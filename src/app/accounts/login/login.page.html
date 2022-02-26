@@ -1,0 +1,36 @@
+<ion-header class="ion-no-border">
+
+</ion-header>
+
+<ion-content>
+
+  <ion-card class="ion-no-margin">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-img class="witfitlogo" src="../assets/logo/witfit-logo.png"></ion-img>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form (ngSubmit)="login()" [formGroup]="credentials">
+        <ion-item fill="solid" class="ion-margin-bottom">
+          <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
+          <ion-note slot="error" *ngIf="(email.dirty || email.touched) && email.errors">Email is invalid</ion-note>
+        </ion-item>
+        <ion-item fill="solid" class="ion-margin-bottom">
+          <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+          <ion-note slot="error" *ngIf="(password.dirty || password.touched) && password.errors">Password needs to be 6 characters</ion-note>
+        </ion-item>
+     
+        <ion-button type="submit" expand="block" [disabled]="!credentials.valid">Log in</ion-button>
+        <ion-button type="button" expand="block" color="secondary" (click)="register()">Create account</ion-button>
+      </form>
+    </ion-card-content>
+
+    <!-- <ion-card-content class="btns">
+      <ion-button expand="block" color="dark" (click)="registerUser()"> SIGN UP</ion-button>
+      <ion-button expand="block" color="medium" (click)="gotoLoginpage()"> LOG IN </ion-button>
+    </ion-card-content> -->
+
+  </ion-card>
+
+</ion-content>

@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "WIT FIT",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

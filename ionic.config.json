@@ -1,0 +1,7 @@
+{
+  "name": "WIT FIT",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
