@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { IonSlides } from '@ionic/angular';
 
 @Component({
   selector: 'app-boarding',
@@ -6,10 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./boarding.page.scss'],
 })
 export class BoardingPage implements OnInit {
-
-  constructor() { }
+  @ViewChild(IonSlides) slides: IonSlides;
+  constructor(private router: Router) { }
 
   ngOnInit() {
+  }
+
+  next() {
+    this.slides.slideNext();
+  }
+
+  start(){
+    this.router.navigateByUrl('/tabs', { replaceUrl: true });
   }
 
 }

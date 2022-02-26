@@ -1,0 +1,50 @@
+ion-content {
+    --background: #000000;
+}
+ 
+ion-slides {
+    height: 100%;
+    --bullet-background-active: #fff;
+    --bullet-background: #000;
+    
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+div.slide-intro-1{
+    text-align: center; 
+    width:100%;
+    
+}
+
+div.slide-intro-2{
+    text-align: center; 
+    width:100%;
+    
+}
+
+h1.header-dark{
+    font-weight: bold;
+    font-size:50px;
+    color: #ffffff;
+}
+
+p.text-light{
+    font-size:20px;
+    color: #ffffff;
+    font-style: normal;
+    margin-top:8px;
+}
+
+h1.header-light{
+    font-weight: bold;
+    font-size:50px;
+    color: #ffffff;
+}
+
+p.text-dark{
+    font-size:20px;
+    color: #ffffff;
+    font-style: normal;
+    margin-top:8px;
+}

@@ -1,9 +1,74 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>sign-up</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="primary"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [scrollEvents]="true">
+  <ion-card class="ion-no-margin">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-img class="witfitlogo" src="../assets/logo/witfit-logo.png"></ion-img>
+        <h4> SIGN UP </h4>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form (ngSubmit)="signUp()" [formGroup]="credentials">
+        <ion-item class="ion-margin-bottom">
+          <ion-label position="stacked">First Name*</ion-label>
+          <ion-input type="text" placeholder="First Name" formControlName="firstName"></ion-input>
+          <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note>
+        </ion-item>
+        <ion-item class="ion-margin-bottom">
+          <ion-label position="stacked">Last Name*</ion-label>
+          <ion-input type="text" placeholder="Last Name" formControlName="lastName"></ion-input>
+          <ion-note slot="error" *ngIf="lastName.dirty && lastName.errors">Enter last name</ion-note>
+        </ion-item>
+        <ion-item class="ion-margin-bottom">
+          <ion-label position="stacked">Email*</ion-label>
+          <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
+          <ion-note slot="error" *ngIf="email.dirty && email.errors">Email is invalid</ion-note>
+        </ion-item>
+        <ion-item class="ion-margin-bottom">
+          <ion-label position="stacked">Birthday*</ion-label>
+          <ion-input type="date" placeholder="DD/MM/YYYY" formControlName="birthday"></ion-input>
+          <ion-note slot="error" *ngIf="birthday.dirty && birthday.errors">Birthday is invalid</ion-note>
+        </ion-item>
+        <ion-item class="ion-margin-bottom">
+          <ion-label position="stacked">Gender*</ion-label>
+          <ion-select interface="popover" placeholder="Select One" formControlName="gender">
+            <ion-select-option value="female">Female</ion-select-option>
+            <ion-select-option value="male">Male</ion-select-option>
+            <ion-select-option value="others">Others</ion-select-option>
+          </ion-select>
+          <!-- <ion-input type="password" placeholder="Password" formControlName="password"></ion-input> -->
+          <ion-note slot="error" *ngIf="(gender.dirty || gender.touched) && gender.errors">Select a gender</ion-note>
+        </ion-item>
+        <ion-item class="ion-margin-bottom">
+          <ion-label position="stacked">Username*</ion-label>
+          <ion-input type="text" placeholder="@" formControlName="username"></ion-input>
+          <ion-note slot="error" *ngIf="username.dirty && username.errors"> Username needs to be 5 characters</ion-note>
+        </ion-item>
+        <ion-item class="ion-margin-bottom">
+          <ion-label position="stacked">Password*</ion-label>
+          <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+          <ion-note slot="error" *ngIf="(password.dirty || password.touched) && password.errors">Password needs to be 6 characters</ion-note>
+        </ion-item>
+        <ion-item class="ion-margin-bottom">
+          <ion-label position="stacked">Confirm Password*</ion-label>
+          <ion-input type="password" placeholder="Confirm Password" formControlName="confirmPassword"></ion-input>
+          <ion-note slot="error" *ngIf="(confirmPassword.dirty || confirmPassword.touched) && confirmPassword.hasError('equalTo')">Password does not match</ion-note>
+        </ion-item>
+     
+        <ion-button type="submit" expand="block" color="primary" [disabled]="!credentials.valid">SIGN UP</ion-button>
+        <p>
+          <ion-text color="secondary" (click)="login()"> I have an account  </ion-text>
+        </p>
+      </form>
+    </ion-card-content>
+
+  </ion-card>
 
 </ion-content>

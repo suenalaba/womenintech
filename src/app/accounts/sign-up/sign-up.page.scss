@@ -1,0 +1,44 @@
+ion-toolbar {
+    --ion-background-color: transparent;
+    --opacity: 0;
+  }
+  
+  ion-card-title {
+    margin-top: 30px;
+    font-size: 20px;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  ion-header {
+    position: absolute;
+  }
+  
+  ion-card {
+    --ion-background-color: transparent;
+    box-shadow: none !important;
+    height: 100%;
+    margin-bottom: 50%;
+  }
+
+
+  .btns {
+    margin-top: 80px;
+  }
+  
+  .witfitlogo {
+    width: 20%;
+    margin: 0 auto;
+  }
+
+ p{
+   text-align: center;
+   margin: 10px;
+   text-decoration: underline;
+ }
+
+ h4{
+   font-weight:bold;
+   margin-bottom:0;
+ }
+  

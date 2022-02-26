@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
-//import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -16,18 +14,6 @@ import { AuthenticationService } from './../../services/authentication.service';
 export class LoginPage implements OnInit {
   credentials: FormGroup;
   errorgroup: [];
-
-  validationUserMessage = {
-    email: [
-      { type: "required", message: "Please enter your Email" },
-      { type: "pattern", message: "The Email entered is Incorrect.Try again" }
-    ],
-    password: [
-      { type: "required", message: "please Enter your Password!" },
-      { type: "minlength", message: "The Password must be at least 5 characters or more" }
-
-    ]
-  }
 
   loadingPresent = true;
 
@@ -56,6 +42,17 @@ export class LoginPage implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
+  async register() {
+    this.router.navigateByUrl('/accounts/sign-up', { replaceUrl: true });
+    // const user = await this.authService.register(this.credentials.value);
+    // await loading.dismiss();
+ 
+    // if (user) {
+    //   this.router.navigateByUrl('/tabs/home', { replaceUrl: true });
+    // } else {
+    //   this.showAlert('Registration failed', 'Please try again!');
+    // }
+  }
 
   async login(value) {
     const loading = await this.loadingController.create();
@@ -65,7 +62,7 @@ export class LoginPage implements OnInit {
     await loading.dismiss();
  
     if (user) {
-      this.router.navigateByUrl('/home', { replaceUrl: true });
+      this.router.navigateByUrl('/tabs', { replaceUrl: true });
     } else {
       this.showAlert('Login failed', 'Please try again!');
     }

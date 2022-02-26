@@ -7,7 +7,7 @@ import {
 } from '@angular/fire/auth-guard';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['']);
-const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
+const redirectLoggedInToHome = () => redirectLoggedInTo(['tabs']);
 
 const routes: Routes = [
   {
@@ -17,15 +17,18 @@ const routes: Routes = [
     ...canActivate(redirectLoggedInToHome),
   },
   {
-    path: '**',
-    redirectTo: '',
-    pathMatch: 'full',
-  },
-  {
-    path: '',
+    path: 'tabs',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
     ...canActivate(redirectUnauthorizedToLogin),
-  }
+  },
+  {
+    path: 'accounts/sign-up',
+    loadChildren: () => import('./accounts/sign-up/sign-up.module').then(m => m.SignUpPageModule)
+  },
+  {
+    path: 'accounts/boarding',
+    loadChildren: () => import('./accounts/boarding/boarding.module').then(m => m.BoardingPageModule)
+  },
 ];
 @NgModule({
   imports: [

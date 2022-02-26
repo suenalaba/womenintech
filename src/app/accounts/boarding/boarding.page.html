@@ -1,9 +1,56 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>boarding</ion-title>
-  </ion-toolbar>
+  <!-- <ion-toolbar>
+    <ion-title>intro</ion-title>
+  </ion-toolbar> -->
 </ion-header>
 
 <ion-content>
+  <ion-slides pager="true">
+    <!-- Slide 1 -->
+    <ion-slide style="background-image: url('../assets/images/boarding1.jpeg'); background-repeat: no-repeat;
+        background-size: 100% 100%; ">
+  
+      <ion-grid class="slide-intro-1">
+        <ion-row>
+          <ion-col size="12">
+            <h1 class="header-dark">TRANSFORM YOUR BODY</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <p class="text-light">Take control of your fitness and health with just a simple click</p>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-button (click)="next()" color="dark" fill="solid" expand="block">Next </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
+      
+    </ion-slide>
 
+    <!-- Slide 2 -->
+    <ion-slide style="background-image: url('../assets/images/boarding2.jpeg'); background-repeat: no-repeat;
+    background-size: 100% 100%;">
+    <ion-grid class="slide-intro-2">
+      <ion-row>
+        <ion-col size="12">
+          <h1 class="header-light">UNIQUE WORKOUTS</h1>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <p class="text-dark">Curated workouts just for you and your body</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-button (click)="start()" color="dark" fill="solid" expand="block">LETS GOOOO </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    </ion-slide>
+  </ion-slides>
 </ion-content>

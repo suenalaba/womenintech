@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>
       Settings
@@ -12,6 +12,10 @@
       <ion-title size="large">Settings</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-button (click)="logout()">
+    <ion-icon slot="icon-only" name="log-out"></ion-icon>
+  </ion-button>
 
   <app-explore-container name="Settings"></app-explore-container>
 </ion-content>

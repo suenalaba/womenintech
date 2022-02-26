@@ -34,7 +34,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   entryComponents: [],
   imports: [
     BrowserModule, 
-    IonicModule.forRoot(), 
+    IonicModule.forRoot({
+      mode: 'ios'
+    }), 
     AppRoutingModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
