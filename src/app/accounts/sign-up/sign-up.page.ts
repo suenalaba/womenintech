@@ -104,10 +104,10 @@ export class SignUpPage implements OnInit {
       const user = await this.authService.register(this.credentials.value);
       await loading.dismiss();
 
-      console.log(user)
-  
-      if (user) {
-        this.router.navigateByUrl('/boarding', { replaceUrl: true });
+      if (this.credentials.valid && user) {
+        localStorage.setItem('userSignUp', JSON.stringify(this.credentials.value));
+        this.router.navigateByUrl('/user-details', { replaceUrl: true });
+        // this.router.navigateByUrl('/boarding', { replaceUrl: true });
       } else {
         this.showAlert('Registration failed', 'Please try again!');
       }

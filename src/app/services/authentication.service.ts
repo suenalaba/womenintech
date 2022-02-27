@@ -71,7 +71,7 @@ export class AuthenticationService {
   }
 
   getUserById(id): Observable<User> {
-    const noteDocRef = doc(this.firestore, `User/${id}`);
+    const noteDocRef = doc(this.firestore, `Users/${id}`);
     return docData(noteDocRef, { idField: 'id' }) as Observable<User>;
   }
 

@@ -1,12 +1,17 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button color="primary"></ion-back-button>
-    </ion-buttons>
+    <!-- <ion-button slot="start" (click)="login()" shape="round" color="dark"> <ion-icon name="chevron-back-outline"></ion-icon></ion-button> -->
   </ion-toolbar>
 </ion-header>
 
 <ion-content [scrollEvents]="true">
+   <!-- fab placed to the top end -->
+   <ion-fab vertical="top" horizontal="start" slot="fixed" edge>
+    <ion-fab-button (click)="login()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
   <ion-card class="ion-no-margin">
     <ion-card-header>
       <ion-card-title>
@@ -61,13 +66,17 @@
           <ion-input type="password" placeholder="Confirm Password" formControlName="confirmPassword"></ion-input>
           <ion-note slot="error" *ngIf="(confirmPassword.dirty || confirmPassword.touched) && confirmPassword.hasError('equalTo')">Password does not match</ion-note>
         </ion-item>
-     
-        <ion-button type="submit" expand="block" color="primary" [disabled]="!credentials.valid">SIGN UP</ion-button>
+
+        <ion-button type="submit" expand="block" [disabled]="!credentials.valid">SIGN UP</ion-button>
+
         <p>
           <ion-text color="secondary" (click)="login()"> I have an account  </ion-text>
         </p>
       </form>
     </ion-card-content>
+  </ion-card>
+
+  <ion-card>
 
   </ion-card>
 

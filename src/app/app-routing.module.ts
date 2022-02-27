@@ -29,6 +29,10 @@ const routes: Routes = [
     path: 'accounts/boarding',
     loadChildren: () => import('./accounts/boarding/boarding.module').then(m => m.BoardingPageModule)
   },
+  {
+    path: 'user-details',
+    loadChildren: () => import('./accounts/user-details/user-details.module').then( m => m.UserDetailsPageModule)
+  },
 ];
 @NgModule({
   imports: [

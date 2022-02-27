@@ -1,0 +1,45 @@
+@import '~swiper/scss';
+@import '~@ionic/angular/css/ionic-swiper';
+
+h2{
+    padding:20px 30px;
+    text-align: center;
+}
+
+ion-card{
+    width:80%;
+    height:70%;
+
+    ion-card-content{
+        height:100%;
+    }
+}
+
+div.parent{
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    
+}
+
+.swiper {
+    height: 70%;
+  }
+
+ion-input{
+    width: 80%;
+    border:1px solid black;
+    border-radius:15px;
+}
+
+div.input-align{
+    display: flex;
+  align-items: center;
+  text-align: center;
+
+  span{
+      padding:5px;
+      font-weight: bold;
+  }
+
+}

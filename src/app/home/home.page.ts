@@ -1,5 +1,6 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
+import { User } from '../class/user';
 
 @Component({
   selector: 'app-home',
@@ -7,15 +8,18 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss']
 })
 export class HomePage implements OnInit {
-  firstName: string;
-
+  firstName: string = '';
+  userInfo: any;
   constructor() {}
 
   ngOnInit() {
     var userInfo_string = localStorage.getItem("userInfo");
-    var userInfo = JSON.parse(userInfo_string);
-    this.firstName = userInfo.firstName;
-    console.log(this.firstName)
+    this.userInfo = JSON.parse(userInfo_string);
+  }
+
+  ionViewWillEnter(){
+    this.firstName = this.userInfo.firstName;
+    
   }
 
   
