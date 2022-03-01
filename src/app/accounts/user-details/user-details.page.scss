@@ -43,3 +43,56 @@ div.input-align{
   }
 
 }
+
+a{
+    text-decoration: underline;
+}
+
+div.listInjuries {
+    display: inline-block;
+    margin: 0 5px 0 5px;
+    width:40%;
+  }
+
+  div.child3{
+      width:100%;
+  }
+
+  ion-item.goal{
+    margin: 10px 0px 10px 0px;
+    text-transform: uppercase ;
+      
+  }
+
+
+ion-item.area, ion-item.goal {
+    font-size: 12px;
+    text-align: center;
+    --background: white;
+    --border-color: black;
+    --border-radius: 10px;
+    --border-width: 1px;
+  
+    ion-label {
+    //   overflow-wrap: break-word;
+      margin: 0;
+      padding-right: 5px;
+    }
+  
+    ion-radio {
+      --border-radius: 10px;
+      width: 0.01px;
+      height: 0.01px;
+      margin: 0;
+      padding: 0;
+      --color-checked: transparent;
+    }
+  }
+
+  ion-item.item-radio-checked.area , ion-item.item-radio-checked.goal {
+  --background: var(--ion-color-dark);
+  --border-radius: 10px;
+  --border-color: transparent;
+  color: white;
+  font-weight: bold;
+}

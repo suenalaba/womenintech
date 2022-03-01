@@ -8,12 +8,15 @@ import { BoardingPageRoutingModule } from './boarding-routing.module';
 
 import { BoardingPage } from './boarding.page';
 
+import { SwiperModule } from 'swiper/angular';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    BoardingPageRoutingModule
+    BoardingPageRoutingModule,
+    SwiperModule
   ],
   declarations: [BoardingPage]
 })

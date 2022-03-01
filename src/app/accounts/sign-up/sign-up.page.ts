@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 
 import { NavController, AlertController, LoadingController, Platform } from '@ionic/angular';
 import { AuthenticationService } from './../../services/authentication.service';
@@ -33,7 +33,7 @@ export class SignUpPage implements OnInit {
       birthday: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required, this.equalto('password')]],
-      username: ['', [Validators.required, Validators.minLength(5)]],
+      username: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
 
@@ -101,10 +101,12 @@ export class SignUpPage implements OnInit {
       const loading = await this.loadingController.create();
       await loading.present();
    
+   
       const user = await this.authService.register(this.credentials.value);
       await loading.dismiss();
 
       if (this.credentials.valid && user) {
+        this.credentials.value.id = user.user.uid;
         localStorage.setItem('userSignUp', JSON.stringify(this.credentials.value));
         this.router.navigateByUrl('/user-details', { replaceUrl: true });
         // this.router.navigateByUrl('/boarding', { replaceUrl: true });

@@ -7,192 +7,240 @@
 <ion-content>
   <h2>We would like to know more about you</h2>
   <ion-progress-bar color="primary" value="{{progress}}"></ion-progress-bar>
+  <form (ngSubmit)="completeSignUp()" [formGroup]="userDetails">
+    <swiper (swiper)="setSwiperInstance($event)" (slideChangeTransitionStart)="slideWillChange()"
+      (slideChangeTransitionEnd)="slideDidChange()" [allowTouchMove]="false">
+      <!--Height & Weight-->
+      <ng-template swiperSlide>
+        <ion-card>
+          <ion-card-content>
+            <div class="parent">
+              <div class="child1">
+                <ion-item class="ion-margin-bottom" lines="none">
+                  <ion-label position="stacked">What is your height?</ion-label>
+                  <div class="input-align">
+                    <ion-input type="number" placeholder="" formControlName="height"></ion-input>
+                    <span>CM</span>
+                  </div>
+                  <ion-note slot="error" *ngIf="height.dirty && height.errors">Enter valid height</ion-note>
+                </ion-item>
+                <ion-item class="ion-margin-bottom" lines="none">
+                  <ion-label position="stacked">What is your weight?</ion-label>
+                  <div class="input-align">
+                    <ion-input type="number" placeholder="" formControlName="weight"></ion-input>
+                    <span>KG</span>
+                  </div>
+                  <ion-note slot="error" *ngIf="weight.dirty && weight.errors">Enter valid weight</ion-note>
+                </ion-item>
+              </div>
+              <div class="child2">
+                <ion-button expand="block" color="dark" (click)="nextPage()"
+                  [disabled]="height.value === '' || weight.value === ''"> Next </ion-button>
 
-  <swiper (swiper)="setSwiperInstance($event)" (slideChangeTransitionStart)="slideWillChange()"
-    (slideChangeTransitionEnd)="slideDidChange()" [allowTouchMove]="false">
-
-    <!--Height & Weight-->
-    <ng-template swiperSlide>
-      <ion-card>
-        <ion-card-content>
-          <div class="parent">
-            <div class="child1">
-              <ion-item class="ion-margin-bottom" lines="none">
-                <ion-label position="stacked">What is your height?</ion-label>
-                <div class="input-align">
-                  <ion-input type="number" placeholder=""></ion-input>
-                  <span>CM</span>
-                </div>
-                <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
-              </ion-item>
-              <ion-item class="ion-margin-bottom" lines="none">
-                <ion-label position="stacked">What is your weight?</ion-label>
-                <div class="input-align">
-                  <ion-input type="number" placeholder=""></ion-input>
-                  <span>KG</span>
-                </div>
-                <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
-              </ion-item>
+              </div>
             </div>
-            <div class="child2">
-              <ion-button expand="block" color="dark" (click)="nextPage()"> Next </ion-button>
-            </div>
-          </div>
-        </ion-card-content>
-      </ion-card>
+          </ion-card-content>
+        </ion-card>
 
-    </ng-template>
+      </ng-template>
 
-    <!--Declaration of Injuries-->
-    <ng-template swiperSlide>
-      <ion-card>
-        <ion-card-content>
-          <div class="parent">
-            <div class="child1">
-              <ion-item class="ion-margin-bottom" lines="none">
-                <ion-label position="stacked">Any physical injuries?</ion-label>
-                <ion-radio-group [(ngModel)]="something">
-                  <ion-row>
-                    <ion-col>
-                         <ion-item lines="none">
-                            <ion-label>Yes</ion-label>
-                            <ion-radio mode="md" item-left value="yes"></ion-radio>
-                       </ion-item>
-                     </ion-col>
-                
-                    <ion-col>
+      <!--Declaration of Injuries-->
+      <ng-template swiperSlide>
+        <ion-card>
+          <ion-card-content>
+            <div class="parent">
+              <div class="child1">
+                <ion-item class="ion-margin-bottom" lines="none">
+                  <ion-label position="stacked">Any physical injuries?</ion-label>
+                  <ion-radio-group formControlName="injury">
+                    <ion-row>
+                      <ion-col>
                         <ion-item lines="none">
-                            <ion-label>No</ion-label>
-                            <ion-radio mode="md" item-left value="no"></ion-radio>
-                       </ion-item>
-                    </ion-col>
-                </ion-row>
-                </ion-radio-group>
-                <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
-              </ion-item>
-              <ion-item class="ion-margin-bottom" lines="none">
-                <ion-label position="stacked" text-wrap>Do you have pre-exisiting health conditions?</ion-label>
-                <ion-radio-group [(ngModel)]="something">
-                  <ion-row>
-                    <ion-col>
-                         <ion-item lines="none">
-                            <ion-label>Yes</ion-label>
-                            <ion-radio mode="md" item-left value="yes"></ion-radio>
-                       </ion-item>
-                     </ion-col>
-                
-                    <ion-col>
+                          <ion-label>Yes</ion-label>
+                          <ion-radio mode="md" item-left value="yes"></ion-radio>
+                        </ion-item>
+                      </ion-col>
+
+                      <ion-col>
                         <ion-item lines="none">
-                            <ion-label>No</ion-label>
-                            <ion-radio mode="md" item-left value="no"></ion-radio>
-                       </ion-item>
-                    </ion-col>
-                </ion-row>
+                          <ion-label>No</ion-label>
+                          <ion-radio mode="md" item-left value="no"></ion-radio>
+                        </ion-item>
+                      </ion-col>
+                    </ion-row>
+                  </ion-radio-group>
+                  <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
+                </ion-item>
+                <ion-item class="ion-margin-bottom" lines="none">
+                  <ion-label position="stacked" text-wrap>Do you have pre-exisiting health conditions?</ion-label>
+                  <ion-radio-group formControlName="healthCond">
+                    <ion-row>
+                      <ion-col>
+                        <ion-item lines="none">
+                          <ion-label>Yes</ion-label>
+                          <ion-radio mode="md" item-left value="yes"></ion-radio>
+                        </ion-item>
+                      </ion-col>
+
+                      <ion-col>
+                        <ion-item lines="none">
+                          <ion-label>No</ion-label>
+                          <ion-radio mode="md" item-left value="no"></ion-radio>
+                        </ion-item>
+                      </ion-col>
+                    </ion-row>
+                  </ion-radio-group>
+                  <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
+                </ion-item>
+              </div>
+              <div class="child2">
+                <ion-button expand="block" color="dark" (click)="nextPage()"
+                  [disabled]="injury.value === '' || healthCond.value === ''"> Next </ion-button>
+                <a (click)="prevPage()"> Go back </a>
+              </div>
+            </div>
+          </ion-card-content>
+
+        </ion-card>
+
+      </ng-template>
+
+      <!--Area of Injuries, if any-->
+      <ng-template swiperSlide *ngIf="injury.value==='yes'">
+        <ion-card>
+          <ion-card-content>
+            <div class="parent">
+              <div class="child1">
+                <ion-item class="ion-margin-bottom" lines="none">
+                  <ion-label position="stacked">What is your injury?</ion-label>
+
+                  <ion-radio-group allow-empty-selection="true" name="radio-group"
+                    (ionChange)="radioInjuryChange($event)" #radioGroup formControlName="areaOfInjury">
+                    <div *ngFor="let item of listInjuries" class="listInjuries">
+                      <ion-item class="area" lines="none" [ngClass]="item.value">
+                        <ion-label text-wrap>{{item.text}}</ion-label>
+                        <ion-radio mode="ios" slot="start" [name]="item.name" [value]="item.value"></ion-radio>
+                      </ion-item>
+                    </div>
+                  </ion-radio-group>
+                </ion-item>
+                <ion-item class="ion-margin-bottom" lines="none" *ngIf="selectedInjury.length > 0">
+                  <ion-label position="stacked">Area of injury</ion-label>
+                  <ion-select formControlName="injuryType">
+                    <ion-select-option *ngFor="let item of selectedInjury" [value]="item">
+                      {{item.text}}
+                    </ion-select-option>
+                  </ion-select>
+                  <ion-note slot="error" *ngIf="areaOfInjury.errors">Select an area of injury</ion-note>
+                </ion-item>
+              </div>
+              <div class="child2">
+                <ion-button expand="block" color="dark" (click)="nextPage()"
+                  [disabled]="areaOfInjury.value === '' && injuryType.value === ''">
+                  Next </ion-button>
+                <a (click)="prevPage()"> Go back </a>
+              </div>
+            </div>
+          </ion-card-content>
+
+        </ion-card>
+      </ng-template>
+
+      <!--Pre-health conditions, if any-->
+      <ng-template swiperSlide *ngIf="healthCond.value==='yes'">
+        <ion-card>
+          <ion-card-content>
+            <div class="parent">
+              <div class="child1">
+                <ion-item class="ion-margin-bottom" lines="none">
+                  <ion-label position="stacked" text-wrap>What exisiting health conditions do you have?</ion-label>
+                  <ion-input type="text" placeholder="" formControlName="healthCondName"></ion-input>
+                </ion-item>
+              </div>
+              <div class="child2">
+                <ion-button expand="block" color="dark" (click)="nextPage()" [disabled]="healthCondName.value === ''">
+                  Next </ion-button>
+                <a (click)="prevPage()"> Go back </a>
+              </div>
+            </div>
+          </ion-card-content>
+
+        </ion-card>
+      </ng-template>
+
+      <!--Fitness goals-->
+      <ng-template swiperSlide>
+        <ion-card>
+          <ion-card-content>
+            <div class="parent">
+              <div class="child1">
+                <ion-item class="ion-margin-bottom" lines="none">
+                  <ion-label position="stacked">What is your fitness goal?</ion-label>
+                  <div class="child3">
+                    <ion-radio-group allow-empty-selection="true" name="radio-group" #radioGroup
+                      formControlName="fitnessGoal">
+                      <div *ngFor="let item of listGoals" class="listGoals">
+                        <ion-item class="goal" lines="none" [ngClass]="item.value">
+                          <ion-label text-wrap>{{item.text}}</ion-label>
+                          <ion-radio mode="ios" slot="start" [name]="item.name" [value]="item.value"></ion-radio>
+                        </ion-item>
+                      </div>
+                    </ion-radio-group>
+                  </div>
+
+                </ion-item>
+
+              </div>
+              <div class="child2">
+                <ion-button expand="block" color="dark" (click)="nextPage()" *ngIf="gender=='female'"> Next
+                </ion-button>
+                <ion-button expand="block" color="dark"
+                  *ngIf="gender=='male' || gender=='others'" type="submit"> Finish </ion-button>
+                <a (click)="prevPage()"> Go back </a>
+              </div>
+            </div>
+          </ion-card-content>
+
+        </ion-card>
+      </ng-template>
+
+      <!--Menstruation cycle, for female gender-->
+      <ng-template swiperSlide *ngIf="gender=='female'">
+        <ion-card>
+          <ion-card-content>
+            <div class="parent">
+              <div class="child1">
+                <ion-item class="ion-margin-bottom" lines="none">
+                  <ion-label position="stacked">When was your last period?</ion-label>
+                  <ion-input type="date" placeholder="DD/MM/YYYY" formControlName="menstruationCycle"></ion-input>
+                </ion-item>
+
+                <ion-radio-group formControlName="menstruationCycle">
+                  <ion-item>
+                    <ion-radio value="false"></ion-radio>
+                    <ion-label>Not Sure</ion-label>
+                    
+                  </ion-item>
+                  <ion-item class="ion-margin-bottom">
+                    <ion-radio value="pregnant"></ion-radio>
+                    <ion-label>I'm pregnant</ion-label>
+                  </ion-item>
+
                 </ion-radio-group>
-                <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
-              </ion-item>
+
+              </div>
+              <div class="child2">
+                <ion-button expand="block" color="dark" (click)="completeSignUp()"> Finish </ion-button>
+                <a (click)="prevPage()"> Go back </a>
+
+              </div>
             </div>
-            <div class="child2">
-              <ion-button expand="block" color="dark" (click)="nextPage()"> Next </ion-button>
-            </div>
-          </div>
-        </ion-card-content>
+          </ion-card-content>
 
-      </ion-card>
+        </ion-card>
+      </ng-template>
 
-    </ng-template>
-
-    <!--Area of Injuries, if any-->
-    <ng-template swiperSlide >
-      <ion-card>
-        <ion-card-content>
-          <div class="parent">
-            <div class="child1">
-              <ion-item class="ion-margin-bottom" lines="none">
-                <ion-label position="stacked">What is your injury?</ion-label>
-                
-
-                <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
-              </ion-item>
-              <ion-item class="ion-margin-bottom" lines="none">
-                <ion-label position="stacked">Area of injury</ion-label>
-                
-                <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
-              </ion-item>
-            </div>
-            <div class="child2">
-              <ion-button expand="block" color="dark" (click)="nextPage()"> Next </ion-button>
-            </div>
-          </div>
-        </ion-card-content>
-
-      </ion-card>
-    </ng-template>
-
-    <!--Pre-health conditions, if any-->
-    <ng-template swiperSlide >
-      <ion-card>
-        <ion-card-content>
-          <div class="parent">
-            <div class="child1">
-              <ion-item class="ion-margin-bottom" lines="none">
-                <ion-label position="stacked">What exisiting health conditions do you have?</ion-label>
-                
-                <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
-              </ion-item>
-            </div>
-            <div class="child2">
-              <ion-button expand="block" color="dark" (click)="nextPage()"> Next </ion-button>
-            </div>
-          </div>
-        </ion-card-content>
-
-      </ion-card>
-    </ng-template>
-
-    <!--Fitness goals-->
-    <ng-template swiperSlide>
-      <ion-card>
-        <ion-card-content>
-          <div class="parent">
-            <div class="child1">
-              <ion-item class="ion-margin-bottom" lines="none">
-                <ion-label position="stacked">What is your fitness goal?</ion-label>
-                
-              </ion-item>
-              
-            </div>
-            <div class="child2">
-              <ion-button expand="block" color="dark" (click)="nextPage()" *ngIf="gender=='female'"> Next </ion-button>
-              <ion-button expand="block" color="dark" (click)="completeSignUp()" *ngIf="gender=='male' || gender=='others' "> Finish </ion-button>
-            </div>
-          </div>
-        </ion-card-content>
-
-      </ion-card>
-    </ng-template>
-
-    <!--Menstruation cycle, for female gender-->
-    <ng-template swiperSlide *ngIf="gender=='female'">
-      <ion-card>
-        <ion-card-content>
-          <div class="parent">
-            <div class="child1">
-              <ion-item class="ion-margin-bottom" lines="none">
-                <ion-label position="stacked">When was your last period?</ion-label>
-                
-              </ion-item>
-              
-            </div>
-            <div class="child2">
-              <ion-button expand="block" color="dark" (click)="completeSignUp()"> Finish </ion-button>
-            </div>
-          </div>
-        </ion-card-content>
-
-      </ion-card>
-    </ng-template>
-  </swiper>
-
+    </swiper>
+  </form>
 
 </ion-content>

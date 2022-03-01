@@ -8,10 +8,16 @@ import { IonSlides } from '@ionic/angular';
   styleUrls: ['./boarding.page.scss'],
 })
 export class BoardingPage implements OnInit {
-  @ViewChild(IonSlides) slides: IonSlides;
+  private slides: any;
+
   constructor(private router: Router) { }
 
   ngOnInit() {
+  }
+
+  setSwiperInstance(swiper: any) {
+    this.slides = swiper;
+
   }
 
   next() {

@@ -1,6 +1,7 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { User } from '../class/user';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-home',
@@ -10,16 +11,23 @@ import { User } from '../class/user';
 export class HomePage implements OnInit {
   firstName: string = '';
   userInfo: any;
-  constructor() {}
+  constructor(
+    private authService: AuthenticationService
+  ) {}
 
   ngOnInit() {
-    var userInfo_string = localStorage.getItem("userInfo");
-    this.userInfo = JSON.parse(userInfo_string);
+    var userInfo_string;
+    if(localStorage.getItem("userInfo") === null){
+      this.authService.logout();
+    }else{
+      userInfo_string = localStorage.getItem("userInfo");
+      this.userInfo = JSON.parse(userInfo_string);
+    }
+   
   }
 
   ionViewWillEnter(){
     this.firstName = this.userInfo.firstName;
-    
   }
 
   

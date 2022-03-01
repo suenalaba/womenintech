@@ -6,8 +6,10 @@ import {
   signOut
 } from '@angular/fire/auth';
 import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
+import { updateDoc } from 'firebase/firestore';
+import { user } from 'rxfire/auth';
 import { Observable } from 'rxjs';
-import { User } from '../class/user';
+import { User, UserDetails } from '../class/user';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +18,8 @@ import { User } from '../class/user';
 
 export class AuthenticationService {
   // Init with null to filter out the first value in a guard!
-  constructor(private auth: Auth, private firestore: Firestore) {}
- 
+  constructor(private auth: Auth, private firestore: Firestore) { }
+
   async register(info) {
     try {
       const user = await createUserWithEmailAndPassword(
@@ -28,12 +30,12 @@ export class AuthenticationService {
 
       this.createUser(info, user.user.uid)
       return user;
-      
+
     } catch (e) {
       return null;
     }
   }
- 
+
   async login({ email, password }) {
     try {
       const user = await signInWithEmailAndPassword(this.auth, email, password);
@@ -47,7 +49,7 @@ export class AuthenticationService {
       return null;
     }
   }
- 
+
   logout() {
     localStorage.removeItem('userInfo');
     return signOut(this.auth);
@@ -67,7 +69,29 @@ export class AuthenticationService {
 
     console.log(create)
     const noteDocRef = doc(this.firestore, `Users`, `${uid}`);
-    return setDoc(noteDocRef, create );
+    return setDoc(noteDocRef, create);
+  }
+
+  addUserDetails(user) {
+    let userDetails : UserDetails = {
+      height: user.height,
+      weight: user.weight,
+      injury: user.injury,
+      areaOfInjury: user.areaOfInjury,
+      injuryType: user.injuryType,
+      healthCond: user.healthCond,
+      healthCondName: user.healthCondName,
+      fitnessGoal: user.fitnessGoal,
+      menstruationCycle: user.menstruationCycle
+    }
+
+    localStorage.removeItem('userSignUp')
+    console.log(user)
+
+    const noteDocRef = doc(this.firestore, `Users`, `${user.id}`);
+    return updateDoc(noteDocRef, { userDetails });
+    
+
   }
 
   getUserById(id): Observable<User> {

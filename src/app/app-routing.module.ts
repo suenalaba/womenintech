@@ -8,6 +8,7 @@ import {
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['tabs']);
+const redirectUnauthorizedToSignUp = () => redirectUnauthorizedTo(['']);
 
 const routes: Routes = [
   {
@@ -31,7 +32,8 @@ const routes: Routes = [
   },
   {
     path: 'user-details',
-    loadChildren: () => import('./accounts/user-details/user-details.module').then( m => m.UserDetailsPageModule)
+    loadChildren: () => import('./accounts/user-details/user-details.module').then( m => m.UserDetailsPageModule),
+    ...canActivate(redirectUnauthorizedToSignUp),
   },
 ];
 @NgModule({
