@@ -18,6 +18,7 @@ import { User, UserDetails } from '../class/user';
 
 export class AuthenticationService {
   // Init with null to filter out the first value in a guard!
+  
   constructor(private auth: Auth, private firestore: Firestore) { }
 
   async register(info) {
@@ -40,7 +41,6 @@ export class AuthenticationService {
     try {
       const user = await signInWithEmailAndPassword(this.auth, email, password);
       this.getUserById(user.user.uid).subscribe(res => {
-        console.log(res);
         localStorage.setItem('userInfo', JSON.stringify(res));
 
       });
@@ -86,12 +86,15 @@ export class AuthenticationService {
     }
 
     localStorage.removeItem('userSignUp')
-    console.log(user)
 
     const noteDocRef = doc(this.firestore, `Users`, `${user.id}`);
-    return updateDoc(noteDocRef, { userDetails });
-    
+    console.log(this.auth)
 
+    this.getUserById(this.auth.currentUser.uid).subscribe(res => {
+      localStorage.setItem('userInfo', JSON.stringify(res));
+
+    });
+    return updateDoc(noteDocRef, { userDetails });
   }
 
   getUserById(id): Observable<User> {

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonSlides } from '@ionic/angular';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-boarding',
@@ -10,7 +11,7 @@ import { IonSlides } from '@ionic/angular';
 export class BoardingPage implements OnInit {
   private slides: any;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthenticationService,) { }
 
   ngOnInit() {
   }
