@@ -1,3 +1,6 @@
+# WITIFIT 
+### Your number one gym companion
+
 Lab Deliverables 
 
 ✅ Lab 1
