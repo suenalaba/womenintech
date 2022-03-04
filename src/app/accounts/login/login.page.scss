@@ -3,8 +3,15 @@ ion-toolbar {
     --opacity: 0;
   }
   
+  ion-card{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+
   ion-card-title {
-    margin-top: 30px;
     font-size: 20px;
     text-align: center;
     font-weight: 600;
@@ -40,9 +47,8 @@ ion-toolbar {
   }
   
   .witfitlogo {
-    width: 20%;
+    width: 15vw;
     margin: 0 auto;
-    margin-top: 50%
   }
 
   
