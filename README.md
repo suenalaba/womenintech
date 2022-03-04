@@ -1,4 +1,4 @@
-Lab Devlierables 
+Lab Deliverables 
 
 ✅ Lab 1
 ✅ Lab 2
