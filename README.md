@@ -5,3 +5,5 @@ Lab Deliverables
 🔲 Lab 3
 🔲 Lab 4
 🔲 Lab 5
+
+[About Us] (https://github.com/suenalaba/womenintech/tree/main/docs)
