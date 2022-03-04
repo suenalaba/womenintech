@@ -21,7 +21,7 @@ export class BoardingPage implements OnInit {
 
   }
 
-  next() {
+  next() {  
     this.slides.slideNext();
   }
 
