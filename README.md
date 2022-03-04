@@ -6,4 +6,4 @@ Lab Deliverables
 🔲 Lab 4
 🔲 Lab 5
 
-[About Us] (https://github.com/suenalaba/womenintech/tree/main/docs)
+[About Us](https://github.com/suenalaba/womenintech/tree/main/docs)
