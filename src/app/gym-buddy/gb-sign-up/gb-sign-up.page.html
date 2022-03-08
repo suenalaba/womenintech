@@ -92,12 +92,12 @@
     [disabled] = !checkGBFirstPageValidity()>NEXT</ion-button>
   </ng-template>
   <ng-template swiperSlide>
-    <!--<ion-button expands="block" (click)="prevPage()">BACK</ion-button>-->
     <ion-header collapse="condense">
       <ion-toolbar>
         <ion-title size="medium">YOUR BUDDY PREFERENCE</ion-title>
       </ion-toolbar>
     </ion-header>
+    <ion-button expands="block" (click)="prevPage()">BACK</ion-button>
     <ion-list>
       <ion-list-header>What traits would you like in your buddy?</ion-list-header>
       <ion-label position="stacked">Select up to 3 strengths</ion-label>

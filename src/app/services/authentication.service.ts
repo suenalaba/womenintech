@@ -57,7 +57,7 @@ export class AuthenticationService {
   }
 
   createUser(value, uid) {
-    console.log(uid)
+    console.log(uid);
     let create: User = {
       id: uid,
       email: value.email,

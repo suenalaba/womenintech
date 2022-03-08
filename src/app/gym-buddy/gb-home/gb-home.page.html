@@ -9,9 +9,52 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Gym Buddsy</ion-title>
+      <ion-title size="large" class="ion-text-center">Gym Buddy</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-card class="ion-text-center">
+    <ion-card-header size="large" style="font-size:20px">Your Profile</ion-card-header>
+    <!-- to insert image here-->
+    <ion-card-content>
+      <ion-item-divider style="text-align: center">
+        <ion-text>
+          {{getFullName}}
+        </ion-text>
+      </ion-item-divider>
+
+      <ion-item-divider>
+        <ion-text class="ion-text-center">
+          {{getBriefIntro}}
+        </ion-text>
+      </ion-item-divider>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-content>
+      <ion-item-divider>
+        <ion-text>
+          Preferred Workout Time: {{this.getPrefWorkoutTime.join(", ")}}
+        </ion-text>
+      </ion-item-divider>
+      <ion-item-divider>
+        <ion-text>
+          My goals: {{this.getGymBuddyGoals.join(", ")}}
+        </ion-text>
+      </ion-item-divider>
+      <ion-item-divider>
+        <ion-text>
+          Area of expertise: {{this.getPersonalTraits.join(", ")}}
+        </ion-text>
+      </ion-item-divider>
+    </ion-card-content>
+  </ion-card>
+  <ion-button expand="block" color = "dark" (click)="goToFindBuddy()">
+    FIND A BUDDY
+  </ion-button>
+  <ion-button expand="block" color = "dark" (click)="goToBuddyList()">
+    BUDDY LIST
+  </ion-button>
+
   <!--<ion-button (click)="signUp()">Sign Up</ion-button>-->
   <!-- Add content here -->
 

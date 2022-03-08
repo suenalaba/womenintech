@@ -35,6 +35,20 @@ const routes: Routes = [
     loadChildren: () => import('./accounts/user-details/user-details.module').then( m => m.UserDetailsPageModule),
     ...canActivate(redirectUnauthorizedToSignUp),
   },
+
+  /*{
+    path: 'gb-buddylist-home',
+    loadChildren: () => import('./gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then( m => m.GbBuddylistHomePageModule)
+  },
+  {
+    path: 'gb-buddylist-home',
+    loadChildren: () => import('./gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then( m => m.GbBuddylistHomePageModule)
+  },
+  {
+    path: 'gb-findbuddy',
+    loadChildren: () => import('./gym-buddy/gb-findbuddy/gb-findbuddy.module').then( m => m.GbFindbuddyPageModule)
+  },*/
+
   /*{
     path: 'gym-buddy/gb-sign-up',
     loadChildren: () => import('./gym-buddy/gb-sign-up/gb-sign-up.module').then( m => m.GbSignUpPageModule),
