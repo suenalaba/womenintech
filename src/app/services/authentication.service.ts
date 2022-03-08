@@ -9,7 +9,8 @@ import { Firestore, collection, collectionData, doc, setDoc, docData } from '@an
 import { updateDoc } from 'firebase/firestore';
 import { user } from 'rxfire/auth';
 import { Observable } from 'rxjs';
-import { GymBuddyDetails, User, UserDetails } from '../class/user';
+import { User, UserDetails } from '../class/user';
+import { GymBuddyDetails } from '../class/GymBuddyProfile';
 
 @Injectable({
   providedIn: 'root'
@@ -73,7 +74,7 @@ export class AuthenticationService {
   }
 
   addUserDetails(user) {
-    let userDetails : UserDetails = {
+    let userDetails: UserDetails = {
       height: user.height,
       weight: user.weight,
       injury: user.injury,
@@ -86,9 +87,9 @@ export class AuthenticationService {
     };
 
 
-    let buddyDetails : GymBuddyDetails = {
+    const gymBuddyDetails: GymBuddyDetails = {
       isSignUp: false
-    }
+    };
 
 
     localStorage.removeItem('userSignUp');
@@ -102,7 +103,7 @@ export class AuthenticationService {
 
     });
     /* must update doc, cannot add doc */
-    return updateDoc(noteDocRef, { userDetails, buddyDetails });
+    return updateDoc(noteDocRef, { userDetails, gymBuddyDetails });
   }
   /*get the id to retrieve whatever information you want*/
   getUserById(id): Observable<User> {

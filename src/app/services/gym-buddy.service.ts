@@ -12,7 +12,7 @@ export class GymBuddyService {
 
   private userInfo;
   private userId;
-  private isSignUp;
+  private isSignUp: boolean;
 
   constructor(private auth: Auth, private fireStore: Firestore) { }
   /* store user's gym buddy details to firebase and local storage */
@@ -53,9 +53,11 @@ export class GymBuddyService {
   }
   /* checks if a user is signed up for gym buddy, return true if user has signed up */
   isUserSignedUpGymBuddy(){
+    this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
     this.isSignUp = this.userInfo.gymBuddyDetails.isSignUp;
+    console.log(this.isSignUp);
     if(this.isSignUp === true){
-    return true;
+      return true;
     } else {
       return false;
     }

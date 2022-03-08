@@ -19,11 +19,3 @@ export class UserDetails {
     fitnessGoal: string;
     menstruationCycle?: string;
 }
-
-
-//is it good practice to declare 2 classes in a single file? Usually in java we don't do that
-//not sure about typescript's standards...
-export class GymBuddyDetails{
-    isSignUp: boolean;
-}
-

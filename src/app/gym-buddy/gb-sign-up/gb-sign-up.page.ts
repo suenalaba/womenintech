@@ -82,15 +82,7 @@ export class GbSignUpPage implements OnInit {
   }
 
   ngOnInit() {
-    /*const loading = await this.loadingController.create();
-    await loading.present();
-
-    const user = await this.authService.register(this.credentials.value);
-    await loading.dismiss();*/
-    /* if user has signed up for gym buddy reroute directly to home */
-    if (this.gymBuddyService.isUserSignedUpGymBuddy()) {
-      this.router.navigateByUrl('/gym-buddy/gb-home', { replaceUrl: true });
-    }
+    this.checkGymBuddySignUp();
     //getting data from local storage which was imported from firebase
     /*let userinfo_string  = localStorage.getItem('userInfo');
     this.userinfo =  JSON.parse(userinfo_string);
@@ -141,6 +133,7 @@ export class GbSignUpPage implements OnInit {
       buddyTrainStyle: new FormControl()
     });*/
   }
+
   /* store gymBuddyGoals data
   * if entry is not checked, check it and store the data
   * else find its index and remove it from the array. (uncheck)
@@ -407,7 +400,7 @@ export class GbSignUpPage implements OnInit {
     });
 
     toast.present();
-    this.router.navigateByUrl('/gym-buddy/gb-home', { replaceUrl: true });
+    this.router.navigateByUrl('/gb-home', { replaceUrl: true });
   }
 
   setSwiperInstance(swiper: any) {
@@ -455,7 +448,7 @@ export class GbSignUpPage implements OnInit {
     const load = await this.loadingController.create({
       message: 'Please wait....',
 
-    })
+    });
     await load.present();
   }
 
@@ -464,5 +457,18 @@ export class GbSignUpPage implements OnInit {
       await this.loadingController.dismiss();
     }
     this.loadingPresent = false;
+  }
+
+  private async checkGymBuddySignUp() {
+    const loading = await this.loadingController.create();
+    await loading.present();
+
+    //const user = await this.authService.register(this.credentials.value);
+    //await loading.dismiss();
+    /* if user has signed up for gym buddy reroute directly to home */
+    if (this.gymBuddyService.isUserSignedUpGymBuddy()) {
+      this.router.navigateByUrl('/gym-buddy/gb-home', { replaceUrl: true });
+    }
+    await loading.dismiss();
   }
 }
