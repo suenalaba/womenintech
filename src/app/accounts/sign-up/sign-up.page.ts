@@ -41,7 +41,7 @@ export class SignUpPage implements OnInit {
     get firstName() {
       return this.credentials.get('firstName');
     }
-   
+
     get lastName() {
       return this.credentials.get('lastName');
     }
@@ -49,7 +49,7 @@ export class SignUpPage implements OnInit {
     get confirmPassword() {
       return this.credentials.get('confirmPassword');
     }
-   
+
     get password() {
       return this.credentials.get('password');
     }
@@ -61,7 +61,7 @@ export class SignUpPage implements OnInit {
     get email() {
       return this.credentials.get('email');
     }
-   
+
     get gender() {
       return this.credentials.get('gender');
     }
@@ -69,14 +69,14 @@ export class SignUpPage implements OnInit {
     get birthday() {
       return this.credentials.get('birthday');
     }
-    
+
     /**
-     * 
-     * @param password 
+     *
+     * @param password
      */
     equalto(field_name): ValidatorFn {
       return (control: AbstractControl): { [key: string]: any } => {
-  
+
         let input = control.value;
         let isValid = control.root.value[field_name] == input
         if (!isValid)
@@ -94,14 +94,14 @@ export class SignUpPage implements OnInit {
     }
 
     /**
-     * 
+     *
      * sign
      */
     async signUp() {
       const loading = await this.loadingController.create();
       await loading.present();
-   
-   
+
+
       const user = await this.authService.register(this.credentials.value);
       await loading.dismiss();
 
@@ -113,9 +113,9 @@ export class SignUpPage implements OnInit {
       } else {
         this.showAlert('Registration failed', 'Please try again!');
       }
-  
+
     }
-  
+
     async showAlert(header, message) {
       const alert = await this.alertController.create({
         header,
@@ -124,16 +124,16 @@ export class SignUpPage implements OnInit {
       });
       await alert.present();
     }
-  
+
     async showLoading() {
       this.loadingPresent = true
       let load = await this.loadingController.create({
         message: "Please wait....",
-  
+
       })
       await load.present();
     }
-  
+
     async dismissLoading() {
       if (this.loadingPresent) {
         await this.loadingController.dismiss();

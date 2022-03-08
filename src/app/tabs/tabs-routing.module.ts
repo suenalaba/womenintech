@@ -26,7 +26,15 @@ const routes: Routes = [
           {
             path: 'gb-home',
             loadChildren: () => import('../gym-buddy/gb-home/gb-home.module').then(m => m.GbHomePageModule),
-          }
+          },
+          {
+            path: 'gb-buddylist-home',
+            loadChildren: () => import('../gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then(m => m.GbBuddylistHomePageModule),
+          },
+          {
+            path: 'gb-findbuddy',
+            loadChildren: () => import('../gym-buddy/gb-findbuddy/gb-findbuddy.module').then(m => m.GbFindbuddyPageModule),
+          },
         ]
       },
       {
