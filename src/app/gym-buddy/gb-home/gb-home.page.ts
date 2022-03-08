@@ -15,8 +15,8 @@ export class GbHomePage implements OnInit {
   ngOnInit() {
   }
 
-  signUp(){
+  /*signUp(){
     this.router.navigateByUrl('tabs/gym-buddy/gb-sign-up', { replaceUrl: true });
-  }
+  }*/
 
 }

@@ -400,7 +400,7 @@ export class GbSignUpPage implements OnInit {
     });
 
     toast.present();
-    this.router.navigateByUrl('/gb-home', { replaceUrl: true });
+    this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
   setSwiperInstance(swiper: any) {
@@ -467,7 +467,7 @@ export class GbSignUpPage implements OnInit {
     //await loading.dismiss();
     /* if user has signed up for gym buddy reroute directly to home */
     if (this.gymBuddyService.isUserSignedUpGymBuddy()) {
-      this.router.navigateByUrl('/gym-buddy/gb-home', { replaceUrl: true });
+      this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
     }
     await loading.dismiss();
   }
