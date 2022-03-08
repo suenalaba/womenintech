@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { children } from 'dom7';
 import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
@@ -17,7 +18,16 @@ const routes: Routes = [
       },
       {
         path: 'gym-buddy',
-        loadChildren: () => import('../gym-buddy/gb-home/gb-home.module').then(m => m.GbHomePageModule)
+        children: [
+          {
+            path: 'gb-sign-up',
+            loadChildren: () => import('../gym-buddy/gb-sign-up/gb-sign-up.module').then(m => m.GbSignUpPageModule)
+          },
+          {
+            path: 'gb-home',
+            loadChildren: () => import('../gym-buddy/gb-home/gb-home.module').then(m => m.GbHomePageModule),
+          }
+        ]
       },
       {
         path: 'settings',
