@@ -9,7 +9,8 @@ import { Firestore, collection, collectionData, doc, setDoc, docData } from '@an
 import { updateDoc } from 'firebase/firestore';
 import { user } from 'rxfire/auth';
 import { Observable } from 'rxjs';
-import { GymBuddyDetails, User, UserDetails } from '../class/user';
+import { User, UserDetails } from '../class/user';
+import { GymBuddyDetails } from '../class/GymBuddyProfile';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ import { GymBuddyDetails, User, UserDetails } from '../class/user';
 
 export class AuthenticationService {
   // Init with null to filter out the first value in a guard!
-  
+
   constructor(private auth: Auth, private firestore: Firestore) { }
 
   async register(info) {
@@ -67,13 +68,13 @@ export class AuthenticationService {
       lastName: value.lastName
     }
 
-    console.log(create)
+    console.log(create);
     const noteDocRef = doc(this.firestore, `Users`, `${uid}`);
     return setDoc(noteDocRef, create);
   }
 
   addUserDetails(user) {
-    let userDetails : UserDetails = {
+    let userDetails: UserDetails = {
       height: user.height,
       weight: user.weight,
       injury: user.injury,
@@ -83,25 +84,28 @@ export class AuthenticationService {
       healthCondName: user.healthCondName,
       fitnessGoal: user.fitnessGoal,
       menstruationCycle: user.menstruationCycle
-    }
+    };
 
-    let buddyDetails : GymBuddyDetails = {
+
+    const gymBuddyDetails: GymBuddyDetails = {
       isSignUp: false
-    }
+    };
 
 
-    localStorage.removeItem('userSignUp')
+    localStorage.removeItem('userSignUp');
 
+    /*store to firebase firestore (firestore, collection, the very long string is the path)*/
     const noteDocRef = doc(this.firestore, `Users`, `${user.id}`);
-    console.log(this.auth)
-
+    console.log(this.auth);
+    /* store to local storage */
     this.getUserById(this.auth.currentUser.uid).subscribe(res => {
       localStorage.setItem('userInfo', JSON.stringify(res));
 
     });
-    return updateDoc(noteDocRef, { userDetails, buddyDetails });
+    /* must update doc, cannot add doc */
+    return updateDoc(noteDocRef, { userDetails, gymBuddyDetails });
   }
-
+  /*get the id to retrieve whatever information you want*/
   getUserById(id): Observable<User> {
     const noteDocRef = doc(this.firestore, `Users/${id}`);
     return docData(noteDocRef, { idField: 'id' }) as Observable<User>;

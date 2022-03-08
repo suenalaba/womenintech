@@ -17,19 +17,15 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     var userInfo_string;
-    if(localStorage.getItem("userInfo") === null){
+    if(localStorage.getItem('userInfo') === null){
       this.authService.logout();
     }else{
-      userInfo_string = localStorage.getItem("userInfo");
+      userInfo_string = localStorage.getItem('userInfo');
       this.userInfo = JSON.parse(userInfo_string);
     }
-   
   }
 
   ionViewWillEnter(){
     this.firstName = this.userInfo.firstName;
   }
-
-  
-
 }
