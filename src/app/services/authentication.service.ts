@@ -89,7 +89,6 @@ export class AuthenticationService {
       isSignUp: false
     }
 
-    
 
     localStorage.removeItem('userSignUp')
 
