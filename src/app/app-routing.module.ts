@@ -35,6 +35,11 @@ const routes: Routes = [
     loadChildren: () => import('./accounts/user-details/user-details.module').then( m => m.UserDetailsPageModule),
     ...canActivate(redirectUnauthorizedToSignUp),
   },
+  /*{
+    path: 'gym-buddy/gb-sign-up',
+    loadChildren: () => import('./gym-buddy/gb-sign-up/gb-sign-up.module').then( m => m.GbSignUpPageModule),
+    ...canActivate(redirectUnauthorizedToSignUp),
+  }*/
 ];
 @NgModule({
   imports: [

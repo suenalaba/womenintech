@@ -4,14 +4,14 @@ import { Router } from '@angular/router';
 import { AlertController, IonicSwiper, LoadingController, ToastController } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { areaOfInjury, armInjuries } from '../../data/injuries';
-import { fitnessGoals } from '../../data/goals'
+import { fitnessGoals } from '../../data/goals';
 
 import SwiperCore, { Keyboard, Pagination, Scrollbar } from 'swiper';
 
 SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
 
 @Component({
-  selector: 'app-user-details',
+  selector: 'app-user-details',//how come its just app-user-details. isn't user details nested in the app->accounts->user-details
   templateUrl: './user-details.page.html',
   styleUrls: ['./user-details.page.scss'],
   encapsulation: ViewEncapsulation.None
@@ -29,7 +29,7 @@ export class UserDetailsPage implements OnInit {
   private slides: any;
 
   userDetails: FormGroup;
-  private userSignUp: any
+  private userSignUp: any;
 
   //Get value on ionChange on IonRadioGroup
   private selectedRadioGroup: any;
@@ -72,7 +72,7 @@ export class UserDetailsPage implements OnInit {
       }
       this.userDetails.controls['areaOfInjury'].updateValueAndValidity();
       this.userDetails.controls['injuryType'].updateValueAndValidity();
-      
+
     });
 
     this.healthCond.valueChanges.subscribe(val => {
@@ -91,7 +91,7 @@ export class UserDetailsPage implements OnInit {
         this.userDetails.controls['menstruationCycle'].clearValidators();
       }
       this.userDetails.controls['menstruationCycle'].updateValueAndValidity();
-   
+
   }
 
   // Easy access for form fields
@@ -131,8 +131,8 @@ export class UserDetailsPage implements OnInit {
     return this.userDetails.get('injuryType');
   }
 
-  
-  
+
+
   setSwiperInstance(swiper: any) {
     this.slides = swiper;
     this.slideIndex = this.slides.activeIndex;
@@ -196,16 +196,20 @@ export class UserDetailsPage implements OnInit {
 
   async completeSignUp(){
     console.log(this.userSignUp.id)
+    /*stuff stored in userdetails object */
+    /*.value is to access form details */
+    /*.id new variable name in the object */
     this.userDetails.value.id = this.userSignUp.id;
+    /*store into firestore */
     this.authService.addUserDetails(this.userDetails.value);
 
     const toast = await this.toastCtrl.create({
       message: 'User updated!',
       duration: 2000
     });
-    
+
     toast.present();
     this.router.navigateByUrl('/accounts/boarding', { replaceUrl: true });
   }
-  
+
 }

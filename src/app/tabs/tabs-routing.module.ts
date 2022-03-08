@@ -17,7 +17,7 @@ const routes: Routes = [
       },
       {
         path: 'gym-buddy',
-        loadChildren: () => import('../gym-buddy/gb-home/gb-home.module').then(m => m.GbHomePageModule)
+        loadChildren: () => import('../gym-buddy/gb-sign-up/gb-sign-up.module').then(m => m.GbSignUpPageModule)
       },
       {
         path: 'settings',

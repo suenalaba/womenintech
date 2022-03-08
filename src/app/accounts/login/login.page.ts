@@ -31,7 +31,7 @@ export class LoginPage implements OnInit {
   get email() {
     return this.credentials.get('email');
   }
- 
+
   get password() {
     return this.credentials.get('password');
   }
@@ -46,7 +46,7 @@ export class LoginPage implements OnInit {
     this.router.navigateByUrl('/accounts/sign-up', { replaceUrl: true });
     // const user = await this.authService.register(this.credentials.value);
     // await loading.dismiss();
- 
+
     // if (user) {
     //   this.router.navigateByUrl('/tabs/home', { replaceUrl: true });
     // } else {
@@ -57,10 +57,10 @@ export class LoginPage implements OnInit {
   async login(value) {
     const loading = await this.loadingController.create();
     await loading.present();
- 
+
     const user = await this.authService.login(this.credentials.value);
     await loading.dismiss();
- 
+
     if (user) {
       this.router.navigateByUrl('/tabs', { replaceUrl: true });
     } else {
@@ -79,11 +79,11 @@ export class LoginPage implements OnInit {
   }
 
   async showLoading() {
-    this.loadingPresent = true
+    this.loadingPresent = true;
     let load = await this.loadingController.create({
-      message: "Please wait....",
+      message: 'Please wait....',
 
-    })
+    });
     await load.present();
   }
 

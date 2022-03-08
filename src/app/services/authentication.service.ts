@@ -18,7 +18,7 @@ import { User, UserDetails } from '../class/user';
 
 export class AuthenticationService {
   // Init with null to filter out the first value in a guard!
-  
+
   constructor(private auth: Auth, private firestore: Firestore) { }
 
   async register(info) {
@@ -67,7 +67,7 @@ export class AuthenticationService {
       lastName: value.lastName
     }
 
-    console.log(create)
+    console.log(create);
     const noteDocRef = doc(this.firestore, `Users`, `${uid}`);
     return setDoc(noteDocRef, create);
   }
@@ -83,20 +83,22 @@ export class AuthenticationService {
       healthCondName: user.healthCondName,
       fitnessGoal: user.fitnessGoal,
       menstruationCycle: user.menstruationCycle
-    }
+    };
 
-    localStorage.removeItem('userSignUp')
+    localStorage.removeItem('userSignUp');
 
+    /*store to firebase firestore (firestore, collection, the very long string is the path)*/
     const noteDocRef = doc(this.firestore, `Users`, `${user.id}`);
-    console.log(this.auth)
-
+    console.log(this.auth);
+    /* store to local storage */
     this.getUserById(this.auth.currentUser.uid).subscribe(res => {
       localStorage.setItem('userInfo', JSON.stringify(res));
 
     });
+    /* must update doc, cannot add doc */
     return updateDoc(noteDocRef, { userDetails });
   }
-
+  /*get the id to retrieve whatever information you want*/
   getUserById(id): Observable<User> {
     const noteDocRef = doc(this.firestore, `Users/${id}`);
     return docData(noteDocRef, { idField: 'id' }) as Observable<User>;

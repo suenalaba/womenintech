@@ -51,3 +51,56 @@ export const personalTraits: GymBuddyDetails[] = [
     isChecked: false
   },
 ];
+
+export const buddyTraits: GymBuddyDetails[] = [
+  {
+      id: 1,
+      text: 'Strength',
+      value: 'strength',
+      name: 'buddyTraits',
+      isChecked: false
+  },
+  {
+      id: 2,
+      text: 'Powerlifting',
+      value: 'powerlifting',
+      name: 'buddyTraits',
+      isChecked: false
+  },
+  {
+      id: 3,
+      text: 'Aerobic',
+      value: 'aerobic',
+      name: 'buddyTraits',
+      isChecked: false
+  },
+  {
+      id: 4,
+      text: 'Calisthenics',
+      value: 'calisthenics',
+      name: 'buddyTraits',
+      isChecked: false
+  },
+  {
+      id: 5,
+      text: 'Yoga',
+      value: 'yoga',
+      name: 'buddyTraits',
+      isChecked: false
+  },
+  {
+    id: 6,
+    text: 'Fitness',
+    value: 'fitness',
+    name: 'buddyTraits',
+    isChecked: false
+  },
+  {
+    id: 7,
+    text: 'Conditioning',
+    value: 'conditioning',
+    name: 'buddyTraits',
+    isChecked: false
+  },
+];
+
