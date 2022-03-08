@@ -19,3 +19,7 @@ export class UserDetails {
     fitnessGoal: string;
     menstruationCycle?: string;
 }
+
+export class GymBuddyDetails{
+    isSignUp: boolean;
+}
