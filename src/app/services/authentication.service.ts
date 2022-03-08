@@ -9,7 +9,7 @@ import { Firestore, collection, collectionData, doc, setDoc, docData } from '@an
 import { updateDoc } from 'firebase/firestore';
 import { user } from 'rxfire/auth';
 import { Observable } from 'rxjs';
-import { User, UserDetails } from '../class/user';
+import { GymBuddyDetails, User, UserDetails } from '../class/user';
 
 @Injectable({
   providedIn: 'root'
@@ -85,6 +85,12 @@ export class AuthenticationService {
       menstruationCycle: user.menstruationCycle
     };
 
+
+    let buddyDetails : GymBuddyDetails = {
+      isSignUp: false
+    }
+
+
     localStorage.removeItem('userSignUp');
 
     /*store to firebase firestore (firestore, collection, the very long string is the path)*/
@@ -96,7 +102,7 @@ export class AuthenticationService {
 
     });
     /* must update doc, cannot add doc */
-    return updateDoc(noteDocRef, { userDetails });
+    return updateDoc(noteDocRef, { userDetails, buddyDetails });
   }
   /*get the id to retrieve whatever information you want*/
   getUserById(id): Observable<User> {
