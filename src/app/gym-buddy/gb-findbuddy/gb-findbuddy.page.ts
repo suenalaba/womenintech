@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GymBuddyProfileInfo } from './GymBuddyInformation';
-
+import { RecommendationEngine } from './RecommendationEngine';
 @Component({
   selector: 'app-gb-findbuddy',
   templateUrl: './gb-findbuddy.page.html',
@@ -16,9 +15,36 @@ export class GbFindbuddyPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    const recommendationEngine = new RecommendationEngine();
+    const matchmakingAlgo = recommendationEngine.getAllMatches();
+    const idRecommendations: string[] = [];
+    //loop to constantly get the array of recommendations.
+    while (true) {
+      const idToDisplay = recommendationEngine.pollMatch(matchmakingAlgo);
+      if (idToDisplay === null) {
+        break;
+      }
+      //use highestscoreid to poll for the user to recommend
+      //extract all info and display to html.
+      console.log(idToDisplay);
+
+      idRecommendations.push(idToDisplay);
+    }
+
+    //extract all information from dictionary based on id and store all information in array
+    //loop through array in html to display information.
+
+    //when user exits page, destroy all objects.
+
+    //testing some stuff here....
+    //var userValidators : IUserValidators = new UserValidators();
+    /*const matchmakingAlgo = new MatchmakingAlgo();
+    matchmakingAlgo.calculateMatchingScores();
+    console.log(score);
+    matchmakingAlgo.getContentFilterScoreMap.forEach((id,scores) => console.log(id,scores));*/
     //const test = new Testz();
     //console.log(test.name);
-    console.log(2/3*20/100);
+    /*console.log(2/3*20/100);
     let mainuser = new GymBuddyProfileInfo();
     console.log(mainuser.getbriefIntro);
     mainuser.setbriefIntro = 'hellotinysherwin';
@@ -27,7 +53,7 @@ export class GbFindbuddyPage implements OnInit {
     mainuser.updateGymBuddyArrays(mainuser.getBuddyTrainStyle,'test');
     console.log(mainuser.getBuddyTrainStyle);
     mainuser.removeFromGymBuddyArrays(mainuser.getBuddyTrainStyle, 'test');
-    console.log(mainuser.getBuddyTrainStyle);
+    console.log(mainuser.getBuddyTrainStyle);*/
   }
   async goToGBHome() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });

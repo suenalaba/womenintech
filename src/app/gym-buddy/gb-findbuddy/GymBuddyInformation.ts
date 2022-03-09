@@ -1,4 +1,5 @@
 export class GymBuddyProfileInfo {
+  private userId: string;
   private isSignUp: boolean;
   private briefIntro?: string;
   //workoutTimePreference: string; //how to create an array to store an array of workouttimepreferences
@@ -14,6 +15,7 @@ export class GymBuddyProfileInfo {
   private gymBuddyInfo = this.userInfo.gymBuddyDetails;
 
   constructor() {
+    this.userId = this.userInfo.id; //probably should use superclass for this.
     this.briefIntro = this.gymBuddyInfo.briefIntro;
     this.workoutTimePreference = this.gymBuddyInfo.workoutTimePreference;
     this.buddyGender = this.gymBuddyInfo.buddyGender;
@@ -23,6 +25,10 @@ export class GymBuddyProfileInfo {
     this.locationPreference = this.gymBuddyInfo.locationPreference;
     this.buddyTraits = this.gymBuddyInfo.buddyTraits;
     this.buddyTrainStyle = this.gymBuddyInfo.buddyTrainStyle;
+  }
+
+  public get getUserId(): string {
+    return this.userId;
   }
 
   public get getbriefIntro(): string {
