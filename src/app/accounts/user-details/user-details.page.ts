@@ -62,7 +62,7 @@ export class UserDetailsPage implements OnInit {
 
     this.injury.valueChanges.subscribe(val => {
       console.log(val)
-      if (val == 'yes') {
+      if (val === 'yes') {
         this.userDetails.controls['areaOfInjury'].setValidators([Validators.required]);
         this.userDetails.controls['injuryType'].setValidators([Validators.required]);
       } else {
@@ -76,8 +76,8 @@ export class UserDetailsPage implements OnInit {
     });
 
     this.healthCond.valueChanges.subscribe(val => {
-      console.log(val)
-      if (val == 'yes') {
+      console.log(val);
+      if (val === 'yes') {
         this.userDetails.controls['healthCondName'].setValidators([Validators.required]);
       } else {
         this.userDetails.controls['healthCondName'].clearValidators();
@@ -85,7 +85,7 @@ export class UserDetailsPage implements OnInit {
       this.userDetails.controls['healthCondName'].updateValueAndValidity();
     });
 
-    if (this.gender == 'female') {
+    if (this.gender === 'female') {
         this.userDetails.controls['menstruationCycle'].setValidators([Validators.required]);
       } else {
         this.userDetails.controls['menstruationCycle'].clearValidators();
@@ -164,7 +164,7 @@ export class UserDetailsPage implements OnInit {
 
   nextPage(){
     console.log(this.slides);
-    console.log(this.userDetails)
+    console.log(this.userDetails);
 
     this.slides.slideNext();
   }
@@ -195,7 +195,7 @@ export class UserDetailsPage implements OnInit {
   }
 
   async completeSignUp(){
-    console.log(this.userSignUp.id)
+    console.log(this.userSignUp.id);
     /*stuff stored in userdetails object */
     /*.value is to access form details */
     /*.id new variable name in the object */
