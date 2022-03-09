@@ -1,31 +1,57 @@
 import { GymBuddyProfileInfo } from './GymBuddyInformation';
 
-class MatchmakingAlgo {
+export class MatchmakingAlgo {
 
-  private static readonly TIME_AND_LOC_PREF_WEIGHTAGE = 10/100;
-  private static readonly GOALS_WEIGHTAGE = 20/100;
-  private static readonly EXPERTISE_AND_STYLE_WEIGHTAGE = 60/100;
+  private static readonly TIME_AND_LOC_PREF_WEIGHTAGE = 10;
+  private static readonly GOALS_WEIGHTAGE = 20;
+  private static readonly EXPERTISE_AND_STYLE_WEIGHTAGE = 60;
   private static readonly FIVE_SELECTIONS = 5;
   private static readonly TWO_SELECTIONS = 2;
   private static readonly THREE_SELECTIONS = 3;
   private static readonly TRAITS_AND_STYLE_SELECTIONS = 10;
-  /* Record<userid, matchscore>*/
-  private myVar: Record<string, number> = {
+  /* dictionary <userid, matchscore>*/
+  //private contentFilterScoreMap: { [key: string]: number} = {};
+  /*private contentFilterScoreMap: Record<string, number> = {
     //key1: 'val1',
     //key2: 'val2',
- };
+ };*/
+ //let scores = new Map<string, number>();
+  private contentFilterScoreMap = new Map<string, number>([]);
 
   constructor() {
 
   }
 
-  public calculateMatchingScore() {
-    const currentUser = new GymBuddyProfileInfo();
-    const anotherUser = new GymBuddyProfileInfo();
-    const matchScore = this.getTotalMatchScore(currentUser, anotherUser);
+  public get getContentFilterScoreMap() {
+    return this.contentFilterScoreMap;
   }
 
+  public deleteIdFromContentFilterScoreMap(highestScoreId) {
+    this.contentFilterScoreMap.delete(highestScoreId);
+  }
 
+  public calculateMatchingScores() {
+    /* Pseudo code for Matchmaking Algo
+    *  For each value in K:V pair in localStorage(dictionary of documents in app)
+    * extract the Value and extract the gymbuddyprofile using json parser
+    * each time, creating an object of a gymbuddyprofile.
+    * store each object(gymbuddyprofile) inside an array of gymbuddyprofile objects
+    * Terminate for loop
+    * Run a new for loop, looping through the array of gymbuddyprofile objects
+    * calculate the matching score between each user
+    * get the string id of the other user
+    * store in hashmap <id,matching score>
+    * this hashmap is to be used in recommendation engine */
+    const currentUser = new GymBuddyProfileInfo();
+    const anotherUser = new GymBuddyProfileInfo();
+    //calculate matching score
+    const matchScore = this.getTotalMatchScore(currentUser, anotherUser);
+    //get id to store
+    const anotherUserId = anotherUser.getUserId;
+    //store to hashmap
+    this.contentFilterScoreMap.set(anotherUserId,matchScore);
+    //return matchScore;
+  }
 
 
   private getTotalMatchScore(currentUser: GymBuddyProfileInfo, anotherUser: GymBuddyProfileInfo) {
