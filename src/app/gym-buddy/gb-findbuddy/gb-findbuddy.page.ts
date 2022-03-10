@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RecommendationEngine } from './RecommendationEngine';
+import { FindBuddyQuery } from './FindBuddyQuery';
+
 @Component({
   selector: 'app-gb-findbuddy',
   templateUrl: './gb-findbuddy.page.html',
@@ -16,6 +18,8 @@ export class GbFindbuddyPage implements OnInit {
 
   ngOnInit() {
     const recommendationEngine = new RecommendationEngine();
+    const findBuddy= new FindBuddyQuery();
+    findBuddy.findBuddyQuery();
     const matchmakingAlgo = recommendationEngine.getAllMatches();
     const idRecommendations: string[] = [];
     //loop to constantly get the array of recommendations.
