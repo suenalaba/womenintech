@@ -1,3 +1,5 @@
+import { userInfo } from "os";
+
 export class GymBuddyProfileInfo {
   private userId: string;
   private isSignUp: boolean;
@@ -11,23 +13,27 @@ export class GymBuddyProfileInfo {
   private locationPreference?: string[];
   private buddyTraits?: string[];
   private buddyTrainStyle?: string[];
-  private userInfo;
-  private gymBuddyInfo;
+  private userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  private gymBuddyInfo=this.userInfo.gymBuddyInfo;
 
   constructor(data) {
     this.userInfo=JSON.parse(JSON.stringify(data));
     this.userId = this.userInfo.id; //probably should use superclass for this.
+    console.log("UserID:");
+    console.log(this.userId);
     this.gymBuddyInfo=this.userInfo.gymBuddyDetails;
-    this.briefIntro = this.gymBuddyInfo.briefIntro;
-    this.workoutTimePreference = this.gymBuddyInfo.workoutTimePreference;
-    this.buddyGender = this.gymBuddyInfo.buddyGender;
-    this.gymBuddyGoals = this.gymBuddyInfo.gymBuddyGoals;
-    this.personalTraits = this.gymBuddyInfo.personalTraits;
-    this.personalTrainStyle = this.gymBuddyInfo.personalTrainStyle;
-    this.locationPreference = this.gymBuddyInfo.locationPreference;
-    this.buddyTraits = this.gymBuddyInfo.buddyTraits;
-    this.buddyTrainStyle = this.gymBuddyInfo.buddyTrainStyle;
+    this.briefIntro = this.userInfo.gymBuddyDetails.briefIntro;
+    this.workoutTimePreference = this.userInfo.gymBuddyDetails.workoutTimePreference;
+    this.buddyGender = this.userInfo.gymBuddyDetails.buddyGender;
+    this.gymBuddyGoals = this.userInfo.gymBuddyDetails.gymBuddyGoals;
+    this.personalTraits = this.userInfo.gymBuddyDetails.personalTraits;
+    this.personalTrainStyle = this.userInfo.gymBuddyDetails.personalTrainStyle;
+    this.locationPreference = this.userInfo.gymBuddyDetails.locationPreference;
+    this.buddyTraits = this.userInfo.gymBuddyDetails.buddyTraits;
+    this.buddyTrainStyle = this.userInfo.gymBuddyDetails.buddyTrainStyle;
   }
+
+
 
   public get getUserId(): string {
     return this.userId;

@@ -1,8 +1,12 @@
 import { MatchmakingAlgo } from './MatchmakingAlgo';
+import { DbRetrieveService } from './../../services/db-retrieve.service';
+
+
 export class RecommendationEngine {
   matchmakingAlgo:MatchmakingAlgo
-  constructor() {
-    this.matchmakingAlgo = new MatchmakingAlgo()
+  constructor(    private dbRetrieve: DbRetrieveService,
+    ) {
+    this.matchmakingAlgo = new MatchmakingAlgo(this.dbRetrieve)
 
 
   }
@@ -25,10 +29,8 @@ export class RecommendationEngine {
   }
 
   public getAllMatches(arrayOfProfiles) {
-    console.log("Start calculating");
     this.matchmakingAlgo.calculateMatchingScores(arrayOfProfiles);
     this.matchmakingAlgo.getContentFilterScoreMap;
-    console.log("Finish calculating");
   }
 
   private getHighestScoreId(contentFilterScoreMap: Map<string, number>) {

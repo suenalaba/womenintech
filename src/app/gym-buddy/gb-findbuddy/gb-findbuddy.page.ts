@@ -11,16 +11,13 @@ import { GymBuddyProfileInfo } from './GymBuddyInformation';
   styleUrls: ['./gb-findbuddy.page.scss'],
 })
 export class GbFindbuddyPage implements OnInit {
-
-  private userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  private gymBuddyInfo = this.userInfo.gymBuddyDetails;
   constructor(
     private router: Router,
     private dbRetrieve: DbRetrieveService,
   ) { }
 
   async ngOnInit() {
-    const recommendationEngine = new RecommendationEngine();
+    const recommendationEngine = new RecommendationEngine(this.dbRetrieve);
     const findBuddy= new FindBuddyQuery(this.dbRetrieve);
     let arrayofProfile = await findBuddy.findBuddyQuery();
     recommendationEngine.getAllMatches(arrayofProfile);

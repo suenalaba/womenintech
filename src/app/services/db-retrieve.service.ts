@@ -38,6 +38,22 @@ export class DbRetrieveService {
 
     return arrayOfProfiles;
   }
+  public async getCurrentUser(){
+    console.log("Hello")
+    const usersDB = collection(this.firestore, "Users");
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userID=userInfo.userID;
+    const q = query(usersDB, where("userID", "==", userID));
+    const querySnapshot =await this.pullFromDB(q);
+
+    let data;
+    querySnapshot.forEach((doc) => {
+      console.log("Hello")
+      data=doc.data();
+      console.log(doc.id);
+    });
+    return data;
+  }
 
   private async pullFromDB(q) {
     const querySnapshot = await getDocs(q);
