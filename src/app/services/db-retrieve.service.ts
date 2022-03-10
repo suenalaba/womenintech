@@ -26,7 +26,6 @@ export class DbRetrieveService {
       q = query(usersDB, where("gymBuddyDetails.isSignUp", "==", true),where("gymBuddyDetails.buddyGender", "in", ['no_preference', gender]));
        //q = query(usersDB, where("gymBuddyDetails.isSignUp", "==", true),where("gender", "==", preferredGender),where("gymBuddyDetails.buddyGender", "in", ['no_preference', gender]));
     }
-    console.log("Reach here");
     const querySnapshot =await this.pullFromDB(q);
 
     let arrayOfProfiles= []
@@ -34,25 +33,7 @@ export class DbRetrieveService {
       console.log(doc.id);
       arrayOfProfiles.push(new GymBuddyProfileInfo(doc.data()));
     });
-    console.log("finish creating profiles");
-
     return arrayOfProfiles;
-  }
-  public async getCurrentUser(){
-    console.log("Hello")
-    const usersDB = collection(this.firestore, "Users");
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    const userID=userInfo.userID;
-    const q = query(usersDB, where("userID", "==", userID));
-    const querySnapshot =await this.pullFromDB(q);
-
-    let data;
-    querySnapshot.forEach((doc) => {
-      console.log("Hello")
-      data=doc.data();
-      console.log(doc.id);
-    });
-    return data;
   }
 
   private async pullFromDB(q) {

@@ -7,8 +7,6 @@ export class RecommendationEngine {
   constructor(    private dbRetrieve: DbRetrieveService,
     ) {
     this.matchmakingAlgo = new MatchmakingAlgo(this.dbRetrieve)
-
-
   }
 
   public pollMatch() {
