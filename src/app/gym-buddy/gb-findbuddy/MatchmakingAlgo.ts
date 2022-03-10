@@ -30,7 +30,10 @@ export class MatchmakingAlgo {
     this.contentFilterScoreMap.delete(highestScoreId);
   }
 
-  public calculateMatchingScores() {
+  public calculateMatchingScores(arrayOfProfiles) {
+    let matchScore;
+    let anotherUserId;
+    const currentUser=new GymBuddyProfileInfo(localStorage.getItem('userInfo'));
     /* Pseudo code for Matchmaking Algo
     *  For each value in K:V pair in localStorage(dictionary of documents in app)
     * extract the Value and extract the gymbuddyprofile using json parser
@@ -42,15 +45,15 @@ export class MatchmakingAlgo {
     * get the string id of the other user
     * store in hashmap <id,matching score>
     * this hashmap is to be used in recommendation engine */
-    const currentUser = new GymBuddyProfileInfo();
-    const anotherUser = new GymBuddyProfileInfo();
     //calculate matching score
-    const matchScore = this.getTotalMatchScore(currentUser, anotherUser);
-    //get id to store
-    const anotherUserId = anotherUser.getUserId;
-    //store to hashmap
-    this.contentFilterScoreMap.set(anotherUserId,matchScore);
-    //return matchScore;
+    arrayOfProfiles.forEach(anotherUser => {
+      matchScore = this.getTotalMatchScore(currentUser, anotherUser);
+      //get id to store
+      anotherUserId = anotherUser.getUserId;
+      //store to hashmap
+      this.contentFilterScoreMap.set(anotherUserId,matchScore);
+      //return matchScore;
+    });
   }
 
 

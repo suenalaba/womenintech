@@ -21,12 +21,12 @@ export class GbFindbuddyPage implements OnInit {
   ngOnInit() {
     const recommendationEngine = new RecommendationEngine();
     const findBuddy= new FindBuddyQuery(this.dbRetrieve);
-    findBuddy.findBuddyQuery();
-    const matchmakingAlgo = recommendationEngine.getAllMatches();
+    const arrayofProfile=findBuddy.findBuddyQuery();
+    recommendationEngine.getAllMatches(arrayofProfile);
     const idRecommendations: string[] = [];
     //loop to constantly get the array of recommendations.
     while (true) {
-      const idToDisplay = recommendationEngine.pollMatch(matchmakingAlgo);
+      const idToDisplay = recommendationEngine.pollMatch();
       if (idToDisplay === null) {
         break;
       }

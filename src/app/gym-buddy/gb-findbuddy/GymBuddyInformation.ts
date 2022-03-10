@@ -11,10 +11,11 @@ export class GymBuddyProfileInfo {
   private locationPreference?: string[];
   private buddyTraits?: string[];
   private buddyTrainStyle?: string[];
-  private userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  private gymBuddyInfo = this.userInfo.gymBuddyDetails;
+  private userInfo;
+  private gymBuddyInfo;
 
-  constructor() {
+  constructor(data) {
+    this.userInfo=JSON.parse(data)
     this.userId = this.userInfo.id; //probably should use superclass for this.
     this.briefIntro = this.gymBuddyInfo.briefIntro;
     this.workoutTimePreference = this.gymBuddyInfo.workoutTimePreference;

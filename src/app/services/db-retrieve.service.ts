@@ -6,11 +6,15 @@ import { Observable } from 'rxjs';
 import { User, UserDetails } from '../class/user';
 import { GymBuddyDetails } from '../class/GymBuddyProfile';
 import { query, where, getDocs,collectionGroup } from "firebase/firestore";
+import { GymBuddyProfileInfo } from '../gym-buddy/gb-findbuddy/GymBuddyInformation';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DbRetrieveService {
+  private arrayOfProfiles= [];
+
   constructor(private firestore: Firestore) { }
 
   public async findBuddiesFromDB(preferredGender,gender){
@@ -23,18 +27,16 @@ export class DbRetrieveService {
     else{
        q = query(usersDB, where("gymBuddyDetails.isSignUp", "==", true),where("gender", "==", preferredGender),where("gymBuddyDetails.buddyGender", "in", ['no_preference', gender]));
     }
-    await this.pullFromDB(q);
+    const querySnapshot =await this.pullFromDB(q);
+    querySnapshot.forEach((doc) => {
+      this.arrayOfProfiles.push(new GymBuddyProfileInfo(doc.data()));
+    });
+    return this.arrayOfProfiles;
   }
 
   private async pullFromDB(q) {
     const querySnapshot = await getDocs(q);
-    /*
-    querySnapshot.forEach((doc) => {
-      console.log("test123");
-    console.log(doc.id, " => ", doc.data());
-    });
-    console.log("test1234");
-    */
+   return querySnapshot;
   }
 
 }
