@@ -5,7 +5,7 @@ import { user } from 'rxfire/auth';
 import { Observable } from 'rxjs';
 import { User, UserDetails } from '../class/user';
 import { GymBuddyDetails } from '../class/GymBuddyProfile';
-import { query, where, getDocs } from "firebase/firestore";
+import { query, where, getDocs,collectionGroup } from "firebase/firestore";
 
 @Injectable({
   providedIn: 'root'
@@ -13,23 +13,28 @@ import { query, where, getDocs } from "firebase/firestore";
 export class DbRetrieveService {
   constructor(private firestore: Firestore) { }
 
-  public findBuddiesFromDB(preferredGender){
-    const usersDB = collection(this.firestore, "users");
+  public async findBuddiesFromDB(preferredGender,gender){
+    const usersDB = collection(this.firestore, "Users");
     let q : Query;
+    preferredGender="female"; //for testing purposes
     if(preferredGender==="no_preference"){
-        q = query(usersDB, where("isSignUp", "==", "true"));
+        q = query(usersDB, where("gymBuddyDetails.isSignUp", "==", true),where("gymBuddyDetails.buddyGender", "in", ['no_preference', gender]));
     }
     else{
-       q = query(usersDB, where("isSignUp", "==", "true"),where("gender", "==", preferredGender));
+       q = query(usersDB, where("gymBuddyDetails.isSignUp", "==", true),where("gender", "==", preferredGender),where("gymBuddyDetails.buddyGender", "in", ['no_preference', gender]));
     }
-    this.pullFromDB(q);
+    await this.pullFromDB(q);
   }
 
   private async pullFromDB(q) {
     const querySnapshot = await getDocs(q);
+    /*
     querySnapshot.forEach((doc) => {
+      console.log("test123");
     console.log(doc.id, " => ", doc.data());
     });
+    console.log("test1234");
+    */
   }
 
 }

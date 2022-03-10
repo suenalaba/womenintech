@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RecommendationEngine } from './RecommendationEngine';
 import { FindBuddyQuery } from './FindBuddyQuery';
+import { DbRetrieveService } from './../../services/db-retrieve.service';
 
 @Component({
   selector: 'app-gb-findbuddy',
@@ -14,11 +15,12 @@ export class GbFindbuddyPage implements OnInit {
   private gymBuddyInfo = this.userInfo.gymBuddyDetails;
   constructor(
     private router: Router,
+    private dbRetrieve: DbRetrieveService,
   ) { }
 
   ngOnInit() {
     const recommendationEngine = new RecommendationEngine();
-    const findBuddy= new FindBuddyQuery();
+    const findBuddy= new FindBuddyQuery(this.dbRetrieve);
     findBuddy.findBuddyQuery();
     const matchmakingAlgo = recommendationEngine.getAllMatches();
     const idRecommendations: string[] = [];
