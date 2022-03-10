@@ -23,6 +23,8 @@ export class MatchmakingAlgo {
   }
 
   public get getContentFilterScoreMap() {
+    console.log("test123")
+    this.getContentFilterScoreMap.forEach((id,scores) => console.log(id,scores))
     return this.contentFilterScoreMap;
   }
 
@@ -30,10 +32,12 @@ export class MatchmakingAlgo {
     this.contentFilterScoreMap.delete(highestScoreId);
   }
 
-  public calculateMatchingScores(arrayOfProfiles) {
+  public calculateMatchingScores(arrayOfProfiles:Array<GymBuddyProfileInfo>) {
     let matchScore;
     let anotherUserId;
-    const currentUser=new GymBuddyProfileInfo(localStorage.getItem('userInfo'));
+    console.log("is the problem here?");
+    const currentUser=new GymBuddyProfileInfo(localStorage.getItem('userInfo')); // placeholder
+    console.log("is the problem here?");
     /* Pseudo code for Matchmaking Algo
     *  For each value in K:V pair in localStorage(dictionary of documents in app)
     * extract the Value and extract the gymbuddyprofile using json parser

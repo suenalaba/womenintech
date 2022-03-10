@@ -13,25 +13,30 @@ import { GymBuddyProfileInfo } from '../gym-buddy/gb-findbuddy/GymBuddyInformati
   providedIn: 'root'
 })
 export class DbRetrieveService {
-  private arrayOfProfiles= [];
 
   constructor(private firestore: Firestore) { }
 
   public async findBuddiesFromDB(preferredGender,gender){
     const usersDB = collection(this.firestore, "Users");
     let q : Query;
-    preferredGender="female"; //for testing purposes
     if(preferredGender==="no_preference"){
         q = query(usersDB, where("gymBuddyDetails.isSignUp", "==", true),where("gymBuddyDetails.buddyGender", "in", ['no_preference', gender]));
     }
     else{
-       q = query(usersDB, where("gymBuddyDetails.isSignUp", "==", true),where("gender", "==", preferredGender),where("gymBuddyDetails.buddyGender", "in", ['no_preference', gender]));
+      q = query(usersDB, where("gymBuddyDetails.isSignUp", "==", true),where("gymBuddyDetails.buddyGender", "in", ['no_preference', gender]));
+       //q = query(usersDB, where("gymBuddyDetails.isSignUp", "==", true),where("gender", "==", preferredGender),where("gymBuddyDetails.buddyGender", "in", ['no_preference', gender]));
     }
+    console.log("Reach here");
     const querySnapshot =await this.pullFromDB(q);
+
+    let arrayOfProfiles= []
     querySnapshot.forEach((doc) => {
-      this.arrayOfProfiles.push(new GymBuddyProfileInfo(doc.data()));
+      console.log(doc.id);
+      arrayOfProfiles.push(new GymBuddyProfileInfo(doc.data()));
     });
-    return this.arrayOfProfiles;
+    console.log("finish creating profiles");
+
+    return arrayOfProfiles;
   }
 
   private async pullFromDB(q) {

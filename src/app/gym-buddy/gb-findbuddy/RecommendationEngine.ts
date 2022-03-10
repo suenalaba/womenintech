@@ -25,7 +25,10 @@ export class RecommendationEngine {
   }
 
   public getAllMatches(arrayOfProfiles) {
+    console.log("Start calculating");
     this.matchmakingAlgo.calculateMatchingScores(arrayOfProfiles);
+    this.matchmakingAlgo.getContentFilterScoreMap;
+    console.log("Finish calculating");
   }
 
   private getHighestScoreId(contentFilterScoreMap: Map<string, number>) {

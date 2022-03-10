@@ -10,9 +10,12 @@ export class FindBuddyQuery {
   constructor(private service: DbRetrieveService
   ) {this.dbRetrieve=service; }
 
-  public findBuddyQuery() {
+  public async findBuddyQuery() {
     this.settingFields();
-    this.dbRetrieve.findBuddiesFromDB(this.preferredGender,this.gender);
+    console.log("test1");
+    const arrayofProfile=await  this.dbRetrieve.findBuddiesFromDB(this.preferredGender,this.gender);
+    console.log("test2");
+    return arrayofProfile;
   }
   private settingFields() {
     this.userInfo = JSON.parse(localStorage.getItem('userInfo'));

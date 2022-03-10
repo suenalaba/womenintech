@@ -15,8 +15,9 @@ export class GymBuddyProfileInfo {
   private gymBuddyInfo;
 
   constructor(data) {
-    this.userInfo=JSON.parse(data)
+    this.userInfo=JSON.parse(JSON.stringify(data));
     this.userId = this.userInfo.id; //probably should use superclass for this.
+    this.gymBuddyInfo=this.userInfo.gymBuddyDetails;
     this.briefIntro = this.gymBuddyInfo.briefIntro;
     this.workoutTimePreference = this.gymBuddyInfo.workoutTimePreference;
     this.buddyGender = this.gymBuddyInfo.buddyGender;
