@@ -1,3 +1,27 @@
 ion-content{
     height:50%
 }
+
+div.input-align{
+    display:flex;
+    align-items: center;
+
+}
+
+ion-card-title{
+    font-size:15px;
+    text-align: center;
+}
+
+ion-label{
+    font-weight: bold;
+}
+
+ion-content{
+    --background: transparent;
+}
+
+div.btn-grp{
+    width:90%;
+    margin: 0 auto;
+}

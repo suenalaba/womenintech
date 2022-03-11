@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ListWorkoutsPageRoutingModule } from './list-workouts-routing.module';
 
 import { ListWorkoutsPage } from './list-workouts.page';
-// import { CreateWorkoutComponent } from 'src/app/components/create-workout/create-workout.component';
+import { CreateWorkoutComponent } from 'src/app/components/create-workout/create-workout.component';
 
 @NgModule({
   imports: [
@@ -16,8 +16,7 @@ import { ListWorkoutsPage } from './list-workouts.page';
     IonicModule,
     ListWorkoutsPageRoutingModule,
     ReactiveFormsModule
-    // CreateWorkoutComponent
   ],
-  declarations: [ListWorkoutsPage]
+  declarations: [ListWorkoutsPage, CreateWorkoutComponent]
 })
 export class ListWorkoutsPageModule {}

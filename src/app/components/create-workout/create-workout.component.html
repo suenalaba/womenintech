@@ -1,33 +1,87 @@
+<ion-content [scrollEvents]="true" >
 <form (ngSubmit)="completeSignUp()" [formGroup]="userUpdates">
-    <ion-card>
-      <ion-card-content>
-        <ion-item class="ion-margin-bottom" lines="none">
-          {{ userDetails.height }}
-        </ion-item>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Any changes?</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item class="ion-margin-bottom">
+        <ion-label position="stacked">Height</ion-label>
+        <div class="input-align">
+          <ion-input type="number" value="{{userDetails.height}}" formControlName="height"></ion-input>
+          <span>CM</span>
+        </div>
+        <ion-note slot="error" *ngIf="height.dirty && height.errors">Enter valid height</ion-note>
+      </ion-item>
 
-        <ion-item class="ion-margin-bottom" lines="none">
-          {{ userDetails.weight }}
-        </ion-item>
-        
-        <!-- <ion-item class="ion-margin-bottom" lines="none">
-          <ion-label position="stacked">What is your height?</ion-label>
-          <div class="input-align">
-            <ion-input type="number" value="{{userDetails.height}}" formControlName="height"></ion-input>
-            <span>CM</span>
-          </div>
-          <ion-note slot="error" *ngIf="height.dirty && height.errors">Enter valid height</ion-note>
-        </ion-item>
+      <ion-item class="ion-margin-bottom">
+        <ion-label position="stacked">Weight</ion-label>
+        <div class="input-align">
+          <ion-input type="number" value="{{userDetails.weight}}" formControlName="weight"></ion-input>
+          <span>KG</span>
+        </div>
+        <ion-note slot="error" *ngIf="weight.dirty && weight.errors">Enter valid weight</ion-note>
+      </ion-item>
 
-        <ion-item class="ion-margin-bottom" lines="none">
-          <ion-label position="stacked">What is your weight?</ion-label>
-          <div class="input-align">
-            <ion-input type="number" placeholder="" formControlName="weight"></ion-input>
-            <span>KG</span>
-          </div>
-          <ion-note slot="error" *ngIf="weight.dirty && weight.errors">Enter valid weight</ion-note>
-        </ion-item>
- -->
+      <ion-item class="ion-margin-bottom" lines="none">
+        <ion-label position="stacked">Injury</ion-label>
+        <ion-radio-group formControlName="injury">
+          <ion-row>
+            <ion-col>
+              <ion-item lines="none">
+                <ion-label>Yes</ion-label>
+                <ion-radio mode="md" item-left value="yes"></ion-radio>
+              </ion-item>
+            </ion-col>
 
-      </ion-card-content>
-    </ion-card>
-  </form>
+            <ion-col>
+              <ion-item lines="none">
+                <ion-label>No</ion-label>
+                <ion-radio mode="md" item-left value="no"></ion-radio>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-radio-group>
+        <!-- <ion-note slot="error" *ngIf="injury.dirty && injury.errors">Enter a selection</ion-note> -->
+      </ion-item>
+
+      <ion-item class="ion-margin-bottom" lines="none" *ngIf="injury.value==='yes'">
+        <ion-label position="stacked">What is your injury?</ion-label>
+        <ion-select formControlName="areaOfInjury" (ionChange)="injuryChange($event)">
+          <ion-select-option *ngFor="let i of listInjuries" [value]="i.value">{{i.text}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="ion-margin-bottom" lines="none" *ngIf="injury.value==='yes'">
+        <ion-label position="stacked">Select specific injury</ion-label>
+        <ion-select formControlName="injuryType">
+          <ion-select-option *ngFor="let i of selectedInjury" [value]="i.value">{{i.text}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="ion-margin-bottom">
+        <ion-label position="stacked">Fitness Goal</ion-label>
+        <ion-select formControlName="fitnessGoal">
+          <ion-select-option *ngFor="let g of listGoals" [value]="g.value">{{g.text}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="ion-margin-bottom" *ngIf="userInfo.gender==='female'">
+          <ion-label position="stacked">Menstruation Cycle</ion-label>
+          <ion-text color="medium">Last Period: {{getPeriodDate(userDetails.menstruationCycle)}} </ion-text>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="btn-grp">
+    <ion-button expand="block" color="light" (click)="updateDetails()" type="submit">
+      UPDATE
+    </ion-button>
+    <ion-button expand="block" fill="outline" color="danger" (click)="cancel()">
+      CANCEL
+    </ion-button>
+  </div>
+</form>
+
+  
+</ion-content>

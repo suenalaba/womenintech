@@ -11,4 +11,4 @@ import { CreateWorkoutComponent } from './create-workout.component';
   declarations: [CreateWorkoutComponent],
   exports: [CreateWorkoutComponent]
 })
-export class ExploreContainerComponentModule {}
+export class CreateWorkoutComponentModule {}

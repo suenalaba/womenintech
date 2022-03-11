@@ -9,6 +9,7 @@ export class User {
     birthday: string;
     username: string;
     gymBuddyDetails?: GymBuddyDetails;
+    userDetails?: UserDetails;
 }
 
 export class UserDetails {
