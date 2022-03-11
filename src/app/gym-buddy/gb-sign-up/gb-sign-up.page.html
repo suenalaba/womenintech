@@ -1,126 +1,154 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>
-      Gym Buddy
+      Gym Buddy Sign Up
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [scrollEvents]="true">
+<ion-content [scrollEvents]="true" id="scrollUp">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">CREATE YOUR PROFILE</ion-title>
     </ion-toolbar>
   </ion-header>
 
-
-
   <!-- Add content here -->
-  <form [formGroup] = "gymBuddyPersonalFormData" (ngSubmit) = "signUpForGymBuddy()">
+  <form [formGroup]="gymBuddyPersonalFormData" (ngSubmit)="signUpForGymBuddy()">
     <swiper (swiper)="setSwiperInstance($event)" (slideChangeTransitionStart)="slideWillChange()"
       (slideChangeTransitionEnd)="slideDidChange()" [allowTouchMove]="false">
-    <ng-template swiperSlide>
-      <ion-list>
-      <ion-item>
-        <ion-label position="stacked">Name</ion-label>
-        <ion-input value= {{getFullName}} disabled></ion-input> <!-- to import name here-->
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Brief Introduction</ion-label>
-        <ion-textarea rows="3" cols="20" placeholder="Brief intro here..." formControlName="briefIntro"></ion-textarea>
-      </ion-item>
-      <ion-list>
-        <ion-list-header>Preferred Workout Time</ion-list-header>
-        <ion-item *ngFor="let entry of timePrefList"> <!-- for each item in workoutList print it-->
-          <ion-label>{{entry.text}}</ion-label>
-          <ion-text>{{entry.time}}</ion-text>
-          <ion-checkbox formArrayName = "timePref" slot="start"
-          (click)="storeGBTimePrefData(entry)"></ion-checkbox>
-        </ion-item>
-      </ion-list>
-      <ion-list>
-        <ion-list-header>Preferred Buddy Gender</ion-list-header>
-        <ion-radio-group formControlName = "buddyPref">
-          <ion-item *ngFor="let entry of genderList"> <!-- for each item in workoutList print it-->
-            <ion-label>{{entry.text}}</ion-label>
-            <ion-radio mode="md" [value]="entry.value" slot="start"></ion-radio>
-          </ion-item>
-        </ion-radio-group>
-      </ion-list>
-      <ion-list *ngIf="gymBuddyGoalsList">
-        <ion-list-header>Goals you want to achieve with your buddy</ion-list-header>
-        <ion-label position="stacked">Select up to 3 strengths</ion-label>
-        <ion-item *ngFor="let entry of gymBuddyGoalsList"> <!-- for each item in workoutList print it-->
-          <ion-label>{{entry.text}}</ion-label>
-          <ion-checkbox slot="start" formArrayName = "gymBuddyGoals"
-          (click)="storeGBGoalsData(entry); checkGymBuddyGoals(entry);"
-          [disabled]="!entry.isChecked && gymBuddyGoalsChecked === gymBuddyGoalsLimit"></ion-checkbox>
-        </ion-item>
-      </ion-list>
-      <ion-list>
-        <ion-list-header>What are your areas of expertise?</ion-list-header>
-        <ion-label position="stacked">Select up to 3 strengths</ion-label>
-          <ion-item *ngFor="let entry of personalTraitsList">
-            <ion-label>{{entry.text}}</ion-label>
-            <ion-checkbox slot = "start" formArrayName = "personalTraits"
-            (click)="storeGBPersonalTraitsData(entry); checkPersonalTraits(entry);"
-            [disabled]="!entry.isChecked && personalTraitsChecked === personalTraitsLimit"></ion-checkbox>
-          </ion-item>
-      </ion-list>
-      <ion-list>
-        <ion-list-header>What is your style of training?</ion-list-header>
-        <ion-label position="stacked">Select up to 2 styles</ion-label>
-        <ion-item *ngFor="let entry of personalStyleList">
-          <ion-label>{{entry.text}}</ion-label>
-          <ion-checkbox slot = "start" formArrayName = "personalStyle"
-          (click)="storeGBPersonalStylesData(entry); checkPersonalTrainStyle(entry);"
-          [disabled]="!entry.isChecked && personalTrainStyleChecked === personalTrainStyleLimit"></ion-checkbox>
-        </ion-item>
-      </ion-list>
-      <ion-list>
-        <ion-list-header>Where would you like to train?</ion-list-header>
-        <ion-label position="stacked">Select up to 2 locations</ion-label>
-        <ion-item *ngFor="let entry of locationPrefList">
-          <ion-label>{{entry.text}}</ion-label>
-          <ion-checkbox slot = "start" formArrayName = "locationPref"
-          (click)="storeGBPrefLocationsData(entry); checkLocationPref(entry);"
-          [disabled]="!entry.isChecked && locationPrefChecked === locationPrefLimit"></ion-checkbox>
-        </ion-item>
-      </ion-list>
-    </ion-list>
-    <ion-button expands="block" (click)="nextPage()"
-    [disabled] = !checkGBFirstPageValidity()>NEXT</ion-button>
-  </ng-template>
-  <ng-template swiperSlide>
-    <ion-header collapse="condense">
-      <ion-toolbar>
-        <ion-title size="medium">YOUR BUDDY PREFERENCE</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-button expands="block" (click)="prevPage()">BACK</ion-button>
-    <ion-list>
-      <ion-list-header>What traits would you like in your buddy?</ion-list-header>
-      <ion-label position="stacked">Select up to 3 strengths</ion-label>
-      <ion-item *ngFor="let entry of buddyTraitsList">
-        <ion-label>{{entry.text}}</ion-label>
-        <ion-checkbox slot = "start" formArrayName = "buddyTraits"
-        (click)="storeGBBuddyTraitsData(entry); checkBuddyTraits(entry);"
-        [disabled]="!entry.isChecked && buddyTraitsChecked === buddyTraitsLimit"></ion-checkbox>
-      </ion-item>
-    </ion-list>
-    <ion-list>
-      <ion-list-header>What training style would you like your buddy to have?</ion-list-header>
-      <ion-label position="stacked">Select up to 2 styles</ion-label>
-      <ion-item *ngFor="let entry of buddyStyleList">
-        <ion-label>{{entry.text}}</ion-label>
-        <ion-checkbox slot = "start" formArrayName = "buddyTrainStyle"
-        (click)="storeGBBuddyTrainStyleData(entry); checkBuddyTrainStyle(entry);"
-        [disabled]="!entry.isChecked && buddyTrainStyleChecked === buddyTrainStyleLimit"></ion-checkbox>
-      </ion-item>
-    </ion-list>
-    <ion-button type="submit" expands="block" [disabled] = !checkGBSecondPageValidity()>DONE</ion-button>
-  </ng-template>
-  </swiper>
+
+      <!-- SWIPER PAGE 1  -->
+      <ng-template swiperSlide>
+        <ion-card>
+          <ion-card-content>
+            <!-- NAME -->
+            <ion-item>
+              <ion-label position="stacked">Name</ion-label>
+              <ion-input value={{getFullName}} disabled></ion-input> <!-- to import name here-->
+            </ion-item>
+            <!-- Introduction -->
+            <ion-item>
+              <ion-label position="stacked">Brief Introduction</ion-label>
+              <ion-textarea rows="3" cols="20" placeholder="Brief intro here..." formControlName="briefIntro">
+              </ion-textarea>
+            </ion-item>
+
+            <!---Workout time-->
+              <ion-list>
+                <ion-list-header>Preferred Workout Time</ion-list-header>
+                <ion-item *ngFor="let entry of timePrefList">
+                  <!-- for each item in workoutList print it-->
+                  <ion-label>{{entry.text}}</ion-label>
+                  <ion-text>{{entry.time}}</ion-text>
+                  <ion-checkbox formArrayName="timePref" slot="start" (click)="storeGBTimePrefData(entry)"></ion-checkbox>
+                </ion-item>
+              </ion-list>
+
+              <!--Gender-->
+              <ion-list>
+              <ion-list-header>Preferred Buddy Gender</ion-list-header>
+              <ion-radio-group formControlName="buddyPref">
+                <ion-item *ngFor="let entry of genderList">
+                  <!-- for each item in workoutList print it-->
+                  <ion-label>{{entry.text}}</ion-label>
+                  <ion-radio mode="md" [value]="entry.value" slot="start"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+
+            <!--Goals-->
+            <ion-list *ngIf="gymBuddyGoalsList">
+              <ion-list-header>Goals you want to achieve with your buddy</ion-list-header>
+              <ion-label position="stacked">Select up to 3 strengths</ion-label>
+              <ion-item *ngFor="let entry of gymBuddyGoalsList">
+                <!-- for each item in workoutList print it-->
+                <ion-label>{{entry.text}}</ion-label>
+                <ion-checkbox slot="start" formArrayName="gymBuddyGoals"
+                  (click)="storeGBGoalsData(entry); checkGymBuddyGoals(entry);"
+                  [disabled]="!entry.isChecked && gymBuddyGoalsChecked === gymBuddyGoalsLimit"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+
+            <ion-list>
+              <ion-list-header>What are your areas of expertise?</ion-list-header>
+              <ion-label position="stacked">Select up to 3 strengths</ion-label>
+              <ion-item *ngFor="let entry of personalTraitsList">
+                <ion-label>{{entry.text}}</ion-label>
+                <ion-checkbox slot="start" formArrayName="personalTraits"
+                  (click)="storeGBPersonalTraitsData(entry); checkPersonalTraits(entry);"
+                  [disabled]="!entry.isChecked && personalTraitsChecked === personalTraitsLimit"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+
+            <ion-list>
+              <ion-list-header>What is your style of training?</ion-list-header>
+              <ion-label position="stacked">Select up to 2 styles</ion-label>
+              <ion-item *ngFor="let entry of personalStyleList">
+                <ion-label>{{entry.text}}</ion-label>
+                <ion-checkbox slot="start" formArrayName="personalStyle"
+                  (click)="storeGBPersonalStylesData(entry); checkPersonalTrainStyle(entry);"
+                  [disabled]="!entry.isChecked && personalTrainStyleChecked === personalTrainStyleLimit"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+
+            <ion-list>
+              <ion-list-header>Where would you like to train?</ion-list-header>
+              <ion-label position="stacked">Select up to 2 locations</ion-label>
+              <ion-item *ngFor="let entry of locationPrefList">
+                <ion-label>{{entry.text}}</ion-label>
+                <ion-checkbox slot="start" formArrayName="locationPref"
+                  (click)="storeGBPrefLocationsData(entry); checkLocationPref(entry);"
+                  [disabled]="!entry.isChecked && locationPrefChecked === locationPrefLimit"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+
+          <ion-button expands="block" (click)="nextPage()" [disabled]=!checkGBFirstPageValidity()>NEXT</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
+
+      <!--SWIPER PAGE 2-->
+      <ng-template swiperSlide>
+        <ion-card>
+          <ion-card-header>
+            <ion-button (click)="prevPage()" size="small" class="back-btn">
+              <ion-icon slot="icon-only" name="chevron-back-outline" (click)="prevPage()"></ion-icon>
+            </ion-button>
+            <ion-card-title color="dark">YOUR BUDDY PREFERENCE</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+            <ion-list>
+              <ion-list-header>What traits would you like in your buddy?</ion-list-header>
+              <ion-label position="stacked">Select up to 3 strengths</ion-label>
+              <ion-item *ngFor="let entry of buddyTraitsList">
+                <ion-label>{{entry.text}}</ion-label>
+                <ion-checkbox slot="start" formArrayName="buddyTraits"
+                  (click)="storeGBBuddyTraitsData(entry); checkBuddyTraits(entry);"
+                  [disabled]="!entry.isChecked && buddyTraitsChecked === buddyTraitsLimit"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+
+            <ion-list>
+              <ion-list-header>What training style would you like your buddy to have?</ion-list-header>
+              <ion-label position="stacked">Select up to 2 styles</ion-label>
+              <ion-item *ngFor="let entry of buddyStyleList">
+                <ion-label>{{entry.text}}</ion-label>
+                <ion-checkbox slot="start" formArrayName="buddyTrainStyle"
+                  (click)="storeGBBuddyTrainStyleData(entry); checkBuddyTrainStyle(entry);"
+                  [disabled]="!entry.isChecked && buddyTrainStyleChecked === buddyTrainStyleLimit"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+            <ion-button type="submit" expands="block" [disabled] = !checkGBSecondPageValidity()>DONE</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
+
+
+
+
+    </swiper>
   </form>
 </ion-content>
 

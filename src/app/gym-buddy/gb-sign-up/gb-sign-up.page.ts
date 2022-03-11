@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ToastController, IonicSwiper, LoadingController } from '@ionic/angular';
+import { ToastController, IonicSwiper, LoadingController, IonContent } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { workoutTimePreference } from '../../data/gym-buddy-data/WorkoutTimePreference';
 import { buddyGender } from '../../data/gym-buddy-data/BuddyGender';
@@ -9,15 +9,21 @@ import { personalTraits, buddyTraits } from 'src/app/data/gym-buddy-data/Traits'
 import { personalTrainStyle, buddyTrainStyle } from 'src/app/data/gym-buddy-data/TrainStyle';
 import { locationPreference } from 'src/app/data/gym-buddy-data/LocationPreference';
 import SwiperCore, { Keyboard, Pagination, Scrollbar } from 'swiper';
-import { AuthenticationService } from 'src/app/services/authentication.service';
 import { GymBuddyService } from 'src/app/services/gym-buddy.service';
+import { User } from 'src/app/class/user';
+import { UserService } from 'src/app/services/user.service';
+
+
 SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
+
 @Component({
   selector: 'app-gb-sign-up',
   templateUrl: './gb-sign-up.page.html',
   styleUrls: ['./gb-sign-up.page.scss'],
 })
 export class GbSignUpPage implements OnInit {
+  
+  @ViewChild(IonContent, { static: false }) content: IonContent;
 
   gymBuddyPersonalFormData: FormGroup;
   timePrefList = workoutTimePreference;
@@ -75,6 +81,7 @@ export class GbSignUpPage implements OnInit {
     private toastCtrl: ToastController,
     private router: Router,
     private loadingController: LoadingController,
+    private userService: UserService
 	){ }
 
   public get getFullName() {
@@ -82,7 +89,10 @@ export class GbSignUpPage implements OnInit {
   }
 
   ngOnInit() {
-    this.checkGymBuddySignUp();
+    
+    // this.checkGymBuddySignUp();
+
+
     //getting data from local storage which was imported from firebase
     /*let userinfo_string  = localStorage.getItem('userInfo');
     this.userinfo =  JSON.parse(userinfo_string);
@@ -92,15 +102,9 @@ export class GbSignUpPage implements OnInit {
     console.log(this.birthday);
     this.injury = this.userinfo.userDetails.injury;
     console.log(this.injury);*/
-    /*get User Info*/
-    this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    console.log(this.userInfo);
-    /*get full name*/
-    this.fullName = this.userInfo.firstName + ' ' + this.userInfo.lastName;
-    console.log(this.fullName);
-    /* get user Id */
-    this.userId = this.userInfo.id;
-    console.log(this.userId);
+    /*get User Details*/
+    this.loadUserDetails()
+  
     //loadingController
     //create service to check if person sign up already
     //if person havent sign up stay
@@ -132,6 +136,33 @@ export class GbSignUpPage implements OnInit {
       buddyTraits: new FormControl(),
       buddyTrainStyle: new FormControl()
     });*/
+  }
+
+  /**
+   * 
+   * load user info from user service
+   */
+
+  async loadUserDetails(){
+    const loading = await this.loadingController.create();
+   await loading.present();
+   this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res) =>{
+    if(res.gymBuddyDetails.isSignUp) {
+      this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
+      loading.dismiss();
+    }
+
+     this.userInfo = res;
+     console.log(this.userInfo);
+     /*get full name*/
+     this.fullName = this.userInfo.firstName + ' ' + this.userInfo.lastName;
+     console.log(this.fullName);
+     /* get user Id */
+     this.userId = this.userInfo.id;
+     console.log(this.userId);
+
+     loading.dismiss();
+   })
   }
 
   /* store gymBuddyGoals data
@@ -392,7 +423,7 @@ export class GbSignUpPage implements OnInit {
     });
     console.log(this.userId);
     console.log(this.gymBuddyPersonalFormData.value);
-    this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value);
+    this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.userId);
 
     const toast = await this.toastCtrl.create({
       message: 'User updated!',
@@ -433,9 +464,10 @@ export class GbSignUpPage implements OnInit {
     console.log(val);
     return val;
   }
+
   nextPage(){
     console.log(this.slides);
-
+    this.content.scrollToTop(1500);
     this.slides.slideNext();
   }
 
@@ -457,18 +489,5 @@ export class GbSignUpPage implements OnInit {
       await this.loadingController.dismiss();
     }
     this.loadingPresent = false;
-  }
-
-  private async checkGymBuddySignUp() {
-    const loading = await this.loadingController.create();
-    await loading.present();
-
-    //const user = await this.authService.register(this.credentials.value);
-    //await loading.dismiss();
-    /* if user has signed up for gym buddy reroute directly to home */
-    if (this.gymBuddyService.isUserSignedUpGymBuddy()) {
-      this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
-    }
-    await loading.dismiss();
   }
 }

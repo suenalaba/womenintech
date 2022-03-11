@@ -1,3 +1,5 @@
+import { GymBuddyDetails } from './GymBuddyProfile';
+
 export class User {
     email: string;
     firstName: string;
@@ -6,6 +8,7 @@ export class User {
     gender: string;
     birthday: string;
     username: string;
+    gymBuddyDetails?: GymBuddyDetails;
 }
 
 export class UserDetails {

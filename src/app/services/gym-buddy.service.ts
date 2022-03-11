@@ -4,19 +4,20 @@ import { GymBuddyDetails } from '../class/GymBuddyProfile';
 import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
 import { updateDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'
 import { User, UserDetails } from '../class/user';
+import { UserService } from './user.service';
 @Injectable({
   providedIn: 'root'
 })
 export class GymBuddyService {
 
   private userInfo;
-  private userId;
   private isSignUp: boolean;
 
-  constructor(private auth: Auth, private fireStore: Firestore) { }
+  constructor(private auth: Auth, private fireStore: Firestore, private userService: UserService) { }
   /* store user's gym buddy details to firebase and local storage */
-  addGymBuddyDetails(details) {
+  addGymBuddyDetails(details, uid) {
     //console.log(details);
     const gymBuddyDetails: GymBuddyDetails = {
       isSignUp: true,
@@ -32,34 +33,24 @@ export class GymBuddyService {
       buddyTrainStyle: details.buddyTrainStyle
     };
 
-    this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    this.userId = this.userInfo.id;
-    console.log(this.userId);
-
-    const noteDocRef = doc(this.fireStore, `Users`,this.userId);
+    const noteDocRef = doc(this.fireStore, `Users`, uid);
     console.log(this.auth);
-    /* store to local storage */
-    this.getUserById(this.auth.currentUser.uid).subscribe(res => {
-      localStorage.setItem('userInfo', JSON.stringify(res));
 
-    });
+    /* store to local storage --scratched */
+    // this.userService.getUserById(this.auth.currentUser.uid).subscribe(res => {
+    //   localStorage.setItem('userInfo', JSON.stringify(res));
+    // });
 
     return updateDoc(noteDocRef,{ gymBuddyDetails });
   }
-
-  getUserById(id): Observable<User> {
-    const noteDocRef = doc(this.fireStore, `Users/${id}`);
-    return docData(noteDocRef, { idField: 'id' }) as Observable<User>;
-  }
+  
   /* checks if a user is signed up for gym buddy, return true if user has signed up */
-  isUserSignedUpGymBuddy(){
-    this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    this.isSignUp = this.userInfo.gymBuddyDetails.isSignUp;
-    console.log(this.isSignUp);
-    if(this.isSignUp === true){
-      return true;
-    } else {
-      return false;
-    }
+  isUserSignedUpGymBuddy() : Observable<boolean>{
+    //this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    return this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).pipe(
+        map(res =>{
+          return res.gymBuddyDetails.isSignUp ? true : false;
+    }))
   }
+
 }

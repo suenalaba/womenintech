@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>
-      Gym Buddy
+      Your Gym Buddy Profile
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -12,19 +12,20 @@
       <ion-title size="large" class="ion-text-center">Gym Buddy</ion-title>
     </ion-toolbar>
   </ion-header>
+
   <ion-card class="ion-text-center">
     <ion-card-header size="large" style="font-size:20px">Your Profile</ion-card-header>
     <!-- to insert image here-->
     <ion-card-content>
       <ion-item-divider style="text-align: center">
         <ion-text>
-          {{getFullName}}
+          {{fullName}}
         </ion-text>
       </ion-item-divider>
 
       <ion-item-divider>
         <ion-text class="ion-text-center">
-          {{getBriefIntro}}
+          {{briefIntro}}
         </ion-text>
       </ion-item-divider>
     </ion-card-content>
@@ -33,17 +34,17 @@
     <ion-card-content>
       <ion-item-divider>
         <ion-text>
-          Preferred Workout Time: {{this.getPrefWorkoutTime.join(", ")}}
+          Preferred Workout Time: {{ getPrefWorkoutTime.join(", ")}}
         </ion-text>
       </ion-item-divider>
       <ion-item-divider>
         <ion-text>
-          My goals: {{this.getGymBuddyGoals.join(", ")}}
+          My goals: {{ getGymBuddyGoals.join(", ") }}
         </ion-text>
       </ion-item-divider>
       <ion-item-divider>
         <ion-text>
-          Area of expertise: {{this.getPersonalTraits.join(", ")}}
+          Area of expertise: {{ getPersonalTraits.join(", ") }}
         </ion-text>
       </ion-item-divider>
     </ion-card-content>

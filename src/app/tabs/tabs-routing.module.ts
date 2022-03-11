@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { children } from 'dom7';
+import { GymBuddyGuard } from '../guards/gym-buddy.guard';
 import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
@@ -20,12 +20,17 @@ const routes: Routes = [
         path: 'gym-buddy',
         children: [
           {
+            path: '',
+            canActivate: [GymBuddyGuard],
+          },
+          {
             path: 'gb-sign-up',
             loadChildren: () => import('../gym-buddy/gb-sign-up/gb-sign-up.module').then(m => m.GbSignUpPageModule)
           },
           {
             path: 'gb-home',
             loadChildren: () => import('../gym-buddy/gb-home/gb-home.module').then(m => m.GbHomePageModule),
+            // canActivate: [GymBuddyGuard]
           },
           {
             path: 'gb-buddylist-home',

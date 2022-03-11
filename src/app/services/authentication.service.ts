@@ -11,6 +11,7 @@ import { user } from 'rxfire/auth';
 import { Observable } from 'rxjs';
 import { User, UserDetails } from '../class/user';
 import { GymBuddyDetails } from '../class/GymBuddyProfile';
+import {UserService} from '../services/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ import { GymBuddyDetails } from '../class/GymBuddyProfile';
 export class AuthenticationService {
   // Init with null to filter out the first value in a guard!
 
-  constructor(private auth: Auth, private firestore: Firestore) { }
+  constructor(private auth: Auth, private firestore: Firestore, private userService: UserService) { }
 
   async register(info) {
     try {
@@ -41,10 +42,11 @@ export class AuthenticationService {
   async login({ email, password }) {
     try {
       const user = await signInWithEmailAndPassword(this.auth, email, password);
-      this.getUserById(user.user.uid).subscribe(res => {
-        localStorage.setItem('userInfo', JSON.stringify(res));
+      localStorage.setItem('userID', JSON.stringify(user.user.uid));
+      // this.userService.getUserById(user.user.uid).subscribe(res => {
+      //   localStorage.setItem('userInfo', JSON.stringify(res));
+      // });
 
-      });
       return user;
     } catch (e) {
       return null;
@@ -52,7 +54,7 @@ export class AuthenticationService {
   }
 
   logout() {
-    localStorage.removeItem('userInfo');
+    localStorage.removeItem('userID');
     return signOut(this.auth);
   }
 
@@ -98,19 +100,13 @@ export class AuthenticationService {
     const noteDocRef = doc(this.firestore, `Users`, `${user.id}`);
     console.log(this.auth);
     /* store to local storage */
-    this.getUserById(this.auth.currentUser.uid).subscribe(res => {
-      localStorage.setItem('userInfo', JSON.stringify(res));
+    localStorage.setItem('userID', JSON.stringify(this.auth.currentUser.uid));
+    // this.userService.getUserById(this.auth.currentUser.uid).subscribe(res => {
+    //   localStorage.setItem('userInfo', JSON.stringify(res));
 
-    });
+    // });
     /* must update doc, cannot add doc */
     return updateDoc(noteDocRef, { userDetails, gymBuddyDetails });
   }
-  /*get the id to retrieve whatever information you want*/
-  getUserById(id): Observable<User> {
-    const noteDocRef = doc(this.firestore, `Users/${id}`);
-    return docData(noteDocRef, { idField: 'id' }) as Observable<User>;
-  }
-
-
 }
 
