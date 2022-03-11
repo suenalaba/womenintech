@@ -1,0 +1,33 @@
+<form (ngSubmit)="completeSignUp()" [formGroup]="userUpdates">
+    <ion-card>
+      <ion-card-content>
+        <ion-item class="ion-margin-bottom" lines="none">
+          {{ userDetails.height }}
+        </ion-item>
+
+        <ion-item class="ion-margin-bottom" lines="none">
+          {{ userDetails.weight }}
+        </ion-item>
+        
+        <!-- <ion-item class="ion-margin-bottom" lines="none">
+          <ion-label position="stacked">What is your height?</ion-label>
+          <div class="input-align">
+            <ion-input type="number" value="{{userDetails.height}}" formControlName="height"></ion-input>
+            <span>CM</span>
+          </div>
+          <ion-note slot="error" *ngIf="height.dirty && height.errors">Enter valid height</ion-note>
+        </ion-item>
+
+        <ion-item class="ion-margin-bottom" lines="none">
+          <ion-label position="stacked">What is your weight?</ion-label>
+          <div class="input-align">
+            <ion-input type="number" placeholder="" formControlName="weight"></ion-input>
+            <span>KG</span>
+          </div>
+          <ion-note slot="error" *ngIf="weight.dirty && weight.errors">Enter valid weight</ion-note>
+        </ion-item>
+ -->
+
+      </ion-card-content>
+    </ion-card>
+  </form>

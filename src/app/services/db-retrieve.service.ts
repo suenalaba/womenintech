@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { User, UserDetails } from '../class/user';
 import { GymBuddyDetails } from '../class/GymBuddyProfile';
 import { query, where, getDocs,collectionGroup } from "firebase/firestore";
-import { GymBuddyProfileInfo } from '../gym-buddy/gb-findbuddy/GymBuddyInformation';
+import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
 
 
 @Injectable({

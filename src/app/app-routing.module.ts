@@ -14,7 +14,7 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./accounts/login/login.module').then((m) => m.LoginPageModule),
+      import('./pages/accounts/login/login.module').then((m) => m.LoginPageModule),
     ...canActivate(redirectLoggedInToHome),
   },
   {
@@ -24,15 +24,15 @@ const routes: Routes = [
   },
   {
     path: 'accounts/sign-up',
-    loadChildren: () => import('./accounts/sign-up/sign-up.module').then(m => m.SignUpPageModule)
+    loadChildren: () => import('./pages/accounts/sign-up/sign-up.module').then(m => m.SignUpPageModule)
   },
   {
     path: 'accounts/boarding',
-    loadChildren: () => import('./accounts/boarding/boarding.module').then(m => m.BoardingPageModule)
+    loadChildren: () => import('./pages/accounts/boarding/boarding.module').then(m => m.BoardingPageModule)
   },
   {
     path: 'user-details',
-    loadChildren: () => import('./accounts/user-details/user-details.module').then( m => m.UserDetailsPageModule),
+    loadChildren: () => import('./pages/accounts/user-details/user-details.module').then( m => m.UserDetailsPageModule),
     ...canActivate(redirectUnauthorizedToSignUp),
   },
 

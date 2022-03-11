@@ -10,11 +10,11 @@ const routes: Routes = [
     children: [
       {
         path: 'home',
-        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
+        loadChildren: () => import('../pages/home/home.module').then(m => m.HomePageModule)
       },
       {
         path: 'workouts',
-        loadChildren: () => import('../workouts/list-workouts/list-workouts.module').then(m => m.ListWorkoutsPageModule)
+        loadChildren: () => import('../pages/workouts/list-workouts/list-workouts.module').then(m => m.ListWorkoutsPageModule)
       },
       {
         path: 'gym-buddy',
@@ -25,26 +25,26 @@ const routes: Routes = [
           },
           {
             path: 'gb-sign-up',
-            loadChildren: () => import('../gym-buddy/gb-sign-up/gb-sign-up.module').then(m => m.GbSignUpPageModule)
+            loadChildren: () => import('../pages/gym-buddy/gb-sign-up/gb-sign-up.module').then(m => m.GbSignUpPageModule)
           },
           {
             path: 'gb-home',
-            loadChildren: () => import('../gym-buddy/gb-home/gb-home.module').then(m => m.GbHomePageModule),
+            loadChildren: () => import('../pages/gym-buddy/gb-home/gb-home.module').then(m => m.GbHomePageModule),
             // canActivate: [GymBuddyGuard]
           },
           {
             path: 'gb-buddylist-home',
-            loadChildren: () => import('../gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then(m => m.GbBuddylistHomePageModule),
+            loadChildren: () => import('../pages/gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then(m => m.GbBuddylistHomePageModule),
           },
           {
             path: 'gb-findbuddy',
-            loadChildren: () => import('../gym-buddy/gb-findbuddy/gb-findbuddy.module').then(m => m.GbFindbuddyPageModule),
+            loadChildren: () => import('../pages/gym-buddy/gb-findbuddy/gb-findbuddy.module').then(m => m.GbFindbuddyPageModule),
           },
         ]
       },
       {
         path: 'settings',
-        loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule)
+        loadChildren: () => import('../pages/settings/settings.module').then(m => m.SettingsPageModule)
       },
       {
         path: '',
