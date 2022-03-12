@@ -15,6 +15,7 @@ export class HomePage implements OnInit {
   userInfo: any;
 
   welcomeText: string = '';
+  today: string = '';
 
   constructor(
     private authService: AuthenticationService,
@@ -43,6 +44,8 @@ export class HomePage implements OnInit {
       this.firstName = this.userInfo.firstName;
 
       this.welcomeText = 'Welcome Back ' + this.firstName;
+      var tdy = new Date();
+      this.today = String(tdy.getDate()) + ' ' + String(tdy.toLocaleString('default', { month: 'long' })) + ' ' + String(tdy.getFullYear()) + ', ' + String(tdy.toLocaleString('default', { weekday: 'long' }));
       loading.dismiss();
     })
   }
