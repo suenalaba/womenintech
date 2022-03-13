@@ -3,7 +3,7 @@ import { Firestore, collection, collectionData, doc, setDoc, docData } from '@an
 import { updateDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
 import { User, UserDetails } from '../class/user';
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +35,9 @@ export class UserService {
     getDownloadURL(storageRef)
       .then((url) => {
         // Insert url into an <img> tag to "download"
-
+        /**
+         * Can choose to store image URL in firestore
+         */
       })
       .catch((error) => {
         // A full list of error codes is available at
@@ -58,6 +60,16 @@ export class UserService {
             break;
         }
       });
+  }
+
+  /**
+   * Get user profile pics from storage
+   */
+  getProfilePictures(){
+    //1. list all images in user profile folder
+
+    //2. get all of its the download url into an array
+
   }
 
 }
