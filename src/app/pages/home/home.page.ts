@@ -40,7 +40,7 @@ export class HomePage implements OnInit {
     await loading.present();
     this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res)=>{
       this.userInfo = res;
-      this.firstName = this.userInfo.firstName;
+      //this.firstName = this.userInfo.firstName;
 
       this.welcomeText = 'Welcome Back ' + this.firstName;
       loading.dismiss();

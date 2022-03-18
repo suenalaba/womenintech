@@ -35,6 +35,15 @@ const routes: Routes = [
     loadChildren: () => import('./pages/accounts/user-details/user-details.module').then( m => m.UserDetailsPageModule),
     ...canActivate(redirectUnauthorizedToSignUp),
   },
+  {
+    path: 'edit-workout',
+    loadChildren: () => import('./pages/workouts/edit-workout/edit-workout.module').then( m => m.EditWorkoutPageModule)
+  },
+  {
+    path: 'display-gyms',
+    loadChildren: () => import('./pages/workouts/display-gyms/display-gyms.module').then( m => m.DisplayGymsPageModule)
+  },
+
 
   /*{
     path: 'gb-buddylist-home',
