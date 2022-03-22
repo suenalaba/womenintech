@@ -33,7 +33,7 @@ export class GbHomePage implements OnInit {
     private loadingController: LoadingController,
     private alertController: AlertController,
     private cameraService: CameraService
-    
+
   ) { }
 
   private userInfo: User;
@@ -106,7 +106,7 @@ export class GbHomePage implements OnInit {
      this.getWorkoutTimeTextDisplay();
      this.getGymBuddyGoalsTextDisplay();
      this.getPersonalTraitsTextDisplay();
-     
+
 
      loading.dismiss();
    })
@@ -126,7 +126,7 @@ export class GbHomePage implements OnInit {
   async goToBuddyList() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-buddylist-home', { replaceUrl: true });
   }
-  
+
   private getPersonalTraitsTextDisplay() {
     for (const val of this.personalTraitsList) {
       //console.log(val.value);
@@ -225,6 +225,6 @@ export class GbHomePage implements OnInit {
     }
 
       loading.dismiss();
-  
+
   }
 }

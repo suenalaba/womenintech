@@ -6,6 +6,7 @@ export class GymBuddyProfileInfo {
   private briefIntro?: string;
   //workoutTimePreference: string; //how to create an array to store an array of workouttimepreferences
   private workoutTimePreference?: string[];
+  private gender?: string;
   private buddyGender?: string;
   private gymBuddyGoals?: string[];
   private personalTraits?: string[];
@@ -13,12 +14,13 @@ export class GymBuddyProfileInfo {
   private locationPreference?: string[];
   private buddyTraits?: string[];
   private buddyTrainStyle?: string[];
-  private userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  private gymBuddyInfo=this.userInfo.gymBuddyInfo;
+  private userInfo;
+  private gymBuddyInfo;
 
   constructor(data) {
     this.userInfo=JSON.parse(JSON.stringify(data));
-    this.userId = this.userInfo.id; //probably should use superclass for this.
+    this.userId = this.userInfo.id;
+    this.gender=this.userInfo.gender;
     this.gymBuddyInfo=this.userInfo.gymBuddyDetails;
     this.briefIntro = this.userInfo.gymBuddyDetails.briefIntro;
     this.workoutTimePreference = this.userInfo.gymBuddyDetails.workoutTimePreference;
@@ -35,6 +37,10 @@ export class GymBuddyProfileInfo {
 
   public get getUserId(): string {
     return this.userId;
+  }
+
+  public get getGender(): string {
+    return this.gender;
   }
 
   public get getbriefIntro(): string {

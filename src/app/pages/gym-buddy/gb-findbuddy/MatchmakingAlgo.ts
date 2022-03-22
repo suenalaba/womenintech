@@ -32,10 +32,9 @@ export class MatchmakingAlgo {
     this.contentFilterScoreMap.delete(highestScoreId);
   }
 
-  public async calculateMatchingScores(arrayOfProfiles:Array<GymBuddyProfileInfo>) {
+  public async calculateMatchingScores(currentUser: GymBuddyProfileInfo,arrayOfProfiles:Array<GymBuddyProfileInfo>) {
     let matchScore;
     let anotherUserId;
-    const currentUser=new GymBuddyProfileInfo(JSON.parse(localStorage.getItem('userInfo'))); // placeholder
     /* Pseudo code for Matchmaking Algo
     *  For each value in K:V pair in localStorage(dictionary of documents in app)
     * extract the Value and extract the gymbuddyprofile using json parser

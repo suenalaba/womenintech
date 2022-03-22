@@ -20,7 +20,7 @@ export class HomePage implements OnInit {
     private authService: AuthenticationService,
     private userService: UserService,
     private loadingCtrl: LoadingController
-    
+
   ) {}
 
   ngOnInit() {

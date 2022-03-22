@@ -1,12 +1,15 @@
 import { MatchmakingAlgo } from './MatchmakingAlgo';
 import { DbRetrieveService } from './../../../services/db-retrieve.service';
+import { GymBuddyProfileInfo } from './GymBuddyInformation';
 
 
 export class RecommendationEngine {
   matchmakingAlgo:MatchmakingAlgo
-  constructor(    private dbRetrieve: DbRetrieveService,
+  userInfo:GymBuddyProfileInfo
+  constructor(    private dbRetrieve: DbRetrieveService, private GymBuddyProfileInfo : GymBuddyProfileInfo
     ) {
     this.matchmakingAlgo = new MatchmakingAlgo(this.dbRetrieve)
+    this.userInfo=GymBuddyProfileInfo;
   }
 
   public pollMatch() {
@@ -27,7 +30,7 @@ export class RecommendationEngine {
   }
 
   public getAllMatches(arrayOfProfiles) {
-    this.matchmakingAlgo.calculateMatchingScores(arrayOfProfiles);
+    this.matchmakingAlgo.calculateMatchingScores(this.userInfo,arrayOfProfiles);
     this.matchmakingAlgo.getContentFilterScoreMap;
   }
 

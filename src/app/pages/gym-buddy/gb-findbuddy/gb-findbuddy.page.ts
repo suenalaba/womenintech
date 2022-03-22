@@ -4,6 +4,8 @@ import { RecommendationEngine } from './RecommendationEngine';
 import { FindBuddyQuery } from './FindBuddyQuery';
 import { DbRetrieveService } from './../../../services/db-retrieve.service';
 import { GymBuddyProfileInfo } from './GymBuddyInformation';
+import { threadId } from 'worker_threads';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-gb-findbuddy',
@@ -11,14 +13,17 @@ import { GymBuddyProfileInfo } from './GymBuddyInformation';
   styleUrls: ['./gb-findbuddy.page.scss'],
 })
 export class GbFindbuddyPage implements OnInit {
+
   constructor(
+    private loadingController: LoadingController,
     private router: Router,
     private dbRetrieve: DbRetrieveService,
   ) { }
 
   async ngOnInit() {
-    const recommendationEngine = new RecommendationEngine(this.dbRetrieve);
-    const findBuddy= new FindBuddyQuery(this.dbRetrieve);
+    const userInfo= await this.dbRetrieve.retrieveCurrentUser();
+    const recommendationEngine = new RecommendationEngine(this.dbRetrieve,userInfo);
+    const findBuddy= new FindBuddyQuery(this.dbRetrieve,userInfo.getGender,userInfo.getPrefBuddyGender);
     let arrayofProfile = await findBuddy.findBuddyQuery();
     recommendationEngine.getAllMatches(arrayofProfile);
     const idRecommendations: string[] = [];
@@ -34,7 +39,6 @@ export class GbFindbuddyPage implements OnInit {
 
       idRecommendations.push(idToDisplay);
     }
-
   }
 
     //extract all information from dictionary based on id and store all information in array
