@@ -12,9 +12,9 @@ import Swiper, {Autoplay} from 'swiper';
 import SwiperCore, {Pagination} from 'swiper';
 import { User } from '../../class/user';
 import { AuthenticationService } from '../../services/authentication.service';
-import { UserService } from '../../services/user.service';
 import { EChartsOption } from 'echarts';
 import { waitForAsync } from '@angular/core/testing';
+import { UserService } from '../../services/user.service'; //youtube api
 
 Swiper.use([Autoplay]);
 SwiperCore.use([Pagination]);
@@ -36,11 +36,13 @@ export class HomePage implements OnInit {
 
   chartOptions: EChartsOption;
 
+  ytPayload: any;
+
   constructor(
     private authService: AuthenticationService,
     private userService: UserService,
-    private loadingCtrl: LoadingController
-
+    private loadingCtrl: LoadingController,
+    private user: UserService
   ) {}
 
   @ViewChild('swiper') swiper: SwiperComponent;
@@ -77,7 +79,7 @@ export class HomePage implements OnInit {
     const loading = await this.loadingCtrl.create();
     await loading.present();
     this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res)=>{
-      console.log(res);
+      //console.log(res);
       this.userInfo = res;
       this.firstName = this.userInfo.firstName;
 
@@ -88,11 +90,23 @@ export class HomePage implements OnInit {
       this.cals = 45;
       var dur = 14;
       this.durn = `${dur} mins`;
-
-
-
       loading.dismiss();
     });
+
+    // this.user.getData().subscribe(data=>{
+    //   console.log('1');
+    //   console.log(data);
+    //   this.ytPayload = data;
+    //   this.loadVideos();
+    // });
+    this.ytPayload = require('../../../assets/placeholders/ytPayload_Sample.json');
+    this.loadVideos();
+
+  }
+
+  async loadVideos() {
+    console.log('2');
+    console.log(this.ytPayload);
   }
 
   async swiperSlideChanged(e) {
@@ -152,4 +166,5 @@ export class HomePage implements OnInit {
       ]
     };
   }
+
 }

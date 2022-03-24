@@ -8,6 +8,8 @@ import { ExploreContainerComponentModule } from '../../explore-container/explore
 import { HomePageRoutingModule } from './home-routing.module';
 import { SwiperModule } from 'swiper/angular';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { YouTubePlayerModule } from '@angular/youtube-player';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -19,7 +21,9 @@ import { NgxEchartsModule } from 'ngx-echarts';
     SwiperModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
-    })
+    }),
+    YouTubePlayerModule,
+    HttpClientModule
   ],
   declarations: [HomePage]
 })
