@@ -7,13 +7,13 @@ import { LoadingController } from '@ionic/angular';
 import { SwiperOptions } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
 import Swiper, {Autoplay} from 'swiper';
-//import SwiperCore, {Pagination} from 'swiper/core';
+import SwiperCore, {Pagination} from 'swiper';
 import { User } from '../../class/user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserService } from '../../services/user.service';
 
 Swiper.use([Autoplay]);
-//Swiper.use([Pagination]);
+SwiperCore.use([Pagination]);
 
 @Component({
   selector: 'app-home',
@@ -38,9 +38,8 @@ export class HomePage implements OnInit {
 
   config: SwiperOptions = {
     slidesPerView: 1,
-    centeredSlides: true,
     loop: true,
-    spaceBetween: 0,
+    spaceBetween: 50,
     autoplay: {
       delay: 3000,
     },
@@ -77,5 +76,9 @@ export class HomePage implements OnInit {
       this.today = String(tdy.getDate()) + ' ' + String(tdy.toLocaleString('default', { month: 'long' })) + ' ' + String(tdy.getFullYear()) + ', ' + String(tdy.toLocaleString('default', { weekday: 'long' }));
       loading.dismiss();
     })
+  }
+
+  swiperSlideChanged(e) {
+    console.log('chnaged slide: ' ,e);
   }
 }

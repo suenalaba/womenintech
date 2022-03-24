@@ -17,32 +17,36 @@
     </ion-toolbar>
   </ion-header>
 
+  <swiper #swiper [config] = "config"
+  (slideChange) = "swiperSlideChanged($event)">
+    <ng-template swiperSlide>
+      <img src = '../../assets/placeholders/progress.png'>
+    </ng-template>
 
-  <ion-slides [options] = "option" class="ion-margin-top">
-    <ion-slide>
+    <ng-template swiperSlide>
+      <img src = '../../assets/placeholders/schedule.png'>
+    </ng-template>
+  </swiper>
+
+  <swiper #swiper [config] = "config"
+  (slideChange) = "swiperSlideChanged($event)">
+    <ng-template swiperSlide>
       <ion-card>
-        <img src = "../../assets/placeholders/progress.png">
+        <ion-card-header>
+          THIS WEEK'S PROGRESS
+        </ion-card-header>
+        <ion-card-content>
+          Calories
+        </ion-card-content>
+        <ion-card-content>
+          Training
+        </ion-card-content>
       </ion-card>
-    </ion-slide>
+    </ng-template>
 
-    <ion-slide>
-      <ion-card>
-        <img src = "../../assets/placeholders/schedule.png">
-      </ion-card>
-    </ion-slide>
-
-  </ion-slides>
-
-
-  <ion-content>
-    <swiper #swiper [config] = "config">
-      <ng-template swiperSlide>
-        <img src = '../../assets/placeholders/progress.png'>
-      </ng-template>
-      <ng-template swiperSlide>
-        <img src = '../../assets/placeholders/schedule.png'>
-      </ng-template>
-    </swiper>
-  </ion-content>
+    <ng-template swiperSlide>
+      <img src = '../../assets/placeholders/schedule.png'>
+    </ng-template>
+  </swiper>
 
 </ion-content>
