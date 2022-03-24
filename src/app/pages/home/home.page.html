@@ -20,17 +20,7 @@
   <swiper #swiper [config] = "config"
   (slideChange) = "swiperSlideChanged($event)">
     <ng-template swiperSlide>
-      <img src = '../../assets/placeholders/progress.png'>
-    </ng-template>
-
-    <ng-template swiperSlide>
-      <img src = '../../assets/placeholders/schedule.png'>
-    </ng-template>
-  </swiper>
-
-  <swiper #swiper [config] = "config"
-  (slideChange) = "swiperSlideChanged($event)">
-    <ng-template swiperSlide>
+      <!--- <img src = '../../assets/placeholders/progress.png'> --->
       <ion-card>
         <ion-card-header>
           THIS WEEK'S PROGRESS
@@ -59,7 +49,8 @@
     </ng-template>
 
     <ng-template swiperSlide>
-      <img src = '../../assets/placeholders/schedule.png'>
+      <!-- <img src = '../../assets/placeholders/schedule.png'> -->
+        <ion-content echarts [options]="chartOptions"></ion-content>
     </ng-template>
   </swiper>
 

@@ -6,7 +6,8 @@ import { HomePage } from './home.page';
 import { ExploreContainerComponentModule } from '../../explore-container/explore-container.module';
 
 import { HomePageRoutingModule } from './home-routing.module';
-import { SwiperModule } from 'swiper/angular'
+import { SwiperModule } from 'swiper/angular';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   imports: [
@@ -15,7 +16,10 @@ import { SwiperModule } from 'swiper/angular'
     FormsModule,
     ExploreContainerComponentModule,
     HomePageRoutingModule,
-    SwiperModule
+    SwiperModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    })
   ],
   declarations: [HomePage]
 })

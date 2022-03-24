@@ -13,6 +13,8 @@ import SwiperCore, {Pagination} from 'swiper';
 import { User } from '../../class/user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserService } from '../../services/user.service';
+import { EChartsOption } from 'echarts';
+import { waitForAsync } from '@angular/core/testing';
 
 Swiper.use([Autoplay]);
 SwiperCore.use([Pagination]);
@@ -31,6 +33,8 @@ export class HomePage implements OnInit {
 
   cals: number = 0;
   durn: string = '0 mins';
+
+  chartOptions: EChartsOption;
 
   constructor(
     private authService: AuthenticationService,
@@ -73,10 +77,11 @@ export class HomePage implements OnInit {
     const loading = await this.loadingCtrl.create();
     await loading.present();
     this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res)=>{
+      console.log(res);
       this.userInfo = res;
       this.firstName = this.userInfo.firstName;
 
-      this.welcomeText = 'Welcome Back ' + this.firstName;
+      this.welcomeText = 'Welcome back, ' + this.firstName;
       var tdy = new Date();
       this.today = String(tdy.getDate()) + ' ' + String(tdy.toLocaleString('default', { month: 'long' })) + ' ' + String(tdy.getFullYear()) + ', ' + String(tdy.toLocaleString('default', { weekday: 'long' }));
 
@@ -84,11 +89,67 @@ export class HomePage implements OnInit {
       var dur = 14;
       this.durn = `${dur} mins`;
 
+
+
       loading.dismiss();
     });
   }
 
-  swiperSlideChanged(e) {
-    console.log('chnaged slide: ' ,e);
+  async swiperSlideChanged(e) {
+    console.log('changed slide: ' ,e);
+    this.chartOptions = {
+      title: {
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {},
+      toolbox: {
+        show: true,
+        feature: {
+          dataZoom: {
+            yAxisIndex: 'none'
+          },
+          dataView: { readOnly: false },
+          magicType: { type: ['line', 'bar'] },
+          restore: {},
+          saveAsImage: {}
+        }
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      },
+      yAxis: {
+        type: 'value',
+        axisLabel: {
+          formatter: '{value}'
+        }
+      },
+      series: [
+        {
+          name: 'Time Recorded',
+          type: 'line',
+          data: [10, 11, 13, 11, 12, 12, 9],
+          markPoint: {
+            data: [
+              { type: 'max', name: 'Max' },
+              { type: 'min', name: 'Min' }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          },
+          smooth: true,
+          label: {
+              show: true,
+              position: 'top',
+              color: 'black',
+              fontSize: 12,
+          },
+        },
+      ]
+    };
   }
 }
