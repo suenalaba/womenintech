@@ -4,7 +4,6 @@ import { Firestore, collection, collectionData, doc, setDoc, docData } from '@an
 import { updateDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
 import { User, UserDetails } from '../class/user';
-import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 
 import { HttpClient } from '@angular/common/http'; //youtube api
 
@@ -15,6 +14,7 @@ import { HttpClient } from '@angular/common/http'; //youtube api
   providedIn: 'root'
 })
 export class UserService {
+
   constructor(
     private firestore: Firestore,
     private http: HttpClient
@@ -29,59 +29,6 @@ export class UserService {
   getData() {
     let url = 'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=3&q=deadlift&key=AIzaSyDH-momG79qABXUQ623_YYZrExXltFPq1k';
     return this.http.get(url);
-  }
-  
-  /**
-   * Upload user profile
-   */
-  uploadProfilePicture(i, file, id) {
-    const storage = getStorage();
-    const storageRef = ref(storage, `Users/${id}-${i}`);
-
-    // 'file' comes from the Blob or File API
-    uploadBytes(storageRef, file).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-    });
-
-    // Get the download URL
-    getDownloadURL(storageRef)
-      .then((url) => {
-        // Insert url into an <img> tag to "download"
-        /**
-         * Can choose to store image URL in firestore
-         */
-      })
-      .catch((error) => {
-        // A full list of error codes is available at
-        // https://firebase.google.com/docs/storage/web/handle-errors
-        switch (error.code) {
-          case 'storage/object-not-found':
-            // File doesn't exist
-            break;
-          case 'storage/unauthorized':
-            // User doesn't have permission to access the object
-            break;
-          case 'storage/canceled':
-            // User canceled the upload
-            break;
-
-          // ...
-
-          case 'storage/unknown':
-            // Unknown error occurred, inspect the server response
-            break;
-        }
-      });
-  }
-
-  /**
-   * Get user profile pics from storage
-   */
-  getProfilePictures(){
-    //1. list all images in user profile folder
-
-    //2. get all of its the download url into an array
-
   }
 
 }
