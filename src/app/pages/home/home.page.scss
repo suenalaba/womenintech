@@ -1,8 +1,6 @@
 @import '~swiper/swiper-bundle.css';
 
 ion-card {
-    display: fex;
-    flex-direction: column;
     width: 100%;
     height: 100%;
     border-radius: 12px;
@@ -19,7 +17,7 @@ ion-card-header {
     font-kerning: normal;
 }
 
-stat-header {
+subheader {
     font-weight: grey;
     font-size: 3vw;
 }

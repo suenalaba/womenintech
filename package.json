@@ -28,12 +28,15 @@
     "@capacitor/keyboard": "1.2.2",
     "@capacitor/status-bar": "1.0.8",
     "@capacitor/storage": "^1.2.4",
+    "@ionic-native/core": "^5.36.0",
+    "@ionic-native/youtube-video-player": "^5.36.0",
     "@ionic/angular": "^6.0.10",
     "@ionic/pwa-elements": "^3.1.1",
     "cordova-android": "10.1.1",
     "echarts": "^5.3.1",
     "firebase": "^9.6.7",
     "ngx-echarts": "^8.0.1",
+    "ngx-youtube-player": "^12.0.1",
     "rxfire": "^6.0.3",
     "rxjs": "~6.6.0",
     "swiper": "^8.0.7",
@@ -62,6 +65,7 @@
     "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
+    "cordova-plugin-youtube-video-player": "^2.4.0",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsdoc": "30.7.6",
@@ -85,7 +89,8 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-youtube-video-player": {}
     },
     "platforms": [
       "android"

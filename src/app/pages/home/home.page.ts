@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable no-var */
 /* eslint-disable max-len */
 /* eslint-disable @angular-eslint/use-lifecycle-interface */
@@ -38,23 +40,41 @@ export class HomePage implements OnInit {
 
   ytPayload: any;
 
+  //wholeWidth = window.innerWidth;
+  //vidWidth = this.parseVideos();
+
   constructor(
     private authService: AuthenticationService,
     private userService: UserService,
     private loadingCtrl: LoadingController,
-    private user: UserService
+    private user: UserService,
+    //private youtubeVideoPlayer: YoutubeVideoPlayer
   ) {}
+
+  //invokeVideoPlayer(){
+  //  this.youtubeVideoPlayer.openVideo('pass-video-id');
+  //}
 
   @ViewChild('swiper') swiper: SwiperComponent;
 
-  config: SwiperOptions = {
+  configStats: SwiperOptions = {
     slidesPerView: 1,
     loop: true,
     spaceBetween: 50,
     autoplay: {
-      delay: 3000,
+      delay: 9000,
     },
     pagination: true
+  };
+
+  configYt: SwiperOptions = {
+    slidesPerView: 1.5,
+    loop: true,
+    spaceBetween: 10,
+    autoplay: {
+      delay: 3000,
+    },
+    pagination: false
   };
 
   ngAfterContentChecked(): void{
@@ -65,6 +85,7 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.loadHomePage();
+    this.parseVideos();
 
     // var userInfo_string;
     // if(localStorage.getItem('userInfo') === null){
@@ -87,12 +108,14 @@ export class HomePage implements OnInit {
       var tdy = new Date();
       this.today = String(tdy.getDate()) + ' ' + String(tdy.toLocaleString('default', { month: 'long' })) + ' ' + String(tdy.getFullYear()) + ', ' + String(tdy.toLocaleString('default', { weekday: 'long' }));
 
-      this.cals = 45;
+      this.cals = 69;
       var dur = 14;
       this.durn = `${dur} mins`;
-      loading.dismiss();
     });
+    loading.dismiss();
+  }
 
+  async parseVideos() {
     // this.user.getData().subscribe(data=>{
     //   console.log('1');
     //   console.log(data);
@@ -100,13 +123,18 @@ export class HomePage implements OnInit {
     //   this.loadVideos();
     // });
     this.ytPayload = require('../../../assets/placeholders/ytPayload_Sample.json');
-    this.loadVideos();
+    var videoRes = this.ytPayload.items;
+    for (var i = 0; i < videoRes.length; i++) {
+      videoRes[i].image = videoRes[i].snippet.thumbnails.high.url;
+      console.log(videoRes[i].image);
 
-  }
+      videoRes[i].name = videoRes[i].snippet.title;
+      console.log(videoRes[i].name);
 
-  async loadVideos() {
-    console.log('2');
-    console.log(this.ytPayload);
+      videoRes[i].videoUrl = 'https://www.youtube.com/embed/' + videoRes[i].id.videoId;
+      console.log(videoRes[i].videoUrl);
+
+    }
   }
 
   async swiperSlideChanged(e) {
@@ -145,7 +173,7 @@ export class HomePage implements OnInit {
         {
           name: 'Time Recorded',
           type: 'line',
-          data: [10, 11, 13, 11, 12, 12, 9],
+          data: [10, 18, 3, 15, 3, 3, 1],
           markPoint: {
             data: [
               { type: 'max', name: 'Max' },
@@ -165,6 +193,21 @@ export class HomePage implements OnInit {
         },
       ]
     };
+  }
+
+}
+
+import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+
+@Pipe({
+  name: 'safe'
+})
+export class SafePipe implements PipeTransform {
+
+  constructor(private sanitizer: DomSanitizer) { }
+  transform(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
 }

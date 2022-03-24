@@ -8,8 +8,12 @@ import { ExploreContainerComponentModule } from '../../explore-container/explore
 import { HomePageRoutingModule } from './home-routing.module';
 import { SwiperModule } from 'swiper/angular';
 import { NgxEchartsModule } from 'ngx-echarts';
-import { YouTubePlayerModule } from '@angular/youtube-player';
 import { HttpClientModule } from '@angular/common/http';
+import { SafePipe } from './home.page';
+
+//import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
+//import { RouteReuseStrategy } from '@angular/router';
+//import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 @NgModule({
   imports: [
@@ -22,9 +26,15 @@ import { HttpClientModule } from '@angular/common/http';
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     }),
-    YouTubePlayerModule,
     HttpClientModule
   ],
-  declarations: [HomePage]
+  //providers: [
+  //  YoutubeVideoPlayer,
+  //  {
+  //    provide: RouteReuseStrategy,
+  //    useClass: IonicRouteStrategy
+  //  }
+  //],
+  declarations: [HomePage, SafePipe]
 })
 export class HomePageModule {}

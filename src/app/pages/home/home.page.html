@@ -1,3 +1,5 @@
+<script src="https://www.youtube.com/iframe_api"></script>
+
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>
@@ -17,7 +19,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <swiper #swiper [config] = "config"
+  <swiper #swiper [config] = "configStats"
   (slideChange) = "swiperSlideChanged($event)">
     <ng-template swiperSlide>
       <!--- <img src = '../../assets/placeholders/progress.png'> --->
@@ -28,17 +30,17 @@
         <ion-grid>
           <ion-row>
             <ion-col>
-              <stat-header class = "font">
+              <subheader class = "font">
                 Calories<br/>
-              </stat-header>
+              </subheader>
               <ion-card-header>
                 {{ cals }}
               </ion-card-header>
             </ion-col>
             <ion-col>
-              <stat-header class = "font">
+              <subheader class = "font">
                 Total Duration<br/>
-              </stat-header>
+              </subheader>
               <ion-card-header>
                 {{ durn }}
               </ion-card-header>
@@ -51,6 +53,25 @@
     <ng-template swiperSlide>
       <!-- <img src = '../../assets/placeholders/schedule.png'> -->
         <ion-content echarts [options]="chartOptions"></ion-content>
+    </ng-template>
+  </swiper>
+ 
+  <ion-card-header>
+    RECOMMENDATIONS
+  </ion-card-header>
+
+  <swiper #swiper [config] = "configYt">
+    <ng-template swiperSlide *ngFor="let video of ytPayload.items">
+      <ion-card>
+        <!--<img src={{video.snippet.thumbnails.high.url}}/><br>-->
+        <iframe 
+          width={{video.snippet.thumbnails.high.width}}
+          height={{video.snippet.thumbnails.high.height}}
+          [src]="video.videoUrl | safe"></iframe><br>
+        <subheader>
+          {{ video.snippet.title }}
+        </subheader>
+      </ion-card>
     </ng-template>
   </swiper>
 
