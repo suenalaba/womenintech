@@ -1,6 +1,10 @@
-import { OnInit } from '@angular/core';
+/* eslint-disable @angular-eslint/use-lifecycle-interface */
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable @typescript-eslint/no-inferrable-types */
+import { OnInit, ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
+import { SwiperComponent } from 'swiper/angular';
 import { User } from '../../class/user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserService } from '../../services/user.service';
@@ -16,13 +20,20 @@ export class HomePage implements OnInit {
 
   welcomeText: string = '';
   today: string = '';
-  
+
   constructor(
     private authService: AuthenticationService,
     private userService: UserService,
     private loadingCtrl: LoadingController
 
   ) {}
+
+  @ViewChild('swiper') swiper: SwiperComponent;
+  ngAfterContentChecked(): void{
+    if (this.swiper) {
+      this.swiper.updateSwiper({});
+    }
+  }
 
   option = {
     slidesPerView: 1,
