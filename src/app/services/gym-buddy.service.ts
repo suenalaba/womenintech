@@ -41,16 +41,16 @@ export class GymBuddyService {
     //   localStorage.setItem('userInfo', JSON.stringify(res));
     // });
 
-    return updateDoc(noteDocRef, { gymBuddyDetails });
+    return updateDoc(noteDocRef,{ gymBuddyDetails });
   }
-
+  
   /* checks if a user is signed up for gym buddy, return true if user has signed up */
-  isUserSignedUpGymBuddy(): Observable<boolean> {
+  isUserSignedUpGymBuddy() : Observable<boolean>{
     //this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
     return this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).pipe(
-      map(res => {
-        return res.gymBuddyDetails.isSignUp ? true : false;
-      }))
+        map(res =>{
+          return res.gymBuddyDetails.isSignUp ? true : false;
+    }))
   }
 
 }

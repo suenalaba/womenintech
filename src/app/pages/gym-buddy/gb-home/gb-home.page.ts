@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 import { userInfo } from 'os';
 import { user } from 'rxfire/auth';
 import { GymBuddyDetails } from 'src/app/class/GymBuddyProfile';
 import { User } from 'src/app/class/user';
 import { gymBuddyGoals } from 'src/app/data/gym-buddy-data/GymBuddyGoals';
 import { personalTraits } from 'src/app/data/gym-buddy-data/Traits';
-import { CameraService } from 'src/app/services/camera.service';
 import { workoutTimePreference } from '../../../data/gym-buddy-data/WorkoutTimePreference';
 import { UserService } from '../../../services/user.service'
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
@@ -31,8 +30,6 @@ export class GbHomePage implements OnInit {
     private router: Router,
     private userService: UserService,
     private loadingController: LoadingController,
-    private alertController: AlertController,
-    private cameraService: CameraService
     
   ) { }
 
@@ -106,12 +103,9 @@ export class GbHomePage implements OnInit {
      this.getWorkoutTimeTextDisplay();
      this.getGymBuddyGoalsTextDisplay();
      this.getPersonalTraitsTextDisplay();
-     
 
      loading.dismiss();
    })
-
-   await this.cameraService.loadSaved();
 
   }
 
@@ -166,65 +160,4 @@ export class GbHomePage implements OnInit {
     this.router.navigateByUrl('tabs/gym-buddy/gb-sign-up', { replaceUrl: true });
   }*/
 
-
-  /**
-   * Upload user profile pictures
-   */
-  async takePhoto() {
-    const alert = await this.alertController.create({
-      cssClass: 'profile-photos',
-      header: 'Take your image from...',
-      message: '',
-      buttons: [
-        {
-          text: 'Camera',
-          handler: () => {
-            console.log('Camera');
-            this.cameraService.getCamera();
-          }
-        },
-        {
-          text: 'Gallery',
-          handler: () => {
-            console.log('Gallery')
-            this.cameraService.getGallery();
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-    // this.cameraService.getCamera();
-  }
-
-  removePhoto(i) {
-    this.cameraService.removePhoto(i)
-  }
-
-  async uploadImages() {
-    let loading = await this.loadingController.create({
-      message: 'Loading ...'
-    });
-
-    await loading.present();
-
-    let photo = this.cameraService.photoStash;
-    let c = 1;
-    if (photo.length != 0) {
-      for(let i of photo)
-        await this.userService.uploadProfilePicture(c, i.webviewPath, this.userInfo.id);
-        c++;
-    }
-
-      loading.dismiss();
-  
-  }
 }
