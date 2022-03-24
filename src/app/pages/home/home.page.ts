@@ -62,7 +62,7 @@ export class HomePage implements OnInit {
     loop: true,
     spaceBetween: 50,
     autoplay: {
-      delay: 9000,
+      delay: 5000,
     },
     pagination: true
   };
