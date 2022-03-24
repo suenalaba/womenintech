@@ -1,3 +1,5 @@
+/* eslint-disable no-var */
+/* eslint-disable max-len */
 /* eslint-disable @angular-eslint/use-lifecycle-interface */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
@@ -26,6 +28,9 @@ export class HomePage implements OnInit {
 
   welcomeText: string = '';
   today: string = '';
+
+  cals: number = 0;
+  durn: string = '0 mins';
 
   constructor(
     private authService: AuthenticationService,
@@ -74,8 +79,13 @@ export class HomePage implements OnInit {
       this.welcomeText = 'Welcome Back ' + this.firstName;
       var tdy = new Date();
       this.today = String(tdy.getDate()) + ' ' + String(tdy.toLocaleString('default', { month: 'long' })) + ' ' + String(tdy.getFullYear()) + ', ' + String(tdy.toLocaleString('default', { weekday: 'long' }));
+
+      this.cals = 45;
+      var dur = 14;
+      this.durn = `${dur} mins`;
+
       loading.dismiss();
-    })
+    });
   }
 
   swiperSlideChanged(e) {

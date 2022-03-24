@@ -35,12 +35,26 @@
         <ion-card-header>
           THIS WEEK'S PROGRESS
         </ion-card-header>
-        <ion-card-content>
-          Calories
-        </ion-card-content>
-        <ion-card-content>
-          Training
-        </ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <stat-header class = "font">
+                Calories<br/>
+              </stat-header>
+              <ion-card-header>
+                {{ cals }}
+              </ion-card-header>
+            </ion-col>
+            <ion-col>
+              <stat-header class = "font">
+                Total Duration<br/>
+              </stat-header>
+              <ion-card-header>
+                {{ durn }}
+              </ion-card-header>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-card>
     </ng-template>
 
