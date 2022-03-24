@@ -4,10 +4,16 @@
 import { OnInit, ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
+import { SwiperOptions } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
+import Swiper, {Autoplay} from 'swiper';
+//import SwiperCore, {Pagination} from 'swiper/core';
 import { User } from '../../class/user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserService } from '../../services/user.service';
+
+Swiper.use([Autoplay]);
+//Swiper.use([Pagination]);
 
 @Component({
   selector: 'app-home',
@@ -29,18 +35,22 @@ export class HomePage implements OnInit {
   ) {}
 
   @ViewChild('swiper') swiper: SwiperComponent;
+
+  config: SwiperOptions = {
+    slidesPerView: 1,
+    centeredSlides: true,
+    loop: true,
+    spaceBetween: 0,
+    autoplay: {
+      delay: 3000,
+    },
+    pagination: true
+  };
+
   ngAfterContentChecked(): void{
     if (this.swiper) {
       this.swiper.updateSwiper({});
     }
-  }
-
-  option = {
-    slidesPerView: 1,
-    centeredSlides: true,
-    loop: false,
-    spaceBetween: 10,
-    autoplay: true
   }
 
   ngOnInit() {
