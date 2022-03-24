@@ -12,7 +12,7 @@
     <ion-toolbar>
       <ion-title size="large"> {{ welcomeText }} </ion-title>
     </ion-toolbar>
-    <ion-toolbar>
+    <ion-toolbar mode="md">
       <ion-title size="small"> {{ today }} </ion-title>
     </ion-toolbar>
   </ion-header>
@@ -34,5 +34,15 @@
   </ion-slides>
 
 
-  <app-explore-container name="Hello Beautiful World"></app-explore-container>
+  <ion-content>
+    <swiper #swiper>
+      <ng-template swiperSlide>
+        <img src = '../../assets/placeholders/progress.png'>
+      </ng-template>
+      <ng-template swiperSlide>
+        <img src = '../../assets/placeholders/schedule.png'>
+      </ng-template>
+    </swiper>
+  </ion-content>
+
 </ion-content>
