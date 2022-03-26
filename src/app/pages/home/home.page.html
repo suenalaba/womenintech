@@ -1,17 +1,78 @@
+<script src="https://www.youtube.com/iframe_api"></script>
+
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>
-      Home
+      Homepage
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large"> {{ welcomeText }} </ion-title>
     </ion-toolbar>
+    <ion-toolbar mode="md">
+      <ion-title size="small"> {{ today }} </ion-title>
+    </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Hello Beautiful World"></app-explore-container>
+  <swiper #swiper [config] = "configStats"
+  (slideChange) = "swiperSlideChanged($event)">
+    <ng-template swiperSlide>
+      <!--- <img src = '../../assets/placeholders/progress.png'> --->
+      <ion-card>
+        <ion-card-header>
+          THIS WEEK'S PROGRESS
+        </ion-card-header>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <subheader class = "font">
+                Calories<br/>
+              </subheader>
+              <ion-card-header>
+                {{ cals }}
+              </ion-card-header>
+            </ion-col>
+            <ion-col>
+              <subheader class = "font">
+                Total Duration<br/>
+              </subheader>
+              <ion-card-header>
+                {{ durn }}
+              </ion-card-header>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+    </ng-template>
+
+    <ng-template swiperSlide>
+      <!-- <img src = '../../assets/placeholders/schedule.png'> -->
+        <ion-content echarts [options]="chartOptions"></ion-content>
+    </ng-template>
+  </swiper>
+ 
+  <ion-card-header>
+    RECOMMENDATIONS
+  </ion-card-header>
+
+  <swiper #swiper [config] = "configYt">
+    <ng-template swiperSlide *ngFor="let video of ytPayload.items">
+      <ion-card>
+        <!--<img src={{video.snippet.thumbnails.high.url}}/><br>-->
+        <iframe 
+          width={{video.snippet.thumbnails.high.width}}
+          height={{video.snippet.thumbnails.high.height}}
+          [src]="video.videoUrl | safe"></iframe><br>
+        <subheader>
+          {{ video.snippet.title }}
+        </subheader>
+      </ion-card>
+    </ng-template>
+  </swiper>
+
 </ion-content>

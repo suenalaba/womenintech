@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 import { userInfo } from 'os';
 import { user } from 'rxfire/auth';
 import { GymBuddyDetails } from 'src/app/class/GymBuddyProfile';
 import { User } from 'src/app/class/user';
 import { gymBuddyGoals } from 'src/app/data/gym-buddy-data/GymBuddyGoals';
 import { personalTraits } from 'src/app/data/gym-buddy-data/Traits';
-import { CameraService } from 'src/app/services/camera.service';
 import { workoutTimePreference } from '../../../data/gym-buddy-data/WorkoutTimePreference';
 import { UserService } from '../../../services/user.service'
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
@@ -107,11 +106,8 @@ export class GbHomePage implements OnInit {
      this.getGymBuddyGoalsTextDisplay();
      this.getPersonalTraitsTextDisplay();
 
-
      loading.dismiss();
    })
-
-   await this.cameraService.loadSaved();
 
   }
 
