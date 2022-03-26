@@ -29,6 +29,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 //import { Camera } from '@ionic-native/camera';
 
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
