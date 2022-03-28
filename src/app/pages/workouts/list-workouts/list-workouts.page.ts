@@ -51,7 +51,6 @@ export class ListWorkoutsPage implements OnInit {
    await loading.present();
    this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res) =>{
       this.userInfo = res;
-      this.loadUserWorkouts(this.userInfo.id);
       loading.dismiss();
    })
   }
