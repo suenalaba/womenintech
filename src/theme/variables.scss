@@ -242,7 +242,6 @@
     --ion-toolbar-background: #ffffff;
 
     --ion-tab-bar-background: #1f1f1f;
-    
 
     --ion-card-background: #ffffff;
   }
@@ -266,5 +265,14 @@
   font-family: Poppins;
   src: url("../assets/fonts/Poppins/Poppins-Medium.ttf") format('truetype'); 
   font-weight: bold; //change url accordingly
+}
+
+.back-btn{
+  --background: white;
+  --box-shadow: none;
+  --color: black;
+  --background-hover: white;
+  --background-focused: white;
+  --background-activated: white;
 }
 

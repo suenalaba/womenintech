@@ -1,9 +1,97 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>create-workouts</ion-title>
+    <ion-button class="back-btn" (click)="goBack()">
+      <ion-icon slot="icon-only" name="chevron-back-outline" color="dark"></ion-icon>
+    </ion-button>
+    <ion-title>CREATE WORKOUT</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true" [scrollEvents]="true">
+  <ion-card>
+    <ion-card-content>
+      <form (ngSubmit)="submitWorkoutDesc()" [formGroup]="createWorkoutForm">
+        <ion-item class="ion-margin-bottom">
+          <ion-label position="stacked">Workout Name</ion-label>
+          <div class="input-align">
+            <ion-input type="text" value="" formControlName="wName"></ion-input>
+          </div>
+          <!-- <ion-note slot="error" *ngIf="wName.dirty && wName.errors">Enter valid name</ion-note> -->
+        </ion-item>
+
+        <ion-item class="ion-margin-bottom">
+          <ion-label position="stacked">Description</ion-label>
+          <div class="input-align">
+            <ion-input type="text" value="" formControlName="wDescription"></ion-input>
+          </div>
+          <!-- <ion-note slot="error" *ngIf="wDescription.dirty && wDescription.errors">Enter valid description</ion-note> -->
+        </ion-item>
+
+        <ion-item class="ion-margin-bottom" lines = "none">
+          <ion-label position="stacked">Intensity</ion-label>
+          <ion-radio-group allow-empty-selection="true" name="radio-group"
+            #radioGroup formControlName="intensity">
+            <div *ngFor="let item of listIntensity" class="radio-item">
+              <ion-item class="area" lines="none" [ngClass]="item.value">
+                <ion-label text-wrap class="text-label">{{item.text}}</ion-label> 
+                <span class="text-info-inline">{{item.info}}</span>
+                <ion-radio mode="md" slot="start" [name]="item.name" [value]="item.value"></ion-radio>
+              </ion-item>
+            </div>
+          </ion-radio-group>
+          <!-- <ion-note slot="error" *ngIf="intensity.errors">Enter valid height</ion-note> -->
+        </ion-item>
+
+        <ion-item class="ion-margin-bottom" lines = "none">
+          <ion-label position="stacked">Duration</ion-label>
+          <ion-radio-group allow-empty-selection="true" name="radio-group"
+            #radioGroup formControlName="duration">
+            <div *ngFor="let item of listDuration" class="radio-item">
+              <ion-item class="area" lines="none" [ngClass]="item.value">
+                <ion-label text-wrap class="text-label">{{item.text}}</ion-label> 
+                <span class="text-info-inline">{{item.info}}</span>
+                <ion-radio mode="md" slot="start" [name]="item.name" [value]="item.value"></ion-radio>
+              </ion-item>
+            </div>
+          </ion-radio-group>
+          <!-- <ion-note slot="error" *ngIf="height.dirty && height.errors">Enter valid height</ion-note> -->
+        </ion-item>
+
+        <ion-item class="ion-margin-bottom" lines = "none">
+          <ion-label position="stacked">Location</ion-label>
+          <ion-radio-group allow-empty-selection="true" name="radio-group"
+          #radioGroup formControlName="location">
+          <div *ngFor="let item of listLocation" class="radio-item">
+            <ion-item class="area" lines="none" [ngClass]="item.value">
+              <ion-label text-wrap class="text-label">{{item.text}}</ion-label> 
+              <span class="text-info-inline">{{item.info}}</span>
+              <ion-radio mode="md" slot="start" [name]="item.name" [value]="item.value"></ion-radio>
+            </ion-item>
+          </div>
+        </ion-radio-group>
+        <!-- <ion-note slot="error" *ngIf="height.dirty && height.errors">Enter valid height</ion-note> -->
+      </ion-item>
+
+        <ion-item class="ion-margin-bottom" lines = "none">
+          <ion-label position="stacked">Equipment</ion-label>
+          <ion-radio-group allow-empty-selection="true" name="radio-group"
+            #radioGroup formControlName="equipment">
+            <div *ngFor="let item of listEquipment" class="radio-item">
+              <ion-item class="area" lines="none" [ngClass]="item.value">
+                <ion-label text-wrap class="text-label">{{item.text}}</ion-label> 
+                <!-- <span class="text-info-under">{{item.info}}</span> -->
+                <ion-radio mode="md" slot="start" [name]="item.name" [value]="item.value"></ion-radio>
+              </ion-item>
+            </div>
+          </ion-radio-group>
+          <!-- <ion-note slot="error" *ngIf="height.dirty && height.errors">Enter valid height</ion-note> -->
+        </ion-item>
+
+        <ion-button expand="block" color="dark" type="submit">
+          CREATE WORKOUT
+        </ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>

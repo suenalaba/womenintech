@@ -31,4 +31,29 @@ export class UserService {
     return this.http.get(url);
   }
 
+  /***
+   * Update user workout profile
+   */
+  updateUser(user){
+    let userDetails: UserDetails = {
+      height: user.height,
+      weight: user.weight,
+      injury: user.injury,
+      areaOfInjury: user.areaOfInjury,
+      injuryType: user.injuryType,
+      healthCond: user.healthCond,
+      healthCondName: user.healthCondName,
+      fitnessGoal: user.fitnessGoal,
+      menstruationCycle: user.menstruationCycle
+    };
+
+    /*store to firebase firestore (firestore, collection, the very long string is the path)*/
+    const noteDocRef = doc(this.firestore, `Users`, `${user.id}`);
+    
+    /* must update doc, cannot add doc */
+    return updateDoc(noteDocRef, { userDetails });
+  }
+
+  
+
 }

@@ -14,7 +14,12 @@ div.done{
     font-weight: 600;
 }
 
-ion-card{
+div.created{
+    color: var(--ion-color-secondary);
+    font-weight: 600;
+}
+
+ion-card div{
     display:flex;
     align-items: center;
 }

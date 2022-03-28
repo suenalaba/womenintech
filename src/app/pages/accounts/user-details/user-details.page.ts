@@ -28,7 +28,7 @@ export class UserDetailsPage implements OnInit {
   private gender: any;
   private slides: any;
 
-  userDetails: FormGroup;
+  userDetailsForm: FormGroup;
   private userSignUp: any;
 
   //Get value on ionChange on IonRadioGroup
@@ -47,8 +47,44 @@ export class UserDetailsPage implements OnInit {
     let userSignUp_string  = localStorage.getItem('userSignUp');
     this.userSignUp =  JSON.parse(userSignUp_string);
     this.gender = this.userSignUp.gender;
+    this.buildForm();
+    
+    this.injury.valueChanges.subscribe(val => {
+      console.log(val)
+      if (val === 'yes') {
+        this.userDetailsForm.controls['areaOfInjury'].setValidators([Validators.required]);
+        this.userDetailsForm.controls['injuryType'].setValidators([Validators.required]);
+      } else {
+        this.userDetailsForm.controls['areaOfInjury'].clearValidators();
+        this.userDetailsForm.controls['injuryType'].clearValidators();
 
-    this.userDetails = this.fb.group({
+      }
+      this.userDetailsForm.controls['areaOfInjury'].updateValueAndValidity();
+      this.userDetailsForm.controls['injuryType'].updateValueAndValidity();
+
+    });
+
+    this.healthCond.valueChanges.subscribe(val => {
+      console.log(val);
+      if (val === 'yes') {
+        this.userDetailsForm.controls['healthCondName'].setValidators([Validators.required]);
+      } else {
+        this.userDetailsForm.controls['healthCondName'].clearValidators();
+      }
+      this.userDetailsForm.controls['healthCondName'].updateValueAndValidity();
+    });
+
+    if (this.gender === 'female') {
+        this.userDetailsForm.controls['menstruationCycle'].setValidators([Validators.required]);
+      } else {
+        this.userDetailsForm.controls['menstruationCycle'].clearValidators();
+      }
+      this.userDetailsForm.controls['menstruationCycle'].updateValueAndValidity();
+
+  }
+
+  buildForm(){
+    this.userDetailsForm = this.fb.group({
       height: ['', [Validators.required, Validators.minLength(3)]],
       weight: ['', [Validators.required, Validators.minLength(2)]],
       injury: ['', [Validators.required]],
@@ -59,76 +95,43 @@ export class UserDetailsPage implements OnInit {
       fitnessGoal: ['', [Validators.required]],
       menstruationCycle: ['', []]
     });
-
-    this.injury.valueChanges.subscribe(val => {
-      console.log(val)
-      if (val === 'yes') {
-        this.userDetails.controls['areaOfInjury'].setValidators([Validators.required]);
-        this.userDetails.controls['injuryType'].setValidators([Validators.required]);
-      } else {
-        this.userDetails.controls['areaOfInjury'].clearValidators();
-        this.userDetails.controls['injuryType'].clearValidators();
-
-      }
-      this.userDetails.controls['areaOfInjury'].updateValueAndValidity();
-      this.userDetails.controls['injuryType'].updateValueAndValidity();
-
-    });
-
-    this.healthCond.valueChanges.subscribe(val => {
-      console.log(val);
-      if (val === 'yes') {
-        this.userDetails.controls['healthCondName'].setValidators([Validators.required]);
-      } else {
-        this.userDetails.controls['healthCondName'].clearValidators();
-      }
-      this.userDetails.controls['healthCondName'].updateValueAndValidity();
-    });
-
-    if (this.gender === 'female') {
-        this.userDetails.controls['menstruationCycle'].setValidators([Validators.required]);
-      } else {
-        this.userDetails.controls['menstruationCycle'].clearValidators();
-      }
-      this.userDetails.controls['menstruationCycle'].updateValueAndValidity();
-
   }
 
   // Easy access for form fields
   get height() {
-    return this.userDetails.get('height');
+    return this.userDetailsForm.get('height');
   }
 
   get weight() {
-    return this.userDetails.get('weight');
+    return this.userDetailsForm.get('weight');
   }
 
   get injury() {
-    return this.userDetails.get('injury');
+    return this.userDetailsForm.get('injury');
   }
 
   get healthCond() {
-    return this.userDetails.get('healthCond');
+    return this.userDetailsForm.get('healthCond');
   }
 
   get healthCondName() {
-    return this.userDetails.get('healthCondName');
+    return this.userDetailsForm.get('healthCondName');
   }
 
   get fitnessGoal() {
-    return this.userDetails.get('fitnessGoal');
+    return this.userDetailsForm.get('fitnessGoal');
   }
 
   get menstruationCycle() {
-    return this.userDetails.get('menstruationCycle');
+    return this.userDetailsForm.get('menstruationCycle');
   }
 
   get areaOfInjury(){
-    return this.userDetails.get('areaOfInjury');
+    return this.userDetailsForm.get('areaOfInjury');
   }
 
   get injuryType(){
-    return this.userDetails.get('injuryType');
+    return this.userDetailsForm.get('injuryType');
   }
 
 
@@ -164,7 +167,7 @@ export class UserDetailsPage implements OnInit {
 
   nextPage(){
     console.log(this.slides);
-    console.log(this.userDetails);
+    console.log(this.userDetailsForm);
 
     this.slides.slideNext();
   }
@@ -196,12 +199,12 @@ export class UserDetailsPage implements OnInit {
 
   async completeSignUp(){
     console.log(this.userSignUp.id);
-    /*stuff stored in userdetails object */
+    /*stuff stored in userDetailsForm object */
     /*.value is to access form details */
     /*.id new variable name in the object */
-    this.userDetails.value.id = this.userSignUp.id;
+    this.userDetailsForm.value.id = this.userSignUp.id;
     /*store into firestore */
-    this.authService.addUserDetails(this.userDetails.value);
+    this.authService.addUserDetails(this.userDetailsForm.value);
 
     const toast = await this.toastCtrl.create({
       message: 'User updated!',

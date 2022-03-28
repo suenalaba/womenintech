@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User, UserDetails } from 'src/app/class/user';
 import {areaOfInjury, armInjuries, Injuries} from'src/app/data/injuries';
 import { fitnessGoals } from 'src/app/data/goals';
+import { UserService } from 'src/app/services/user.service'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-workout',
@@ -19,7 +21,14 @@ export class CreateWorkoutComponent implements OnInit {
   selectedInjury: Injuries[];
 
   private injuryArea: any;
-  constructor(private navParams: NavParams, private modalController: ModalController, private fb: FormBuilder) { }
+
+  formChange = false;
+
+  constructor(private navParams: NavParams, 
+    private modalController: ModalController, 
+    private fb: FormBuilder, 
+    private userService: UserService,
+    private router: Router) { }
 
   ngOnInit() {
     this.userInfo = this.navParams.get('userInfo');
@@ -43,6 +52,8 @@ export class CreateWorkoutComponent implements OnInit {
       } else {
         this.userUpdates.controls['areaOfInjury'].clearValidators();
         this.userUpdates.controls['injuryType'].clearValidators();
+        this.userUpdates.controls['areaOfInjury'].setValue("");
+        this.userUpdates.controls['injuryType'].setValue("");
 
       }
       this.userUpdates.controls['areaOfInjury'].updateValueAndValidity();
@@ -50,6 +61,9 @@ export class CreateWorkoutComponent implements OnInit {
 
     });
 
+    this.userUpdates.valueChanges.subscribe(selectedValue => {
+      this.formChange = true;
+    })
   }
 
   closeModal() {
@@ -123,8 +137,21 @@ export class CreateWorkoutComponent implements OnInit {
     });
   }
 
-  updateDetails(){
+  async updateDetails(){
     console.log(this.userUpdates)
+    if(this.formChange){
+      this.userUpdates.value.id = this.userInfo.id;
+      /*update into firestore */
+      this.userService.updateUser(this.userUpdates.value);
+    }
+    
+    await this.createWorkout()
+  }
+
+  async createWorkout(){
+    this.cancel()
+    this.router.navigateByUrl('/tabs/workouts/create-workout', { replaceUrl: true });
+
   }
 
 }

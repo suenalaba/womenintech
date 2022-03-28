@@ -1,4 +1,4 @@
-<ion-header [translucent]="true" class="ion-no-border"> 
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>
       Workouts
@@ -19,16 +19,19 @@
   </ion-header>
 
   <!-- Add content here -->
-    <ion-card *ngFor="let workout of workouts">
+  <ion-card *ngFor="let workout of workouts">
+    <div (click)="workoutAction(workout.id)">
       <ion-card-header>
         <ion-card-title>
-          This is my workout
+          {{workout.wName}}
         </ion-card-title>
         <ion-card-subtitle>
-          Workout description 
+          {{workout.wDescription}}
         </ion-card-subtitle>
       </ion-card-header>
-      <div class="progress"> STILL IN PROGRESS </div>
-    </ion-card>
+      <div class="progress" *ngIf="workout.workoutStatus === 'in_progress'"> STILL IN PROGRESS </div>
+      <div class="done" *ngIf="workout.workoutStatus === 'completed'"> WORKOUT COMPLETED </div>
+      <div class="created" *ngIf="workout.workoutStatus === 'created'"> START WORKOUT </div>
+    </div>
+  </ion-card>
 </ion-content>
-
