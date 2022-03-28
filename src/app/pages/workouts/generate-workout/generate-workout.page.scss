@@ -1,0 +1,73 @@
+.logo-header {
+  display: flex;
+  justify-content: center;
+
+}
+
+.logo-img {
+  width: 13%;
+}
+
+ion-card.workout-desc, ion-card.workout-plan{
+    box-shadow: none !important;
+}
+
+ion-card.workout-desc{
+    border-radius: 0px;
+    border-bottom: 1px solid var(--ion-color-medium);
+}
+
+.workout-desc ion-card-title {
+  text-transform: uppercase;
+}
+
+.workout-desc ion-card-content a {
+  text-decoration: underline;
+  color: blue;
+}
+
+.warm-up, .workout-exercises, .cool-down{
+    margin-bottom: 10px;
+}
+
+.cool-down{
+    margin-bottom: 30px;
+}
+
+.workout-div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.workout-title {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color:var(--ion-color-dark);
+}
+
+.workout-exercises ion-item div.exercise-div{
+    display: flex;
+    justify-content: space-between;
+    width:100%;
+    align-items: center;
+    margin: 7px 5px;
+}
+
+.workout-exercises .exercise-left .exercise-name{
+    font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color:var(--ion-color-dark);
+}
+
+div.delete-workout{
+    margin-top:10px;
+    width:100%;
+    text-align:center;
+    a{
+     color: var(--ion-color-secondary);
+    text-decoration: underline;   
+    }
+    
+}

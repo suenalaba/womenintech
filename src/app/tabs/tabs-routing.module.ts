@@ -14,7 +14,25 @@ const routes: Routes = [
       },
       {
         path: 'workouts',
-        loadChildren: () => import('../pages/workouts/list-workouts/list-workouts.module').then(m => m.ListWorkoutsPageModule)
+        children: [{
+          path: '',
+          loadChildren: () => import('../pages/workouts/list-workouts/list-workouts.module').then(m => m.ListWorkoutsPageModule)
+        },
+        {
+          path:'create-workout',
+          loadChildren: () => import('../pages/workouts/create-workouts/create-workouts.module').then(m => m.CreateWorkoutsPageModule)
+        },
+        {
+          path:'generate-workout',
+          loadChildren: () => import('../pages/workouts/generate-workout/generate-workout.module').then(m => m.GenerateWorkoutPageModule)
+        },
+        {
+          path:'edit-workout',
+          loadChildren: () => import('../pages/workouts/edit-workout/edit-workout.module').then(m => m.EditWorkoutPageModule)
+        }
+          
+        ]
+        
       },
       {
         path: 'gym-buddy',
