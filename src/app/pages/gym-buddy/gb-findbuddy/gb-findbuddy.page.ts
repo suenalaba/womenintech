@@ -67,4 +67,25 @@ export class GbFindbuddyPage implements OnInit {
   async goToGBHome() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
+
+  public get getFullName() {
+    return "Joshua Wang";
+  }
+
+  public get getAge() {
+    return "26";
+  }
+
+  public get getDescription() {
+    return "Full time student at NTU";
+  }
+
+  async matchBuddy() {
+    console.log("Match buddy")
+  }
+
+  async unmatchBuddy() {
+    console.log("Unmatch buddy")
+  }
+
 }
