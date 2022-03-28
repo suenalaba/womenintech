@@ -15,7 +15,9 @@ export class WorkoutDesc {
     duration: string;
     location: string;
     equipment: string;
-    dateCreated: number;
+    dateCreated: Timestamp;
     workoutStatus: string;
-    dateStart?: string;
+    dateStart?: Timestamp;
+    datePaused?: Timestamp;
+    dateCompleted?: Timestamp;
 }

@@ -16,7 +16,7 @@ export class WorkoutsService {
   }
 
   async createWorkout(val, uid) {
-    let timestamp = Timestamp.fromDate(new Date()).seconds;
+    let timestamp = Timestamp.fromDate(new Date());
     const docData: WorkoutDesc = {
       wName: val.wName,
       wDescription: val.wDescription,
@@ -27,7 +27,7 @@ export class WorkoutsService {
       dateCreated: timestamp,
       workoutStatus: "created"
     };
-    await setDoc(doc(this.firestore, "Users", `${uid}`, "Workouts", timestamp.toString()), docData) ;
+    await setDoc(doc(this.firestore, "Users", `${uid}`, "Workouts", timestamp.seconds.toString()), docData) ;
     return await timestamp;
   }
 
