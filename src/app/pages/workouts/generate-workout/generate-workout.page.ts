@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { LoadingController, NavController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { Duration, Equipment, Intensity, wLocation } from 'src/app/data/workout-data/CreateWorkout';
 import { WorkoutsService } from 'src/app/services/workouts.service';
@@ -29,7 +29,8 @@ export class GenerateWorkoutPage implements OnInit {
     private route: ActivatedRoute,
     private workoutService: WorkoutsService,
     private loadingCtrl: LoadingController,
-    private nav: NavController) { }
+    private nav: NavController,
+    private alertController: AlertController) { }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
@@ -39,8 +40,6 @@ export class GenerateWorkoutPage implements OnInit {
     this.userId = JSON.parse(localStorage.getItem("userID"));
 
     this.getWorkoutDetails(this.workoutId, this.userId);
-   
-
   }
 
   async getWorkoutDetails(wid, uid){
@@ -63,6 +62,39 @@ export class GenerateWorkoutPage implements OnInit {
 
   goBack(){
     this.nav.navigateBack(['tabs/workouts'], { animated: true })
+  }
+
+  deleteWorkout(){
+    this.presentAlertConfirm();
+  }
+
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Delete Workout',
+      message: 'Are you sure you want to delete the workout created for <strong>YOU</strong>?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          id: 'cancel-button',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Yes',
+          id: 'confirm-button',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.workoutService.deleteWorkout(this.workoutId, this.userId);
+            this.goBack();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 }

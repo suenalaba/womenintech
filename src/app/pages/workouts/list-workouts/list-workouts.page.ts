@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActionSheetController, LoadingController, ModalController } from '@ionic/angular';
+import { ActionSheetController, AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { docData } from 'rxfire/firestore';
 import { WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { User } from 'src/app/class/user';
@@ -23,7 +23,8 @@ export class ListWorkoutsPage implements OnInit {
     private loadingController: LoadingController,
     private workoutService: WorkoutsService,
     private router: Router,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    private alertController: AlertController
   ) { }
 
   ngOnInit() {
@@ -45,7 +46,6 @@ export class ListWorkoutsPage implements OnInit {
    * 
    * load user info from user service
    */
-
   async loadUserDetails(){
     const loading = await this.loadingController.create();
    await loading.present();
@@ -56,8 +56,8 @@ export class ListWorkoutsPage implements OnInit {
    })
   }
 
-  ionViewWillEnter(){
-    this.loadUserWorkouts(JSON.parse(localStorage.getItem('userID')));
+  async ionViewDidEnter(){
+    await this.loadUserWorkouts(JSON.parse(localStorage.getItem('userID')));
   }
 
   async loadUserWorkouts(id){
@@ -69,6 +69,14 @@ export class ListWorkoutsPage implements OnInit {
       workout.id = doc.id;
       this.workouts.push(workout)
     });
+  }
+
+  getDate(date){
+    let newDate = new Date(date.seconds*1000)
+    let mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+    let strDate = newDate.getDate() + " " + mS[newDate.getMonth()] +" " + newDate.getFullYear()
+    return strDate;
+    console.log(strDate)
   }
 
   async workoutAction(id) {
@@ -94,6 +102,7 @@ export class ListWorkoutsPage implements OnInit {
         },
         handler: () => {
           console.log('Delete clicked');
+          this.deleteWorkout(id, this.userInfo.id);
         }
       }, {
         text: 'Cancel',
@@ -108,6 +117,39 @@ export class ListWorkoutsPage implements OnInit {
 
   async editWorkout(id){
     await this.router.navigate(['/tabs/workouts/edit-workout'], { queryParams: { id: id }});
+  }
+
+  deleteWorkout(wid,uid){
+    this.presentAlertConfirm(wid, uid);
+  }
+
+  async presentAlertConfirm(wid, uid) {
+    const alert = await this.alertController.create({
+      cssClass: 'delete-workout-alert',
+      header: 'Delete Workout',
+      message: 'Are you sure you want to delete the workout created for <strong>YOU</strong>?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          id: 'cancel-button',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Yes',
+          id: 'confirm-button',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.workoutService.deleteWorkout(wid, uid);
+            this.loadUserWorkouts(uid);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 }

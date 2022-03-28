@@ -1,10 +1,21 @@
 ion-card-title{
-    font-size:15px;
+    font-size:13px;
     text-transform: uppercase;
 }
+ion-card-subtitle{
+    font-size:11px;
+}
+
 ion-card-header{
     width:60%;
 }
+div.progress, div.done, div.created{
+    font-size:11px;
+    text-align:center;
+    margin-right:5px;
+    
+}
+
 div.progress{
     color: var(--ion-color-success);
     font-weight: 600;
@@ -12,6 +23,11 @@ div.progress{
 div.done{
     color: var(--ion-color-medium);
     font-weight: 600;
+    flex-direction: column;
+}
+
+div.done span{
+    text-transform: uppercase;
 }
 
 div.created{

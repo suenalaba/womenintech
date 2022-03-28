@@ -30,6 +30,10 @@ ion-card.workout-desc{
     margin-bottom: 10px;
 }
 
+.cool-down{
+    margin-bottom: 30px;
+}
+
 .workout-div {
   display: flex;
   justify-content: space-between;
@@ -55,4 +59,15 @@ ion-card.workout-desc{
   font-weight: bold;
   text-transform: uppercase;
   color:var(--ion-color-dark);
+}
+
+div.delete-workout{
+    margin-top:10px;
+    width:100%;
+    text-align:center;
+    a{
+     color: var(--ion-color-secondary);
+    text-decoration: underline;   
+    }
+    
 }
