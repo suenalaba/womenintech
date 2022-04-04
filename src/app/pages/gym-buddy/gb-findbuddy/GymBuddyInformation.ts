@@ -140,6 +140,10 @@ export class GymBuddyProfileInfo {
     this._unmatches .push(value);
   }
 
+  public checkMatches(userID: string) : boolean{
+    return this.matches.includes(userID);
+  }
+
   //not sure what is a better design, update individually, or take array as a parameter
   /* 1st parameter is the array to update */
   /* 2nd parameter is the information to update */

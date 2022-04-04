@@ -91,6 +91,9 @@ export class GbFindbuddyPage implements OnInit {
   async matchBuddy() {
     this.recommendedUser=this.recommendationEngine.pollMatch();
     this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
+    if(this.recommendedUser.checkMatches(this.currentUser.getUserId)){
+        this.createChat(this.recommendedUser.getUserId,this.currentUser.getUserId);
+    }
     if(!this.recommendedUser){
       this.displayNoMoreMatches();
     }
@@ -109,6 +112,11 @@ export class GbFindbuddyPage implements OnInit {
   //Display something and prevent the user from matching and unmatching
   private displayNoMoreMatches() {
     console.log("No More Matches")
+  }
+
+  //this should probably be in a seperate class -> i just put this here as a placeholder
+  private createChat(userID1 :string ,userID2:string) {
+    console.log("Create Chat")
   }
 
 }
