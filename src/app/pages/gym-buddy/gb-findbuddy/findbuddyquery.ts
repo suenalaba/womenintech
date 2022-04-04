@@ -13,8 +13,10 @@ export class FindBuddyQuery {
     this.preferredGender=userPreferredGender
    }
 
+
+
   public async findBuddyQuery() {
-    let arrayofProfile =await  this.dbRetrieve.findBuddiesFromDB(this.preferredGender,this.gender);
-    return arrayofProfile;
+    let dictofProfile =await  this.dbRetrieve.findBuddiesFromDB(this.preferredGender,this.gender);
+    return dictofProfile;
   }
 }

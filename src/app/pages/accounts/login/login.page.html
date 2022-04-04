@@ -22,17 +22,17 @@
           <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
           <ion-note slot="error" *ngIf="(password.dirty || password.touched) && password.errors">Password needs to be 6 characters</ion-note>
         </ion-item>
-     
+
         <ion-button type="submit" expand="block" color="dark" [disabled]="!credentials.valid">LOGIN</ion-button>
-        
+
         <!-- <p>
           <ion-text color="danger"> Forget password </ion-text>
         </p> -->
         <p>
           <ion-text color="secondary" (click)="register()"> I don't have an account  </ion-text>
         </p>
-        
-       
+
+
       </form>
     </ion-card-content>
 

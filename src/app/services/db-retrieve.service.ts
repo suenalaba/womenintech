@@ -18,6 +18,12 @@ export class DbRetrieveService {
     private loadingController: LoadingController
     ) { }
 
+  /**
+   *
+   * @param preferredGender
+   * @param gender
+   * @returns dictionary of gym buddy profiles that have matched that criteria
+   */
   public async findBuddiesFromDB(preferredGender,gender){
     const usersDB = collection(this.firestore, "Users");
     let q : Query;
@@ -30,13 +36,13 @@ export class DbRetrieveService {
     }
     const querySnapshot =await this.pullFromDB(q);
 
-    let arrayOfProfiles= []
+    let dictOfProfiles= new Map<string, GymBuddyProfileInfo>();
     console.log("Matched users:")
     querySnapshot.forEach((doc) => {
       console.log(doc.id);
-      arrayOfProfiles.push(new GymBuddyProfileInfo(doc.data()));
+      dictOfProfiles.set(doc.id,new GymBuddyProfileInfo(doc.data()));
     });
-    return arrayOfProfiles;
+    return dictOfProfiles;
   }
 
 

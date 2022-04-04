@@ -12,12 +12,12 @@
   </ion-header>
 
   <ion-card>
-    <img src="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="ion">
+    <img src={{getProfilePicture}} alt="ion">
     <ion-card-header>
       <ion-card-title>{{getFullName}}, {{getAge}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      {{getDescription}}
+      {{getBriefIntro}}
     </ion-card-content>
     <ion-footer>
       <ion-row>

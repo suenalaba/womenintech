@@ -6,6 +6,7 @@ import { GymBuddyProfileInfo } from './GymBuddyInformation';
 export class RecommendationEngine {
   matchmakingAlgo:MatchmakingAlgo
   userInfo:GymBuddyProfileInfo
+  dictOfProfiles:Map<string, GymBuddyProfileInfo>
   constructor(    private dbRetrieve: DbRetrieveService, private gymBuddyProfileInfo : GymBuddyProfileInfo
     ) {
     this.matchmakingAlgo = new MatchmakingAlgo(this.dbRetrieve)
@@ -25,11 +26,14 @@ export class RecommendationEngine {
       return null;
     }
     else {
-      return highestScoreId;
+      return this.dictOfProfiles.get(highestScoreId);
     }
   }
 
-  public getAllMatches(arrayOfProfiles) {
+  public getAllMatches(dictOfProfiles) {
+    this.dictOfProfiles=dictOfProfiles;
+    let arrayOfProfiles= new Array<GymBuddyProfileInfo>();
+    arrayOfProfiles=Array.from(this.dictOfProfiles.values())
     this.matchmakingAlgo.calculateMatchingScores(this.userInfo,arrayOfProfiles);
     this.matchmakingAlgo.getContentFilterScoreMap;
   }

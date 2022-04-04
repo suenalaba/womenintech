@@ -13,6 +13,8 @@ import { LoadingController } from '@ionic/angular';
   styleUrls: ['./gb-findbuddy.page.scss'],
 })
 export class GbFindbuddyPage implements OnInit {
+  private recommendationEngine;
+  private recommendedUser: GymBuddyProfileInfo;
 
   constructor(
     private loadingController: LoadingController,
@@ -22,23 +24,11 @@ export class GbFindbuddyPage implements OnInit {
 
   async ngOnInit() {
     const userInfo= await this.dbRetrieve.retrieveCurrentUser();
-    const recommendationEngine = new RecommendationEngine(this.dbRetrieve,userInfo);
+    this.recommendationEngine = new RecommendationEngine(this.dbRetrieve,userInfo);
     const findBuddy= new FindBuddyQuery(this.dbRetrieve,userInfo.getGender,userInfo.getPrefBuddyGender);
-    let arrayofProfile = await findBuddy.findBuddyQuery();
-    recommendationEngine.getAllMatches(arrayofProfile);
-    const idRecommendations: string[] = [];
-    //loop to constantly get the array of recommendations.
-    while (true) {
-      const idToDisplay = recommendationEngine.pollMatch();
-      if (idToDisplay === null) {
-        break;
-      }
-      //use highestscoreid to poll for the user to recommend
-      //extract all info and display to html.
-      console.log(idToDisplay);
-
-      idRecommendations.push(idToDisplay);
-    }
+    this.recommendationEngine.getAllMatches(await findBuddy.findBuddyQuery());
+    // First user to be displayed
+    this.recommendedUser=this.recommendationEngine.pollMatch();
   }
 
     //extract all information from dictionary based on id and store all information in array
@@ -69,23 +59,39 @@ export class GbFindbuddyPage implements OnInit {
   }
 
   public get getFullName() {
-    return "Joshua Wang";
+    return this.recommendedUser.name;
   }
 
   public get getAge() {
-    return "26";
+    return this.recommendedUser.age;
   }
 
-  public get getDescription() {
-    return "Full time student at NTU";
+  public get getBriefIntro() {
+    return this.recommendedUser.getbriefIntro;
+  }
+
+  public get getProfilePicture() {
+    return this.recommendedUser.profilePicture;
   }
 
   async matchBuddy() {
+    this.recommendedUser=this.recommendationEngine.pollMatch();
+    if(!this.recommendedUser){
+      this.displayNoMoreMatches();
+    }
     console.log("Match buddy")
   }
 
   async unmatchBuddy() {
+    this.recommendedUser=this.recommendationEngine.pollMatch();
+    if(!this.recommendedUser){
+      this.displayNoMoreMatches();
+    }
     console.log("Unmatch buddy")
+  }
+
+  private displayNoMoreMatches() {
+    console.log("No More Matches")
   }
 
 }
