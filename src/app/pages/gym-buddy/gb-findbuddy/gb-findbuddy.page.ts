@@ -58,20 +58,29 @@ export class GbFindbuddyPage implements OnInit {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
+
   public get getFullName() {
-    return this.recommendedUser.name;
+    if(this.recommendedUser)
+      return this.recommendedUser.name;
+    return ""
   }
 
   public get getAge() {
-    return this.recommendedUser.age;
+    if(this.recommendedUser)
+      return this.recommendedUser.age;
+    return ""
   }
 
   public get getBriefIntro() {
-    return this.recommendedUser.getbriefIntro;
+    if(this.recommendedUser)
+      return this.recommendedUser.getbriefIntro;
+    return ""
   }
 
   public get getProfilePicture() {
-    return this.recommendedUser.profilePicture;
+    if(this.recommendedUser)
+      return this.recommendedUser.profilePicture;
+    return ""
   }
 
   async matchBuddy() {
@@ -79,7 +88,7 @@ export class GbFindbuddyPage implements OnInit {
     if(!this.recommendedUser){
       this.displayNoMoreMatches();
     }
-    console.log("Match buddy")
+    else console.log("Match buddy")
   }
 
   async unmatchBuddy() {
@@ -87,9 +96,10 @@ export class GbFindbuddyPage implements OnInit {
     if(!this.recommendedUser){
       this.displayNoMoreMatches();
     }
-    console.log("Unmatch buddy")
+    else console.log("Unmatch buddy")
   }
 
+  //Display something and prevent the user from matching and unmatching
   private displayNoMoreMatches() {
     console.log("No More Matches")
   }
