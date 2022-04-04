@@ -24,7 +24,7 @@ export class DbRetrieveService {
    * @param gender
    * @returns dictionary of gym buddy profiles that have matched that criteria
    */
-  public async findBuddiesFromDB(preferredGender,gender){
+  public async findBuddiesFromDB(preferredGender:string,gender:string){
     const usersDB = collection(this.firestore, "Users");
     let q : Query;
     if(preferredGender==="no_preference"){

@@ -7,9 +7,9 @@ export class RecommendationEngine {
   matchmakingAlgo:MatchmakingAlgo
   userInfo:GymBuddyProfileInfo
   dictOfProfiles:Map<string, GymBuddyProfileInfo>
-  constructor(    private dbRetrieve: DbRetrieveService, private gymBuddyProfileInfo : GymBuddyProfileInfo
+  constructor( private gymBuddyProfileInfo : GymBuddyProfileInfo
     ) {
-    this.matchmakingAlgo = new MatchmakingAlgo(this.dbRetrieve)
+    this.matchmakingAlgo = new MatchmakingAlgo()
     this.userInfo=gymBuddyProfileInfo;
   }
 
