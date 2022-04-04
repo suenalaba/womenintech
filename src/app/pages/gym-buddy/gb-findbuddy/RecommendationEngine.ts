@@ -7,9 +7,9 @@ export class RecommendationEngine {
   matchmakingAlgo:MatchmakingAlgo
   userInfo:GymBuddyProfileInfo
   dictOfProfiles:Map<string, GymBuddyProfileInfo>
-  constructor(    private dbRetrieve: DbRetrieveService, private gymBuddyProfileInfo : GymBuddyProfileInfo
+  constructor( private gymBuddyProfileInfo : GymBuddyProfileInfo
     ) {
-    this.matchmakingAlgo = new MatchmakingAlgo(this.dbRetrieve)
+    this.matchmakingAlgo = new MatchmakingAlgo()
     this.userInfo=gymBuddyProfileInfo;
   }
 
@@ -33,7 +33,10 @@ export class RecommendationEngine {
   public getAllMatches(dictOfProfiles) {
     this.dictOfProfiles=dictOfProfiles;
     let arrayOfProfiles= new Array<GymBuddyProfileInfo>();
-    arrayOfProfiles=Array.from(this.dictOfProfiles.values())
+    for (let key in this.dictOfProfiles) {
+      let value = this.dictOfProfiles[key];
+      arrayOfProfiles.push(value);
+  }
     this.matchmakingAlgo.calculateMatchingScores(this.userInfo,arrayOfProfiles);
     this.matchmakingAlgo.getContentFilterScoreMap;
   }

@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { GymBuddyDetails } from '../class/GymBuddyProfile';
 import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
-import { updateDoc } from 'firebase/firestore';
+import { arrayUnion, updateDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
 import { User, UserDetails } from '../class/user';
 import { UserService } from './user.service';
+import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -43,7 +45,7 @@ export class GymBuddyService {
 
     return updateDoc(noteDocRef,{ gymBuddyDetails });
   }
-  
+
   /* checks if a user is signed up for gym buddy, return true if user has signed up */
   isUserSignedUpGymBuddy() : Observable<boolean>{
     //this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -52,5 +54,20 @@ export class GymBuddyService {
           return res.gymBuddyDetails.isSignUp ? true : false;
     }))
   }
+
+  updateMatches(user : GymBuddyProfileInfo,userID) {
+    //console.log(details);
+    const noteDocRef = doc(this.fireStore, `Users`, user.getUserId);
+
+    return updateDoc(noteDocRef,{ "gymBuddyDetails.matches" : arrayUnion(userID)});
+  }
+
+  updateUnmatches(user : GymBuddyProfileInfo,userID) {
+    //console.log(details);
+    const noteDocRef = doc(this.fireStore, `Users`, user.getUserId);
+
+    return updateDoc(noteDocRef,{ "gymBuddyDetails.unmatches" : arrayUnion(userID)});
+  }
+
 
 }

@@ -6,6 +6,8 @@ import { DbRetrieveService } from './../../../services/db-retrieve.service';
 import { GymBuddyProfileInfo } from './GymBuddyInformation';
 import { threadId } from 'worker_threads';
 import { LoadingController } from '@ionic/angular';
+import { GymBuddyService } from 'src/app/services/gym-buddy.service';
+
 
 @Component({
   selector: 'app-gb-findbuddy',
@@ -14,19 +16,22 @@ import { LoadingController } from '@ionic/angular';
 })
 export class GbFindbuddyPage implements OnInit {
   private recommendationEngine;
+  private currentUser: GymBuddyProfileInfo;
   private recommendedUser: GymBuddyProfileInfo;
+  private findBuddyQuery : FindBuddyQuery
 
   constructor(
     private loadingController: LoadingController,
     private router: Router,
     private dbRetrieve: DbRetrieveService,
+    private gbService: GymBuddyService,
   ) { }
 
   async ngOnInit() {
-    const userInfo= await this.dbRetrieve.retrieveCurrentUser();
-    this.recommendationEngine = new RecommendationEngine(this.dbRetrieve,userInfo);
-    const findBuddy= new FindBuddyQuery(this.dbRetrieve,userInfo.getGender,userInfo.getPrefBuddyGender);
-    this.recommendationEngine.getAllMatches(await findBuddy.findBuddyQuery());
+    this.currentUser= await this.dbRetrieve.retrieveCurrentUser();
+    this.recommendationEngine = new RecommendationEngine(this.currentUser);
+    this.findBuddyQuery= new FindBuddyQuery(this.dbRetrieve,this.gbService,this.currentUser);
+    this.recommendationEngine.getAllMatches(await this.findBuddyQuery.findBuddyQuery());
     // First user to be displayed
     this.recommendedUser=this.recommendationEngine.pollMatch();
   }
@@ -85,6 +90,10 @@ export class GbFindbuddyPage implements OnInit {
 
   async matchBuddy() {
     this.recommendedUser=this.recommendationEngine.pollMatch();
+    this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
+    if(this.recommendedUser.checkMatches(this.currentUser.getUserId)){
+        this.createChat(this.recommendedUser.getUserId,this.currentUser.getUserId);
+    }
     if(!this.recommendedUser){
       this.displayNoMoreMatches();
     }
@@ -93,6 +102,7 @@ export class GbFindbuddyPage implements OnInit {
 
   async unmatchBuddy() {
     this.recommendedUser=this.recommendationEngine.pollMatch();
+    this.findBuddyQuery.addUnmatches(this.recommendedUser.getUserId);
     if(!this.recommendedUser){
       this.displayNoMoreMatches();
     }
@@ -102,6 +112,11 @@ export class GbFindbuddyPage implements OnInit {
   //Display something and prevent the user from matching and unmatching
   private displayNoMoreMatches() {
     console.log("No More Matches")
+  }
+
+  //this should probably be in a seperate class -> i just put this here as a placeholder
+  private createChat(userID1 :string ,userID2:string) {
+    console.log("Create Chat")
   }
 
 }

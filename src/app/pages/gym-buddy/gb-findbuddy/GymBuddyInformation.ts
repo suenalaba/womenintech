@@ -16,6 +16,9 @@ export class GymBuddyProfileInfo {
   private userInfo;
   private gymBuddyInfo;
 
+  private _matches?: string[];
+  private _unmatches?: string[];
+
   //To display
   private _name: string;
   private briefIntro?: string;
@@ -39,6 +42,9 @@ export class GymBuddyProfileInfo {
     this.locationPreference = this.userInfo.gymBuddyDetails.locationPreference;
     this.buddyTraits = this.userInfo.gymBuddyDetails.buddyTraits;
     this.buddyTrainStyle = this.userInfo.gymBuddyDetails.buddyTrainStyle;
+
+    this.matches = this.userInfo.gymBuddyDetails.matches;
+    this.unmatches = this.userInfo.gymBuddyDetails.matches;
 
     //Information needed for display
 
@@ -112,6 +118,30 @@ export class GymBuddyProfileInfo {
   }
   public get profilePicture(): string {
     return this._profilePicture;
+  }
+
+  public get matches(): string[] {
+    return this._matches;
+  }
+  public set matches(value: string[]) {
+    this._matches = value;
+  }
+  public addMatches(value: string) {
+    this._matches .push(value);
+  }
+
+  public get unmatches(): string[] {
+    return this._unmatches;
+  }
+  public set unmatches(value: string[]) {
+    this._unmatches = value;
+  }
+  public addUnmatches(value: string) {
+    this._unmatches .push(value);
+  }
+
+  public checkMatches(userID: string) : boolean{
+    return this.matches.includes(userID);
   }
 
   //not sure what is a better design, update individually, or take array as a parameter

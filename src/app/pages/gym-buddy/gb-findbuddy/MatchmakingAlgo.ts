@@ -19,7 +19,7 @@ export class MatchmakingAlgo {
  //let scores = new Map<string, number>();
   private contentFilterScoreMap = new Map<string, number>([]);
 
-  constructor(    private dbRetrieve: DbRetrieveService,
+  constructor(
     ) {
   }
 
