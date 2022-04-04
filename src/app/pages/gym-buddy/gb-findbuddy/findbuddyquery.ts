@@ -32,6 +32,16 @@ export class FindBuddyQuery {
 
   public async findBuddyQuery() {
     let dictofProfile =await  this.dbRetrieve.findBuddiesFromDB(this.preferredGender,this.gender);
-    return dictofProfile;
+    return this.filterDictionary(dictofProfile);
+  }
+
+  private filterDictionary(dict:Map<string, GymBuddyProfileInfo>){
+    this.currentUser.matches.forEach(function (value) {
+      delete dict[value];
+    });
+    this.currentUser.unmatches.forEach(function (value) {
+      delete dict[value];
+    });
+    return dict
   }
 }
