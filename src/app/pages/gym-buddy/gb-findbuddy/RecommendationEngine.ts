@@ -33,7 +33,10 @@ export class RecommendationEngine {
   public getAllMatches(dictOfProfiles) {
     this.dictOfProfiles=dictOfProfiles;
     let arrayOfProfiles= new Array<GymBuddyProfileInfo>();
-    arrayOfProfiles=Array.from(this.dictOfProfiles.values())
+    for (let key in this.dictOfProfiles) {
+      let value = this.dictOfProfiles[key];
+      arrayOfProfiles.push(value);
+  }
     this.matchmakingAlgo.calculateMatchingScores(this.userInfo,arrayOfProfiles);
     this.matchmakingAlgo.getContentFilterScoreMap;
   }
