@@ -8,6 +8,10 @@ import { threadId } from 'worker_threads';
 import { LoadingController } from '@ionic/angular';
 import { GymBuddyService } from 'src/app/services/gym-buddy.service';
 
+export interface CardData {
+  imageId: string;
+  state: 'default' | 'flipped' | 'matched';
+}
 
 @Component({
   selector: 'app-gb-findbuddy',
@@ -35,30 +39,6 @@ export class GbFindbuddyPage implements OnInit {
     // First user to be displayed
     this.recommendedUser=this.recommendationEngine.pollMatch();
   }
-
-    //extract all information from dictionary based on id and store all information in array
-    //loop through array in html to display information.
-
-    //when user exits page, destroy all objects.
-
-    //testing some stuff here....
-    //var userValidators : IUserValidators = new UserValidators();
-    /*const matchmakingAlgo = new MatchmakingAlgo();
-    matchmakingAlgo.calculateMatchingScores();
-    console.log(score);
-    matchmakingAlgo.getContentFilterScoreMap.forEach((id,scores) => console.log(id,scores));*/
-    //const test = new Testz();
-    //console.log(test.name);
-    /*console.log(2/3*20/100);
-    let mainuser = new GymBuddyProfileInfo();
-    console.log(mainuser.getbriefIntro);
-    mainuser.setbriefIntro = 'hellotinysherwin';
-    console.log(mainuser.getbriefIntro);
-    console.log(mainuser.getBuddyTrainStyle);
-    mainuser.updateGymBuddyArrays(mainuser.getBuddyTrainStyle,'test');
-    console.log(mainuser.getBuddyTrainStyle);
-    mainuser.removeFromGymBuddyArrays(mainuser.getBuddyTrainStyle, 'test');
-    console.log(mainuser.getBuddyTrainStyle);*/
   async goToGBHome() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
@@ -87,6 +67,11 @@ export class GbFindbuddyPage implements OnInit {
       return this.recommendedUser.profilePicture;
     return ""
   }
+
+  public get getMoreGymBuddyInformation() {
+    return ""
+  }
+
 
   async matchBuddy() {
     this.recommendedUser=this.recommendationEngine.pollMatch();

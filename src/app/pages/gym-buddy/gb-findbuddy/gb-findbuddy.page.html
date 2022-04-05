@@ -11,8 +11,17 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-card>
-    <img src={{getProfilePicture}} alt="ion">
+  <ion-card ng-controller="appcontrol">
+    <div class="flip-container" ng-click="flip = !flip" ng-class="{'flip': flip}">
+      <div class="flipper">
+        <div class="front">
+          <img src={{getProfilePicture}} alt="ion">
+        </div>
+        <div class="back">
+          <p>{{getMoreGymBuddyInformation}}</p>
+        </div>
+      </div>
+    </div>
     <ion-card-header>
       <ion-card-title>{{getFullName}}, {{getAge}}</ion-card-title>
     </ion-card-header>

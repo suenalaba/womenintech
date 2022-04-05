@@ -39,8 +39,10 @@ export class DbRetrieveService {
     let dictOfProfiles= new Map<string, GymBuddyProfileInfo>();
     console.log("Matched users:")
     querySnapshot.forEach((doc) => {
-      console.log(doc.id);
-      dictOfProfiles.set(doc.id,new GymBuddyProfileInfo(doc.data()));
+      let person = new GymBuddyProfileInfo(doc.data());
+      console.log("user id:",person.getUserId);
+      dictOfProfiles[doc.id]=person;
+      console.log(dictOfProfiles[doc.id])
     });
     return dictOfProfiles;
   }
