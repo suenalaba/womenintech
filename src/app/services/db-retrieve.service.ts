@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
-import { getDoc, Query, updateDoc } from 'firebase/firestore';
-import { user } from 'rxfire/auth';
-import { Observable } from 'rxjs';
-import { User, UserDetails } from '../class/user';
-import { GymBuddyDetails } from '../class/GymBuddyProfile';
+import { arrayUnion, getDoc, Query, updateDoc } from 'firebase/firestore';
 import { query, where, getDocs,collectionGroup } from "firebase/firestore";
 import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
 import { AlertController, LoadingController } from '@ionic/angular';
@@ -65,5 +61,20 @@ export class DbRetrieveService {
     const querySnapshot = await getDocs(q);
    return querySnapshot;
   }
+
+  updateMatches(user : GymBuddyProfileInfo,userID) {
+    //console.log(details);
+    const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
+
+    return updateDoc(noteDocRef,{ "gymBuddyDetails.matches" : arrayUnion(userID)});
+  }
+
+  updateUnmatches(user : GymBuddyProfileInfo,userID) {
+    //console.log(details);
+    const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
+
+    return updateDoc(noteDocRef,{ "gymBuddyDetails.unmatches" : arrayUnion(userID)});
+  }
+
 
 }

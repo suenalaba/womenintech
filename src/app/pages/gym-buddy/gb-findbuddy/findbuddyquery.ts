@@ -10,10 +10,9 @@ export class FindBuddyQuery {
   gender;
   preferredGender;
   currentUser:GymBuddyProfileInfo;
-  constructor(private dbservice: DbRetrieveService,private gbservice: GymBuddyService, private currentuser:GymBuddyProfileInfo
+  constructor(private dbservice: DbRetrieveService, private currentuser:GymBuddyProfileInfo
   ) {
     this.dbRetrieve=dbservice;
-    this.gbService=gbservice;
     this.currentUser=currentuser;
     this.gender=this.currentUser.getGender;
     this.preferredGender=this.currentUser.getPrefBuddyGender;
@@ -21,12 +20,12 @@ export class FindBuddyQuery {
 
   public addMatches(userID: string){
     this.currentUser.addMatches(userID);
-    this.gbService.updateMatches(this.currentUser,userID);
+    this.dbservice.updateMatches(this.currentUser,userID);
   }
 
   public addUnmatches(userID: string){
     this.currentUser.addUnmatches(userID);
-    this.gbService.updateUnmatches(this.currentUser,userID);
+    this.dbservice.updateUnmatches(this.currentUser,userID);
   }
 
 
