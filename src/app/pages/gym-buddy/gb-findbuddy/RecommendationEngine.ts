@@ -26,7 +26,7 @@ export class RecommendationEngine {
       return null;
     }
     else {
-      return this.dictOfProfiles.get(highestScoreId);
+      return this.dictOfProfiles[highestScoreId];
     }
   }
 
@@ -36,7 +36,8 @@ export class RecommendationEngine {
     for (let key in this.dictOfProfiles) {
       let value = this.dictOfProfiles[key];
       arrayOfProfiles.push(value);
-  }
+    }
+    console.log("array of profiles:", arrayOfProfiles);
     this.matchmakingAlgo.calculateMatchingScores(this.userInfo,arrayOfProfiles);
     this.matchmakingAlgo.getContentFilterScoreMap;
   }

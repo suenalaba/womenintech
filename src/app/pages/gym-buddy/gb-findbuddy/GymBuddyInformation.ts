@@ -30,6 +30,7 @@ export class GymBuddyProfileInfo {
 
   constructor(data) {
     this.userInfo=JSON.parse(JSON.stringify(data));
+
     // Information needed for matching
     this.userId = this.userInfo.id;
     this.gender=this.userInfo.gender;
@@ -42,9 +43,10 @@ export class GymBuddyProfileInfo {
     this.locationPreference = this.userInfo.gymBuddyDetails.locationPreference;
     this.buddyTraits = this.userInfo.gymBuddyDetails.buddyTraits;
     this.buddyTrainStyle = this.userInfo.gymBuddyDetails.buddyTrainStyle;
-
-    this.matches = this.userInfo.gymBuddyDetails.matches;
-    this.unmatches = this.userInfo.gymBuddyDetails.matches;
+    if(!this.userInfo.gymBuddyDetails.matches) this.matches=[];
+      else this.matches = this.userInfo.gymBuddyDetails.matches;
+    if(!this.userInfo.gymBuddyDetails.unmatches) this.unmatches=[];
+      else this.unmatches = this.userInfo.gymBuddyDetails.unmatches;
 
     //Information needed for display
 
@@ -53,7 +55,6 @@ export class GymBuddyProfileInfo {
     this._age=this.userInfo.age;
     this._profilePicture="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA"
     //this._profilePicture=this.userInfo.profilePicture;
-
   }
 
 
