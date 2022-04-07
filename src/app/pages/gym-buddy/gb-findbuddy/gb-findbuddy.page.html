@@ -14,7 +14,7 @@
   <ion-card>
     <img src="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="ion">
     <ion-card-header>
-      <ion-card-title>{{getFullName}}, {{getAge}}</ion-card-title>
+      <ion-card-title>{{ getFullName }}, {{ getAge }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       {{getDescription}}
@@ -22,14 +22,14 @@
     <ion-footer>
       <ion-row>
         <ion-col center text-center>
-          <button (click)="matchBuddy()" >
+          <ion-button (click)="matchBuddy()" expand="block" fill="outline" class="buddy-btn" >
             <ion-icon name="checkmark-circle-outline" size="large" color="success" ></ion-icon>
-          </button>
+          </ion-button>
         </ion-col>
         <ion-col center text-center>
-          <button (click)="unmatchBuddy()">
+          <ion-button (click)="unmatchBuddy()" expand="block" fill="outline" class="buddy-btn">
             <ion-icon name="close-circle-outline" size="large" color="danger" ></ion-icon>
-          </button>
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-footer>
