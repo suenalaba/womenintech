@@ -126,6 +126,7 @@ export class GbHomePage implements OnInit {
   }
 
   private getPersonalTraitsTextDisplay() {
+    this.personalTraits = []
     for (const val of this.personalTraitsList) {
       //console.log(val.value);
       //console.log(this.gymBuddyInfo.workoutTimePreference);
@@ -138,6 +139,7 @@ export class GbHomePage implements OnInit {
   }
 
   private getGymBuddyGoalsTextDisplay() {
+    this.gymBuddyGoals = []
     for (const val of this.buddyGoalsList) {
       //console.log(val.value);
       //console.log(this.gymBuddyInfo.workoutTimePreference);
@@ -150,6 +152,7 @@ export class GbHomePage implements OnInit {
   }
 
   private getWorkoutTimeTextDisplay() {
+    this.prefWorkoutTime = []
     for (const val of this.timePrefList) {
       //console.log(val.value);
       //console.log(this.gymBuddyInfo.workoutTimePreference);
