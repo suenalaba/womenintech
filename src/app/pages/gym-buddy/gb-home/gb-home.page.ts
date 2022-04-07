@@ -12,6 +12,7 @@ import { personalTraits } from 'src/app/data/gym-buddy-data/Traits';
 import { workoutTimePreference } from '../../../data/gym-buddy-data/WorkoutTimePreference';
 import { UserService } from '../../../services/user.service'
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
+import { GymBuddyService } from 'src/app/services/gym-buddy.service';
 @Component({
   selector: 'app-gb-home',
   templateUrl: './gb-home.page.html',
@@ -31,6 +32,7 @@ export class GbHomePage implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
+    private gymBuddyService: GymBuddyService,
     private loadingController: LoadingController,
     private alertController: AlertController,
     private cameraService: CameraService
@@ -77,13 +79,12 @@ export class GbHomePage implements OnInit {
 
 
   ngOnInit() {
-    this.loadUserDetails();
-    /*for (const val of this.timePrefList) {
-      console.log(val.value);
-      if (this.gymBuddyInfo.workoutTimePreference.includes(val.value)) {
-        this.prefWorkoutTime.push(val.text);
-      }
-    }*/
+    /** checks if the user has signed up for Gym Buddy */
+    // if(this.gymBuddyService.isSignedUp()) 
+      this.loadUserDetails();
+    // else 
+      /** user has NOT signed up for Gym Buddy, will be navigated to sign up page*/
+      // this.router.navigateByUrl('tabs/gym-buddy/gb-sign-up', { replaceUrl: true });
   }
 
   /**
@@ -92,12 +93,15 @@ export class GbHomePage implements OnInit {
   async loadUserDetails(){
     const loading = await this.loadingController.create();
     await loading.present();
+
     this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res) =>{
-      console.log(res);
+      /** checks if user signed up */
       if(!res.gymBuddyDetails.isSignUp) {
        this.router.navigateByUrl('tabs/gym-buddy/gb-sign-up', { replaceUrl: true });
        loading.dismiss();
       }
+
+      
       this.fullName = res.firstName + ' ' + res.lastName;
       this.briefIntro = res.gymBuddyDetails.briefIntro;
       this.userInfo = res;
@@ -126,6 +130,7 @@ export class GbHomePage implements OnInit {
   }
 
   private getPersonalTraitsTextDisplay() {
+    this.personalTraits = []
     for (const val of this.personalTraitsList) {
       //console.log(val.value);
       //console.log(this.gymBuddyInfo.workoutTimePreference);
@@ -138,6 +143,7 @@ export class GbHomePage implements OnInit {
   }
 
   private getGymBuddyGoalsTextDisplay() {
+    this.gymBuddyGoals = []
     for (const val of this.buddyGoalsList) {
       //console.log(val.value);
       //console.log(this.gymBuddyInfo.workoutTimePreference);
@@ -150,6 +156,7 @@ export class GbHomePage implements OnInit {
   }
 
   private getWorkoutTimeTextDisplay() {
+    this.prefWorkoutTime = []
     for (const val of this.timePrefList) {
       //console.log(val.value);
       //console.log(this.gymBuddyInfo.workoutTimePreference);
