@@ -39,17 +39,17 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            canActivate: [GymBuddyGuard],
+            redirectTo: '/tabs/gym-buddy/gb-home',
+            pathMatch: 'full'
           },
           {
             path: 'gb-sign-up',
             loadChildren: () => import('../pages/gym-buddy/gb-sign-up/gb-sign-up.module').then(m => m.GbSignUpPageModule),
-            //canActivate: [GymBuddyGuard],
           },
           {
             path: 'gb-home',
             loadChildren: () => import('../pages/gym-buddy/gb-home/gb-home.module').then(m => m.GbHomePageModule),
-            // canActivate: [GymBuddyGuard]
+            // canActivate: [GymBuddyGuard] 
           },
           {
             path: 'gb-buddylist-home',
@@ -58,6 +58,7 @@ const routes: Routes = [
           {
             path: 'gb-findbuddy',
             loadChildren: () => import('../pages/gym-buddy/gb-findbuddy/gb-findbuddy.module').then(m => m.GbFindbuddyPageModule),
+          
           },
         ]
       },
