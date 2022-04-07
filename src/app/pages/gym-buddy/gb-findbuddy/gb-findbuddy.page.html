@@ -11,23 +11,31 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-card>
-    <img src="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="ion">
+  <ion-card >
+    <img src={{getProfilePicture}} alt="ion">
     <ion-card-header>
       <ion-card-title>{{ getFullName }}, {{ getAge }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      {{getDescription}}
+      {{getBriefIntro}}
     </ion-card-content>
     <ion-footer>
       <ion-row>
         <ion-col center text-center>
+<<<<<<< HEAD
           <ion-button (click)="matchBuddy()" expand="block" fill="outline" class="buddy-btn" >
+=======
+          <button name="matchButton" (click)="matchBuddy()" >
+>>>>>>> b29f6cb735c6077a9d9c618085260dc07c059d6e
             <ion-icon name="checkmark-circle-outline" size="large" color="success" ></ion-icon>
           </ion-button>
         </ion-col>
         <ion-col center text-center>
+<<<<<<< HEAD
           <ion-button (click)="unmatchBuddy()" expand="block" fill="outline" class="buddy-btn">
+=======
+          <button name="unmatchButton" (click)="unmatchBuddy()">
+>>>>>>> b29f6cb735c6077a9d9c618085260dc07c059d6e
             <ion-icon name="close-circle-outline" size="large" color="danger" ></ion-icon>
           </ion-button>
         </ion-col>

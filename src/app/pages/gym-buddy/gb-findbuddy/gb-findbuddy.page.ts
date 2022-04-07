@@ -6,6 +6,12 @@ import { DbRetrieveService } from './../../../services/db-retrieve.service';
 import { GymBuddyProfileInfo } from './GymBuddyInformation';
 import { threadId } from 'worker_threads';
 import { LoadingController } from '@ionic/angular';
+import { GymBuddyService } from 'src/app/services/gym-buddy.service';
+
+export interface CardData {
+  imageId: string;
+  state: 'default' | 'flipped' | 'matched';
+}
 
 @Component({
   selector: 'app-gb-findbuddy',
@@ -13,6 +19,10 @@ import { LoadingController } from '@ionic/angular';
   styleUrls: ['./gb-findbuddy.page.scss'],
 })
 export class GbFindbuddyPage implements OnInit {
+  private recommendationEngine;
+  private currentUser: GymBuddyProfileInfo;
+  private recommendedUser: GymBuddyProfileInfo;
+  private findBuddyQuery : FindBuddyQuery
 
   constructor(
     private loadingController: LoadingController,
@@ -21,71 +31,77 @@ export class GbFindbuddyPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    const userInfo= await this.dbRetrieve.retrieveCurrentUser();
-    const recommendationEngine = new RecommendationEngine(this.dbRetrieve,userInfo);
-    const findBuddy= new FindBuddyQuery(this.dbRetrieve,userInfo.getGender,userInfo.getPrefBuddyGender);
-    let arrayofProfile = await findBuddy.findBuddyQuery();
-    recommendationEngine.getAllMatches(arrayofProfile);
-    const idRecommendations: string[] = [];
-    //loop to constantly get the array of recommendations.
-    while (true) {
-      const idToDisplay = recommendationEngine.pollMatch();
-      if (idToDisplay === null) {
-        break;
-      }
-      //use highestscoreid to poll for the user to recommend
-      //extract all info and display to html.
-      console.log(idToDisplay);
-
-      idRecommendations.push(idToDisplay);
-    }
+    this.currentUser= await this.dbRetrieve.retrieveCurrentUser();
+    this.recommendationEngine = new RecommendationEngine(this.currentUser);
+    this.findBuddyQuery= new FindBuddyQuery(this.dbRetrieve,this.currentUser);
+    this.recommendationEngine.getAllMatches(await this.findBuddyQuery.findBuddyQuery());
+    // First user to be displayed
+    this.recommendedUser=this.recommendationEngine.pollMatch();
   }
 
-    //extract all information from dictionary based on id and store all information in array
-    //loop through array in html to display information.
-
-    //when user exits page, destroy all objects.
-
-    //testing some stuff here....
-    //var userValidators : IUserValidators = new UserValidators();
-    /*const matchmakingAlgo = new MatchmakingAlgo();
-    matchmakingAlgo.calculateMatchingScores();
-    console.log(score);
-    matchmakingAlgo.getContentFilterScoreMap.forEach((id,scores) => console.log(id,scores));*/
-    //const test = new Testz();
-    //console.log(test.name);
-    /*console.log(2/3*20/100);
-    let mainuser = new GymBuddyProfileInfo();
-    console.log(mainuser.getbriefIntro);
-    mainuser.setbriefIntro = 'hellotinysherwin';
-    console.log(mainuser.getbriefIntro);
-    console.log(mainuser.getBuddyTrainStyle);
-    mainuser.updateGymBuddyArrays(mainuser.getBuddyTrainStyle,'test');
-    console.log(mainuser.getBuddyTrainStyle);
-    mainuser.removeFromGymBuddyArrays(mainuser.getBuddyTrainStyle, 'test');
-    console.log(mainuser.getBuddyTrainStyle);*/
-  async goToGBHome() {
-    this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
-  }
 
   public get getFullName() {
-    return "Joshua Wang";
+    if(this.recommendedUser)
+      return this.recommendedUser.name;
+    return "Full name"
   }
 
   public get getAge() {
-    return "26";
+    if(this.recommendedUser)
+      return this.recommendedUser.age;
+    return "Age"
   }
 
-  public get getDescription() {
-    return "Full time student at NTU";
+  public get getBriefIntro() {
+    if(this.recommendedUser)
+      return this.recommendedUser.getbriefIntro;
+    return "Brief Introduction"
   }
+
+  public get getProfilePicture() {
+    if(this.recommendedUser)
+      return this.recommendedUser.profilePicture;
+    return "Profile Picture"
+  }
+
+  public get getMoreGymBuddyInformation() {
+    return "More Information"
+  }
+
 
   async matchBuddy() {
-    console.log("Match buddy")
+    this.recommendedUser=this.recommendationEngine.pollMatch();
+    if(!this.recommendedUser){
+      this.displayNoMoreMatches();
+    }
+    else {
+      console.log("Match buddy")
+      this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
+      if(this.recommendedUser.checkMatches(this.currentUser.getUserId)){
+          this.createChat(this.recommendedUser.getUserId,this.currentUser.getUserId);
+      }
+    }
   }
 
   async unmatchBuddy() {
-    console.log("Unmatch buddy")
+    this.recommendedUser=this.recommendationEngine.pollMatch();
+    if(!this.recommendedUser){
+      this.displayNoMoreMatches();
+    }
+    else{
+      console.log("Unmatch buddy")
+      this.findBuddyQuery.addUnmatches(this.recommendedUser.getUserId);
+    }
+  }
+
+  //Display something and prevent the user from matching and unmatching
+  private displayNoMoreMatches() {
+    console.log("No More Matches")
+  }
+
+  //this should probably be in a seperate class -> i just put this here as a placeholder
+  private createChat(userID1 :string ,userID2:string) {
+    console.log("Create Chat")
   }
 
 }
