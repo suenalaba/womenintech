@@ -17,18 +17,18 @@ export class GymBuddyGuard implements CanActivate {
 
     // return true if use is authenticated
     this.gymBuddyService.isUserSignedUpGymBuddy().subscribe(res => {
-      console.log("Gym buddy sign up: " , res)
+      console.log('Gym buddy sign up: ' , res);
       isSignUp = res;
       if (isSignUp){
         this.router.navigate(['tabs/gym-buddy/gb-home']);
         return true;
-      }else{
+      } else {
         // else redirect the user to another route and return false.
         this.router.navigate(['tabs/gym-buddy/gb-sign-up']);
         return false;
       }
-    })
-    return isSignUp
+    });
+    return isSignUp;
   }
 
 }
