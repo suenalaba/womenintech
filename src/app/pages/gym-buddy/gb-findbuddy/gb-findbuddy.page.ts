@@ -76,7 +76,7 @@ export class GbFindbuddyPage implements OnInit {
   async matchBuddy() {
     this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
     if(this.recommendedUser.checkMatches(this.currentUser.getUserId)){
-          this.createChat(this.recommendedUser.getUserId,this.currentUser.getUserId);
+          this.createChat(this.currentUser.getUserId, this.recommendedUser.getUserId);
     }
     this.recommendedUser=this.recommendationEngine.pollMatch();
     if(!this.recommendedUser){
@@ -108,7 +108,8 @@ export class GbFindbuddyPage implements OnInit {
   }
 
   //this should probably be in a seperate class -> i just put this here as a placeholder
-  private createChat(userID1: string , userID2: string) {
+  private createChat(userId1: string , userId2: string) {
+    this.findBuddyQuery.createChatQuery(userId1, userId2);
     console.log('Chat created');
   }
 

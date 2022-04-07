@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
-import { arrayUnion, DocumentReference, getDoc, Query, updateDoc } from 'firebase/firestore';
+import { addDoc, arrayUnion, DocumentReference, getDoc, Query, updateDoc } from 'firebase/firestore';
 import { query, where, getDocs,collectionGroup } from 'firebase/firestore';
 import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
 import { AlertController, LoadingController } from '@ionic/angular';
@@ -71,6 +71,42 @@ export class DbRetrieveService {
     return userInfo;
   }
 
+public updateMatches(user: GymBuddyProfileInfo,userID) {
+    //console.log(details);
+    const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
+
+    return updateDoc(noteDocRef,{ 'gymBuddyDetails.matches' : arrayUnion(userID)});
+  }
+
+  public updateUnmatches(user: GymBuddyProfileInfo,userID) {
+    //console.log(details);
+    const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
+
+    return updateDoc(noteDocRef,{ 'gymBuddyDetails.unmatches' : arrayUnion(userID)});
+  }
+
+  public async createChatInFireStore(currentUserId: string, recommendedUserId: string) {
+
+    const newChatDoc = await addDoc(collection(this.firestore, 'Chat'), {
+      chatUsers: [currentUserId, recommendedUserId],
+      //reference for creating hashmap in array.
+      /*favorites: [{
+        food: 'Pizza',
+        color: 'Blue',
+        subject: 'Recess'}],*/
+    });
+    const chatId=newChatDoc.id;
+    console.log('Document written with ID: ', chatId);
+    this.updateChatForEachUser(currentUserId, chatId, recommendedUserId);
+  }
+
+  private updateChatForEachUser(currentUserId: string, chatId: string, recommendedUserId: string) {
+    const curUserDocRef = doc(this.firestore, `Users`, currentUserId);
+    updateDoc(curUserDocRef, { 'gymBuddyDetails.chats': arrayUnion(chatId) });
+    const recUserDocRef = doc(this.firestore, `Users`, recommendedUserId);
+    updateDoc(recUserDocRef, { 'gymBuddyDetails.chats': arrayUnion(chatId) });
+  }
+
   /**
    * Reads the document to be fetched and get the document snapshot with document contents.
    *
@@ -93,19 +129,7 @@ export class DbRetrieveService {
     return querySnapshot;
   }
 
-  updateMatches(user : GymBuddyProfileInfo,userID) {
-    //console.log(details);
-    const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
 
-    return updateDoc(noteDocRef,{ "gymBuddyDetails.matches" : arrayUnion(userID)});
-  }
-
-  updateUnmatches(user : GymBuddyProfileInfo,userID) {
-    //console.log(details);
-    const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
-
-    return updateDoc(noteDocRef,{ "gymBuddyDetails.unmatches" : arrayUnion(userID)});
-  }
 
 
 }
