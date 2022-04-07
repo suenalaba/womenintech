@@ -90,26 +90,26 @@ export class GbHomePage implements OnInit {
    * CALLING USER DYNAMICALLY
    */
   async loadUserDetails(){
-   const loading = await this.loadingController.create();
-   await loading.present();
-   this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res) =>{
-     console.log(res)
-     if(!res.gymBuddyDetails.isSignUp) {
+    const loading = await this.loadingController.create();
+    await loading.present();
+    this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res) =>{
+      console.log(res);
+      if(!res.gymBuddyDetails.isSignUp) {
        this.router.navigateByUrl('tabs/gym-buddy/gb-sign-up', { replaceUrl: true });
        loading.dismiss();
-     }
-     this.fullName = res.firstName + ' ' + res.lastName;
-     this.briefIntro = res.gymBuddyDetails.briefIntro;
-     this.userInfo = res;
+      }
+      this.fullName = res.firstName + ' ' + res.lastName;
+      this.briefIntro = res.gymBuddyDetails.briefIntro;
+      this.userInfo = res;
 
-     this.gymBuddyInfo = this.userInfo.gymBuddyDetails;
+      this.gymBuddyInfo = this.userInfo.gymBuddyDetails;
 
-     this.getWorkoutTimeTextDisplay();
-     this.getGymBuddyGoalsTextDisplay();
-     this.getPersonalTraitsTextDisplay();
+      this.getWorkoutTimeTextDisplay();
+      this.getGymBuddyGoalsTextDisplay();
+      this.getPersonalTraitsTextDisplay();
 
-     loading.dismiss();
-   })
+      loading.dismiss();
+   });
 
   }
 

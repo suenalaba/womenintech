@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>gb-findbuddy</ion-title>
+    <ion-button color="light" slot="start" (click)="goToGBHome()">
+      <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -10,6 +13,7 @@
       <ion-title size="large" class="ion-text-center">Find a Gym Buddy</ion-title>
     </ion-toolbar>
   </ion-header>
+  <!-- back button -->
 
   <ion-card >
     <img src={{getProfilePicture}} alt="ion">
@@ -22,12 +26,20 @@
     <ion-footer>
       <ion-row>
         <ion-col center text-center>
+<<<<<<< HEAD
           <ion-button (click)="matchBuddy()" expand="block" fill="outline" class="buddy-btn" >
+=======
+          <ion-button ion-stop-event="click" name="matchButton" (click)="matchBuddy()">
+>>>>>>> d9689b587d45cadc3e0f169dfd09c3b69c81da8b
             <ion-icon name="checkmark-circle-outline" size="large" color="success" ></ion-icon>
           </ion-button>
         </ion-col>
         <ion-col center text-center>
+<<<<<<< HEAD
           <ion-button (click)="unmatchBuddy()" expand="block" fill="outline" class="buddy-btn">
+=======
+          <ion-button ion-stop-event="click" name="unmatchButton" (click)="unmatchBuddy()">
+>>>>>>> d9689b587d45cadc3e0f169dfd09c3b69c81da8b
             <ion-icon name="close-circle-outline" size="large" color="danger" ></ion-icon>
           </ion-button>
         </ion-col>

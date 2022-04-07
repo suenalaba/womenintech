@@ -30,9 +30,9 @@ const routes: Routes = [
           path:'edit-workout',
           loadChildren: () => import('../pages/workouts/edit-workout/edit-workout.module').then(m => m.EditWorkoutPageModule)
         }
-          
+
         ]
-        
+
       },
       {
         path: 'gym-buddy',
@@ -43,7 +43,8 @@ const routes: Routes = [
           },
           {
             path: 'gb-sign-up',
-            loadChildren: () => import('../pages/gym-buddy/gb-sign-up/gb-sign-up.module').then(m => m.GbSignUpPageModule)
+            loadChildren: () => import('../pages/gym-buddy/gb-sign-up/gb-sign-up.module').then(m => m.GbSignUpPageModule),
+            //canActivate: [GymBuddyGuard],
           },
           {
             path: 'gb-home',

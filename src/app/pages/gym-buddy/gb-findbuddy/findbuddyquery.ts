@@ -5,34 +5,37 @@ import { GymBuddyProfileInfo } from './GymBuddyInformation';
 
 
 export class FindBuddyQuery {
-  dbRetrieve: DbRetrieveService
-  gbService: GymBuddyService
-  gender;
-  preferredGender;
-  currentUser:GymBuddyProfileInfo;
-  constructor(private dbservice: DbRetrieveService, private currentuser:GymBuddyProfileInfo
-  ) {
-    this.dbRetrieve=dbservice;
-    this.currentUser=currentuser;
+
+  //private dbRetrieve: DbRetrieveService;
+  private dbRetrieve: DbRetrieveService;
+  private currentUser: GymBuddyProfileInfo;
+  private gender;
+  private preferredGender;
+  //private currentUser: GymBuddyProfileInfo;
+  constructor(dbRetrieve: DbRetrieveService, currentUser: GymBuddyProfileInfo) {
+    this.dbRetrieve = dbRetrieve;
+    this.currentUser = currentUser;
+    //this.dbRetrieve=dbservice;
+    //this.currentUser=currentuser;
     this.gender=this.currentUser.getGender;
     this.preferredGender=this.currentUser.getPrefBuddyGender;
-   }
+  }
 
   public addMatches(userID: string){
     this.currentUser.addMatches(userID);
-    this.dbservice.updateMatches(this.currentUser,userID);
+    this.dbRetrieve.updateMatches(this.currentUser,userID);
   }
 
   public addUnmatches(userID: string){
     this.currentUser.addUnmatches(userID);
-    this.dbservice.updateUnmatches(this.currentUser,userID);
+    this.dbRetrieve.updateUnmatches(this.currentUser,userID);
   }
 
 
   public async findBuddyQuery() {
-    let dictofProfile =await  this.dbRetrieve.findBuddiesFromDB(this.preferredGender,this.gender);
-    this.filterDictionary(dictofProfile)
-    return dictofProfile;
+    const dictOfProfile = await this.dbRetrieve.findBuddiesFromDB(this.preferredGender,this.gender);
+    this.filterDictionary(dictOfProfile);
+    return dictOfProfile;
   }
 
   private filterDictionary(dict:Map<string, GymBuddyProfileInfo>){

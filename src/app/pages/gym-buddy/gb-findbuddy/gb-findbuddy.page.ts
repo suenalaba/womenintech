@@ -22,7 +22,7 @@ export class GbFindbuddyPage implements OnInit {
   private recommendationEngine;
   private currentUser: GymBuddyProfileInfo;
   private recommendedUser: GymBuddyProfileInfo;
-  private findBuddyQuery : FindBuddyQuery
+  private findBuddyQuery: FindBuddyQuery;
 
   constructor(
     private loadingController: LoadingController,
@@ -31,12 +31,16 @@ export class GbFindbuddyPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.currentUser= await this.dbRetrieve.retrieveCurrentUser();
-    this.recommendationEngine = new RecommendationEngine(this.currentUser);
-    this.findBuddyQuery= new FindBuddyQuery(this.dbRetrieve,this.currentUser);
-    this.recommendationEngine.getAllMatches(await this.findBuddyQuery.findBuddyQuery());
-    // First user to be displayed
-    this.recommendedUser=this.recommendationEngine.pollMatch();
+    this.currentUser = await this.dbRetrieve.retrieveCurrentUser(); //currentUser is an object of GymBuddyProfile
+    this.recommendationEngine = new RecommendationEngine(this.currentUser); //recommendation engine object for current user
+    this.findBuddyQuery = new FindBuddyQuery(this.dbRetrieve,this.currentUser); //create a find buddy query object
+    //to set the content filter score map.
+    this.recommendationEngine.getAllMatches(await this.findBuddyQuery.findBuddyQuery()); //parameter is a dictionary of profiles.
+    // First user to be displayed, recommended user is the Gym Buddy Profile object of suggested match.
+    /*do {
+      this.recommendedUser=this.recommendationEngine.pollMatch();
+    } while (this.recommendedUser != null); */
+    this.recommendedUser = this.recommendationEngine.pollMatch();
   }
 
 
@@ -70,39 +74,53 @@ export class GbFindbuddyPage implements OnInit {
 
 
   async matchBuddy() {
+    this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
+    if(this.recommendedUser.checkMatches(this.currentUser.getUserId)){
+          this.createChat(this.recommendedUser.getUserId,this.currentUser.getUserId);
+    }
     this.recommendedUser=this.recommendationEngine.pollMatch();
     if(!this.recommendedUser){
       this.displayNoMoreMatches();
     }
     else {
+<<<<<<< HEAD
       console.log("Match buddy")
       this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
       if(this.recommendedUser.checkMatches(this.currentUser.getUserId) === true){
         console.log("create chat")
           // this.createChat(this.recommendedUser.getUserId,this.currentUser.getUserId);
       }
+=======
+      console.log('Another buddy found');
+>>>>>>> d9689b587d45cadc3e0f169dfd09c3b69c81da8b
     }
   }
 
   async unmatchBuddy() {
+    this.findBuddyQuery.addUnmatches(this.recommendedUser.getUserId);
     this.recommendedUser=this.recommendationEngine.pollMatch();
     if(!this.recommendedUser){
       this.displayNoMoreMatches();
     }
     else{
-      console.log("Unmatch buddy")
-      this.findBuddyQuery.addUnmatches(this.recommendedUser.getUserId);
+      console.log('UnMatch Buddy');
     }
+  }
+
+  async goToGBHome() {
+    this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
   //Display something and prevent the user from matching and unmatching
   private displayNoMoreMatches() {
-    console.log("No More Matches")
+    console.log('No more matches');
   }
 
   //this should probably be in a seperate class -> i just put this here as a placeholder
-  private createChat(userID1 :string ,userID2:string) {
-    console.log("Create Chat")
+  private createChat(userID1: string , userID2: string) {
+    console.log('Chat created');
   }
+
+
 
 }
