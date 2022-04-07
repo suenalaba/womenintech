@@ -75,6 +75,7 @@ export class GbFindbuddyPage implements OnInit {
 
   async matchBuddy() {
     this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
+    console.log(this.recommendedUser.checkMatches(this.currentUser.getUserId))
     if(this.recommendedUser.checkMatches(this.currentUser.getUserId)){
           this.createChat(this.recommendedUser.getUserId,this.currentUser.getUserId);
     }

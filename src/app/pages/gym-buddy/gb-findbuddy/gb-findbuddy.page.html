@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>gb-findbuddy</ion-title>
+    <!-- <ion-title>gb-findbuddy</ion-title> -->
     <ion-button color="light" slot="start" (click)="goToGBHome()">
       <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
     </ion-button>
@@ -26,12 +26,12 @@
     <ion-footer>
       <ion-row>
         <ion-col center text-center>
-          <ion-button ion-stop-event="click" name="matchButton" (click)="matchBuddy()">
+          <ion-button name="matchButton" expand="full" (click)="matchBuddy()">
             <ion-icon name="checkmark-circle-outline" size="large" color="success" ></ion-icon>
           </ion-button>
         </ion-col>
         <ion-col center text-center>
-          <ion-button ion-stop-event="click" name="unmatchButton" (click)="unmatchBuddy()">
+          <ion-button name="unmatchButton" expand="full" (click)="unmatchBuddy()">
             <ion-icon name="close-circle-outline" size="large" color="danger" ></ion-icon>
           </ion-button>
         </ion-col>
