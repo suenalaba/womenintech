@@ -70,14 +70,6 @@ export class GbFindbuddyPage implements OnInit {
 
 
   async matchBuddy() {
-<<<<<<< HEAD
-=======
-    this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
-    console.log(this.recommendedUser.checkMatches(this.currentUser.getUserId))
-    if(this.recommendedUser.checkMatches(this.currentUser.getUserId)){
-          this.createChat(this.recommendedUser.getUserId,this.currentUser.getUserId);
-    }
->>>>>>> 9a10ba5
     this.recommendedUser=this.recommendationEngine.pollMatch();
     if(!this.recommendedUser){
       this.displayNoMoreMatches();
