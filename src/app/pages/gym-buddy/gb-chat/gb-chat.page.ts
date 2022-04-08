@@ -24,7 +24,7 @@ export class GbChatPage implements OnInit {
    }
 
   async ngOnInit() {
-    this.currentUser = await this.chatService.retrieveCurrentUser();
+    /*this.currentUser = await this.chatService.retrieveCurrentUser();*/
     //this.messages = this.chatService.getChatMessages();
   }
 
@@ -40,5 +40,13 @@ export class GbChatPage implements OnInit {
       this.router.navigateByUrl('/', { replaceUrl: true });
     });
   }
+
 */
+  async navigateChatPageToBuddyListPage() {
+    this.router.navigateByUrl('tabs/gym-buddy/gb-buddylist-home', { replaceUrl: true });
+  }
+
+  async sendMessage() {
+    console.log('Message sent');
+  }
 }
