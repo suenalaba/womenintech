@@ -1,7 +1,7 @@
-<ion-header class="ion-no-border" mode = "ios">
+<ion-header class="ion-no-border">
   <ion-toolbar class="ion-padding">
-    <ion-icon name="arrow-round-back" slot="start" (click)="goToGBHome()"></ion-icon>
-    <ion-title>Gym Buddy Kakis</ion-title>
+    <ion-icon name="arrow-back" slot="start" (click)="navigateBuddyListToGBHome()"></ion-icon>
+    <ion-title>Chattie</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -19,7 +19,8 @@
         <h1> All Chats </h1>
         <ion-icon name="search-sharp"></ion-icon>
         <div class="chats">
-          <ion-item lines="none" routerLink="/gb-chat-page">
+          <!--<ion-item lines="none" routerLink="/gb-chat-page"> -->
+            <ion-item lines="none" (click)="navigateBuddyListToChat()">
             <ion-avatar>
               <img src = "https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt=""> <!-- to include user image here-->
             </ion-avatar>
@@ -29,6 +30,20 @@
             </ion-label>
             <div class="info-div">
               <p>2 unread</p>
+            </div>
+          </ion-item>
+          <!--Display all the chats, should display user's name and last message.-->
+          <!--<ion-item *ngFor="let eachChat of getAllChatInfoList" (click)="navigateBuddyListToChat()">-->
+            <ion-item *ngFor="let eachChat of getChatNameAndMessagesMap | keyvalue" (click)="navigateBuddyListToChat(eachChat.key,eachChat.value[1])">
+            <ion-avatar>
+              <img src = "https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt=""> <!-- to include user image here-->
+            </ion-avatar>
+            <ion-label class="ion-text-nowrap">
+              <h2>{{eachChat.key}}</h2>
+              <p>{{eachChat.value[0]}}</p>
+            </ion-label>
+            <div class="info-div">
+              <p>3 unread</p>
             </div>
           </ion-item>
         </div>

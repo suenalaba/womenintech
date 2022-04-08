@@ -1,0 +1,52 @@
+ion-content {
+  ion-avatar{
+    width: 100% !important;
+    height: 100% !important;
+  }
+  --background: #7c7899;
+  .header {
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    letter-spacing: 1px;
+    height: 10vh;
+    ion-icon{
+      font-size: 1.6rem;
+      color: #fff;
+    }
+    .info{
+      display: flex;
+      align-items: center;
+      ion-avatar{
+        max-width: 51px;;
+        max-height: 51px;
+        margin-left: 15px
+      }
+      .details{
+        margin-left: 15px;
+        display: flex;
+        flex-direction: column;
+        h1,p{
+          margin: 0;
+          color: #fff;
+          margin-left: 10px;
+        }
+        h1{
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+        p{
+          opacity: 0.7;
+          margin-top: 3px;
+          font-size: 0.8rem;
+        }
+      }
+    }
+    .share-workout{
+      ion-icon{
+        margin-right: 15px;
+        opacity: 0.7;
+      }
+    }
+  }
+}

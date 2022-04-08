@@ -14,6 +14,8 @@ export class GbChatPage implements OnInit {
   private currentUser: GymBuddyProfileInfo = null;
   private otherUser: GymBuddyProfileInfo = null;
 
+  private buddyName: string = null;
+
   //@ViewChild(IonContent) content: IonContent;
 
   //messages: Observable<any[]>;
@@ -23,7 +25,12 @@ export class GbChatPage implements OnInit {
 
    }
 
+  public getSelectedChatBuddyName() {
+    return this.buddyName;
+  }
+
   async ngOnInit() {
+    this.buddyName = this.chatService.getSelectedChatUserName;
     /*this.currentUser = await this.chatService.retrieveCurrentUser();*/
     //this.messages = this.chatService.getChatMessages();
   }
