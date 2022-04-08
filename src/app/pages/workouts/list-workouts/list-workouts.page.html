@@ -1,4 +1,4 @@
-<ion-header [translucent]="true" class="ion-no-border"> 
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>
       Workouts
@@ -19,16 +19,54 @@
   </ion-header>
 
   <!-- Add content here -->
-    <ion-card *ngFor="let workout of workouts">
+  <div *ngIf="workouts.length!=0">
+    <ion-item lines="none">
+      <ion-select value="all" interface="popover" class="filter-workout"
+        [interfaceOptions]="{'cssClass': 'filter-popover'}" (ionChange)="filterWorkout($event.detail.value)">
+        <ion-select-option value="all"> All </ion-select-option>
+        <ng-container *ngFor="let f of filterWOList">
+          <ion-select-option [value]="f.value">{{f.title}}</ion-select-option>
+        </ng-container>
+      </ion-select>
+    </ion-item>
+    <ion-item lines="none">
+      <a (click)="showTags()" class="show-tag"> {{ tagText }}</a>
+    </ion-item>
+  </div>
+
+
+  <div *ngIf="workouts.length==0" class="no-workout">
+    <h2> No workouts yet </h2>
+    <ion-button (click)="createWorkout()">Create a Workout</ion-button>
+  </div>
+
+
+  <ion-card *ngFor="let workout of workouts">
+    <div (click)="workoutAction(workout.id)" class="workout-details">
       <ion-card-header>
         <ion-card-title>
-          This is my workout
+          {{workout.wName}}
         </ion-card-title>
         <ion-card-subtitle>
-          Workout description 
+          {{workout.wDescription}}
         </ion-card-subtitle>
       </ion-card-header>
-      <div class="progress"> STILL IN PROGRESS </div>
-    </ion-card>
-</ion-content>
+      <div class="progress" *ngIf="workout.workoutStatus === 'in_progress'"> STILL IN PROGRESS </div>
+      <div class="done" *ngIf="workout.workoutStatus === 'completed'">
+        <span> WORKOUT COMPLETED </span>
+        <span>ON {{getDate(workout.dateCompleted)}}</span>
+      </div>
+      <div class="created" *ngIf="workout.workoutStatus === 'created'"> WORKOUT NOT STARTED </div>
 
+    </div>
+    <div [hidden]=ishidden class="workout-tags" *ngIf="workout.tags">
+      <ion-chip *ngFor="let tag of workout.tags" [color]="getTagText(tag).color">
+        <ion-label>
+          {{getTagText(tag).text}}
+        </ion-label>
+      </ion-chip>
+    </div>
+
+  </ion-card>
+
+</ion-content>

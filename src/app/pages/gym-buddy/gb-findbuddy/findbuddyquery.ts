@@ -1,28 +1,55 @@
 
 import { DbRetrieveService } from './../../../services/db-retrieve.service';
+import { GymBuddyService } from 'src/app/services/gym-buddy.service';
+import { GymBuddyProfileInfo } from './GymBuddyInformation';
 
 
 export class FindBuddyQuery {
-  dbRetrieve: DbRetrieveService
-  userInfo;
-  gender;
-  preferredGender;
-  constructor(private service: DbRetrieveService
-  ) {this.dbRetrieve=service; }
+
+  //private dbRetrieve: DbRetrieveService;
+  private dbRetrieve: DbRetrieveService;
+  private currentUser: GymBuddyProfileInfo;
+  private gender;
+  private preferredGender;
+  //private currentUser: GymBuddyProfileInfo;
+  constructor(dbRetrieve: DbRetrieveService, currentUser: GymBuddyProfileInfo) {
+    this.dbRetrieve = dbRetrieve;
+    this.currentUser = currentUser;
+    //this.dbRetrieve=dbservice;
+    //this.currentUser=currentuser;
+    this.gender=this.currentUser.getGender;
+    this.preferredGender=this.currentUser.getPrefBuddyGender;
+  }
+
+  public createChatQuery(currentUserId: string, recommendedUserId: string) {
+    //locally add chat here.
+    this.dbRetrieve.createChatInFireStore(currentUserId, recommendedUserId);
+  }
+
+  public addMatches(userID: string){
+    this.currentUser.addMatches(userID);
+    this.dbRetrieve.updateMatches(this.currentUser,userID);
+  }
+
+  public addUnmatches(userID: string){
+    this.currentUser.addUnmatches(userID);
+    this.dbRetrieve.updateUnmatches(this.currentUser,userID);
+  }
+
 
   public async findBuddyQuery() {
-    this.settingFields();
-    console.log("test1");
-    const arrayofProfile=await  this.dbRetrieve.findBuddiesFromDB(this.preferredGender,this.gender);
-    console.log("test2");
-    return arrayofProfile;
-  }
-  private settingFields() {
-    this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    this.preferredGender = this.userInfo.gymBuddyDetails.buddyGender;
-    this.gender=this.userInfo.gender;
+    const dictOfProfile = await this.dbRetrieve.findBuddiesFromDB(this.preferredGender,this.gender);
+    this.filterDictionary(dictOfProfile);
+    return dictOfProfile;
   }
 
+  private filterDictionary(dict:Map<string, GymBuddyProfileInfo>){
+    this.currentUser.matches.forEach(function (value) {
+      console.log(value);
+      delete dict[value];
+    });
+    this.currentUser.unmatches.forEach(function (value) {
+      delete dict[value];
+    });
+  }
 }
-// IsSingup=True
-// is buddygender

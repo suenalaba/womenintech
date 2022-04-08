@@ -13,22 +13,15 @@ export class GymBuddyGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    let isSignUp: boolean = false;
-
     // return true if use is authenticated
-    this.gymBuddyService.isUserSignedUpGymBuddy().subscribe(res => {
-      console.log("Gym buddy sign up: " , res)
-      isSignUp = res;
-      if (isSignUp){
-        this.router.navigate(['tabs/gym-buddy/gb-home']);
+    console.log(this.gymBuddyService.isSignedUp())
+      if (this.gymBuddyService.isSignedUp()){
         return true;
-      }else{
+      } else {
         // else redirect the user to another route and return false.
         this.router.navigate(['tabs/gym-buddy/gb-sign-up']);
         return false;
       }
-    })
-    return isSignUp
   }
 
 }

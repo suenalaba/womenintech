@@ -1,10 +1,21 @@
 ion-card-title{
-    font-size:15px;
+    font-size:13px;
     text-transform: uppercase;
 }
+ion-card-subtitle{
+    font-size:11px;
+}
+
 ion-card-header{
     width:60%;
 }
+div.progress, div.done, div.created{
+    font-size:11px;
+    text-align:center;
+    margin-right:5px;
+    
+}
+
 div.progress{
     color: var(--ion-color-success);
     font-weight: 600;
@@ -12,9 +23,35 @@ div.progress{
 div.done{
     color: var(--ion-color-medium);
     font-weight: 600;
+    flex-direction: column;
 }
 
-ion-card{
+div.done span{
+    text-transform: uppercase;
+}
+
+div.created{
+    color: var(--ion-color-secondary);
+    font-weight: 600;
+}
+
+ion-card div.workout-details{
     display:flex;
     align-items: center;
+}
+
+ion-card div.workout-tags{
+    padding-left:10px;
+    padding-right:10px;
+}
+
+
+div.no-workout{
+    text-align: center;
+    margin:10px;
+}
+
+a.show-tag{
+    text-decoration: underline;
+    font-size:12px;
 }

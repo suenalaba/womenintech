@@ -1,21 +1,29 @@
 import { Injectable } from '@angular/core';
+import { Platform } from '@ionic/angular';
 import { Auth } from '@angular/fire/auth';
 import { GymBuddyDetails } from '../class/GymBuddyProfile';
 import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
-import { updateDoc } from 'firebase/firestore';
-import { Observable } from 'rxjs';
+import { arrayUnion, updateDoc } from 'firebase/firestore';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
 import { User, UserDetails } from '../class/user';
 import { UserService } from './user.service';
+import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
+
 @Injectable({
   providedIn: 'root'
 })
 export class GymBuddyService {
-
+  
+  authState = new BehaviorSubject(false);
   private userInfo;
   private isSignUp: boolean;
 
-  constructor(private auth: Auth, private fireStore: Firestore, private userService: UserService) { }
+  constructor(private auth: Auth, private fireStore: Firestore, private userService: UserService, private platform: Platform,) {
+    this.platform.ready().then(() => {
+      this.isUserSignedUpGymBuddy();
+    });
+   }
   /* store user's gym buddy details to firebase and local storage */
   addGymBuddyDetails(details, uid) {
     //console.log(details);
@@ -41,16 +49,35 @@ export class GymBuddyService {
     //   localStorage.setItem('userInfo', JSON.stringify(res));
     // });
 
-    return updateDoc(noteDocRef, { gymBuddyDetails });
+    return updateDoc(noteDocRef,{ gymBuddyDetails });
   }
 
   /* checks if a user is signed up for gym buddy, return true if user has signed up */
-  isUserSignedUpGymBuddy(): Observable<boolean> {
-    //this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    return this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).pipe(
-      map(res => {
-        return res.gymBuddyDetails.isSignUp ? true : false;
-      }))
+  isUserSignedUpGymBuddy(){
+    console.log("checking.....")
+    this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe(res=>{
+      if(res.gymBuddyDetails.isSignUp) this.authState.next(true);
+    })
   }
+
+  isSignedUp(){
+    return this.authState.value;
+  }
+
+  updateMatches(user : GymBuddyProfileInfo,userID) {
+    //console.log(details);
+    const noteDocRef = doc(this.fireStore, `Users`, user.getUserId);
+
+    return updateDoc(noteDocRef,{ "gymBuddyDetails.matches" : arrayUnion(userID)});
+  }
+
+  updateUnmatches(user : GymBuddyProfileInfo,userID) {
+    //console.log(details);
+    const noteDocRef = doc(this.fireStore, `Users`, user.getUserId);
+
+    return updateDoc(noteDocRef,{ "gymBuddyDetails.unmatches" : arrayUnion(userID)});
+  }
+
+
 
 }

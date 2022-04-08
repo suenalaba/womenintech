@@ -20,7 +20,7 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <form (ngSubmit)="signUp()" [formGroup]="credentials">
+      <form (ngSubmit)="signUp()" [formGroup]="credentials" *ngIf="credentials">
         <ion-item class="ion-margin-bottom">
           <ion-label position="stacked">First Name*</ion-label>
           <ion-input type="text" placeholder="First Name" formControlName="firstName"></ion-input>

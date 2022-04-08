@@ -17,14 +17,14 @@ export class MatchmakingAlgo {
     //key2: 'val2',
  };*/
  //let scores = new Map<string, number>();
-  private contentFilterScoreMap = new Map<string, number>([]);
+  private contentFilterScoreMap: Map<string, number>;
 
-  constructor(    private dbRetrieve: DbRetrieveService,
-    ) {
+  constructor() {
+      this.contentFilterScoreMap = new Map<string, number>([]);
   }
 
   public get getContentFilterScoreMap() {
-    this.contentFilterScoreMap.forEach((id,scores) => console.log(id,scores))
+    this.contentFilterScoreMap.forEach((id,scores) => console.log(id,scores));
     return this.contentFilterScoreMap;
   }
 
@@ -32,10 +32,9 @@ export class MatchmakingAlgo {
     this.contentFilterScoreMap.delete(highestScoreId);
   }
 
-  public async calculateMatchingScores(arrayOfProfiles:Array<GymBuddyProfileInfo>) {
+  public async calculateMatchingScores(currentUser: GymBuddyProfileInfo, arrayOfProfiles: Array<GymBuddyProfileInfo>) {
     let matchScore;
     let anotherUserId;
-    const currentUser=new GymBuddyProfileInfo(JSON.parse(localStorage.getItem('userInfo'))); // placeholder
     /* Pseudo code for Matchmaking Algo
     *  For each value in K:V pair in localStorage(dictionary of documents in app)
     * extract the Value and extract the gymbuddyprofile using json parser
@@ -52,7 +51,7 @@ export class MatchmakingAlgo {
       matchScore = this.getTotalMatchScore(currentUser, anotherUser);
       //get id to store
       anotherUserId = anotherUser.getUserId;
-      //store to hashmap
+      //store to hashmap: key is the other user id, value: total matching score.
       this.contentFilterScoreMap.set(anotherUserId,matchScore);
       //return matchScore;
     });

@@ -1,0 +1,78 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-button class="back-btn" (click)="goBack()">
+      <ion-icon slot="icon-only" name="chevron-back-outline" color="dark"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="logo-header">
+    <ion-img class="logo-img" src="../assets/logo/witfit-black.png"> </ion-img>
+  </div>
+
+  <ion-card class="workout-desc" *ngIf="workoutDesc">
+    <ion-card-header>
+      <ion-card-title>{{ workoutDesc.wName }} </ion-card-title>
+      <ion-card-subtitle>{{ workoutDesc.wDescription }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Duration: {{workoutDesc.duration }} </p>
+      <p>Location: {{ workoutDesc.location}} </p>
+      <a *ngIf="workoutDesc.location === 'Gym'">Find gym nearby</a>
+      <a *ngIf="workoutDesc.location === 'Outdoor'">Find park nearby</a>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="workout-plan" *ngIf="workoutDesc">
+    <ion-card-content>
+      <div class="warm-up">
+        <div class="workout-div">
+          <div class="workout-title">Warm Up</div>
+          <div class="workout-duration">10 mins </div>
+        </div>
+      </div>
+
+      <div class="workout-exercises">
+        <div class="workout-div">
+          <div class="workout-title">Exercises</div>
+          <div class="workout-duration"> 40 mins</div>
+        </div>
+        <ion-card class="workout-exercises-plan">
+          <ion-card-content>
+            <div *ngFor="let i of exerciseList">
+              <ion-item>
+                <div class="exercise-div">
+                  <div class="exercise-left">
+                    <p class="exercise-name"> Exercise Name </p>
+                  </div>
+    
+                  <div class="exercise-right">
+                    <p class="sets">sets</p>
+                    <p class="reps">reps</p>
+                  </div>
+                </div>
+              </ion-item>
+            </div>
+            
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div class="cool-down">
+        <div class="workout-div">
+          <div class="workout-title">Cool Down</div>
+          <div class="workout-duration">5 mins</div>
+
+        </div>
+      </div>
+
+      <ion-button expand="block" color="dark"> START WORKOUT </ion-button>
+      <ion-button expand="block" color="danger" fill="outline" (click)="goBack()"> MAYBE I START LATER </ion-button>
+
+      <div class="delete-workout"><a (click)="deleteWorkout()" > Delete Workout </a> </div>
+    </ion-card-content>
+
+  </ion-card>
+
+</ion-content>

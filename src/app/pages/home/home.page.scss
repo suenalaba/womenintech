@@ -1,0 +1,23 @@
+@import '~swiper/swiper-bundle.css';
+
+ion-card {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+
+.font{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+ion-card-header {
+    font-weight: bold;
+    font-size: 4vw;
+    color: black;
+    font-kerning: normal;
+}
+
+subheader {
+    font-weight: grey;
+    font-size: 3vw;
+}

@@ -14,23 +14,46 @@ const routes: Routes = [
       },
       {
         path: 'workouts',
-        loadChildren: () => import('../pages/workouts/list-workouts/list-workouts.module').then(m => m.ListWorkoutsPageModule)
+        children: [{
+          path: '',
+          loadChildren: () => import('../pages/workouts/list-workouts/list-workouts.module').then(m => m.ListWorkoutsPageModule)
+        },
+        {
+          path:'create-workout',
+          loadChildren: () => import('../pages/workouts/create-workouts/create-workouts.module').then(m => m.CreateWorkoutsPageModule)
+        },
+        {
+          path:'generate-workout',
+          loadChildren: () => import('../pages/workouts/generate-workout/generate-workout.module').then(m => m.GenerateWorkoutPageModule)
+        },
+        {
+          path:'edit-workout',
+          loadChildren: () => import('../pages/workouts/edit-workout/edit-workout.module').then(m => m.EditWorkoutPageModule)
+        },
+        {
+          path: 'start-workout',
+          loadChildren: () => import('../pages/workouts/start-workout/start-workout.module').then( m => m.StartWorkoutPageModule)
+        }
+
+        ]
+
       },
       {
         path: 'gym-buddy',
         children: [
           {
             path: '',
-            canActivate: [GymBuddyGuard],
+            redirectTo: '/tabs/gym-buddy/gb-home',
+            pathMatch: 'full'
           },
           {
             path: 'gb-sign-up',
-            loadChildren: () => import('../pages/gym-buddy/gb-sign-up/gb-sign-up.module').then(m => m.GbSignUpPageModule)
+            loadChildren: () => import('../pages/gym-buddy/gb-sign-up/gb-sign-up.module').then(m => m.GbSignUpPageModule),
           },
           {
             path: 'gb-home',
             loadChildren: () => import('../pages/gym-buddy/gb-home/gb-home.module').then(m => m.GbHomePageModule),
-            // canActivate: [GymBuddyGuard]
+            // canActivate: [GymBuddyGuard] 
           },
           {
             path: 'gb-buddylist-home',
@@ -39,6 +62,7 @@ const routes: Routes = [
           {
             path: 'gb-findbuddy',
             loadChildren: () => import('../pages/gym-buddy/gb-findbuddy/gb-findbuddy.module').then(m => m.GbFindbuddyPageModule),
+          
           },
         ]
       },

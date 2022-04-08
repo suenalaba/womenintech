@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>start-workout</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="timer-header">
+
+    <div class="timer">
+      <span *ngIf="displayTimer; else elseBlock"> {{displayTimer}}</span>
+      <ng-template #elseBlock> 00:00:00 </ng-template>
+      <span style="font-weight:bold">Duration</span>
+    </div>
+
+    <div class="timer-control">
+      <ion-button fill="clear" (click)="toggleTimer()">
+        <ion-icon slot="icon-only" [name]="timerButton"></ion-icon>
+      </ion-button>
+    </div>
+
+
+  </div>
+
+
+</ion-content>

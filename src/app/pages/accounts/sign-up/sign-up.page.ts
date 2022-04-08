@@ -104,6 +104,7 @@ export class SignUpPage implements OnInit {
 
       const user = await this.authService.register(this.credentials.value);
       await loading.dismiss();
+      
 
       if (this.credentials.valid && user) {
         this.credentials.value.id = user.user.uid;
