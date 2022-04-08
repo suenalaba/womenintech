@@ -14,12 +14,13 @@ export class StartWorkoutPage implements OnInit {
   timerDuration;
   displayTimer;
 
+
+
   constructor(private workoutExercise: WorkoutExercisesService) { }
 
   ngOnInit() {
     this.timerDuration = 0;
     this.toggleTimer();
-    this.workoutExercise.loadExercises();
   }
 
   ionViewWillLeave(){

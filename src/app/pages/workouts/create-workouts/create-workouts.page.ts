@@ -5,12 +5,20 @@ import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } fro
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { WorkoutsService } from 'src/app/services/workouts.service';
+import { WorkoutExercisesService } from 'src/app/services/workout-exercises.service'
+import { WorkoutAlgo } from 'src/app/pages/workouts/create-workouts/WorkoutAlgo'
+
 @Component({
   selector: 'app-create-workouts',
   templateUrl: './create-workouts.page.html',
   styleUrls: ['./create-workouts.page.scss'],
 })
 export class CreateWorkoutsPage implements OnInit {
+
+  private workoutAlgo: WorkoutAlgo;
+
+  exerciseData = [];
+  apiError: string;
 
   listIntensity: CreateWorkoutDesc[] = Intensity;
   listDuration: CreateWorkoutDesc[] = Duration;
@@ -22,7 +30,9 @@ export class CreateWorkoutsPage implements OnInit {
 
   workoutDesc: WorkoutDesc;
 
-  errors= [];
+  private workoutId: any;
+
+  errors = [];
 
   constructor(
     private fb: FormBuilder,
@@ -30,9 +40,12 @@ export class CreateWorkoutsPage implements OnInit {
     private router: Router,
     private workoutService: WorkoutsService,
     private loadingCtrl: LoadingController,
-    private nav: NavController
+    private nav: NavController,
+    private workoutAPI: WorkoutExercisesService,
 
-  ) { }
+  ) { 
+   
+  }
 
   ngOnInit() {
     this.buildForm();
@@ -88,12 +101,31 @@ export class CreateWorkoutsPage implements OnInit {
     this.workoutDesc = val;
     let id = 0;
     let uid = JSON.parse(localStorage.getItem('userID'));
-    const loading = await this.loadingCtrl.create();
-    await loading.present();
-    let workoutId = this.workoutService.createWorkout(this.workoutDesc, uid);
-    workoutId.then(function(result) {
+
+    this.presentLoadingWithOptions();
+
+    this.workoutId = this.workoutService.createWorkout(this.workoutDesc, uid);
+    this.workoutId.then(function(result) {
       id = result;
-    }).then(()=>this.goToStartWorkout(id));
+    }).then(()=>{this.makeWorkout()})
+  }
+
+  async makeWorkout(){
+    console.log("making workout")
+    this.workoutAPI.loadExercises().subscribe(
+      data => {
+        // Set the data to display in the template
+        this.exerciseData = data['results'].filter(x => x.language.id==2)
+        console.log(this.exerciseData)
+
+        this.loadingCtrl.dismiss();
+      },
+      err => {
+        // Set the error information to display in the template
+        this.apiError = `An error occurred, the data could not be retrieved: Status: ${err.status}, Message: ${err.statusText}`;
+      }
+    );
+
   }
 
   async goToStartWorkout(id){
@@ -104,6 +136,15 @@ export class CreateWorkoutsPage implements OnInit {
 
   goBack(){
     this.nav.navigateBack(['tabs/workouts'], { animated: true })
+  }
+
+  async presentLoadingWithOptions() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Please wait... </br> We are creating a workout for you!',
+      translucent: true,
+      cssClass: 'custom-class custom-loading'
+    });
+    return await loading.present();
   }
 
 }
