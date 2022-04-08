@@ -7,7 +7,7 @@
 <ion-content>
   <h2>We would like to know more about you</h2>
   <ion-progress-bar color="primary" value="{{progress}}"></ion-progress-bar>
-  <form (ngSubmit)="completeSignUp()" [formGroup]="userDetails">
+  <form (ngSubmit)="completeSignUp()" [formGroup]="userDetailsForm">
     <swiper (swiper)="setSwiperInstance($event)" (slideChangeTransitionStart)="slideWillChange()"
       (slideChangeTransitionEnd)="slideDidChange()" [allowTouchMove]="false">
       <!--Height & Weight-->
