@@ -35,7 +35,23 @@ div.created{
     font-weight: 600;
 }
 
-ion-card div{
+ion-card div.workout-details{
     display:flex;
     align-items: center;
+}
+
+ion-card div.workout-tags{
+    padding-left:10px;
+    padding-right:10px;
+}
+
+
+div.no-workout{
+    text-align: center;
+    margin:10px;
+}
+
+a.show-tag{
+    text-decoration: underline;
+    font-size:12px;
 }

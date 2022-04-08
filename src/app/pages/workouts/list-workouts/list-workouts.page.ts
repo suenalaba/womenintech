@@ -3,10 +3,13 @@ import { Router } from '@angular/router';
 import { ActionSheetController, AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { docData } from 'rxfire/firestore';
 import { WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
+import { FilterWorkoutList } from 'src/app/data/workout-data/FilterWorkout';
+import { Tags } from 'src/app/data/workout-data/CreateWorkout';
 import { User } from 'src/app/class/user';
 import { UserService } from 'src/app/services/user.service';
 import { WorkoutsService } from 'src/app/services/workouts.service';
 import { CreateWorkoutComponent } from '../../../components/create-workout/create-workout.component';
+import { TabsPage } from 'src/app/tabs/tabs.page';
 @Component({
   selector: 'app-list-workouts',
   templateUrl: './list-workouts.page.html',
@@ -15,7 +18,14 @@ import { CreateWorkoutComponent } from '../../../components/create-workout/creat
 export class ListWorkoutsPage implements OnInit {
 
   private workouts = [];
+  private allWorkouts = [];
   private userInfo: User;
+  private filterWOList = FilterWorkoutList;
+  private workoutTags = Tags;
+
+  filterBy;
+  ishidden = true;
+  tagText = 'Show Tags'
 
   constructor(
     private modalController: ModalController,
@@ -57,6 +67,7 @@ export class ListWorkoutsPage implements OnInit {
 
   async ionViewDidEnter(){
     await this.loadUserWorkouts(JSON.parse(localStorage.getItem('userID')));
+    this.filterWorkout('all');
   }
 
   async loadUserWorkouts(id){
@@ -68,6 +79,8 @@ export class ListWorkoutsPage implements OnInit {
       workout.id = doc.id;
       this.workouts.push(workout)
     });
+
+    this.allWorkouts = this.workouts;
   }
 
   getDate(date){
@@ -85,6 +98,7 @@ export class ListWorkoutsPage implements OnInit {
         text: 'Start',
         handler: () => {
           console.log('Start clicked');
+          this.startWorkout(id, this.userInfo.id);
         }
       }, {
         text: 'Edit',
@@ -112,6 +126,10 @@ export class ListWorkoutsPage implements OnInit {
       }]
     });
     await actionSheet.present();
+  }
+
+  startWorkout(wid,uid){
+    this.router.navigate(['/tabs/workouts/start-workout'], { queryParams: { wid: wid, uid: uid}});
   }
 
   async editWorkout(id){
@@ -149,6 +167,35 @@ export class ListWorkoutsPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  filterWorkout(filter){
+    this.workouts = this.allWorkouts;
+    this.filterBy =  filter;
+    
+    if(this.filterBy=='not_started'){
+      this.workouts = this.workouts.filter(a => a.workoutStatus == "created");
+    }else if(this.filterBy=='in_progress'){
+      this.workouts = this.workouts.filter(a => a.workoutStatus == "in_progress");
+    }else if(this.filterBy=='completed'){
+      this.workouts = this.workouts.filter(a => a.workoutStatus == "completed");
+    }else{
+      this.workouts = this.allWorkouts;
+    }
+  }
+
+  showTags(){
+    if(this.ishidden){
+      this.ishidden = false;
+      this.tagText = 'Hide Tags'
+    }else{
+      this.ishidden = true;
+      this.tagText = 'Show Tags'
+    }
+  }
+
+  getTagText(tag){
+    return this.workoutTags.find(t => t.value === tag);
   }
 
 }

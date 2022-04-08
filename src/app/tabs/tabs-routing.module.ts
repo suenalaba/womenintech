@@ -29,6 +29,10 @@ const routes: Routes = [
         {
           path:'edit-workout',
           loadChildren: () => import('../pages/workouts/edit-workout/edit-workout.module').then(m => m.EditWorkoutPageModule)
+        },
+        {
+          path: 'start-workout',
+          loadChildren: () => import('../pages/workouts/start-workout/start-workout.module').then( m => m.StartWorkoutPageModule)
         }
 
         ]

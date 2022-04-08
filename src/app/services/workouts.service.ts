@@ -25,7 +25,8 @@ export class WorkoutsService {
       location: val.location,
       equipment: val.equipment,
       dateCreated: timestamp,
-      workoutStatus: "created"
+      workoutStatus: "created",
+      tags:[val.intensity,val.duration,val.location,val.equipment]
     };
     await setDoc(doc(this.firestore, "Users", `${uid}`, "Workouts", timestamp.seconds.toString()), docData) ;
     return await timestamp.seconds;

@@ -6,6 +6,7 @@ export class CreateWorkoutDesc {
     info: string;
     value: string;
     name: string;
+    color?: string;
 }
 
 export class WorkoutDesc {
@@ -15,6 +16,7 @@ export class WorkoutDesc {
     duration: string;
     location: string;
     equipment: string;
+    tags: string[];
     dateCreated: Timestamp;
     workoutStatus: string;
     dateStart?: Timestamp;
