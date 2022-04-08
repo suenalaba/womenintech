@@ -10,27 +10,59 @@ import { ChatService } from 'src/app/services/chat.service';
 })
 export class GbBuddylistHomePage implements OnInit {
 
+  private static readonly CHATID_INDEX = 1;
+
+  //array of hashmap storing <chatID, chatId> & <otherUser: otherUserId>
+  //private allChatInfo: Map<string, string>[] = [];
+  //private allChatInfo: string[] = [];
+  private allChatInfo;
+  //private allChatInfo: Map<string, string>[] boardPopulation= (HashMap<String, Integer>[])
+  //Map<string, GymBuddyProfileInfo>;
   private currentUser: GymBuddyProfileInfo;
-  private router: Router;
-  private loadingController: LoadingController;
-  private chatService: ChatService;
+  private chatNameAndMessagesMap: Map<string, string[]>;
 
   constructor(
-  ) {
-    this.chatService = this.chatService;
-    this.router = this.router;
-    this.loadingController = this.loadingController;
-   }
+    private chatService: ChatService,
+    private router: Router,
+    private loadingController: LoadingController
+  ) { }
+
+  public get getAllChatInfoList() {
+    return this.allChatInfo;
+  }
+
+  public get getChatNameAndMessagesMap() {
+    return this.chatNameAndMessagesMap;
+  }
 
   async ngOnInit() {
-    /*this.currentUser = await this.chatService.retrieveCurrentUser();*/
-
-
+    this.currentUser = await this.chatService.retrieveCurrentChatUser();
+    console.log('The current user is: ' + this.currentUser.getUserId);
+    this.allChatInfo = await this.chatService.retrieveAllChatsFromDB();
+    //this.chatService.testPullFromDb();
+    console.log(this.allChatInfo);
+    console.log(this.allChatInfo[0].chatID);
+    console.log(this.allChatInfo[0].otherUser);
+    this.chatService.getGbListHomeDisplayFromDB();
+    this.chatNameAndMessagesMap = await this.chatService.getGbListHomeDisplayFromDB();
+    this.chatNameAndMessagesMap.forEach((value: string[], key: string) => {
+      console.log('Printing key value pair 1');
+      console.log(key, value[0], value[1]);
+    });
   }
 
-  async goToGBHome() {
+  async navigateBuddyListToGBHome() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
+
+  async navigateBuddyListToChat(selectedChatUserName: string, selectedChatId: string) {
+    console.log('This chat ID was selected: ' + selectedChatId);
+    //set the selected chat in the chat service, so the navigation will be selected accordingly.
+    this.chatService.setSelectedChatId = selectedChatId;
+    this.chatService.setSelectedChatUserName = selectedChatUserName;
+    this.router.navigateByUrl('tabs/gym-buddy/gb-chat', { replaceUrl: true });
+  }
+
 
 
 }

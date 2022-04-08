@@ -100,11 +100,23 @@ public updateMatches(user: GymBuddyProfileInfo,userID) {
     this.updateChatForEachUser(currentUserId, chatId, recommendedUserId);
   }
 
+  /**
+   * Updates the chat field in firestore for both users that matched.
+   * The chat field in firestore stores an array of hashmaps.
+   * Each hashmap K:V => ChatId: UserId of the other party in the chat.
+   * => OtherUser: the userId of the other person in the chat.
+   *
+   * @param currentUserId User Id of Primary user.
+   * @param chatId Chat Id of the chat between both parties.
+   * @param recommendedUserId User Id of the buddy you matched with. (Secondary User).
+   */
   private updateChatForEachUser(currentUserId: string, chatId: string, recommendedUserId: string) {
     const curUserDocRef = doc(this.firestore, `Users`, currentUserId);
-    updateDoc(curUserDocRef, { 'gymBuddyDetails.chats': arrayUnion(chatId) });
+    updateDoc(curUserDocRef, { 'gymBuddyDetails.chats': arrayUnion({chatID: chatId,
+    otherUser: recommendedUserId})});
     const recUserDocRef = doc(this.firestore, `Users`, recommendedUserId);
-    updateDoc(recUserDocRef, { 'gymBuddyDetails.chats': arrayUnion(chatId) });
+    updateDoc(recUserDocRef, { 'gymBuddyDetails.chats': arrayUnion({chatID: chatId,
+    otherUser: currentUserId})});
   }
 
   /**
