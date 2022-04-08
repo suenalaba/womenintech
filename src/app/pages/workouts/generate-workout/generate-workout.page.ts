@@ -64,6 +64,10 @@ export class GenerateWorkoutPage implements OnInit {
     this.nav.navigateBack(['tabs/workouts'], { animated: true })
   }
 
+  goGymMap(){
+    this.router.navigateByUrl('tabs/workouts/display-gyms', { replaceUrl: true })
+  }
+
   deleteWorkout(){
     this.presentAlertConfirm();
   }

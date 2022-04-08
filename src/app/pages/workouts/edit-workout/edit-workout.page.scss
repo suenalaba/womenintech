@@ -1,0 +1,27 @@
+h2{
+    font-weight: bold;
+    padding:20px 30px;
+    text-align: center;
+}
+
+h4{
+    padding:20px 30px;
+    text-align: center;
+}
+
+.input-align{
+    display:flex;
+}
+
+.set{
+    background-color: var(--ion-color-dark);
+    color:white;
+    padding: 50px;
+    border-radius: 25px;
+    margin: 65px;
+}
+
+ion-label{
+    font-weight: bold;
+    font-size: large;
+}

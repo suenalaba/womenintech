@@ -6,6 +6,7 @@ import {
   canActivate,
 } from '@angular/fire/auth-guard';
 
+
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['tabs']);
 const redirectUnauthorizedToSignUp = () => redirectUnauthorizedTo(['']);
@@ -34,11 +35,35 @@ const routes: Routes = [
     path: 'user-details',
     loadChildren: () => import('./pages/accounts/user-details/user-details.module').then( m => m.UserDetailsPageModule),
     ...canActivate(redirectUnauthorizedToSignUp),
-  },  {
-    path: 'gb-chat',
-    loadChildren: () => import('./pages/gym-buddy/gb-chat/gb-chat.module').then( m => m.GbChatPageModule)
-  }
+  },
+  {
+    path: 'edit-workout',
+    loadChildren: () => import('./pages/workouts/edit-workout/edit-workout.module').then( m => m.EditWorkoutPageModule)
+  },
+  {
+    path: 'display-gyms',
+    loadChildren: () => import('./pages/workouts/display-gyms/display-gyms.module').then( m => m.DisplayGymsPageModule)
+  },
 
+
+  /*{
+    path: 'gb-buddylist-home',
+    loadChildren: () => import('./gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then( m => m.GbBuddylistHomePageModule)
+  },
+  {
+    path: 'gb-buddylist-home',
+    loadChildren: () => import('./gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then( m => m.GbBuddylistHomePageModule)
+  },
+  {
+    path: 'gb-findbuddy',
+    loadChildren: () => import('./gym-buddy/gb-findbuddy/gb-findbuddy.module').then( m => m.GbFindbuddyPageModule)
+  },*/
+
+  /*{
+    path: 'gym-buddy/gb-sign-up',
+    loadChildren: () => import('./gym-buddy/gb-sign-up/gb-sign-up.module').then( m => m.GbSignUpPageModule),
+    ...canActivate(redirectUnauthorizedToSignUp),
+  }*/
 ];
 @NgModule({
   imports: [
