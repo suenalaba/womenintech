@@ -113,8 +113,4 @@ export class GbFindbuddyPage implements OnInit {
 
   }
 
-  goToGBHome(){
-    this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
-  }
-
 }
