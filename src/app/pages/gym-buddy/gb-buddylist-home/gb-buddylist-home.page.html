@@ -1,91 +1,39 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>List of Chats</ion-title>
-    <!--<ion-button (click)="goToGBHome()">BACK</ion-button>-->
+<ion-header class="ion-no-border" mode = "ios">
+  <ion-toolbar class="ion-padding">
+    <ion-icon name="arrow-round-back" slot="start" (click)="goToGBHome()"></ion-icon>
+    <ion-title>Gym Buddy Kakis</ion-title>
   </ion-toolbar>
 </ion-header>
-<!--<ion-content>
-  <ion-header size="large" class="ion-text-center">GYM BUDDY CHAT</ion-header>
-  <ion-button (click)="goToGBHome()">BACK</ion-button>
-</ion-content>-->
 
-<!--
-  <ng-container *ngIf="chat$ | async as chat">
-
-    <div class="top">
-      <p>
-          https://firestore-megachat.firebaseapp.com/chats/{{ chat.id }}
-      </p>
-    </div>
-
-
-    <div class="chat">
-
-
-      <div class="msg" *ngFor="let msg of chat.messages; trackBy: trackByCreated">
-
-        <div class="user">
-          <img [src]="msg.user?.photoURL">
-          <div>{{ msg.user?.displayName }}</span></div>
+<ion-content>
+  <div class="tabs ion-padding">
+    <ion-segment value="chats">
+      <ion-segment-button value="chats">
+        <ion-label>Chat up your gym buddies</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  <div class="chat-list">
+    <div class="all-chats ion-padding">
+      <div class = "heading">
+        <h1> All Chats </h1>
+        <ion-icon name="search-sharp"></ion-icon>
+        <div class="chats">
+          <ion-item lines="none" routerLink="/gb-chat-page">
+            <ion-avatar>
+              <img src = "https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt=""> <!-- to include user image here-->
+            </ion-avatar>
+            <ion-label class="ion-text-nowrap">
+              <h2>Zhi Kai</h2>
+              <p>Hi im foo zhi kai</p>
+            </ion-label>
+            <div class="info-div">
+              <p>2 unread</p>
+            </div>
+          </ion-item>
         </div>
-
-        <p>{{ msg.content }}</p>
-
       </div>
-
     </div>
-
-    <div class="form">
-      <input [(ngModel)]="newMsg" (keydown.enter)="submit(chat.id)">
-
-      <button (click)="submit(chat.id)">Send</button>
-    </div>
-
-</ng-container>
--->
-
-
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Display the other username.</ion-title>
-    <ion-buttons slot="start">
-      <ion-button fill="clear" (click)="goToGBHome()">
-        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
- <!--
-  <ion-grid>
-    <ion-row *ngFor="let message of messages | async">
-      <ion-col size="9" class="message"
-        [offset]="message.myMsg ? 3 : 0"
-        [ngClass]="{ 'my-message': message.myMsg, 'other-message': !message.myMsg }">
-        <b>{{ message.fromName }}</b><br>
-        <span>{{ message.msg }}
-        </span>
-        <div class="time ion-text-right"><br>{{ message.createdAt?.toMillis() | date:'short' }}</div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
- -->
+  </div>
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar color="light">
-    <ion-row class="ion-align-items-center">
-      <ion-col size="10">
-        <ion-textarea autoGrow="true" class="message-input" rows="1" maxLength="500">
-        </ion-textarea>
-      </ion-col>
-      <ion-col size="2">
-        <ion-button expand="block" fill="clear" color="primary"
-          class="msg-btn" (click)="sendMessage()">
-          <ion-icon name="send" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-toolbar>
-</ion-footer>
