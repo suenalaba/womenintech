@@ -19,7 +19,7 @@
     <ion-card-content>
       <p>Duration: {{workoutDesc.duration }} </p>
       <p>Location: {{ workoutDesc.location}} </p>
-      <a *ngIf="workoutDesc.location === 'Gym'">Find gym nearby</a>
+      <a *ngIf="workoutDesc.location === 'Gym'"  (click)="goGymMap()">Find gym nearby</a>
       <a *ngIf="workoutDesc.location === 'Outdoor'">Find park nearby</a>
     </ion-card-content>
   </ion-card>

@@ -22,7 +22,7 @@ export class GbFindbuddyPage implements OnInit {
   private recommendationEngine;
   private currentUser: GymBuddyProfileInfo;
   private recommendedUser: GymBuddyProfileInfo;
-  private findBuddyQuery : FindBuddyQuery
+  private findBuddyQuery: FindBuddyQuery;
 
   constructor(
     private loadingController: LoadingController,
@@ -31,12 +31,16 @@ export class GbFindbuddyPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.currentUser= await this.dbRetrieve.retrieveCurrentUser();
+    this.currentUser = await this.dbRetrieve.retrieveCurrentUser();
     this.recommendationEngine = new RecommendationEngine(this.currentUser);
     this.findBuddyQuery= new FindBuddyQuery(this.dbRetrieve,this.currentUser);
     this.recommendationEngine.getAllMatches(await this.findBuddyQuery.findBuddyQuery());
     // First user to be displayed
     this.recommendedUser=this.recommendationEngine.pollMatch();
+  }
+
+  public getCurrentUser(): GymBuddyProfileInfo {
+    return this.currentUser;
   }
 
 
@@ -68,6 +72,9 @@ export class GbFindbuddyPage implements OnInit {
     return "More Information"
   }
 
+  async goToGBHome() {
+    this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
+  }
 
   async matchBuddy() {
     this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
@@ -104,10 +111,6 @@ export class GbFindbuddyPage implements OnInit {
     this.findBuddyQuery.createChatQuery(userId1, userId2);
     console.log('Chat created');
 
-  }
-
-  goToGBHome(){
-    this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
 }

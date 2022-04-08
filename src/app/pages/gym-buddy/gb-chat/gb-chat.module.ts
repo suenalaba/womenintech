@@ -4,19 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { DisplayGymsPageRoutingModule } from './display-gyms-routing.module';
+import { GbChatPageRoutingModule } from './gb-chat-routing.module';
 
-import { DisplayGymsPage } from './display-gyms.page';
-
-declare var google: any;
+import { GbChatPage } from './gb-chat.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DisplayGymsPageRoutingModule
+    GbChatPageRoutingModule
   ],
-  declarations: [DisplayGymsPage]
+  declarations: [GbChatPage]
 })
-export class DisplayGymsPageModule {}
+export class GbChatPageModule {}

@@ -40,6 +40,31 @@ export class DisplayGymsPage implements OnInit {
         title: "Evolve MMA (Clarke Quay Central)",
         latitude: "1.2896832895355255",
         longitude: "103.84702072975008"
+    },
+    {
+      title: "Revolution Cecil St",
+      latitude: "1.2798575868211335",
+      longitude: "103.84866199709363"
+    },
+    {
+      title: "BoOm Singapore",
+      latitude: "1.2825082733779776",
+      longitude: "103.84954627373418"
+    },
+    {
+      title: "UFIT CBD Hub - Club Street",
+      latitude: "1.2827022160371604",
+      longitude: "103.84666523691632"
+    },
+    {
+      title: "Amore Fitness & Define",
+      latitude: "1.3001766947873528",
+      longitude: "103.84537272919611"
+    },
+    {
+      title: "Vigeo Fitness | Personal Training Singapore",
+      latitude: "1.2978813139944605",
+      longitude: "103.8449650334324"
     }
   ];
 
@@ -49,6 +74,7 @@ export class DisplayGymsPage implements OnInit {
     this.showMap();
   }
 
+  
   addMarkersToMap(markers) {
     for (let marker of markers) {
       let position = new google.maps.LatLng(marker.latitude, marker.longitude);
