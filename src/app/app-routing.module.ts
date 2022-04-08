@@ -34,7 +34,11 @@ const routes: Routes = [
     path: 'user-details',
     loadChildren: () => import('./pages/accounts/user-details/user-details.module').then( m => m.UserDetailsPageModule),
     ...canActivate(redirectUnauthorizedToSignUp),
+  },  {
+    path: 'gb-chat',
+    loadChildren: () => import('./pages/gym-buddy/gb-chat/gb-chat.module').then( m => m.GbChatPageModule)
   }
+
 ];
 @NgModule({
   imports: [
