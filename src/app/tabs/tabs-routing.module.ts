@@ -53,16 +53,21 @@ const routes: Routes = [
           {
             path: 'gb-home',
             loadChildren: () => import('../pages/gym-buddy/gb-home/gb-home.module').then(m => m.GbHomePageModule),
-            // canActivate: [GymBuddyGuard] 
+            // canActivate: [GymBuddyGuard]
           },
           {
             path: 'gb-buddylist-home',
-            loadChildren: () => import('../pages/gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then(m => m.GbBuddylistHomePageModule),
+            loadChildren: () => import('../pages/gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then(
+                m => m.GbBuddylistHomePageModule),
           },
           {
             path: 'gb-findbuddy',
             loadChildren: () => import('../pages/gym-buddy/gb-findbuddy/gb-findbuddy.module').then(m => m.GbFindbuddyPageModule),
-          
+
+          },
+          {
+            path: 'gb-chat',
+            loadChildren: () => import('../pages/gym-buddy/gb-chat/gb-chat.module').then(m => m.GbChatPageModule),
           },
         ]
       },

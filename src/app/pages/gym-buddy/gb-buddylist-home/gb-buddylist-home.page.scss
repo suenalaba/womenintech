@@ -1,0 +1,101 @@
+ion-header {
+  ion-toolbar {
+    --background: #7c7899
+    font-family "Satisfy", cursive !important;
+    letter-spacing: 2px;
+    font-size: 2rem !important;
+    color: #fff;
+    ion-title{
+      margin-top: 5px;
+      font-size: 2rem !important;
+    }
+  }
+}
+
+ion-content {
+  -background: #7c7899;
+  .tabs {
+    margin-top: 20px;
+    font-family: "Nato Sans HK", sans-serif;
+    ion-segment {
+      --background: none;
+      ion-segment-button{
+        font-size: 1rem;
+        --border-width: 0;
+        --padding-start: 8px !important;
+        --padding-bottom: 3px !important;
+        --padding-end: 8px !important;
+        --padding-top: 3px !important;
+        --background-checked: #feacac;
+        --indicator-color: transparent !important;
+        --color: #d1d1d1;
+        --color-checked: #fff;
+        font-weight: bold;
+        border-radius: 22px;
+      }
+    }
+  }
+  .chat-list {
+    background: #fff;
+    margin-top: 5px;
+    border-top-right-radius:38px;
+    border-top-left-radius: 38px;
+  }
+  .all-chats {
+    padding-top: 0;
+  }
+  .heading {
+  }
+  .chats {
+    margin-top:15px;
+    ion-item::part(native) {
+      padding: 0;
+    }
+    ion-item {
+      margin-bottom: 15px;
+      ion-avatar{
+        width: 100%!important;
+        height: 100%!important;
+        max-width: 51px;
+      }
+      ion-label {
+        h2 {
+          font-size: 1rem;
+          font-weight: bolder;
+          color: #7c7899
+        }
+        p {
+          margin-top: 6px;
+          font-size: 0.8rem;
+          color: #7c7899;
+          opacity: 0.5;
+          letter-spacing: 0.5;
+          font-weight: bold;
+        }
+        .info-div {
+          position: absolute;
+          right: 0;
+          font-size: 0.8rem;
+          color: #7c7899;
+          font-weight: bolder;
+          text-align: right;
+          p {
+            opacity: 0.5;
+          }
+          ion-icon{
+            font-size: 1.3rem;
+          }
+          ion-badge {
+            font-size: 11px;
+            margin-bottom: 5px;
+            --padding-start: 5px;
+            --padding-end: 5px;
+            --padding-bottom: 5px;
+            --padding-top: 5px;
+            --background: red;
+          }
+        }
+      }
+    }
+  }
+}
