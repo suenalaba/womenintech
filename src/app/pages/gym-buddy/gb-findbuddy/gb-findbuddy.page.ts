@@ -79,7 +79,7 @@ export class GbFindbuddyPage implements OnInit {
       this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
       if(this.recommendedUser.checkMatches(this.currentUser.getUserId) === false){
         console.log("create chat")
-          // this.createChat(this.recommendedUser.getUserId,this.currentUser.getUserId);
+          this.createChat(this.recommendedUser.getUserId,this.currentUser.getUserId);
       }
     }
   }
@@ -103,6 +103,10 @@ export class GbFindbuddyPage implements OnInit {
   //this should probably be in a seperate class -> i just put this here as a placeholder
   private createChat(userID1 :string ,userID2:string) {
     console.log("Create Chat")
+  }
+
+  goToGBHome(){
+    this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
 }

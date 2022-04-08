@@ -6,28 +6,32 @@ export const Intensity: CreateWorkoutDesc[] = [
         text: 'Low',
         info: '< 3.0 METs',
         value: 'low',
-        name: 'intensity'
+        name: 'intensity',
+        color: 'warning'
     },
     {
         id: 2,
         text: 'Moderate',
         info: '3.0 - 6.0 METs',
         value: 'moderate',
-        name: 'intensity'
+        name: 'intensity',
+        color: 'warning'
     },
     {
         id: 3,
         text: 'Vigorous',
         info: '6.0 - 9.0 METs',
         value: 'vigorous',
-        name: 'intensity'
+        name: 'intensity',
+        color: 'warning'
     },
     {
         id: 4,
         text: 'Hard',
         info: '> 9.0 METs',
         value: 'hard',
-        name: 'intensity'
+        name: 'intensity',
+        color: 'warning'
     }
 ]
 
@@ -37,28 +41,32 @@ export const Duration: CreateWorkoutDesc[] = [
         text: 'Short and Quick',
         info: '15 Mins',
         value: 'short',
-        name: 'duration'
+        name: 'duration',
+        color: 'success'
     },
     {
         id: 2,
         text: 'Back on Track',
         info: '30 Mins',
         value: 'medium',
-        name: 'duration'
+        name: 'duration',
+        color: 'success'
     },
     {
         id: 3,
         text: 'Built Different',
         info: '60 Mins',
         value: 'long',
-        name: 'duration'
+        name: 'duration',
+        color: 'success'
     },
     {
         id: 4,
         text: 'Beast Mode',
         info: '90 Mins >',
         value: 'longer',
-        name: 'duration'
+        name: 'duration',
+        color: 'success'
     }
 ]
 
@@ -68,21 +76,24 @@ export const wLocation: CreateWorkoutDesc[] = [
         text: 'Gym',
         info: '',
         value: 'gym',
-        name: 'location'
+        name: 'location',
+        color: 'tertiary'
     },
     {
         id: 2,
         text: 'Home',
         info: '',
         value: 'home',
-        name: 'location'
+        name: 'location',
+        color: 'tertiary'
     },
     {
         id: 3,
         text: 'Outdoor',
         info: '',
         value: 'outdoor',
-        name: 'location'
+        name: 'location',
+        color: 'tertiary'
     }
 ]
 
@@ -92,20 +103,26 @@ export const Equipment: CreateWorkoutDesc[] = [
         text: 'Basic Equipment',
         info: 'Resistance bands, Dumbbells, Barbells, etc',
         value: 'basic',
-        name: 'equipment'
+        name: 'equipment',
+        color: 'secondary'
     },
     {
         id: 2,
         text: 'Minimal Equipment',
         info: 'Household items with weight',
         value: 'minimal',
-        name: 'equipment'
+        name: 'equipment',
+        color: 'secondary'
     },
     {
         id: 3,
         text: 'No Equipment',
         info: 'Body weight',
         value: 'no_equipment',
-        name: 'equipment'
+        name: 'equipment',
+        color: 'secondary'
     },
 ]
+
+export let tag: CreateWorkoutDesc[] = []
+export const Tags = tag.concat(Intensity,Equipment,wLocation,Duration)
