@@ -21,6 +21,11 @@ export class FindBuddyQuery {
     this.preferredGender=this.currentUser.getPrefBuddyGender;
   }
 
+  public createChatQuery(currentUserId: string, recommendedUserId: string) {
+    //locally add chat here.
+    this.dbRetrieve.createChatInFireStore(currentUserId, recommendedUserId);
+  }
+
   public addMatches(userID: string){
     this.currentUser.addMatches(userID);
     this.dbRetrieve.updateMatches(this.currentUser,userID);
