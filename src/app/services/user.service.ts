@@ -88,6 +88,7 @@ export class UserService {
    * Update user workout profile
    */
   updateUser(user){
+    console.log(user)
     let userDetails: UserDetails = {
       height: user.height,
       weight: user.weight,
