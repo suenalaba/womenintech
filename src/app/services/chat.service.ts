@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, doc, setDoc, docData, onSnapshot } from '@angular/fire/firestore';
-import { addDoc, arrayUnion, DocumentReference, getDoc, Query, updateDoc, Timestamp, serverTimestamp } from 'firebase/firestore';
+import { addDoc, arrayUnion, DocumentReference, getDoc, Query, updateDoc, Timestamp, serverTimestamp, DocumentSnapshot } from 'firebase/firestore';
 import { query, where, getDocs,collectionGroup } from 'firebase/firestore';
 import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
 import { AlertController, LoadingController } from '@ionic/angular';
@@ -14,23 +14,37 @@ import { GbFindbuddyPage } from '../pages/gym-buddy/gb-findbuddy/gb-findbuddy.pa
 
 export class ChatService {
 
+  getAllChatMessages() {
 
-  myObservable = new Observable ((observer) => {
-    const unSub = onSnapshot(doc(this.fireStore, 'Chat', this.selectedChatId), (chatDoc) => {
-      const source = chatDoc.metadata.hasPendingWrites ? 'Local' : 'Server';
-      //console.log(chatDoc.data);
-      //const nextInfo = source + 'data: ' + chatDoc.data();
-      //observer.next(nextInfo);
-      //console.log(source, ' data: ', chatDoc.data());
-      observer.next(chatDoc.data().conversation);
+    return new Observable(observer => {
+      const unSub = onSnapshot(doc(this.fireStore, 'Chat', this.selectedChatId), (chatDoc) => {
+        const source = chatDoc.metadata.hasPendingWrites ? 'Local' : 'Server';
+
+          observer.next(chatDoc.data().conversation);
+        });
+
+      return () => {
+        unSub();
+      };
     });
-    console.log('Observable starts');
-    // setTimeout(()=>{observer.next('1');},1000);
-    // setTimeout(()=>{observer.next('2');},2000);
-    // setTimeout(()=>{observer.next('3');},3000);
-    // setTimeout(()=>{observer.next('4');},4000);
-    // setTimeout(()=>{observer.next('5');},5000);
-  });
+  }
+
+  // myObservable = new Observable ((observer) => {
+  //   const unSub = onSnapshot(doc(this.fireStore, 'Chat', this.selectedChatId), (chatDoc) => {
+  //     const source = chatDoc.metadata.hasPendingWrites ? 'Local' : 'Server';
+  //     console.log(chatDoc.data);
+  //     //const nextInfo = source + 'data: ' + chatDoc.data();
+  //     //observer.next(nextInfo);
+  //     console.log(source, ' data: ', chatDoc.data());
+  //     observer.next(chatDoc.data().conversation);
+  //   });
+  //   console.log('Observable starts');
+  //   // setTimeout(()=>{observer.next('1');},1000);
+  //   // setTimeout(()=>{observer.next('2');},2000);
+  //   // setTimeout(()=>{observer.next('3');},3000);
+  //   // setTimeout(()=>{observer.next('4');},4000);
+  //   // setTimeout(()=>{observer.next('5');},5000);
+  // });
 
 
 
@@ -104,6 +118,8 @@ export class ChatService {
     this.currentUser = userInfo;
     return userInfo;
   }
+
+
 
   /**
    * Gets an array of hashmap for all the chats involving the current user.
