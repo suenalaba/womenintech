@@ -1,3 +1,40 @@
+<!--
+<ion-content>
+  <div class="header ion-padding">
+    <div class="info">
+      <ion-icon name="chevron-back-outline" (click)="navigateChatPageToBuddyListPage()"></ion-icon>
+      <ion-avatar>
+        <img src="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="">
+      </ion-avatar>
+      <span class="details">
+        <h1>Zhi kai monster</h1>
+        <p>Hitting the gym</p>
+      </span>
+    </div>
+    <div class="share-workout">
+      <ion-icon name="american-football-outline"></ion-icon>
+    </div>
+  </div>
+  <div class="conversation ion-padding">
+    <div class="chat-section" id="chat">
+      <div class="chat">
+        <div class="your messages">
+          <div class="message-other">
+            Hey
+          </div>
+          <div class="last-message-other">
+            <ion-avatar>
+
+            </ion-avatar>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+-->
+
+<!--
 <ion-header>
   <ion-toolbar>
     <ion-title>gb-chat</ion-title>
@@ -7,7 +44,7 @@
 <ion-content>
 
 </ion-content>
-
+-->
 
 <!--
   <ng-container *ngIf="chat$ | async as chat">
@@ -47,7 +84,7 @@
 
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Display the other username.</ion-title>
+    <ion-title>{{getSelectedChatBuddyName()}}</ion-title>
     <ion-buttons slot="start">
       <ion-button fill="clear" (click)="navigateChatPageToBuddyListPage()">
         <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
@@ -57,6 +94,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
  <!--
   <ion-grid>
     <ion-row *ngFor="let message of messages | async">
