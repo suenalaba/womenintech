@@ -3,7 +3,7 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { Duration, Equipment, Intensity, wLocation } from 'src/app/data/workout-data/CreateWorkout';
-import { WorkoutsService } from 'src/app/services/workouts.service';
+import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 
 @Component({
   selector: 'app-generate-workout',

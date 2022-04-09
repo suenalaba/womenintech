@@ -95,31 +95,32 @@
 
 <ion-content class="ion-padding">
 
- <!--
+
   <ion-grid>
-    <ion-row *ngFor="let message of messages | async">
+    <ion-row *ngFor="let message of allChatMessages">
       <ion-col size="9" class="message"
-        [offset]="message.myMsg ? 3 : 0"
-        [ngClass]="{ 'my-message': message.myMsg, 'other-message': !message.myMsg }">
-        <b>{{ message.fromName }}</b><br>
-        <span>{{ message.msg }}
+        [offset]="message.fromId === '{{getCurrentUserId()}}' ? 3 : 0"
+        [ngClass]="{ 'my-message': message.fromId === '{{getCurrentUserId()}}',
+            'other-message': message.fromId === '{{getCurrentUserId()}}' }">
+        <b>{{ message.fromId }}</b><br>
+        <span>{{ message.message }}
         </span>
-        <div class="time ion-text-right"><br>{{ message.createdAt?.toMillis() | date:'short' }}</div>
+        <div class="time ion-text-right"><br>{{ message.timeSent?.toMillis() | date:'short' }}</div>
       </ion-col>
     </ion-row>
   </ion-grid>
- -->
+
 </ion-content>
 
 <ion-footer>
   <ion-toolbar color="light">
     <ion-row class="ion-align-items-center">
       <ion-col size="10">
-        <ion-textarea autoGrow="true" class="message-input" rows="1" maxLength="500">
+        <ion-textarea autoGrow="true" class="message-input" rows="1" maxLength="500" [(ngModel)]="newMessage" >
         </ion-textarea>
       </ion-col>
       <ion-col size="2">
-        <ion-button expand="block" fill="clear" color="primary"
+        <ion-button expand="block" fill="clear" color="primary" [disabled]="newMessage === ''"
           class="msg-btn" (click)="sendMessage()">
           <ion-icon name="send" slot="icon-only"></ion-icon>
         </ion-button>

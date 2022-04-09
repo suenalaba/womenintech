@@ -1,17 +1,38 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
-import { addDoc, arrayUnion, DocumentReference, getDoc, Query, updateDoc } from 'firebase/firestore';
+import { Firestore, collection, collectionData, doc, setDoc, docData, onSnapshot } from '@angular/fire/firestore';
+import { addDoc, arrayUnion, DocumentReference, getDoc, Query, updateDoc, Timestamp, serverTimestamp } from 'firebase/firestore';
 import { query, where, getDocs,collectionGroup } from 'firebase/firestore';
 import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { GbFindbuddyPage } from '../pages/gym-buddy/gb-findbuddy/gb-findbuddy.page';
-import { type } from 'os';
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class ChatService {
+
+
+  myObservable = new Observable ((observer) => {
+    const unSub = onSnapshot(doc(this.fireStore, 'Chat', this.selectedChatId), (chatDoc) => {
+      const source = chatDoc.metadata.hasPendingWrites ? 'Local' : 'Server';
+      //console.log(chatDoc.data);
+      //const nextInfo = source + 'data: ' + chatDoc.data();
+      //observer.next(nextInfo);
+      //console.log(source, ' data: ', chatDoc.data());
+      observer.next(chatDoc.data().conversation);
+    });
+    console.log('Observable starts');
+    // setTimeout(()=>{observer.next('1');},1000);
+    // setTimeout(()=>{observer.next('2');},2000);
+    // setTimeout(()=>{observer.next('3');},3000);
+    // setTimeout(()=>{observer.next('4');},4000);
+    // setTimeout(()=>{observer.next('5');},5000);
+  });
+
+
 
   //key:other user name, value: latest message
   //private allChatNameAndMessage: Map<string, string>;
@@ -22,13 +43,24 @@ export class ChatService {
   private conversationData;
   private otherUserData;
   //private testDoc = null;
+  //these fields are set based on which chat was selected.
   private selectedChatId: string = null;
-  private selectedChatUserName: string = null;
+  private selectedChatUserName: string = null; //username of the other party.
+  private selectedOtherUserId: string = null;
+
   private currentUser: GymBuddyProfileInfo = null;
   constructor(private fireStore: Firestore, private loadingController: LoadingController) {
     /*this.afAuth.onAuthStateChanged((user) => {
       this.currentUser = user;
     });*/
+  }
+
+  public get getCurrentUser() {
+    return this.currentUser;
+  }
+
+  public get getSelectedOtherUserId() {
+    return this.selectedOtherUserId;
   }
 
   public get getSelectedChatUserName() {
@@ -46,6 +78,12 @@ export class ChatService {
   public set setSelectedChatId(chatId: string) {
     this.selectedChatId = chatId;
   }
+
+  public set setSelectedOtherUserId(otherUserId: string) {
+    this.selectedOtherUserId = otherUserId;
+  }
+
+
 
 
 
@@ -96,6 +134,7 @@ export class ChatService {
       const chatRef = doc(this.fireStore, 'Chat', chatInfo.chatID);
       const conversationDoc = await this.pullFullChat(chatRef);
       this.conversationData = conversationDoc.data();
+      //-1 is index of lastMessage.
       const lastMessage = this.conversationData.conversation[0].message;
       console.log(lastMessage);
       //console.log(conversationData);
@@ -107,12 +146,29 @@ export class ChatService {
       const lastName = this.otherUserData.lastName;
       const fullName = firstName + lastName;
       console.log(fullName);
-      allChatNameAndMessage.set(fullName, [lastMessage,chatInfo.chatID]);
+      //full name, last message, chat id, other userId.
+      allChatNameAndMessage.set(fullName, [lastMessage,chatInfo.chatID,this.otherUserData.id]);
       //const mapofnameandmessage = this.allChatNameAndMessage;
       //mapofnameandmessage.set(fullName, lastMessage);
     }
     return allChatNameAndMessage;
   }
+
+  //Chat functionalities
+  addChatMessage(msg) {
+    const chatSelectedRef = doc(this.fireStore, 'Chat', this.selectedChatId);
+    const messageData = {
+      fromId: this.currentUser.getUserId,
+      isRead: false,
+      message: msg,
+      timeSent: Timestamp.now()
+    };
+    return updateDoc(chatSelectedRef, {conversation: arrayUnion(messageData)});
+  }
+
+  // private getUsers() {
+  //   return this.afs.collection('users').valueChanges({ idField: 'uid' }) as Observable<User[]>;
+  // }
 
   private async getOtherUser(q) {
     const otherUserQuerySnapshot = await getDoc(q);
@@ -123,6 +179,7 @@ export class ChatService {
     const chatQuerySnapshot = await getDoc(q);
     return chatQuerySnapshot;
   }
+
 
   /*public async testPullFromDb() {
     const testref = doc(this.fireStore, 'Chat','Test');
@@ -151,18 +208,11 @@ export class ChatService {
 
 
 
+
   /*public async retrieveAllChats()
 
 
-export interface Message {
-  //createdDate: Firestore.FieldValue;
-  //createdAt: firebase.firestore.FieldValue;
-  id: string;
-  from: string;
-  msg: string;
-  fromName: string;
-  myMsg: boolean;
-}
+
 
 // Chat functionality
 
@@ -204,4 +254,15 @@ private getUserForMsg(msgFromId, users: User[]): string {
     }
   }
   return 'Deleted';*/
+}
+
+export interface Message {
+  //createdDate: Firestore.FieldValue;
+  //createdAt: firebase.firestore.FieldValue;
+  chatId: string;
+  fromId: string;
+  message: string;
+  fromName: string;
+  isMyMsg: boolean; //indicates whether message was sent by me, primary user.
+  isRead: boolean;
 }

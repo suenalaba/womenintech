@@ -1,9 +1,15 @@
+/**
+ * 
+ * COMMUNICATES WITH FIREBASE
+ * 
+ */
+
 import { Injectable } from '@angular/core';
 import { Firestore, collection, doc, setDoc, docData, Timestamp, query, getDocs } from '@angular/fire/firestore';
 import { onSnapshot, orderBy, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
-import { WorkoutDesc } from '../class/CreateWorkoutDesc';
-import { WorkoutDetails } from '../class/WorkoutDetails';
+import { WorkoutDesc } from '../../class/CreateWorkoutDesc';
+import { WorkoutDetails } from '../../class/WorkoutDetails';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +36,11 @@ export class WorkoutsService {
     };
     await setDoc(doc(this.firestore, "Users", `${uid}`, "Workouts", timestamp.seconds.toString()), docData);
     return await timestamp.seconds;
+  }
+
+  async saveWorkout(wid, uid, userWorkout){
+    console.log(wid, userWorkout)
+
   }
 
   getWorkout(wid, uid): Observable <WorkoutDesc>  {
