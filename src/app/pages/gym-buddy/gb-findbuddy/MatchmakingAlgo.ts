@@ -37,11 +37,11 @@ export class MatchmakingAlgo {
     let anotherUserId;
     /* Pseudo code for Matchmaking Algo
     *  For each value in K:V pair in localStorage(dictionary of documents in app)
-    * extract the Value and extract the gymbuddyprofile using json parser
-    * each time, creating an object of a gymbuddyprofile.
-    * store each object(gymbuddyprofile) inside an array of gymbuddyprofile objects
+    * extract the Value and extract the gym buddy profile using json parser
+    * each time, creating an object of a gym buddy profile.
+    * store each object(gym buddy profile) inside an array of gym buddy profile objects
     * Terminate for loop
-    * Run a new for loop, looping through the array of gymbuddyprofile objects
+    * Run a new for loop, looping through the array of gym buddy profile objects
     * calculate the matching score between each user
     * get the string id of the other user
     * store in hashmap <id,matching score>
@@ -88,7 +88,7 @@ export class MatchmakingAlgo {
         traitsStyleScore++;
       }
     }
-    /* user A personal trainstyle match with User B preferred train style */
+    /* user A personal train style match with User B preferred train style */
     for (const field of currentUser.getPersonalTrainStyle) {
       if (anotherUser.getBuddyTrainStyle.includes(field)) {
         traitsStyleScore++;

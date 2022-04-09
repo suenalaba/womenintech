@@ -1,4 +1,3 @@
-<!--
 <ion-content>
   <div class="header ion-padding">
     <div class="info">
@@ -18,6 +17,20 @@
   <div class="conversation ion-padding">
     <div class="chat-section" id="chat">
       <div class="chat">
+        <ion-grid>
+          <ion-row *ngFor="let message of allChatMessages">
+            <ion-col size="9" class="message"
+              [offset]="message.fromId === '{{getCurrentUserId()}}' ? 3 : 0"
+              [ngClass]="{ 'my-message': message.fromId === '{{getCurrentUserId()}}',
+                  'other-message': message.fromId === '{{getCurrentUserId()}}' }">
+              <b>{{ message.fromId }}</b><br>
+              <span>{{ message.message }}
+              </span>
+              <div class="time ion-text-right"><br>{{ message.timeSent?.toMillis() | date:'short' }}</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!--
         <div class="your messages">
           <div class="message-other">
             Hey
@@ -40,6 +53,7 @@
             <ion-icon name = "checkmark-done-outline"></ion-icon>1.44pm
           </span>
         </div>
+      -->
       </div>
     </div>
     <div class="message input">
@@ -53,7 +67,7 @@
     </div>
   </div>
 </ion-content>
--->
+
 
 <!--
 <ion-header>
@@ -102,7 +116,7 @@
 </ng-container>
 -->
 
-
+<!--
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>{{getSelectedChatBuddyName()}}</ion-title>
@@ -117,10 +131,10 @@
 <ion-content class="ion-padding">
 
 
-  <ion-grid class="conversation">
-    <ion-row *ngFor="let message of allChatMessages | async">
+  <ion-grid>
+    <ion-row *ngFor="let message of allChatMessages">
       <ion-col size="9" class="message"
-        [offset]="isMyMessage(message.fromId) ? 3 : 0"
+        [offset]="message.fromId === '{{getCurrentUserId()}}' ? 3 : 0"
         [ngClass]="getUserClass(message.fromId)">
         <b>{{ message.fromId }}</b><br>
         <span>{{ message.message }}
@@ -136,9 +150,7 @@
   <ion-toolbar color="light">
     <ion-row class="ion-align-items-center">
       <ion-col size="10">
-        <ion-textarea autoGrow="true" class="message-input" rows="1"
-         maxLength="500" [(ngModel)]="newMessage"
-         placeholder="Type your message here..." >
+        <ion-textarea autoGrow="true" class="message-input" rows="1" maxLength="500" [(ngModel)]="newMessage" >
         </ion-textarea>
       </ion-col>
       <ion-col size="2">
@@ -150,3 +162,4 @@
     </ion-row>
   </ion-toolbar>
 </ion-footer>
+-->

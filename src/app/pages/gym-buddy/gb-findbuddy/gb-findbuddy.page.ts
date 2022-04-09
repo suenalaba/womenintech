@@ -30,8 +30,40 @@ export class GbFindbuddyPage implements OnInit {
     private dbRetrieve: DbRetrieveService,
   ) { }
 
+  public get getFullName() {
+    if(this.recommendedUser) {
+      return this.recommendedUser.name;
+    }
+    return 'Full Name';
+  }
+
+  public get getAge() {
+    if(this.recommendedUser) {
+      return this.recommendedUser.age;
+    }
+    return 'Age';
+  }
+
+  public get getBriefIntro() {
+    if(this.recommendedUser) {
+      return this.recommendedUser.getbriefIntro;
+    }
+    return 'Brief Introduction';
+  }
+
+  public get getProfilePicture() {
+    if(this.recommendedUser) {
+      return this.recommendedUser.profilePicture;
+    }
+    return 'Profile Picture';
+  }
+
+  public get getMoreGymBuddyInformation() {
+    return 'More Information';
+  }
+
   async ngOnInit() {
-    this.currentUser = await this.dbRetrieve.retrieveCurrentUser();
+    this.currentUser = this.dbRetrieve.retrieveCurrentUser();
     this.recommendationEngine = new RecommendationEngine(this.currentUser);
     this.findBuddyQuery= new FindBuddyQuery(this.dbRetrieve,this.currentUser);
     this.recommendationEngine.getAllMatches(await this.findBuddyQuery.findBuddyQuery());
@@ -39,44 +71,19 @@ export class GbFindbuddyPage implements OnInit {
     this.recommendedUser=this.recommendationEngine.pollMatch();
   }
 
+
   public getCurrentUser(): GymBuddyProfileInfo {
     return this.currentUser;
   }
 
 
-  public get getFullName() {
-    if(this.recommendedUser)
-      return this.recommendedUser.name;
-    return "Full name"
-  }
 
-  public get getAge() {
-    if(this.recommendedUser)
-      return this.recommendedUser.age;
-    return "Age"
-  }
 
-  public get getBriefIntro() {
-    if(this.recommendedUser)
-      return this.recommendedUser.getbriefIntro;
-    return "Brief Introduction"
-  }
-
-  public get getProfilePicture() {
-    if(this.recommendedUser)
-      return this.recommendedUser.profilePicture;
-    return "Profile Picture"
-  }
-
-  public get getMoreGymBuddyInformation() {
-    return "More Information"
-  }
-
-  async goToGBHome() {
+  public async goToGBHome() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
-  async matchBuddy() {
+  public async matchBuddy() {
     this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
     if(this.recommendedUser.checkMatches(this.currentUser.getUserId)){
           this.createChat(this.currentUser.getUserId, this.recommendedUser.getUserId);
@@ -86,31 +93,30 @@ export class GbFindbuddyPage implements OnInit {
       this.displayNoMoreMatches();
     }
     else {
-      console.log("Match buddy")
+      console.log('Match Buddy');
     }
   }
 
-  async unmatchBuddy() {
+  public async unmatchBuddy() {
     this.recommendedUser=this.recommendationEngine.pollMatch();
     if(!this.recommendedUser){
       this.displayNoMoreMatches();
     }
     else{
-      console.log("Unmatch buddy")
+      console.log('UnMatch Buddy');
       this.findBuddyQuery.addUnmatches(this.recommendedUser.getUserId);
     }
   }
 
   //Display something and prevent the user from matching and unmatching
   private displayNoMoreMatches() {
-    console.log("No More Matches")
+    console.log('No more matches');
   }
 
   //this should probably be in a seperate class -> i just put this here as a placeholder
   private createChat(userId1: string , userId2: string) {
     this.findBuddyQuery.createChatQuery(userId1, userId2);
     console.log('Chat created');
-
   }
 
 }

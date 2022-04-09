@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
-import { addDoc, arrayUnion, DocumentReference, getDoc, Query, updateDoc } from 'firebase/firestore';
+import { addDoc, arrayUnion, DocumentReference, DocumentSnapshot, getDoc, Query, updateDoc } from 'firebase/firestore';
 import { query, where, getDocs,collectionGroup } from 'firebase/firestore';
 import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
 import { AlertController, LoadingController } from '@ionic/angular';
@@ -9,10 +9,14 @@ import { AlertController, LoadingController } from '@ionic/angular';
   providedIn: 'root'
 })
 export class DbRetrieveService {
+
+  private currentUserDataDoc: DocumentSnapshot<any>;
+
   constructor(
     private firestore: Firestore,
     private loadingController: LoadingController
     ) { }
+
 
   /**
    *
@@ -58,44 +62,51 @@ export class DbRetrieveService {
   }
 
   /**
-   * Fetches User ID from local storage, then gets the user info and store in a Gym Buddy Profile Object.
+   * Uses the current instance of the user info and store in a Gym Buddy Profile Object.
    *
    * @returns Gym Buddy Profile Object
    */
-  public async retrieveCurrentUser(): Promise<GymBuddyProfileInfo> {
+  public retrieveCurrentUser(): GymBuddyProfileInfo {
+    const userInfo = new GymBuddyProfileInfo(this.currentUserDataDoc.data()); //create userInfo object which stores user data.
+    return userInfo;
+  }
+
+  /**
+   * Sets the current user in the home-page, so no need to constantly pull from DB.
+   */
+  public async setCurrentUser() {
     const loading = await this.loadingController.create();
     const id = JSON.parse(localStorage.getItem('userID')); //get id string from localStorage
     const ref = doc(this.firestore, 'Users', id); //object ref refers to information in the firebase
     const user = await this.singlePullFromDB(ref); //pull ref, and store in user object.
-    const userInfo = new GymBuddyProfileInfo(user.data()); //create userInfo object which stores user data.
-    return userInfo;
+    this.currentUserDataDoc = user;
   }
 
-public updateMatches(user: GymBuddyProfileInfo,userID) {
+  public updateMatches(user: GymBuddyProfileInfo,userID) {
     //console.log(details);
     const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
 
     return updateDoc(noteDocRef,{ 'gymBuddyDetails.matches' : arrayUnion(userID)});
   }
 
-  public updateUnmatches(user: GymBuddyProfileInfo,userID) {
+  public updateUnMatches(user: GymBuddyProfileInfo,userID) {
     //console.log(details);
     const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
 
     return updateDoc(noteDocRef,{ 'gymBuddyDetails.unmatches' : arrayUnion(userID)});
   }
 
+  /**
+   * Create a chat with both users.
+   *
+   * @param currentUserId Primary user id
+   * @param recommendedUserId Secondary user id to create the chat with.
+   */
   public async createChatInFireStore(currentUserId: string, recommendedUserId: string) {
-
     const newChatDoc = await addDoc(collection(this.firestore, 'Chat'), {
-      chatUsers: [currentUserId, recommendedUserId],
-      //reference for creating hashmap in array.
-      /*favorites: [{
-        food: 'Pizza',
-        color: 'Blue',
-        subject: 'Recess'}],*/
+      chatUsers: [currentUserId, recommendedUserId]
     });
-    const chatId=newChatDoc.id;
+    const chatId = newChatDoc.id;
     console.log('Document written with ID: ', chatId);
     this.updateChatForEachUser(currentUserId, chatId, recommendedUserId);
   }

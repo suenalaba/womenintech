@@ -13,6 +13,7 @@ import { workoutTimePreference } from '../../../data/gym-buddy-data/WorkoutTimeP
 import { UserService } from '../../../services/user.service'
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
 import { GymBuddyService } from 'src/app/services/gym-buddy.service';
+import { DbRetrieveService } from 'src/app/services/db-retrieve.service';
 @Component({
   selector: 'app-gb-home',
   templateUrl: './gb-home.page.html',
@@ -20,27 +21,30 @@ import { GymBuddyService } from 'src/app/services/gym-buddy.service';
 })
 export class GbHomePage implements OnInit {
 
-  timePrefList = workoutTimePreference;
-  buddyGoalsList = gymBuddyGoals;
-  personalTraitsList = personalTraits;
+  private timePrefList = workoutTimePreference;
+  private buddyGoalsList = gymBuddyGoals;
+  private personalTraitsList = personalTraits;
   private fullName: string;
   private briefIntro: string;
   private prefWorkoutTime: string[] = [];
   private gymBuddyGoals: string[] = [];
   private personalTraits: string[] = [];
 
+  private userInfo: User;
+  private gymBuddyInfo: GymBuddyDetails;
+
+
   constructor(
     private router: Router,
     private userService: UserService,
-    private gymBuddyService: GymBuddyService,
+    //private gymBuddyService: GymBuddyService,
     private loadingController: LoadingController,
-    private alertController: AlertController,
-    private cameraService: CameraService
+    private dbRetrieveService: DbRetrieveService,
+    //private alertController: AlertController,
+    //private cameraService: CameraService
 
   ) { }
 
-  private userInfo: User;
-  private gymBuddyInfo: GymBuddyDetails;
 
   public get getFullName() {
     // this.fullName = this.userInfo.firstName + ' ' + this.userInfo.lastName;
@@ -80,17 +84,41 @@ export class GbHomePage implements OnInit {
 
   ngOnInit() {
     /** checks if the user has signed up for Gym Buddy */
-    // if(this.gymBuddyService.isSignedUp()) 
-      this.loadUserDetails();
-    // else 
+    // if(this.gymBuddyService.isSignedUp())
+    //check if user is signed up.
+    this.checkIfUserIsSignedUp();
+    //this line only follows if user is signed up, basically to set the status of current user.
+    this.dbRetrieveService.setCurrentUser();
+    // else
       /** user has NOT signed up for Gym Buddy, will be navigated to sign up page*/
       // this.router.navigateByUrl('tabs/gym-buddy/gb-sign-up', { replaceUrl: true });
   }
 
+  public getColor(i: number) {
+    i = i % 5;
+    const colors = ['#ED93D5','#94DAEC','#FB6175','#EFBCFF','#F2D28A'];
+    return colors[i];
+  }
+
   /**
-   * CALLING USER DYNAMICALLY
+   * Navigate to find a buddy.
    */
-  async loadUserDetails(){
+  public async goToFindBuddy() {
+    this.router.navigateByUrl('tabs/gym-buddy/gb-findbuddy', { replaceUrl: true });
+  }
+
+  /**
+   * Navigate to Buddy list (Chat Home Page)
+   */
+  public async goToBuddyList() {
+    this.router.navigateByUrl('tabs/gym-buddy/gb-buddylist-home', { replaceUrl: true });
+  }
+
+  /**
+   * CALLING USER DYNAMICALLY, check if user is signed up.
+   * If yes, load info else, reroute to sign up page.
+   */
+  private async checkIfUserIsSignedUp(){
     const loading = await this.loadingController.create();
     await loading.present();
 
@@ -101,36 +129,41 @@ export class GbHomePage implements OnInit {
        loading.dismiss();
       }
 
-      
-      this.fullName = res.firstName + ' ' + res.lastName;
-      this.briefIntro = res.gymBuddyDetails.briefIntro;
-      this.userInfo = res;
+    this.setUserDetails(res);
+      // this.fullName = res.firstName + ' ' + res.lastName;
+      // this.briefIntro = res.gymBuddyDetails.briefIntro;
+      // this.userInfo = res;
 
-      this.gymBuddyInfo = this.userInfo.gymBuddyDetails;
+      // this.gymBuddyInfo = this.userInfo.gymBuddyDetails;
 
-      this.getWorkoutTimeTextDisplay();
-      this.getGymBuddyGoalsTextDisplay();
-      this.getPersonalTraitsTextDisplay();
+      // this.getWorkoutTimeTextDisplay();
+      // this.getGymBuddyGoalsTextDisplay();
+      // this.getPersonalTraitsTextDisplay();
 
       loading.dismiss();
    });
 
   }
 
-  async loadGymBuddyDetails(){
-    this.gymBuddyInfo = this.userInfo.gymBuddyDetails;
+  private setUserDetails(userDetail) {
+    this.fullName = userDetail.firstName + ' ' + userDetail.lastName;
+      this.briefIntro = userDetail.gymBuddyDetails.briefIntro;
+      this.userInfo = userDetail;
+
+      this.gymBuddyInfo = this.userInfo.gymBuddyDetails;
+
+      this.setWorkoutTimeTextDisplay();
+      this.setGymBuddyGoalsTextDisplay();
+      this.setPersonalTraitsTextDisplay();
   }
 
-  async goToFindBuddy() {
-    this.router.navigateByUrl('tabs/gym-buddy/gb-findbuddy', { replaceUrl: true });
-  }
+  // async loadGymBuddyDetails(){
+  //   this.gymBuddyInfo = this.userInfo.gymBuddyDetails;
+  // }
 
-  async goToBuddyList() {
-    this.router.navigateByUrl('tabs/gym-buddy/gb-buddylist-home', { replaceUrl: true });
-  }
 
-  private getPersonalTraitsTextDisplay() {
-    this.personalTraits = []
+  private setPersonalTraitsTextDisplay() {
+    this.personalTraits = [];
     for (const val of this.personalTraitsList) {
       //console.log(val.value);
       //console.log(this.gymBuddyInfo.workoutTimePreference);
@@ -142,8 +175,8 @@ export class GbHomePage implements OnInit {
     }
   }
 
-  private getGymBuddyGoalsTextDisplay() {
-    this.gymBuddyGoals = []
+  private setGymBuddyGoalsTextDisplay() {
+    this.gymBuddyGoals = [];
     for (const val of this.buddyGoalsList) {
       //console.log(val.value);
       //console.log(this.gymBuddyInfo.workoutTimePreference);
@@ -155,13 +188,15 @@ export class GbHomePage implements OnInit {
     }
   }
 
-  private getWorkoutTimeTextDisplay() {
-    this.prefWorkoutTime = []
+  private setWorkoutTimeTextDisplay() {
+    this.prefWorkoutTime = [];
     for (const val of this.timePrefList) {
       //console.log(val.value);
       //console.log(this.gymBuddyInfo.workoutTimePreference);
       if (this.gymBuddyInfo.workoutTimePreference.includes(val.value)) {
         //console.log(val.text);
+        //convert all but first letter to lower case.
+        val.text = val.text.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
         this.prefWorkoutTime.push(val.text);
       }
       //console.log(this.prefWorkoutTime);
@@ -172,64 +207,64 @@ export class GbHomePage implements OnInit {
   }*/
 
 
-  /**
-   * Upload user profile pictures
-   */
-  async takePhoto() {
-    const alert = await this.alertController.create({
-      cssClass: 'profile-photos',
-      header: 'Take your image from...',
-      message: '',
-      buttons: [
-        {
-          text: 'Camera',
-          handler: () => {
-            console.log('Camera');
-            this.cameraService.getCamera();
-          }
-        },
-        {
-          text: 'Gallery',
-          handler: () => {
-            console.log('Gallery')
-            this.cameraService.getGallery();
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
-        }
-      ]
-    });
+  // /**
+  //  * Upload user profile pictures
+  //  */
+  // async takePhoto() {
+  //   const alert = await this.alertController.create({
+  //     cssClass: 'profile-photos',
+  //     header: 'Take your image from...',
+  //     message: '',
+  //     buttons: [
+  //       {
+  //         text: 'Camera',
+  //         handler: () => {
+  //           console.log('Camera');
+  //           this.cameraService.getCamera();
+  //         }
+  //       },
+  //       {
+  //         text: 'Gallery',
+  //         handler: () => {
+  //           console.log('Gallery')
+  //           this.cameraService.getGallery();
+  //         }
+  //       },
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //         cssClass: 'secondary',
+  //         handler: (blah) => {
+  //           console.log('Confirm Cancel: blah');
+  //         }
+  //       }
+  //     ]
+  //   });
 
-    await alert.present();
-    // this.cameraService.getCamera();
-  }
+  //   await alert.present();
+  //   // this.cameraService.getCamera();
+  // }
 
-  removePhoto(i) {
-    this.cameraService.removePhoto(i)
-  }
+  // removePhoto(i) {
+  //   this.cameraService.removePhoto(i)
+  // }
 
-  async uploadImages() {
-    let loading = await this.loadingController.create({
-      message: 'Loading ...'
-    });
+  // async uploadImages() {
+  //   let loading = await this.loadingController.create({
+  //     message: 'Loading ...'
+  //   });
 
-    await loading.present();
+  //   await loading.present();
 
-    let photo = this.cameraService.photoStash;
-    let c = 1;
-    if (photo.length != 0) {
-      for(let i of photo)
-        await this.userService.uploadProfilePicture(c, i.webviewPath, this.userInfo.id);
-        c++;
-    }
+  //   let photo = this.cameraService.photoStash;
+  //   let c = 1;
+  //   if (photo.length != 0) {
+  //     for(let i of photo)
+  //       await this.userService.uploadProfilePicture(c, i.webviewPath, this.userInfo.id);
+  //       c++;
+  //   }
 
-      loading.dismiss();
+  //     loading.dismiss();
 
-  }
+  // }
 }

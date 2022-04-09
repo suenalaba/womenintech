@@ -33,7 +33,7 @@ export class FindBuddyQuery {
 
   public addUnmatches(userID: string){
     this.currentUser.addUnmatches(userID);
-    this.dbRetrieve.updateUnmatches(this.currentUser,userID);
+    this.dbRetrieve.updateUnMatches(this.currentUser,userID);
   }
 
 
@@ -43,12 +43,12 @@ export class FindBuddyQuery {
     return dictOfProfile;
   }
 
-  private filterDictionary(dict:Map<string, GymBuddyProfileInfo>){
-    this.currentUser.matches.forEach(function (value) {
+  private filterDictionary(dict: Map<string, GymBuddyProfileInfo>){
+    this.currentUser.matches.forEach(function(value) {
       console.log(value);
       delete dict[value];
     });
-    this.currentUser.unmatches.forEach(function (value) {
+    this.currentUser.unmatches.forEach(function(value) {
       delete dict[value];
     });
   }
