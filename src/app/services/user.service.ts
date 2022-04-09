@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
-import { Injectable } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
 import { updateDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
 import { User, UserDetails } from '../class/user';
-import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from 'firebase/storage';
 
 import { HttpClient } from '@angular/common/http'; //youtube api
 
@@ -27,13 +27,38 @@ export class UserService {
     return docData(noteDocRef, { idField: 'id' }) as Observable<User>;
   }
 
-  getData() {
-    let url = 'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=3&q=deadlift&key=AIzaSyDH-momG79qABXUQ623_YYZrExXltFPq1k';
-    return this.http.get(url);
+  /**
+   * Function to search the Youtube API and parse the result
+   * @param searchTerm the term to search youtube for 
+   * returns the top 3 results' 1) video title, 2) video url, and 3) video thumbnail
+   */
+  getYoutubeAPI(searchTerm) {
+    const YOUTUBE_NUM_SEARCH_RESULTS = 3;
+    console.log('searching youtube for ', searchTerm);
+    const url = 'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=3&q=' + searchTerm + '&key=AIzaSyDH-momG79qABXUQ623_YYZrExXltFPq1k';
+    const parsedVideos = [];
+    this.http.get<any>(url).subscribe((data) => { //needs to be <any> so that it can call .items on data without compile error
+      const response = data.items;
+      for (let i = 0; i < YOUTUBE_NUM_SEARCH_RESULTS; i++)
+      {
+        const tempDict = {};
+        tempDict['Title'] = response[i].snippet.title;
+        tempDict['URL'] = 'https://www.youtube.com/embed/' + response[i].id.videoId;
+        tempDict['ThumbnailURL'] = response[i].snippet.thumbnails.high.url;
+        tempDict['ThumbnailWidth'] = response[i].snippet.thumbnails.high.width;
+        tempDict['ThumbnailHeight'] = response[i].snippet.thumbnails.high.height;
+
+        parsedVideos[i] = tempDict;
+      }
+    });
+    return parsedVideos;
   }
 
-   /**
-   * Upload user profile
+  /**
+   * Function to allow users to upload an image as their profile pic
+   * @param i i
+   * @param file the image users choose to upload
+   * @param id the id of the registered user
    */
     uploadProfilePicture(i, file, id) {
       const storage = getStorage();
