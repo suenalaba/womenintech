@@ -19,7 +19,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <swiper #swiper [config] = "configStats"
+  <swiper #swiperStats [config] = "configStats"
   (slideChange) = "swiperSlideChanged($event)">
     <ng-template swiperSlide>
       <!--- <img src = '../../assets/placeholders/progress.png'> --->
@@ -60,16 +60,16 @@
     RECOMMENDATIONS
   </ion-card-header>
 
-  <swiper #swiper [config] = "configYt">
-    <ng-template swiperSlide *ngFor="let video of ytPayload.items">
+  <swiper #swiperYt [config] = "configYt">
+    <ng-template swiperSlide *ngFor="let video of ytVideos">
       <ion-card>
-        <!--<img src={{video.snippet.thumbnails.high.url}}/><br>-->
+        <!--<img src={{video.ThumbnailURL}}/><br>-->
         <iframe 
-          width={{video.snippet.thumbnails.high.width}}
-          height={{video.snippet.thumbnails.high.height}}
-          [src]="video.videoUrl | safe"></iframe><br>
+          width={{video.ThumbnailWidth}}
+          height={{video.ThumbnailHeight}}
+          [src]="video.URL | safe"></iframe><br>
         <subheader>
-          {{ video.snippet.title }}
+          {{ video.title }}
         </subheader>
       </ion-card>
     </ng-template>
