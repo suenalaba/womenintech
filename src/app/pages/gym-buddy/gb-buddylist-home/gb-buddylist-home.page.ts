@@ -47,7 +47,7 @@ export class GbBuddylistHomePage implements OnInit {
     this.chatNameAndMessagesMap = await this.chatService.getGbListHomeDisplayFromDB();
     this.chatNameAndMessagesMap.forEach((value: string[], key: string) => {
       console.log('Printing key value pair 1');
-      console.log(key, value[0], value[1]);
+      console.log(key, value[0], value[1], value[2]);
     });
   }
 
@@ -55,9 +55,10 @@ export class GbBuddylistHomePage implements OnInit {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
-  async navigateBuddyListToChat(selectedChatUserName: string, selectedChatId: string) {
+  async navigateBuddyListToChat(selectedChatUserName: string, selectedChatId: string, otherUserIdOfSelectedChat: string) {
     console.log('This chat ID was selected: ' + selectedChatId);
     //set the selected chat in the chat service, so the navigation will be selected accordingly.
+    this.chatService.setSelectedOtherUserId = otherUserIdOfSelectedChat;
     this.chatService.setSelectedChatId = selectedChatId;
     this.chatService.setSelectedChatUserName = selectedChatUserName;
     this.router.navigateByUrl('tabs/gym-buddy/gb-chat', { replaceUrl: true });

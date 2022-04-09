@@ -71,7 +71,12 @@
 
       <ion-item class="ion-margin-bottom" *ngIf="userInfo.gender==='female'">
           <ion-label position="stacked">Menstruation Cycle</ion-label>
-          <ion-text color="medium">Last Period: {{getPeriodDate(userDetails.menstruationCycle)}} </ion-text>
+          <ion-text color="medium"> Last Period: {{getPeriodDate(userDetails.menstruationCycle)}} </ion-text>
+          <a class="period-date" *ngIf="userDetails.menstruationCycle == ''" (click)="showDateInput()"> Enter period date </a>
+          <a class="period-date" *ngIf="userDetails.menstruationCycle != ''" (click)="showDateInput()"> Update period date </a>
+
+          <ion-input type="date" value="" formControlName="menstruationCycle" *ngIf="isShown"></ion-input>
+          
       </ion-item>
     </ion-card-content>
   </ion-card>

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User, UserDetails } from 'src/app/class/user';
-import {areaOfInjury, armInjuries, Injuries} from'src/app/data/injuries';
+import { areaOfInjury, armInjuries, Injuries } from 'src/app/data/injuries';
 import { fitnessGoals } from 'src/app/data/goals';
 import { UserService } from 'src/app/services/user.service'
 import { Router } from '@angular/router';
@@ -19,14 +19,15 @@ export class CreateWorkoutComponent implements OnInit {
   public listGoals = fitnessGoals;
   userUpdates: FormGroup;
   selectedInjury: Injuries[];
+  isShown: boolean = false;
 
   private injuryArea: any;
 
   formChange = false;
 
-  constructor(private navParams: NavParams, 
-    private modalController: ModalController, 
-    private fb: FormBuilder, 
+  constructor(private navParams: NavParams,
+    private modalController: ModalController,
+    private fb: FormBuilder,
     private userService: UserService,
     private router: Router) { }
 
@@ -38,8 +39,10 @@ export class CreateWorkoutComponent implements OnInit {
       height: [this.userDetails.height, [Validators.required, Validators.minLength(3)]],
       weight: [this.userDetails.weight, [Validators.required, Validators.minLength(2)]],
       injury: [this.userDetails.injury, [Validators.required]],
-      areaOfInjury:[this.userDetails.areaOfInjury,[]],
-      injuryType:[this.userDetails.injuryType,[]],
+      areaOfInjury: [this.userDetails.areaOfInjury, []],
+      injuryType: [this.userDetails.injuryType, []],
+      healthCond: [this.userDetails.healthCond],
+      healthCondName: [this.userDetails.healthCondName],
       fitnessGoal: [this.userDetails.fitnessGoal, [Validators.required]],
       menstruationCycle: ['', []]
     });
@@ -71,7 +74,13 @@ export class CreateWorkoutComponent implements OnInit {
   }
 
   getPeriodDate(pd) {
-    return pd.toDate().toLocaleDateString("en-UK");
+    let dateTemp = []
+    if (pd != ''){
+      dateTemp =pd.split('-')
+      return dateTemp[2]+"/"+dateTemp[1]+"/"+dateTemp[0]
+    }
+    else
+      return "No Information"
   }
 
   // Easy access for form fields
@@ -131,26 +140,32 @@ export class CreateWorkoutComponent implements OnInit {
     }
   }
 
-  cancel(){
+  cancel() {
     this.modalController.dismiss({
       'dismissed': true
     });
   }
 
-  async updateDetails(){
+  async updateDetails() {
     console.log(this.userUpdates)
-    if(this.formChange){
+    if (this.formChange) {
       this.userUpdates.value.id = this.userInfo.id;
       /*update into firestore */
       this.userService.updateUser(this.userUpdates.value);
     }
-    
+
     await this.createWorkout()
   }
 
-  async createWorkout(){
+  async createWorkout() {
     this.cancel()
     this.router.navigateByUrl('/tabs/workouts/create-workout', { replaceUrl: true });
+
+  }
+
+  showDateInput() {
+
+    this.isShown = !this.isShown;
 
   }
 

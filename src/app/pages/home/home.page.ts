@@ -102,7 +102,7 @@ export class HomePage implements OnInit {
     this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res)=>{
       //console.log(res);
       this.userInfo = res;
-      this.firstName = this.userInfo.firstName;
+      //this.firstName = this.userInfo.firstName;
 
       this.welcomeText = 'Welcome back, ' + this.firstName;
       var tdy = new Date();

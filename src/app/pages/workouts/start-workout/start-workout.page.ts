@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { timer } from 'rxjs';
+import { WorkoutAPIService } from 'src/app/services/workouts/workout-API.service';
 
 @Component({
   selector: 'app-start-workout',
@@ -8,16 +9,23 @@ import { timer } from 'rxjs';
 })
 export class StartWorkoutPage implements OnInit {
 
-  isRunning: boolean = false;
+  isRunning: boolean = true;
   timerButton: string = 'pause';
   timerDuration;
   displayTimer;
 
-  constructor() { }
+
+
+  constructor(private workoutExercise: WorkoutAPIService) { }
 
   ngOnInit() {
     this.timerDuration = 0;
     this.toggleTimer();
+  }
+
+  ionViewWillLeave(){
+    this.isRunning = false;
+    console.log(this.timerDuration)
   }
 
   toggleTimer() {
