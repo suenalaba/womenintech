@@ -16,6 +16,9 @@ export class GenerateWorkoutPage implements OnInit {
   userId: string;
 
   workoutDesc: WorkoutDesc;
+  warmUpTime: string; 
+  coolDownTime: string;
+  workoutTime: string;
   
   listIntensity: CreateWorkoutDesc[] = Intensity;
   listDuration: CreateWorkoutDesc[] = Duration;
@@ -34,8 +37,8 @@ export class GenerateWorkoutPage implements OnInit {
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
-      let id = params.get('id');
-      this.workoutId = id;
+      let wid = params.get('wid');
+      this.workoutId = wid;
    })
     this.userId = JSON.parse(localStorage.getItem("userID"));
 
@@ -46,6 +49,8 @@ export class GenerateWorkoutPage implements OnInit {
     const loading = await this.loadingCtrl.create();
     await loading.present();
 
+    console.log(wid)
+
     this.workoutService.getWorkout(wid, uid).subscribe(results=>{
       console.log(results)
       this.workoutDesc = results;
@@ -54,10 +59,16 @@ export class GenerateWorkoutPage implements OnInit {
       this.workoutDesc.duration = this.listDuration.find(x => x.value === this.workoutDesc.duration).info
       this.workoutDesc.equipment = this.listEquipment.find(x => x.value === this.workoutDesc.equipment).text
       this.workoutDesc.location = this.listLocation.find(x => x.value === this.workoutDesc.location).text
+    
+      this.exerciseList = this.workoutDesc.workoutRoutine
+
+      if(this.workoutDesc.intensity=='Low') { this.warmUpTime = "2.5 mins" ; this.coolDownTime = "2.5 mins"; this.workoutTime = "10 mins"}
+      if(this.workoutDesc.intensity=='Moderate') { this.warmUpTime = "5 mins" ; this.coolDownTime = "5 mins"; this.workoutTime = "20 mins" }
+      if(this.workoutDesc.intensity=='Vigorous') { this.warmUpTime = "5 mins" ; this.coolDownTime = "5 mins"; this.workoutTime = "50 mins" }
+      if(this.workoutDesc.intensity=='Hard') { this.warmUpTime = "10 mins" ; this.coolDownTime = "10 mins"; this.workoutTime = "70 mins" }
     });
 
     this.loadingCtrl.dismiss();
-
   }
 
   goBack(){
@@ -70,6 +81,10 @@ export class GenerateWorkoutPage implements OnInit {
 
   deleteWorkout(){
     this.presentAlertConfirm();
+  }
+
+  async startWorkout(){
+    await this.router.navigate(['/start-workout'], { queryParams: { wid: this.workoutId, uid: this.userId } });
   }
 
   async presentAlertConfirm() {

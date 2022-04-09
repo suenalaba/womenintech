@@ -29,14 +29,14 @@
       <div class="warm-up">
         <div class="workout-div">
           <div class="workout-title">Warm Up</div>
-          <div class="workout-duration">10 mins </div>
+          <div class="workout-duration"> {{ warmUpTime }} </div>
         </div>
       </div>
 
       <div class="workout-exercises">
         <div class="workout-div">
           <div class="workout-title">Exercises</div>
-          <div class="workout-duration"> 40 mins</div>
+          <div class="workout-duration"> {{ workoutTime }}</div>
         </div>
         <ion-card class="workout-exercises-plan">
           <ion-card-content>
@@ -44,12 +44,12 @@
               <ion-item>
                 <div class="exercise-div">
                   <div class="exercise-left">
-                    <p class="exercise-name"> Exercise Name </p>
+                    <p class="exercise-name"> {{ i.exerciseName}}</p>
                   </div>
     
                   <div class="exercise-right">
-                    <p class="sets">sets</p>
-                    <p class="reps">reps</p>
+                    <p class="sets">{{i.sets.sets}} sets</p>
+                    <p class="reps">{{i.sets.reps}} reps</p>
                   </div>
                 </div>
               </ion-item>
@@ -62,12 +62,12 @@
       <div class="cool-down">
         <div class="workout-div">
           <div class="workout-title">Cool Down</div>
-          <div class="workout-duration">5 mins</div>
+          <div class="workout-duration">{{ coolDownTime }}</div>
 
         </div>
       </div>
 
-      <ion-button expand="block" color="dark"> START WORKOUT </ion-button>
+      <ion-button expand="block" color="dark" (click)="startWorkout()"> START WORKOUT </ion-button>
       <ion-button expand="block" color="danger" fill="outline" (click)="goBack()"> MAYBE I START LATER </ion-button>
 
       <div class="delete-workout"><a (click)="deleteWorkout()" > Delete Workout </a> </div>

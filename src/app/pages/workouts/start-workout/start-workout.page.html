@@ -1,8 +1,12 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
-    <ion-title>start-workout</ion-title>
+    <ion-buttons slot="secondary">
+      <ion-button fill="solid" color="light">
+        <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content>
   <div class="timer-header">
@@ -22,11 +26,15 @@
 
   </div>
 
-  <div class="workout-section">
-    <h2> {{ }} </h2>
-
+  <div class="workout-section" *ngIf="workoutDetails">
+    <h2> {{workoutDetails.wName}} </h2>
 
     <!-- <div> spotify </div> -->
+
+    <app-display-workout></app-display-workout>
+
+    <ion-button expand="block" color="dark" (click)="nextExercise(workoutSection)"> {{ buttonText }}</ion-button>
+    <ion-button expand="block" size="small" color="danger" (click)="stopWorkout()">STOP WORKOUT</ion-button>
 
   </div>
 

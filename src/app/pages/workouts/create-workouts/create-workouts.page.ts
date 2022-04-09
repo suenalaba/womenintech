@@ -101,42 +101,27 @@ export class CreateWorkoutsPage implements OnInit {
     let wid = 0;
     let uid = JSON.parse(localStorage.getItem('userID'));
 
-    this.presentLoadingWithOptions();
+    this.presentLoadingWithOptions().then(() => {
+      this.workoutService.createWorkout(this.workoutDesc, uid).then((res)=>{
+        console.log(res)
+        this.goToStartWorkout(res)
+      })
+    });
 
-    this.workoutId = this.workoutService.createWorkout(this.workoutDesc, uid);
+
+
 
     /******* !!! figure out how to return subscription ********/
     // this.workoutAlgo.generateWorkout(this.workoutAPI.loadExercises()).then(x =>{
     //   console.log(x)
     // });
     /***************/
-    
-    this.workoutId.then(function (result) {
-      wid = result;
-    }).then(()=>this.getWorkout(wid, uid))
-
-  }
-
-  getWorkout(wid, uid){
-    this.workoutAPI.loadExercises().subscribe(r => {
-      // Shuffle array 
-      console.log(r);
-      this.exerciseData = this.shuffle(r);
-
-      //Filter array further 
-      //Extract exercises based on time
-      this.userWorkout = this.exerciseData.slice(0, 5);
-      console.log(this.userWorkout);
-
-      this.workoutService.saveWorkout(wid, uid, this.userWorkout);
-      this.goToStartWorkout(wid)
-    });
   }
 
   async goToStartWorkout(id) {
     console.log(id);
     this.loadingCtrl.dismiss();
-    await this.router.navigate(['/tabs/workouts/generate-workout'], { queryParams: { id: id } });
+    await this.router.navigate(['/tabs/workouts/generate-workout'], { queryParams: { wid: id } });
   }
 
   goBack() {
@@ -146,7 +131,7 @@ export class CreateWorkoutsPage implements OnInit {
   async presentLoadingWithOptions() {
     const loading = await this.loadingCtrl.create({
       message: 'Please wait... </br> We are creating a workout for you!',
-      translucent: false,
+      translucent: true,
       cssClass: 'custom-class custom-loading'
     });
     return await loading.present();
