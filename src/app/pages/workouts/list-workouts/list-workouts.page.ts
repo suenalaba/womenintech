@@ -7,7 +7,7 @@ import { FilterWorkoutList } from 'src/app/data/workout-data/FilterWorkout';
 import { Tags } from 'src/app/data/workout-data/CreateWorkout';
 import { User } from 'src/app/class/user';
 import { UserService } from 'src/app/services/user.service';
-import { WorkoutsService } from 'src/app/services/workouts.service';
+import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 import { CreateWorkoutComponent } from '../../../components/create-workout/create-workout.component';
 import { TabsPage } from 'src/app/tabs/tabs.page';
 @Component({

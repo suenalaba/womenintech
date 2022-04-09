@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { timer } from 'rxjs';
-import { WorkoutExercisesService } from 'src/app/services/workout-exercises.service';
+import { WorkoutAPIService } from 'src/app/services/workouts/workout-API.service';
 
 @Component({
   selector: 'app-start-workout',
@@ -16,7 +16,7 @@ export class StartWorkoutPage implements OnInit {
 
 
 
-  constructor(private workoutExercise: WorkoutExercisesService) { }
+  constructor(private workoutExercise: WorkoutAPIService) { }
 
   ngOnInit() {
     this.timerDuration = 0;

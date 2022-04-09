@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
-import { Duration, Equipment, Intensity, wLocation} from 'src/app/data/workout-data/CreateWorkout';
+import { Duration, Equipment, Intensity, wLocation } from 'src/app/data/workout-data/CreateWorkout';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { WorkoutsService } from 'src/app/services/workouts.service';
-import { WorkoutExercisesService } from 'src/app/services/workout-exercises.service'
-import { WorkoutAlgo } from 'src/app/pages/workouts/create-workouts/WorkoutAlgo'
+import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
+import { WorkoutAlgoService } from 'src/app/services/workouts/workout-algo.service'
+import { WorkoutAPIService } from 'src/app/services/workouts/workout-API.service';
 
 @Component({
   selector: 'app-create-workouts',
@@ -14,11 +14,6 @@ import { WorkoutAlgo } from 'src/app/pages/workouts/create-workouts/WorkoutAlgo'
   styleUrls: ['./create-workouts.page.scss'],
 })
 export class CreateWorkoutsPage implements OnInit {
-
-  private workoutAlgo: WorkoutAlgo;
-
-  exerciseData = [];
-  apiError: string;
 
   listIntensity: CreateWorkoutDesc[] = Intensity;
   listDuration: CreateWorkoutDesc[] = Duration;
@@ -34,6 +29,9 @@ export class CreateWorkoutsPage implements OnInit {
 
   errors = [];
 
+  exerciseData = [];
+  userWorkout = [];
+
   constructor(
     private fb: FormBuilder,
     private alertController: AlertController,
@@ -41,17 +39,18 @@ export class CreateWorkoutsPage implements OnInit {
     private workoutService: WorkoutsService,
     private loadingCtrl: LoadingController,
     private nav: NavController,
-    private workoutAPI: WorkoutExercisesService,
+    private workoutAlgo: WorkoutAlgoService,
+    private workoutAPI: WorkoutAPIService
 
-  ) { 
-   
+  ) {
+
   }
 
   ngOnInit() {
     this.buildForm();
   }
 
-  buildForm(){
+  buildForm() {
     this.createWorkoutForm = this.fb.group({
       wName: ['', [Validators.required]],
       wDescription: ['', [Validators.required]],
@@ -62,16 +61,16 @@ export class CreateWorkoutsPage implements OnInit {
     });
   }
 
-  submitWorkoutDesc(){
-    if(this.createWorkoutForm.status == "INVALID"){
+  submitWorkoutDesc() {
+    if (this.createWorkoutForm.status == "INVALID") {
       this.presentAlert()
-    }else{
+    } else {
       this.generateWorkout(this.createWorkoutForm.value)
     }
   }
 
   async presentAlert() {
-    this.validateAllFormFields(this.createWorkoutForm) 
+    this.validateAllFormFields(this.createWorkoutForm)
 
     const alert = await this.alertController.create({
       cssClass: '',
@@ -97,54 +96,76 @@ export class CreateWorkoutsPage implements OnInit {
     });
   }
 
-  async generateWorkout(val){
+  async generateWorkout(val) {
     this.workoutDesc = val;
-    let id = 0;
+    let wid = 0;
     let uid = JSON.parse(localStorage.getItem('userID'));
 
     this.presentLoadingWithOptions();
 
     this.workoutId = this.workoutService.createWorkout(this.workoutDesc, uid);
-    this.workoutId.then(function(result) {
-      id = result;
-    }).then(()=>{this.makeWorkout()})
-  }
 
-  async makeWorkout(){
-    console.log("making workout")
-    this.workoutAPI.loadExercises().subscribe(
-      data => {
-        // Set the data to display in the template
-        this.exerciseData = data['results'].filter(x => x.language.id==2)
-        console.log(this.exerciseData)
-
-        this.loadingCtrl.dismiss();
-      },
-      err => {
-        // Set the error information to display in the template
-        this.apiError = `An error occurred, the data could not be retrieved: Status: ${err.status}, Message: ${err.statusText}`;
-      }
-    );
+    /******* !!! figure out how to return subscription ********/
+    // this.workoutAlgo.generateWorkout(this.workoutAPI.loadExercises()).then(x =>{
+    //   console.log(x)
+    // });
+    /***************/
+    
+    this.workoutId.then(function (result) {
+      wid = result;
+    }).then(()=>this.getWorkout(wid, uid))
 
   }
 
-  async goToStartWorkout(id){
+  getWorkout(wid, uid){
+    this.workoutAPI.loadExercises().subscribe(r => {
+      // Shuffle array 
+      console.log(r);
+      this.exerciseData = this.shuffle(r);
+
+      //Filter array further 
+      //Extract exercises based on time
+      this.userWorkout = this.exerciseData.slice(0, 5);
+      console.log(this.userWorkout);
+
+      this.workoutService.saveWorkout(wid, uid, this.userWorkout);
+      this.goToStartWorkout(wid)
+    });
+  }
+
+  async goToStartWorkout(id) {
     console.log(id);
     this.loadingCtrl.dismiss();
-    await this.router.navigate(['/tabs/workouts/generate-workout'], { queryParams: { id: id }});
+    await this.router.navigate(['/tabs/workouts/generate-workout'], { queryParams: { id: id } });
   }
 
-  goBack(){
+  goBack() {
     this.nav.navigateBack(['tabs/workouts'], { animated: true })
   }
 
   async presentLoadingWithOptions() {
     const loading = await this.loadingCtrl.create({
       message: 'Please wait... </br> We are creating a workout for you!',
-      translucent: true,
+      translucent: false,
       cssClass: 'custom-class custom-loading'
     });
     return await loading.present();
   }
+
+  /**
+  * Shuffles array in place.
+  * @param {Array} a items An array containing the items.
+  */
+  shuffle(arr) {
+    let j, x, index;
+    for (index = arr.length - 1; index > 0; index--) {
+      j = Math.floor(Math.random() * (index + 1));
+      x = arr[index];
+      arr[index] = arr[j];
+      arr[j] = x;
+    }
+    return arr;
+  }
+
 
 }
