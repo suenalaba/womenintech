@@ -72,6 +72,13 @@ export class GymBuddyService {
     return this.authState.value;
   }
 
+  uploadProfilePicture(imgPath:string,userID) {
+    console.log("uploaded image");
+    const noteDocRef = doc(this.fireStore, `Users`, userID);
+    return updateDoc(noteDocRef,{ "gymBuddyDetails.profilePicture" : imgPath});
+  }
+
+
   updateMatches(user : GymBuddyProfileInfo,userID) {
     //console.log(details);
     const noteDocRef = doc(this.fireStore, `Users`, user.getUserId);
