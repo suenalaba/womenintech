@@ -25,6 +25,7 @@ export class GbHomePage implements OnInit {
   private buddyGoalsList = gymBuddyGoals;
   private personalTraitsList = personalTraits;
   private fullName: string;
+  private profilePicture: string;
   private briefIntro: string;
   private prefWorkoutTime: string[] = [];
   private gymBuddyGoals: string[] = [];
@@ -93,6 +94,9 @@ export class GbHomePage implements OnInit {
       /** user has NOT signed up for Gym Buddy, will be navigated to sign up page*/
       // this.router.navigateByUrl('tabs/gym-buddy/gb-sign-up', { replaceUrl: true });
   }
+  public get getProfilePicture() {
+    return this.profilePicture
+  }
 
   public getColor(i: number) {
     i = i % 5;
@@ -151,7 +155,9 @@ export class GbHomePage implements OnInit {
     this.fullName = userDetail.firstName + ' ' + userDetail.lastName;
       this.briefIntro = userDetail.gymBuddyDetails.briefIntro;
       this.userInfo = userDetail;
-
+      this.profilePicture=userDetail.gymBuddyDetails.profilePicture;
+      console.log("Profile picture:")
+      console.log(userDetail.gymBuddyDetails.profilePicture)
       this.gymBuddyInfo = this.userInfo.gymBuddyDetails;
 
       this.setWorkoutTimeTextDisplay();
