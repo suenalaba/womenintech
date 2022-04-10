@@ -60,6 +60,11 @@ const routes: Routes = [
                 m => m.GbBuddylistHomePageModule),
           },
           {
+            path: 'gb-find-buddy-boarding',
+            loadChildren: () => import('../pages/gym-buddy/gb-find-buddy-boarding/gb-find-buddy-boarding.module').then(
+                m => m.GbFindBuddyBoardingPageModule),
+          },
+          {
             path: 'gb-findbuddy',
             loadChildren: () => import('../pages/gym-buddy/gb-findbuddy/gb-findbuddy.module').then(m => m.GbFindbuddyPageModule),
 

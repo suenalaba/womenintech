@@ -27,7 +27,9 @@ export class FindBuddyQuery {
   }
 
   public addMatches(userID: string){
+    console.log("reach here");
     this.currentUser.addMatches(userID);
+    console.log("reach here2");
     this.dbRetrieve.updateMatches(this.currentUser,userID);
   }
 

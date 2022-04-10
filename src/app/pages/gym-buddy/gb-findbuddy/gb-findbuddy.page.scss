@@ -1,3 +1,177 @@
-ion-button.buddy-btn{
-    --background: white;
+// ion-button.buddy-btn{
+//     --background: white;
+// }
+
+.matchList {
+  margin: auto;
+  display: block;
+  position: absolute;
+
+
+  width: 95%;
+  //height: fit-content;
+
+  overflow: scroll;
+  border-radius: 30px 30px 30px 30px;
+  .basic-info {
+    border-radius: 30px 30px 5px 5px;
+  }
+  ion-button {
+    position: absolute;
+    z-index: 2;
+    margin: 1px;
+    background: #fdfd;
+    padding: 3px 9px;
+    font-size: 1.7rem;
+    border-radius: 15px;
+    // button{
+    //   background: black;
+    //   .button-native{
+    //     background: black;
+    //   }
+    // }
+    ion-icon{
+      font-size: 16px
+    }
+  }
+  .basic-info {
+    display: flex;
+    flex-direction: column;
+    h1,p{
+      margin: 0 0 5px 0;
+    }
+    p{
+      font-size: 1rem;
+      color: #504b4b;
+      i{
+        color: #ef94d7;
+        margin-right:5px;
+      }
+    }
+    h1{
+      font-size: 1.3rem;
+      font-weight: 900;
+    }
+  }
+  .about-me{
+    h5,p{
+      margin: 0 0 10px 0;
+    }
+    h5{
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+  }
+  .pref-workout-time{
+    h5{
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    ion-chip{
+      margin-bottom: 5px;
+    }
+  }
+  .goals{
+    h5{
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    ion-chip{
+      margin-bottom: 5px;
+    }
+  }
+  .traits{
+    h5{
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    ion-chip{
+      margin-bottom: 5px;
+    }
+  }
+  .style{
+    h5{
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    ion-chip{
+      margin-bottom: 5px;
+    }
+  }
+  .location{
+    h5{
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    ion-chip{
+      margin-bottom: 5px;
+    }
+  }
+  // .image {
+  //   position: relative;
+  //   height: 50vh;
+  //   width: 100%;
+  //   --bullet-background-active: #ef94d7;
+  //   img {
+  //     width: 100vw;
+  //     max-width: 100vw;
+  //     object-fit: cover;
+  //   }
+  // }
+
+  // .profile-info{
+  //   //border-top-left-radius: 30px;
+  //   //border-top-right-radius: 30px;
+  //   border-radius: 30px 30px 5px 5px;
+  //   background: #fff;
+  //   margin-top: -30px;
+  //   position: absolute;
+  //   width: 100%;
+  //   z-index: 1;
+  //   .user-info{
+  //     padding: 20px;
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: space-between;
+  //     .basic-info {
+  //       display: flex;
+  //       flex-direction: column;
+  //       h1,p{
+  //         margin: 0 0 10px 0;
+  //       }
+  //       p{
+  //         font-size: 1rem;
+  //         color: #504b4b;
+  //         i{
+  //           color: #ef94d7;
+  //           margin-right:5px;
+  //         }
+  //       }
+  //       h1{
+  //         font-size: 1.3rem;
+  //         font-weight: 900;
+  //       }
+  //     }
+  //     .about-me{
+  //       //padding: 0 20px;
+  //       h5,p{
+  //         margin: 0 0 5px 0;
+  //       }
+  //       h5{
+  //         font-weight: 800;
+  //         margin-bottom: 10px;
+  //       }
+  //     }
+  //   }
+  // }
+
 }
+
+img {
+  position: relative;
+  height: 250px;
+  width: 100%;
+}
+
+
+

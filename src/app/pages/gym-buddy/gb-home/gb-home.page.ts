@@ -104,7 +104,9 @@ export class GbHomePage implements OnInit {
    * Navigate to find a buddy.
    */
   public async goToFindBuddy() {
-    this.router.navigateByUrl('tabs/gym-buddy/gb-findbuddy', { replaceUrl: true });
+    this.router.navigateByUrl('tabs/gym-buddy/gb-find-buddy-boarding', { replaceUrl: true });
+    //this.router.navigateByUrl('tabs/gym-buddy/gb-findbuddy', { replaceUrl: true });
+    //pages/gym-buddy/gb-find-buddy-boarding/gb-find-buddy-boarding.module
   }
 
   /**

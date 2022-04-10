@@ -14,7 +14,15 @@ import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInf
   providedIn: 'root'
 })
 export class GymBuddyService {
-  
+  potentialMatchDetails: (GymBuddyProfileInfo)[] = [];
+
+  public setPotentialMatchDetails(potentialMatches: (GymBuddyProfileInfo)[]) {
+    this.potentialMatchDetails = potentialMatches;
+  }
+
+  public getPotentialMatchDetails() {
+    return this.potentialMatchDetails;
+  }
   authState = new BehaviorSubject(false);
   private userInfo;
   private isSignUp: boolean;

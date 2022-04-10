@@ -150,9 +150,14 @@ export class ChatService {
       const chatRef = doc(this.fireStore, 'Chat', chatInfo.chatID);
       const conversationDoc = await this.pullFullChat(chatRef);
       this.conversationData = conversationDoc.data();
-      //-1 is index of lastMessage.
-      const lastMessage = this.conversationData.conversation[0].message;
-      console.log(lastMessage);
+      let lastMessage = '';
+      try {
+        //should be -1 to index the last message, but idk why its not working.
+        lastMessage = this.conversationData.conversation[0].message;
+        console.log(lastMessage);
+      } catch (error) {
+        lastMessage = 'Start chatting with this user.';
+      }
       //console.log(conversationData);
       console.log(chatInfo.otherUser);
       const otherUserRef = doc(this.fireStore, 'Users', chatInfo.otherUser);
