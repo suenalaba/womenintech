@@ -36,9 +36,7 @@
 
             <!-- Profile Picture -->
             <ion-card class="ion-text-center" *ngIf="!isFileUploading && !isFileUploaded">
-              <ion-card-header>
-                <ion-card-title>Choose Images to Upload</ion-card-title>
-              </ion-card-header>
+              <ion-label position="stacked">Choose Images to Upload</ion-label>
               <ion-card-content>
                 <ion-button color="primary" size="medium">
                   <input type="file" (change)="uploadImage($event.target.files)" />
