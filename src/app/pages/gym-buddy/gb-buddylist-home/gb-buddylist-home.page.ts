@@ -50,9 +50,9 @@ export class GbBuddylistHomePage implements OnInit {
     console.log('The current user is: ' + this.currentUser.getUserId);
     this.allChatInfo = await this.chatService.retrieveAllChatsFromDB();
     //this.chatService.testPullFromDb();
-    console.log(this.allChatInfo);
-    console.log(this.allChatInfo[0].chatID);
-    console.log(this.allChatInfo[0].otherUser);
+    //console.log(this.allChatInfo);
+    //console.log(this.allChatInfo[0].chatID);
+    //console.log(this.allChatInfo[0].otherUser);
     //this.chatService.getGbListHomeDisplayFromDB();
     this.chatNameAndMessagesMap = await this.chatService.getGbListHomeDisplayFromDB();
     this.chatNameAndMessagesMap.forEach((value: string[], key: string) => {

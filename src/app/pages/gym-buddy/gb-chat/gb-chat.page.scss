@@ -3,7 +3,7 @@ ion-content {
     width: 100% !important;
     height: 100% !important;
   }
-  --background: #7c7899;
+  --background: #404040;
   .header {
     display:flex;
     align-items:center;
@@ -42,9 +42,15 @@ ion-content {
         }
       }
     }
+    .delete{
+      ion-icon{
+        margin-right: 20px;
+        opacity: 0.7;
+      }
+    }
     .share-workout{
       ion-icon{
-        margin-right: 15px;
+        margin-right: 10px;
         opacity: 0.7;
       }
     }
