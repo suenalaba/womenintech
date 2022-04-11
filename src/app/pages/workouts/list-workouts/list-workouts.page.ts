@@ -81,6 +81,7 @@ export class ListWorkoutsPage implements OnInit {
     });
 
     this.allWorkouts = this.workouts;
+    console.log(this.allWorkouts)
   }
 
   getDate(date){
@@ -129,7 +130,7 @@ export class ListWorkoutsPage implements OnInit {
   }
 
   startWorkout(wid,uid){
-    this.router.navigate(['/tabs/workouts/start-workout'], { queryParams: { wid: wid, uid: uid}});
+    this.router.navigate(['/start-workout'], { queryParams: { wid: wid, uid: uid}});
   }
 
   async editWorkout(id){

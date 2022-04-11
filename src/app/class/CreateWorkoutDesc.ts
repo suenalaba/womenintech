@@ -1,4 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
+import { WorkoutDetails } from './WorkoutDetails';
 
 export class CreateWorkoutDesc {
     id: number;
@@ -20,6 +21,12 @@ export class WorkoutDesc {
     dateCreated: Timestamp;
     workoutStatus: string;
     dateStart?: Timestamp;
-    datePaused?: Timestamp;
+    stopwatch?: number;
+    currExercise?: {
+        section: string,
+        index: number,
+        // set: number
+    };
     dateCompleted?: Timestamp;
+    workoutRoutine: WorkoutDetails [];
 }

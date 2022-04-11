@@ -1,13 +1,16 @@
 //choose get fit , lift heavier
 export class WorkoutDetails {
-    exercise: string;
-    sets: number;
-    reps: number;
+    exerciseName: string;
+    id: number;
+    equipment: any[];
+    category: string;
+    exerciseDesc: string;
+    images: any[];
+    sets: ExerciseDetails;
   }
   
 
 export class ExerciseDetails {
-    exerciseName: string;
     sets: number;
     reps: number;
   }

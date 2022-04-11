@@ -10,6 +10,12 @@ import { GbSignUpPage } from './gb-sign-up.page';
 
 import { SwiperModule } from 'swiper/angular';
 
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { environment } from '../../../../../src/environments/environment';
+import { FormatFileSizePipe } from './format-file-size.pipe';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -17,8 +23,11 @@ import { SwiperModule } from 'swiper/angular';
     IonicModule,
     GbSignUpPageRoutingModule,
     SwiperModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireStorageModule,
+    AngularFirestoreModule
   ],
-  declarations: [GbSignUpPage]
+  declarations: [GbSignUpPage,FormatFileSizePipe]
 })
 export class GbSignUpPageModule {}

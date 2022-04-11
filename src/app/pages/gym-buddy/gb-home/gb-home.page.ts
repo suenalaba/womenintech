@@ -25,6 +25,7 @@ export class GbHomePage implements OnInit {
   private buddyGoalsList = gymBuddyGoals;
   private personalTraitsList = personalTraits;
   private fullName: string;
+  private profilePicture: string;
   private briefIntro: string;
   private prefWorkoutTime: string[] = [];
   private gymBuddyGoals: string[] = [];
@@ -66,6 +67,10 @@ export class GbHomePage implements OnInit {
 
   public get getPersonalTraits() {
     return this.personalTraits;
+  }
+
+  public get getProfilePicture() {
+    return this.profilePicture
   }
   /*public get getPrefWorkoutTime() {
     for (const val of this.timePrefList) {
@@ -151,7 +156,9 @@ export class GbHomePage implements OnInit {
     this.fullName = userDetail.firstName + ' ' + userDetail.lastName;
       this.briefIntro = userDetail.gymBuddyDetails.briefIntro;
       this.userInfo = userDetail;
-
+      console.log("Profile picture:")
+      console.log(userDetail.gymBuddyDetails.profilePicture)
+      this.profilePicture=userDetail.gymBuddyDetails.profilePicture;
       this.gymBuddyInfo = this.userInfo.gymBuddyDetails;
 
       this.setWorkoutTimeTextDisplay();

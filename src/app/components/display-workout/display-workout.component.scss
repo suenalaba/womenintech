@@ -1,0 +1,46 @@
+ion-card{
+    --ion-background-color: transparent;
+    box-shadow: none !important;
+}
+
+ion-card-title{
+    font-size: 14px;
+}
+
+ion-card-title.exercise-title{
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+div.sets{
+    margin-top:20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    overflow-x: scroll;
+}
+
+div.working-set{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--ion-color-dark);
+    color: white;
+    text-align: center;
+    margin: 5px;
+    padding:10px;
+    align-items: center;
+    border-radius: 15%;
+    height:100px;
+}
+
+div.add-set{
+    height:100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: black;
+}
