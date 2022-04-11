@@ -10,7 +10,10 @@ import { ChatService } from 'src/app/services/chat.service';
 })
 export class GbBuddylistHomePage implements OnInit {
 
+
   private static readonly CHATID_INDEX = 1;
+
+  activeTab = 'chats'; //for tab
 
   //array of hashmap storing <chatID, chatId> & <otherUser: otherUserId>
   //private allChatInfo: Map<string, string>[] = [];
@@ -20,6 +23,8 @@ export class GbBuddylistHomePage implements OnInit {
   //Map<string, GymBuddyProfileInfo>;
   private currentUser: GymBuddyProfileInfo;
   private chatNameAndMessagesMap: Map<string, string[]>;
+
+
 
   constructor(
     private chatService: ChatService,
@@ -35,19 +40,24 @@ export class GbBuddylistHomePage implements OnInit {
     return this.chatNameAndMessagesMap;
   }
 
+
+  segmentChange(e) {
+    this.activeTab = e.target.value;
+  }
+
   async ngOnInit() {
     this.currentUser = await this.chatService.retrieveCurrentChatUser();
     console.log('The current user is: ' + this.currentUser.getUserId);
     this.allChatInfo = await this.chatService.retrieveAllChatsFromDB();
     //this.chatService.testPullFromDb();
-    console.log(this.allChatInfo);
-    console.log(this.allChatInfo[0].chatID);
-    console.log(this.allChatInfo[0].otherUser);
-    this.chatService.getGbListHomeDisplayFromDB();
+    //console.log(this.allChatInfo);
+    //console.log(this.allChatInfo[0].chatID);
+    //console.log(this.allChatInfo[0].otherUser);
+    //this.chatService.getGbListHomeDisplayFromDB();
     this.chatNameAndMessagesMap = await this.chatService.getGbListHomeDisplayFromDB();
     this.chatNameAndMessagesMap.forEach((value: string[], key: string) => {
       console.log('Printing key value pair 1');
-      console.log(key, value[0], value[1], value[2]);
+      console.log(key, value[0], value[1], value[2],value[3]);
     });
   }
 
@@ -64,6 +74,12 @@ export class GbBuddylistHomePage implements OnInit {
     this.router.navigateByUrl('tabs/gym-buddy/gb-chat', { replaceUrl: true });
   }
 
-
+  public isNewChat(message: string) {
+    if(message === 'Start chatting with this user.') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 }

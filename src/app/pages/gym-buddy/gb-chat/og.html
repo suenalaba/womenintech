@@ -17,23 +17,12 @@
   <div class="conversation ion-padding">
     <div class="chat-section" id="chat">
       <div class="chat">
-        <ion-grid>
-          <ion-row *ngFor="let message of allChatMessages">
-            <ion-col size="9" class="message"
-              [offset]="message.fromId === '{{getCurrentUserId()}}' ? 3 : 0"
-              [ngClass]="{ 'my-message': message.fromId === '{{getCurrentUserId()}}',
-                  'other-message': message.fromId === '{{getCurrentUserId()}}' }">
-              <b>{{ message.fromId }}</b><br>
-              <span>{{ message.message }}
-              </span>
-              <div class="time ion-text-right"><br>{{ message.timeSent?.toMillis() | date:'short' }}</div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-        <!--
         <div class="your messages">
-          <div class="message-other">
+          <div class="message other">
             Hey
+          </div>
+          <div class="message other">
+            You there?
           </div>
           <div class="last-message-other">
             <ion-avatar>
@@ -49,19 +38,20 @@
           <div class="message">
             great thanks!
           </div>
+          <div class="message last">
+            How about you?
+          </div>
           <span>
             <ion-icon name = "checkmark-done-outline"></ion-icon>1.44pm
           </span>
         </div>
-      -->
       </div>
     </div>
     <div class="message input">
-      <ion-input placeholder="Type your message..."
-          [(ngModel)]="newMessage" autoGrow="true"
-          rows="1" maxLength="500"></ion-input>
+      <ion-input placeholder="Type your message..."></ion-input> <!-- [(ngModel)]="newMessage" autoGrow="true"
+        rows="1" maxLength="500"  -->
       <div class="send-button">
-        <ion-button (click)="sendMessage()" [disabled]="newMessage === ''"></ion-button>
+        <!-- <ion-button (click)="sendMessage()" [disabled]="newMessage === ''"></ion-button> -->
         <ion-icon name="send-sharp"></ion-icon>
       </div>
     </div>
@@ -163,3 +153,18 @@
   </ion-toolbar>
 </ion-footer>
 -->
+
+
+        <!-- <ion-grid>
+          <ion-row *ngFor="let message of allChatMessages">
+            <ion-col size="9" class="message"
+              [offset]="message.fromId === '{{getCurrentUserId()}}' ? 3 : 0"
+              [ngClass]="{ 'my-message': message.fromId === '{{getCurrentUserId()}}',
+                  'other-message': message.fromId === '{{getCurrentUserId()}}' }">
+              <b>{{ message.fromId }}</b><br>
+              <span>{{ message.message }}
+              </span>
+              <div class="time ion-text-right"><br>{{ message.timeSent?.toMillis() | date:'short' }}</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid> -->
