@@ -31,11 +31,10 @@
 
     <!-- <div> spotify </div> -->
 
-    <app-display-workout></app-display-workout>
+    <!--Dsiplay workouts-->
+    <app-display-workout section="{{workoutSection}}" workoutDetails="{{workoutJSON}}"></app-display-workout>
 
-    <ion-button expand="block" color="dark" (click)="nextExercise(workoutSection)"> {{ buttonText }}</ion-button>
     <ion-button expand="block" size="small" color="danger" (click)="stopWorkout()">STOP WORKOUT</ion-button>
-
   </div>
 
 

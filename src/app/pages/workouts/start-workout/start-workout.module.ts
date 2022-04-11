@@ -15,7 +15,7 @@ import { DisplayWorkoutComponentModule } from 'src/app/components/display-workou
     FormsModule,
     IonicModule,
     StartWorkoutPageRoutingModule,
-    DisplayWorkoutComponentModule
+    DisplayWorkoutComponentModule,
   ],
   declarations: [StartWorkoutPage]
 })
