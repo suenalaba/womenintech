@@ -78,6 +78,11 @@ const routes: Routes = [
             loadChildren: () => import('../pages/gym-buddy/gb-delete-buddy-modal/gb-delete-buddy-modal.module').then(
               m => m.GbDeleteBuddyModalPageModule)
           },
+          {
+            path: 'gb-share-workout-modal',
+            loadChildren: () => import('../pages/gym-buddy/gb-share-workout-modal/gb-share-workout-modal.module').then(
+              m => m.GbShareWorkoutModalPageModule)
+          },
         ]
       },
       {

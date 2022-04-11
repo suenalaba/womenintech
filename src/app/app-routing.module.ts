@@ -58,6 +58,8 @@ const routes: Routes = [
 
 
 
+
+
   /*{
     path: 'gb-buddylist-home',
     loadChildren: () => import('./gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then( m => m.GbBuddylistHomePageModule)

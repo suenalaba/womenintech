@@ -9,14 +9,14 @@
       (click)="navigateBack(option)" expand="block" shape="round"
       [color]="getColorOfButton(option)">
       {{option}}
-    </ion-button>
+      </ion-button>
     </ion-col>
   </ion-row>
 </ion-content>
 
 <ion-footer class="ion-text-center">
   <ion-toolbar>
-    <ion-button (click)="navigateBack('No, I\'ve made a mistake')" fill="clear" color="light">
+    <ion-button (click)="navigateBack('Return to chat')" fill="clear" color="light">
       <ion-icon name ="close-circle" slot="icon-only"></ion-icon>
     </ion-button>
   </ion-toolbar>

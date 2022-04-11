@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, doc, setDoc, docData, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, doc, setDoc, docData, onSnapshot, deleteDoc } from '@angular/fire/firestore';
 import { addDoc, arrayUnion, DocumentReference, getDoc, Query, updateDoc,
-  Timestamp, serverTimestamp, DocumentSnapshot } from 'firebase/firestore';
+  Timestamp, serverTimestamp, DocumentSnapshot, arrayRemove } from 'firebase/firestore';
 import { query, where, getDocs,collectionGroup } from 'firebase/firestore';
 import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
 import { AlertController, LoadingController } from '@ionic/angular';
@@ -197,6 +197,49 @@ export class ChatService {
       //mapofnameandmessage.set(fullName, lastMessage);
     }
     return allChatNameAndMessage;
+  }
+
+  public async deleteMatch(chatId: string, currentUserId: string, otherUserId: string) {
+    //remove chat reference for both users. 'chats' field array being edited.
+    await this.removeChatReferenceFromBothUsers(chatId, currentUserId, otherUserId);
+    //delete the chat
+    await deleteDoc(doc(this.fireStore, 'Chat', chatId));
+    //move matches to unMatches for current user.
+    await this.moveMatchesToUnMatchesForCurrentUser(currentUserId, otherUserId);
+    //move matches to unMatches for other user.
+    await this.moveMatchesToUnMatchesForOtherUser(currentUserId,otherUserId);
+  }
+
+  public async moveMatchesToUnMatchesForCurrentUser(currentUserId: string, otherUserId: string) {
+    //get current user document reference
+    const currentUserDocRef = doc(this.fireStore, `Users`, currentUserId);
+    //remove the the buddy from matches
+    await updateDoc(currentUserDocRef,{ 'gymBuddyDetails.matches' : arrayRemove(otherUserId)});
+    //add the buddy to unMatches
+    await updateDoc(currentUserDocRef,{ 'gymBuddyDetails.unmatches' : arrayUnion(otherUserId)});
+  }
+
+  public async moveMatchesToUnMatchesForOtherUser(currentUserId: string, otherUserId: string) {
+    //get other user document reference
+    const otherUserDocRef = doc(this.fireStore, `Users`, otherUserId);
+    //remove the current user from matches
+    await updateDoc(otherUserDocRef,{ 'gymBuddyDetails.matches' : arrayRemove(currentUserId)});
+    //add the current user to unMatches
+    await updateDoc(otherUserDocRef,{ 'gymBuddyDetails.unmatches' : arrayUnion(currentUserId)});
+  }
+
+  public async removeChatReferenceFromBothUsers(chatId: string, currentUserId: string, otherUserId: string) {
+    //get current user document reference
+    const currentUserDocRef = doc(this.fireStore, `Users`, currentUserId);
+    //update the chats field for current user, to remove the specific chatId.
+    await updateDoc(currentUserDocRef, {'gymBuddyDetails.chats' : arrayRemove({chatID: chatId,
+      otherUser: otherUserId})});
+    //get other user document reference
+    const otherUserDocRef = doc(this.fireStore, `Users`, otherUserId);
+    //update the chats field for other user, to remove the specific chatId.
+    await updateDoc(otherUserDocRef, {'gymBuddyDetails.chats' : arrayRemove({chatID: chatId,
+      otherUser: currentUserId})});
+    console.log('removed');
   }
 
   private getTimeDiffInString(conversationArr: any, timeDiffString: string) {

@@ -6,6 +6,7 @@ import { ChatService } from 'src/app/services/chat.service';
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
 import { updateCurrentUser } from 'firebase/auth';
 import { GbDeleteBuddyModalPage } from '../gb-delete-buddy-modal/gb-delete-buddy-modal.page';
+import { GbShareWorkoutModalPage } from '../gb-share-workout-modal/gb-share-workout-modal.page';
 @Component({
   selector: 'app-gb-chat',
   templateUrl: './gb-chat.page.html',
@@ -16,7 +17,7 @@ export class GbChatPage implements OnInit, AfterContentChecked {
 
   @ViewChild(IonContent) content: IonContent;
 
-  public modalDataResponse: any;
+  public modalDataResponse = false;
 
   newMessage = '';
   allChatMessages;
@@ -57,6 +58,7 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     //   this.allChatMessages = val;
     //   console.log('This is what was imported: ', this.allChatMessages);
     // });
+    this.modalDataResponse = false;
     this.allChatMessages = this.chatService.getAllChatMessages();
     this.buddyName = this.chatService.getSelectedChatUserName;
     this.buddyUserId = this.chatService.getSelectedOtherUserId;
@@ -65,14 +67,24 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     //this.messages = this.chatService.getChatMessages();
   }
 
-  public async openTransparentModal() {
+  public async openDeleteModal() {
     const modal = await this.modalController.create({
       component: GbDeleteBuddyModalPage,
-      cssClass: 'transparent-modal'
+      cssClass: 'small-modal'
     });
 
     modal.onDidDismiss().then((modalDataResponse) => {
-      if (modalDataResponse !== null) {
+      if (modalDataResponse.data === true) {
+        //proceed to Delete.
+        //delete the match in fireStore.
+        this.chatService.deleteMatch(this.chatService.getSelectedChatId, this.getCurrentUserId(),this.buddyUserId);
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+        //navigate back to buddy list page.
+        console.log('going here.');
+        this.navigateChatPageToBuddyListPage();
+      } else {
+        //don't do anything
         this.modalDataResponse = modalDataResponse.data;
         console.log('Modal Sent Data : '+ modalDataResponse.data);
       }
@@ -81,17 +93,21 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     await modal.present();
   }
 
-  public async openModal() {
+  public async openShareModal() {
     const modal = await this.modalController.create({
-      component: GbDeleteBuddyModalPage,
+      component: GbShareWorkoutModalPage,
       cssClass: 'small-modal'
     });
 
     modal.onDidDismiss().then((modalDataResponse) => {
-      if (modalDataResponse === true) {
-        //proceed to Delete.
+      if (modalDataResponse.data === true) {
+        //proceed to share workout.
+        //share workout over fireStore.
         this.modalDataResponse = modalDataResponse.data;
         console.log('Modal Sent Data : '+ modalDataResponse.data);
+        //navigate back to buddy list page.
+        console.log('going here.');
+        this.navigateToWorkoutListPage();
       } else {
         //don't do anything
         this.modalDataResponse = modalDataResponse.data;
@@ -185,6 +201,10 @@ export class GbChatPage implements OnInit, AfterContentChecked {
 */
   async navigateChatPageToBuddyListPage() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-buddylist-home', { replaceUrl: true });
+  }
+
+  async navigateToWorkoutListPage() {
+    this.router.navigateByUrl('tabs/workouts', { replaceUrl: true });
   }
 
 
