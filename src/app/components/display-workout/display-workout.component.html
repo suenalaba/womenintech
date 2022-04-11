@@ -1,11 +1,18 @@
-<div id="warmup" *ngIf="workoutSection === 'warmup'">
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<div style="height: 100%; display: flex; align-items: center; justify-content: center;" id="warmup" *ngIf="workoutSection === 'warmup'">
   <ion-card>
     <ion-card-header>
       <ion-card-title>WARM UP</ion-card-title>
     </ion-card-header>
-  
     <ion-card-content>
-      <!-- YOUTUBE VIDEO HERE-->
+      <ion-card>
+        <iframe 
+          width={{warmUp[1].ThumbnailWidth}}
+          height={{warmUp[1].ThumbnailHeight}}
+          [src]="warmUp[1].URL | safe">
+        </iframe>
+      </ion-card>
     </ion-card-content>
   </ion-card>
 </div>
@@ -46,14 +53,13 @@
 </div>
 
 
-<div id="COOLDOWN" *ngIf="workoutSection === 'cooldown'">
+<div style="height: 100%; display: flex; align-items: center; justify-content: center;" id="COOLDOWN" *ngIf="workoutSection === 'cooldown'">
   <ion-card>
     <ion-card-header>
       <ion-card-title>COOL DOWN</ion-card-title>
     </ion-card-header>
-  
     <ion-card-content>
-      <!-- YOUTUBE VIDEO HERE-->
+      
     </ion-card-content>
   </ion-card>
   <h1> lets get phsyical!</h1>

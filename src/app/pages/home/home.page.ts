@@ -1,10 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable no-var */
-/* eslint-disable max-len */
-/* eslint-disable @angular-eslint/use-lifecycle-interface */
-/* eslint-disable @typescript-eslint/member-ordering */
-/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { OnInit, ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
@@ -17,11 +10,8 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { EChartsOption } from 'echarts';
 import { waitForAsync } from '@angular/core/testing';
 import { UserService } from '../../services/user.service'; //youtube api
-
+import { YoutubeService } from '../../services/youtube.service';
 import { HostListener } from '@angular/core';
-
-import { Pipe, PipeTransform } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 Swiper.use([Autoplay]);
 SwiperCore.use([Pagination]);
@@ -44,6 +34,7 @@ export class HomePage implements OnInit {
 
   chartOptions: EChartsOption;
 
+  yt: any;
   ytVideos: any;
 
   dataSeries: number[];
@@ -53,7 +44,7 @@ export class HomePage implements OnInit {
     private userService: UserService,
     private loadingCtrl: LoadingController,
     private user: UserService,
-  ) { this.onResize(); }
+  ) { this.onResize(); this.yt = YoutubeService.getInstance(); }
 
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
@@ -129,9 +120,9 @@ export class HomePage implements OnInit {
     else {
       searchTerm = "deadlift " + this.userInfo.gender;
     }
-    this.ytVideos = this.user.getYoutubeAPI(searchTerm);
-
+    this.ytVideos = this.yt.getYoutubeAPI(searchTerm);
     loading.dismiss();
+    console.log(this.ytVideos);
   }
 
   async loadGraph() {
@@ -202,13 +193,3 @@ export class HomePage implements OnInit {
   }
 }
 
-@Pipe({
-  name: 'safe'
-})
-export class SafePipe implements PipeTransform {
-
-  constructor(private sanitizer: DomSanitizer) { }
-  transform(url) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  }
-}

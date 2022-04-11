@@ -9,7 +9,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { SwiperModule } from 'swiper/angular';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { HttpClientModule } from '@angular/common/http';
-import { SafePipe } from './home.page';
+import { SafePipe } from '../../services/youtube.service';
 
 //import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
 //import { RouteReuseStrategy } from '@angular/router';

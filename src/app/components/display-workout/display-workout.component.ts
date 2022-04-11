@@ -3,7 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { WorkoutDetails } from 'src/app/class/WorkoutDetails';
-
+import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
+//import { GenerateWorkoutPage } from 'src/app/pages/workouts/generate-workout/generate-workout.page';
+import { YoutubeService } from '../../services/youtube.service';
 
 @Component({
   selector: 'app-display-workout',
@@ -12,9 +14,12 @@ import { WorkoutDetails } from 'src/app/class/WorkoutDetails';
 })
 export class DisplayWorkoutComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private router: Router, private alertController: AlertController) { }
+  constructor(private route: ActivatedRoute, private router: Router, private alertController: AlertController, private workoutService: WorkoutsService) { 
+    this.yt = YoutubeService.getInstance();
+  }
   @Input() section: string;
   @Input() workoutDetails: any;
+  //@Input() warmUpTime: any;
   
   workoutId: string;
   userId: string;
@@ -30,14 +35,22 @@ export class DisplayWorkoutComponent implements OnInit {
   workoutRoutine: WorkoutDetails[];
   currentExercise: WorkoutDetails;
 
+  workoutIntensity: string;
+
   workSets = [];
 
+  yt: any;
+  warmUp: any;
+  coolDown: any
+  choice: number;
+
   ngOnInit() {
-    this.getExercises()
+    this.getExercises();
+    this.getWarmUp();
     this.displayExercise();
   }
 
-  async getExercises(){
+  getExercises(){
     this.route.queryParamMap.subscribe(params => {
       this.workoutSection = params.get('workoutSection');
       this.exerciseiString = params.get('exerciseIndex');
@@ -53,6 +66,19 @@ export class DisplayWorkoutComponent implements OnInit {
     this.exerciseIndex = parseInt(this.exerciseiString)
 
     this.displayExercise();
+  }
+  
+  getWarmUp(){
+    this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(results => {
+      let durn: number;
+      this.workoutIntensity = results.intensity;
+      if(this.workoutIntensity=='low') { durn = 2; }
+      else if(this.workoutIntensity=='hard') { durn=10; }
+      else { durn=5; }
+
+      this.warmUp = this.yt.getYoutubeAPI('warm up ' + durn + ' minutes');
+      console.log('warm', this.warmUp);
+    });
   }
 
   displayExercise() {
@@ -73,6 +99,7 @@ export class DisplayWorkoutComponent implements OnInit {
 
       this.buttonText = "NEXT EXERCISE";
       console.log(this.section, this.exerciseIndex)
+      //console.log('duration is', this.warmUpTime);
     }
 
   }
@@ -192,7 +219,6 @@ export class DisplayWorkoutComponent implements OnInit {
       // do not trigger navigation
     });
   }
- 
 
   async goToSummary(){
     this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId}});

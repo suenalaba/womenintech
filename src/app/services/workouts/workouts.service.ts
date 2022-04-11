@@ -52,7 +52,7 @@ export class WorkoutsService {
           dateCreated: timestamp,
           workoutStatus: "created",
           tags: [val.intensity, val.duration, val.location, val.equipment],
-          workoutRoutine: val.routine
+          workoutRoutine: val.routine,
         };
 
         console.log(docData);
