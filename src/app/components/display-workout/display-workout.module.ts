@@ -6,9 +6,12 @@ import { IonicModule } from '@ionic/angular';
 
 import { DisplayWorkoutComponent } from './display-workout.component';
 
+import { HttpClientModule } from '@angular/common/http';
+import { SafePipe } from './display-workout.component';
+
 @NgModule({
-  imports: [ CommonModule, FormsModule, IonicModule],
-  declarations: [DisplayWorkoutComponent],
+  imports: [ CommonModule, FormsModule, IonicModule, HttpClientModule],
+  declarations: [DisplayWorkoutComponent, SafePipe],
   exports: [DisplayWorkoutComponent]
 })
 export class DisplayWorkoutComponentModule {}
