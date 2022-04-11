@@ -6,13 +6,9 @@ import { IonicModule } from '@ionic/angular';
 
 import { DisplayWorkoutComponent } from './display-workout.component';
 
-import { SafePipe } from '../../services/youtube.service';
-
-import { SwiperModule } from 'swiper/angular';
-
 @NgModule({
-  imports: [ CommonModule, FormsModule, IonicModule, SwiperModule],
-  declarations: [DisplayWorkoutComponent, SafePipe],
+  imports: [ CommonModule, FormsModule, IonicModule],
+  declarations: [DisplayWorkoutComponent],
   exports: [DisplayWorkoutComponent]
 })
 export class DisplayWorkoutComponentModule {}

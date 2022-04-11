@@ -59,8 +59,6 @@ export class StartWorkoutPage implements OnInit {
       this.getMoreWorkoutDetails(results)
 
       console.log(this.workoutRoutine)
-      console.log('here');
-      console.log(this.workoutDetails);
 
       window.localStorage.setItem("workoutRoutine",JSON.stringify(this.workoutRoutine));
       window.localStorage.setItem("workoutDetails",JSON.stringify(this.workoutDetails));
