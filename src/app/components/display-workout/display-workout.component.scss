@@ -1,46 +1,74 @@
-ion-card{
-    --ion-background-color: transparent;
-    box-shadow: none !important;
+ion-card {
+  --ion-background-color: transparent;
+  box-shadow: none !important;
 }
 
-ion-card-title{
-    font-size: 14px;
+ion-card-title {
+  font-size: 14px;
 }
 
-ion-card-title.exercise-title{
-    font-size: 15px;
-    margin-bottom: 10px;
+ion-card-title.exercise-title {
+  font-size: 15px;
+  margin-bottom: 10px;
 }
 
-div.sets{
-    margin-top:20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    overflow-x: scroll;
+// div.sets{
+//     margin-top:20px;
+//     display: flex;
+//     flex-direction: row;
+//     justify-content: space-between;
+//     align-items: center;
+//     width: 100%;
+//     overflow-x: scroll;
+// }
+
+div.sets {
+  width: 100%;
+  display: inline-grid;
+  grid-template-columns: 100px 100px 100px;
+  column-gap: 10px;
+  row-gap: 10px;
 }
 
-div.working-set{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: var(--ion-color-dark);
-    color: white;
-    text-align: center;
-    margin: 5px;
-    padding:10px;
-    align-items: center;
-    border-radius: 15%;
-    height:100px;
+div.working-set,
+div.add-set {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-div.add-set{
-    height:100px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: black;
+div.working-set {
+//   width: 100%;
+  background-color: var(--ion-color-dark);
+  color: white;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 15%;
+  height: 100px;
+}
+
+div.add-set {
+  height: 100px;
+  width: 80px;
+  font-size: 20px;
+  color: black;
+  margin: 10px;
+  background-color: var(--ion-color-light);
+}
+
+div.working-set.active {
+  background-color: var(--ion-color-danger);
+}
+
+div.delete-set {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--ion-color-danger);
+  border-radius: 15%;
 }

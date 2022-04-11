@@ -18,7 +18,7 @@
   
     <ion-card-content>
 
-      <ion-card-title class="exercise-title"> {{currentExercise.exerciseName}} </ion-card-title>
+      <ion-card-title class="exercise-title"> {{ currentExercise.exerciseName }} </ion-card-title>
 
       <img src='{{currentExercise.images[0]}}' *ngIf="currentExercise.images.length > 0">
 
@@ -26,8 +26,13 @@
 
       <div class="sets">
         <div *ngFor="let e of workSets; let i = index" class="working-set">
-          <p> SET {{ i+1 }}</p>
-          <p> {{ e }} REPS </p>
+          <div *ngIf="selectedSet != i || !setClick" (click)="deleteSet(i)">
+            <p> SET {{ i+1 }}</p>
+            <p> {{ e }} REPS </p>
+          </div>
+          <div *ngIf="selectedSet == i && workSets.length != 1" [hidden]="!setClick" class="delete-set" (click)="dismiss()">
+            <ion-icon name="trash-outline" (click)="removeSet()"></ion-icon>
+          </div>
         </div>
 
         <div class="add-set" (click)="addSet()">
@@ -53,3 +58,7 @@
   </ion-card>
   <h1> lets get phsyical!</h1>
 </div>
+
+<p>Next: {{nextComponent()}}</p>
+<ion-button expand="block" color="dark" (click)="nextExercise()"> {{ buttonText }}</ion-button>
+
