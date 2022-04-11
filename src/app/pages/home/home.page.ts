@@ -1,10 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable no-var */
-/* eslint-disable max-len */
-/* eslint-disable @angular-eslint/use-lifecycle-interface */
-/* eslint-disable @typescript-eslint/member-ordering */
-/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { OnInit, ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
