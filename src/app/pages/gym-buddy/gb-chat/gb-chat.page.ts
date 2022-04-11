@@ -28,9 +28,7 @@ export class GbChatPage implements OnInit {
   //messages: Observable<any[]>;
 
 
-  constructor(private chatService: ChatService, private router: Router) {
-
-   }
+  constructor(private chatService: ChatService, private router: Router) {}
 
   public getSelectedChatBuddyName() {
     return this.buddyName;

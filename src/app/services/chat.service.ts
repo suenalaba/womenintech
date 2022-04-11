@@ -153,9 +153,13 @@ export class ChatService {
       let lastMessage = '';
       try {
         //should be -1 to index the last message, but idk why its not working.
-        lastMessage = this.conversationData.conversation[0].message;
+        const conversationArr = this.conversationData.conversation;
+        console.log('The conversation is: ', conversationArr);
+        lastMessage = conversationArr[conversationArr.length - 1].message;
+        //lastMessage = this.conversationData.conversation[0].message;
         console.log(lastMessage);
       } catch (error) {
+        //if conversation has not started.
         lastMessage = 'Start chatting with this user.';
       }
       //console.log(conversationData);
