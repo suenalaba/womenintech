@@ -12,7 +12,21 @@ import SwiperCore, { Keyboard, Pagination, Scrollbar } from 'swiper';
 import { GymBuddyService } from 'src/app/services/gym-buddy.service';
 import { User } from 'src/app/class/user';
 import { UserService } from 'src/app/services/user.service';
-
+import { Observable } from 'rxjs';
+import { finalize, tap } from 'rxjs/operators';
+import {
+  AngularFireStorage,
+  AngularFireUploadTask,
+} from '@angular/fire/compat/storage';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+} from '@angular/fire/compat/firestore';
+export interface imgFile {
+  name: string;
+  filepath: string;
+  size: number;
+}
 
 SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
 
@@ -22,7 +36,7 @@ SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
   styleUrls: ['./gb-sign-up.page.scss'],
 })
 export class GbSignUpPage implements OnInit {
-  
+
   @ViewChild(IonContent, { static: false }) content: IonContent;
 
   gymBuddyPersonalFormData: FormGroup;
@@ -75,21 +89,50 @@ export class GbSignUpPage implements OnInit {
 
   private loadingPresent = true;
 
+  // File upload task
+  fileUploadTask: AngularFireUploadTask;
+  // Upload progress
+  percentageVal: Observable<number>;
+  // Track file uploading with snapshot
+  trackSnapshot: Observable<any>;
+  // Uploaded File URL
+  UploadedImageURL: Observable<string>;
+  // Uploaded image collection
+  files: Observable<imgFile[]>;
+  // Image specifications
+  imgName: string;
+  imgSize: number;
+  // File uploading status
+  isFileUploading: boolean;
+  isFileUploaded: boolean;
+  private filesCollection: AngularFirestoreCollection<imgFile>;
+  private imgFilePath: string;
+
+
   constructor(
     private formBuilder: FormBuilder,
     private gymBuddyService: GymBuddyService,
     private toastCtrl: ToastController,
     private router: Router,
     private loadingController: LoadingController,
-    private userService: UserService
-	){ }
+    private userService: UserService,
+    private afs: AngularFirestore,
+    private afStorage: AngularFireStorage
+	){
+    this.isFileUploading = false;
+    this.isFileUploaded = false;
+    // Define uploaded files collection
+    this.filesCollection = afs.collection<imgFile>('imagesCollection');
+    this.files = this.filesCollection.valueChanges();
+
+  }
 
   public get getFullName() {
     return this.fullName;
   }
 
   ngOnInit() {
-    
+
     // this.checkGymBuddySignUp();
 
 
@@ -104,7 +147,7 @@ export class GbSignUpPage implements OnInit {
     console.log(this.injury);*/
     /*get User Details*/
     this.loadUserDetails()
-  
+
     //loadingController
     //create service to check if person sign up already
     //if person havent sign up stay
@@ -139,7 +182,7 @@ export class GbSignUpPage implements OnInit {
   }
 
   /**
-   * 
+   *
    * load user info from user service
    */
 
@@ -163,6 +206,62 @@ export class GbSignUpPage implements OnInit {
 
      loading.dismiss();
    })
+  }
+
+  uploadImage(event: FileList) {
+    const file = event.item(0);
+    // Image validation
+    if (file.type.split('/')[0] !== 'image') {
+      console.log('File type is not supported!');
+      return;
+    }
+    this.isFileUploading = true;
+    this.isFileUploaded = false;
+    this.imgName = file.name;
+    // Storage path
+    const fileStoragePath = `filesStorage/${new Date().getTime()}_${file.name}`;
+    // Image reference
+    const imageRef = this.afStorage.ref(fileStoragePath);
+    // File upload task
+    this.fileUploadTask = this.afStorage.upload(fileStoragePath, file);
+    // Show uploading progress
+    this.percentageVal = this.fileUploadTask.percentageChanges();
+    this.trackSnapshot = this.fileUploadTask.snapshotChanges().pipe(
+      finalize(() => {
+        // Retreive uploaded image storage path
+        this.UploadedImageURL = imageRef.getDownloadURL();
+        this.UploadedImageURL.subscribe(
+          (resp) => {
+            this.storeFilesFirebase({
+              name: file.name,
+              filepath: resp,
+              size: this.imgSize,
+            });
+            this.isFileUploading = false;
+            this.isFileUploaded = true;
+            this.imgFilePath=resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }),
+      tap((snap) => {
+        this.imgSize = snap.totalBytes;
+      })
+    );
+  }
+  storeFilesFirebase(image: imgFile) {
+    const fileId = this.afs.createId();
+    this.filesCollection
+      .doc(fileId)
+      .set(image)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   /* store gymBuddyGoals data
@@ -424,7 +523,7 @@ export class GbSignUpPage implements OnInit {
     console.log(this.userId);
     console.log(this.gymBuddyPersonalFormData.value);
     this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.userId);
-
+    this.gymBuddyService.uploadProfilePicture(this.imgFilePath,this.userId);
     const toast = await this.toastCtrl.create({
       message: 'User updated!',
       duration: 2000

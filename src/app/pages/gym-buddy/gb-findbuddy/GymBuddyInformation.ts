@@ -53,8 +53,7 @@ export class GymBuddyProfileInfo {
     this._name=this.userInfo.firstName+" "+ this.userInfo.lastName;
     this.briefIntro = this.userInfo.gymBuddyDetails.briefIntro;
     this._age=this.userInfo.age;
-    this._profilePicture="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA"
-    //this._profilePicture=this.userInfo.profilePicture;
+    this._profilePicture=this.userInfo.gymBuddyDetails.profilePicture;
   }
 
 

@@ -14,7 +14,15 @@ import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInf
   providedIn: 'root'
 })
 export class GymBuddyService {
-  
+  potentialMatchDetails: (GymBuddyProfileInfo)[] = [];
+
+  public setPotentialMatchDetails(potentialMatches: (GymBuddyProfileInfo)[]) {
+    this.potentialMatchDetails = potentialMatches;
+  }
+
+  public getPotentialMatchDetails() {
+    return this.potentialMatchDetails;
+  }
   authState = new BehaviorSubject(false);
   private userInfo;
   private isSignUp: boolean;
@@ -63,6 +71,13 @@ export class GymBuddyService {
   isSignedUp(){
     return this.authState.value;
   }
+
+  uploadProfilePicture(imgPath:string,userID) {
+    console.log("uploaded image");
+    const noteDocRef = doc(this.fireStore, `Users`, userID);
+    return updateDoc(noteDocRef,{ "gymBuddyDetails.profilePicture" : imgPath});
+  }
+
 
   updateMatches(user : GymBuddyProfileInfo,userID) {
     //console.log(details);

@@ -1,42 +1,91 @@
-<ion-header>
-  <ion-toolbar>
-    <!-- <ion-title>gb-findbuddy</ion-title> -->
-    <ion-button color="light" slot="start" (click)="goToGBHome()">
-      <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-    </ion-button>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large" class="ion-text-center">Find a Gym Buddy</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <!-- back button -->
-
-  <ion-card >
-    <img src={{getProfilePicture}} alt="ion">
-    <ion-card-header>
-      <ion-card-title>{{ getFullName }}, {{ getAge }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      {{getBriefIntro}}
-    </ion-card-content>
-    <ion-footer>
-      <ion-row>
-        <ion-col center text-center>
-          <ion-button (click)="matchBuddy()" expand="block" fill="outline" class="buddy-btn" >
-            <ion-icon name="checkmark-circle-outline" size="large" color="success" ></ion-icon>
+<ion-content fullscreen="true">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12">
+        <ion-card *ngFor="let p of potentialMatches" scroll-y="true"  class="matchList">
+          <i class="fi-rr-arrow-small-left">
+          <ion-button color="light" slot="start" size="small" (click)="goToGBHome()">
+            <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
           </ion-button>
-        </ion-col>
-        <ion-col center text-center>
-          <ion-button (click)="unmatchBuddy()" expand="block" fill="outline" class="buddy-btn">
-            <ion-icon name="close-circle-outline" size="large" color="danger" ></ion-icon>
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-footer>
-  </ion-card>
+          </i>
+          <img src="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="">
+          <!--<img [src]="p.img" /> -->
+          <ion-card-header text-left>
+            <!-- <ion-title class="name">
+              {{p.name}}
+            </ion-title> -->
+            <div class="basic-info">
+              <!-- to get the correct age-->
+              <h1>{{p.name}}, {{p.age}}</h1>
+              <p>
+                <i class="fi-rr-location-alt"></i>
+                <ion-icon name="location-outline"></ion-icon>
+                Singapore
+              </p>
+            </div>
+          </ion-card-header>
+          <ion-card-content class="all-information">
+            <div class="about-me">
+              <h5>About me</h5>
+              <p>
+                {{p.getbriefIntro}}
+              </p>
+            </div>
+            <!-- gym buddy goals-->
+            <div class="goals">
+              <h5>My goals</h5>
+              <div class="goals-list">
+                <ion-chip *ngFor = "let goal of p.getGymBuddyGoals; let i=index"
+                    [ngStyle]="{'background-color': getColor(i+1)}">
+                  <ion-label>{{goal}}</ion-label>
+                </ion-chip>
+              </div>
+            </div>
+            <!-- Personal traits -->
+            <div class="traits">
+              <h5>My strengths</h5>
+              <div class="traits-list">
+                <ion-chip *ngFor = "let trait of p.getPersonalTraits; let i=index"
+                    [ngStyle]="{'background-color': getColor(i+2)}">
+                  <ion-label>{{trait}}</ion-label>
+                </ion-chip>
+              </div>
+            </div>
+            <!-- Personal Style -->
+            <div class="style">
+              <h5>My style of training...</h5>
+              <div class="style-list">
+                <ion-chip *ngFor = "let style of p.getPersonalTrainStyle; let i=index"
+                    [ngStyle]="{'background-color': getColor(i+3)}">
+                  <ion-label>{{style}}</ion-label>
+                </ion-chip>
+              </div>
+            </div>
+            <!-- preferred workout time-->
+            <div class="pref-workout-time">
+              <h5>My favourite hours...</h5>
+              <div class="pref-workout-time-list">
+                <ion-chip *ngFor = "let time of p.getWorkoutTimePreference; let i=index"
+                    [ngStyle]="{'background-color': getColor(i)}">
+                  <ion-label>{{time}}</ion-label>
+                </ion-chip>
+              </div>
+            </div>
+            <!-- Preferred location -->
+            <div class="location">
+              <h5>You can find me at the...</h5>
+              <div class="location-list">
+                <ion-chip *ngFor = "let location of p.getLocationPreference; let i=index"
+                    [ngStyle]="{'background-color': getColor(i+4)}">
+                  <ion-label>{{location}}</ion-label>
+                </ion-chip>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
+
 
