@@ -11,18 +11,22 @@
   <div *ngFor="let ex of workout">
   <ion-card>
     <ion-card-content>
-      <ion-item class="ion-margin-bottom" lines="none">
-        <ion-label position="stacked">{{ex.exercise}}</ion-label>
+      <!-- <ion-item class="ion-margin-bottom" lines="none"> -->
+        <!-- <ion-label position="stacked">{{ex.exercise}}</ion-label> -->
+        <ion-card-title class="exercise-title"> {{ex.exercise}} </ion-card-title>
           <div class="input-align">
             <div *ngFor="let set of exercises" class="set">
-              <h4>Set {{set.no}} </h4>  
-              <h4>{{set.reps}} Reps </h4> 
+              <h3>Set {{set.no}} </h3>  
+              <h3>{{set.reps}} Reps </h3> 
             </div>
           </div>
-      </ion-item>
+      <!-- </ion-item> -->
     </ion-card-content>
   </ion-card>
   </div>
 <!-- </form> -->
 </ion-content>
+
+
+
 

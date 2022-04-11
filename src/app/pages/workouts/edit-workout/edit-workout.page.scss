@@ -9,19 +9,46 @@ h4{
     text-align: center;
 }
 
+// ion-card {
+//     width: 100%;
+//     height: 100%;
+//     border-radius: 12px;
+// }
+
 .input-align{
     display:flex;
+    width:100%;
 }
 
-.set{
-    background-color: var(--ion-color-dark);
-    color:white;
-    padding: 50px;
-    border-radius: 25px;
-    margin: 65px;
-}
+// div.set {
+//     width: 100%;
+//     display: inline-grid;
+//     grid-template-columns: 100px 100px 100px;
+//     column-gap: 10px;
+//     row-gap: 10px;
+//   }
 
-ion-label{
-    font-weight: bold;
-    font-size: large;
-}
+  div.set {
+    //   width: 100%;
+      background-color: var(--ion-color-dark);
+      color: white;
+      margin: 5px;
+      padding: 10px;
+      border-radius: 15%;
+      height: 100px;
+    }
+// .set{
+//     background-color: var(--ion-color-dark);
+//     color:white;
+//     padding: 5%;
+//     // border-radius: 25px;
+//     // margin: 65px;
+//     width: 50px; 
+//     height: 50px;
+//     text-align: center;
+// }
+
+// ion-label{
+//     font-weight: bold;
+//     font-size: large;
+// }
