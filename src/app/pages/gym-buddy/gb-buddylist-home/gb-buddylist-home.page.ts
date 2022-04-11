@@ -24,6 +24,7 @@ export class GbBuddylistHomePage implements OnInit {
   private currentUser: GymBuddyProfileInfo;
   private chatNameAndMessagesMap: Map<string, string[]>;
 
+  private loadingPresent = false;
 
 
   constructor(
@@ -40,12 +41,10 @@ export class GbBuddylistHomePage implements OnInit {
     return this.chatNameAndMessagesMap;
   }
 
-
-  segmentChange(e) {
-    this.activeTab = e.target.value;
-  }
-
   async ngOnInit() {
+    //display loading controller.
+    this.showLoading();
+    //get user data.
     this.currentUser = await this.chatService.retrieveCurrentChatUser();
     console.log('The current user is: ' + this.currentUser.getUserId);
     this.allChatInfo = await this.chatService.retrieveAllChatsFromDB();
@@ -55,17 +54,23 @@ export class GbBuddylistHomePage implements OnInit {
     //console.log(this.allChatInfo[0].otherUser);
     //this.chatService.getGbListHomeDisplayFromDB();
     this.chatNameAndMessagesMap = await this.chatService.getGbListHomeDisplayFromDB();
-    this.chatNameAndMessagesMap.forEach((value: string[], key: string) => {
-      console.log('Printing key value pair 1');
-      console.log(key, value[0], value[1], value[2],value[3]);
-    });
+    // this.chatNameAndMessagesMap.forEach((value: string[], key: string) => {
+    //   console.log('Printing key value pair 1');
+    //   console.log(key, value[0], value[1], value[2],value[3]);
+    // });
+    //dismiss loading.
+    this.dismissLoading();
   }
 
-  async navigateBuddyListToGBHome() {
+  public segmentChange(e) {
+    this.activeTab = e.target.value;
+  }
+
+  public async navigateBuddyListToGBHome() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
-  async navigateBuddyListToChat(selectedChatUserName: string, selectedChatId: string, otherUserIdOfSelectedChat: string) {
+  public async navigateBuddyListToChat(selectedChatUserName: string, selectedChatId: string, otherUserIdOfSelectedChat: string) {
     console.log('This chat ID was selected: ' + selectedChatId);
     //set the selected chat in the chat service, so the navigation will be selected accordingly.
     this.chatService.setSelectedOtherUserId = otherUserIdOfSelectedChat;
@@ -82,4 +87,20 @@ export class GbBuddylistHomePage implements OnInit {
     }
   }
 
+  private async showLoading() {
+    this.loadingPresent = true;
+    const load = await this.loadingController.create({
+      message: 'Retrieving your chats, hang in there!',
+
+    });
+    await load.present();
+  }
+
+  private async dismissLoading() {
+    if (this.loadingPresent) {
+      await this.loadingController.dismiss();
+    }
+    this.loadingPresent = false;
+  }
 }
+

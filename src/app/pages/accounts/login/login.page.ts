@@ -81,7 +81,7 @@ export class LoginPage implements OnInit {
   async showLoading() {
     this.loadingPresent = true;
     let load = await this.loadingController.create({
-      message: 'Please wait....',
+      message: 'Retrieving your chats, hang in there!',
 
     });
     await load.present();

@@ -37,5 +37,22 @@
     --width: 90% !important;
     position: absolute;
     --background: transparent !important;
-    
+
+}
+
+// Small Modal for Gb Chat Page delete icon.
+.small-modal {
+
+  // --ion-backdrop-color: red;
+
+  &::part(backdrop) {
+    background-color: red;
+  }
+
+  &::part(content) {
+    width: 45%;
+    height: 30%;
+    margin: auto;
+    border-radius: 10px;
+  }
 }

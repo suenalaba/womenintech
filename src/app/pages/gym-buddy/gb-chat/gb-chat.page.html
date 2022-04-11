@@ -14,11 +14,13 @@
     <div class="share-workout">
       <!-- think of adding a button here to share workout.-->
       <!--(click)="shareWorkout()"-->
-      <ion-icon name="share-social-outline"></ion-icon>
+      <ion-icon name="share-social-outline" (click)="openShareModal()"></ion-icon>
     </div>
     <!--(click)="removeMatch()"-->
     <div class = "delete">
-      <ion-icon name="trash-outline"></ion-icon>
+      <!-- <ion-icon name="trash-outline" (click)="openTransparentModal()"></ion-icon> -->
+      <ion-icon name="trash-outline" (click)="openDeleteModal()"></ion-icon>
+      <p *ngIf="modalDataResponse">{{modalDataResponse}}</p>
     </div>
   </div>
   <div class="conversation ion-padding">

@@ -1,11 +1,12 @@
 import { AfterContentChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { IonContent } from '@ionic/angular';
+import { IonContent, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ChatService } from 'src/app/services/chat.service';
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
 import { updateCurrentUser } from 'firebase/auth';
-
+import { GbDeleteBuddyModalPage } from '../gb-delete-buddy-modal/gb-delete-buddy-modal.page';
+import { GbShareWorkoutModalPage } from '../gb-share-workout-modal/gb-share-workout-modal.page';
 @Component({
   selector: 'app-gb-chat',
   templateUrl: './gb-chat.page.html',
@@ -15,6 +16,8 @@ import { updateCurrentUser } from 'firebase/auth';
 export class GbChatPage implements OnInit, AfterContentChecked {
 
   @ViewChild(IonContent) content: IonContent;
+
+  public modalDataResponse = false;
 
   newMessage = '';
   allChatMessages;
@@ -33,7 +36,8 @@ export class GbChatPage implements OnInit, AfterContentChecked {
 
   constructor(private chatService: ChatService,
               private router: Router,
-              private cdRef: ChangeDetectorRef) {}
+              private cdRef: ChangeDetectorRef,
+              public modalController: ModalController) {}
 
   public getSelectedChatBuddyName() {
     return this.buddyName;
@@ -54,12 +58,64 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     //   this.allChatMessages = val;
     //   console.log('This is what was imported: ', this.allChatMessages);
     // });
+    this.modalDataResponse = false;
     this.allChatMessages = this.chatService.getAllChatMessages();
     this.buddyName = this.chatService.getSelectedChatUserName;
     this.buddyUserId = this.chatService.getSelectedOtherUserId;
     this.currentUser = this.chatService.getCurrentUser;
     /*this.currentUser = await this.chatService.retrieveCurrentUser();*/
     //this.messages = this.chatService.getChatMessages();
+  }
+
+  public async openDeleteModal() {
+    const modal = await this.modalController.create({
+      component: GbDeleteBuddyModalPage,
+      cssClass: 'small-modal'
+    });
+
+    modal.onDidDismiss().then((modalDataResponse) => {
+      if (modalDataResponse.data === true) {
+        //proceed to Delete.
+        //delete the match in fireStore.
+        this.chatService.deleteMatch(this.chatService.getSelectedChatId, this.getCurrentUserId(),this.buddyUserId);
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+        //navigate back to buddy list page.
+        console.log('going here.');
+        this.navigateChatPageToBuddyListPage();
+      } else {
+        //don't do anything
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+      }
+    });
+
+    await modal.present();
+  }
+
+  public async openShareModal() {
+    const modal = await this.modalController.create({
+      component: GbShareWorkoutModalPage,
+      cssClass: 'small-modal'
+    });
+
+    modal.onDidDismiss().then((modalDataResponse) => {
+      if (modalDataResponse.data === true) {
+        //proceed to share workout.
+        //share workout over fireStore.
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+        //navigate back to buddy list page.
+        console.log('going here.');
+        this.navigateToWorkoutListPage();
+      } else {
+        //don't do anything
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+      }
+    });
+
+    await modal.present();
   }
 
   public getUserClass(fromId: string){
@@ -145,6 +201,10 @@ export class GbChatPage implements OnInit, AfterContentChecked {
 */
   async navigateChatPageToBuddyListPage() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-buddylist-home', { replaceUrl: true });
+  }
+
+  async navigateToWorkoutListPage() {
+    this.router.navigateByUrl('tabs/workouts', { replaceUrl: true });
   }
 
 
