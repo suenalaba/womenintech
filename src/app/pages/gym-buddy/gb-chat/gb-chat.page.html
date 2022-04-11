@@ -18,7 +18,9 @@
     </div>
     <!--(click)="removeMatch()"-->
     <div class = "delete">
-      <ion-icon name="trash-outline"></ion-icon>
+      <!-- <ion-icon name="trash-outline" (click)="openTransparentModal()"></ion-icon> -->
+      <ion-icon name="trash-outline" (click)="openModal()"></ion-icon>
+      <p *ngIf="modalDataResponse">{{modalDataResponse}}</p>
     </div>
   </div>
   <div class="conversation ion-padding">

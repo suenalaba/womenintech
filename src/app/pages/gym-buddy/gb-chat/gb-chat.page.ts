@@ -1,11 +1,11 @@
 import { AfterContentChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { IonContent } from '@ionic/angular';
+import { IonContent, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ChatService } from 'src/app/services/chat.service';
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
 import { updateCurrentUser } from 'firebase/auth';
-
+import { GbDeleteBuddyModalPage } from '../gb-delete-buddy-modal/gb-delete-buddy-modal.page';
 @Component({
   selector: 'app-gb-chat',
   templateUrl: './gb-chat.page.html',
@@ -15,6 +15,8 @@ import { updateCurrentUser } from 'firebase/auth';
 export class GbChatPage implements OnInit, AfterContentChecked {
 
   @ViewChild(IonContent) content: IonContent;
+
+  public modalDataResponse: any;
 
   newMessage = '';
   allChatMessages;
@@ -33,7 +35,8 @@ export class GbChatPage implements OnInit, AfterContentChecked {
 
   constructor(private chatService: ChatService,
               private router: Router,
-              private cdRef: ChangeDetectorRef) {}
+              private cdRef: ChangeDetectorRef,
+              public modalController: ModalController) {}
 
   public getSelectedChatBuddyName() {
     return this.buddyName;
@@ -60,6 +63,43 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     this.currentUser = this.chatService.getCurrentUser;
     /*this.currentUser = await this.chatService.retrieveCurrentUser();*/
     //this.messages = this.chatService.getChatMessages();
+  }
+
+  public async openTransparentModal() {
+    const modal = await this.modalController.create({
+      component: GbDeleteBuddyModalPage,
+      cssClass: 'transparent-modal'
+    });
+
+    modal.onDidDismiss().then((modalDataResponse) => {
+      if (modalDataResponse !== null) {
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+      }
+    });
+
+    await modal.present();
+  }
+
+  public async openModal() {
+    const modal = await this.modalController.create({
+      component: GbDeleteBuddyModalPage,
+      cssClass: 'small-modal'
+    });
+
+    modal.onDidDismiss().then((modalDataResponse) => {
+      if (modalDataResponse === true) {
+        //proceed to Delete.
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+      } else {
+        //don't do anything
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+      }
+    });
+
+    await modal.present();
   }
 
   public getUserClass(fromId: string){

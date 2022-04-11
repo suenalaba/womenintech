@@ -203,6 +203,35 @@ ion-content {
   }
 }
 
+.transparent-modal {
+  --background: #0000005c;
+
+  &::part(content) {
+    backdrop-filter: blur(12px);
+  }
+
+  ion-content {
+    --background: transparent;
+  }
+}
+
+.small-modal {
+
+  // --ion-backdrop-color: red;
+
+  &::part(backdrop) {
+    background-color: red;
+  }
+
+  &::part(content) {
+    width: 80%;
+    height: 50%;
+    margin: auto;
+    border-radius: 10px;
+  }
+}
+
+
 //simon grimm version
 // .message-input {
 //     width: 100%;
