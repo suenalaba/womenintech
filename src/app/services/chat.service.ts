@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, doc, setDoc, docData, onSnapshot } from '@angular/fire/firestore';
-import { addDoc, arrayUnion, DocumentReference, getDoc, Query, updateDoc, Timestamp, serverTimestamp, DocumentSnapshot } from 'firebase/firestore';
+import { addDoc, arrayUnion, DocumentReference, getDoc, Query, updateDoc,
+  Timestamp, serverTimestamp, DocumentSnapshot } from 'firebase/firestore';
 import { query, where, getDocs,collectionGroup } from 'firebase/firestore';
 import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
 import { AlertController, LoadingController } from '@ionic/angular';
@@ -14,20 +15,7 @@ import { GbFindbuddyPage } from '../pages/gym-buddy/gb-findbuddy/gb-findbuddy.pa
 
 export class ChatService {
 
-  getAllChatMessages() {
 
-    return new Observable(observer => {
-      const unSub = onSnapshot(doc(this.fireStore, 'Chat', this.selectedChatId), (chatDoc) => {
-        const source = chatDoc.metadata.hasPendingWrites ? 'Local' : 'Server';
-
-          observer.next(chatDoc.data().conversation);
-        });
-
-      return () => {
-        unSub();
-      };
-    });
-  }
 
   // myObservable = new Observable ((observer) => {
   //   const unSub = onSnapshot(doc(this.fireStore, 'Chat', this.selectedChatId), (chatDoc) => {
@@ -98,7 +86,37 @@ export class ChatService {
   }
 
 
+  /**
+   * Observable that updates whenever data in the database changes.
+   *
+   * @returns the most updated conversation data
+   */
+   public getAllChatMessages() {
 
+    return new Observable(observer => {
+      const unSub = onSnapshot(doc(this.fireStore, 'Chat', this.selectedChatId), (chatDoc) => {
+        const source = chatDoc.metadata.hasPendingWrites ? 'Local' : 'Server';
+
+          observer.next(chatDoc.data().conversation);
+        });
+
+      return () => {
+        unSub();
+      };
+    });
+  }
+
+  //Chat functionalities
+  public addChatMessage(msg) {
+    const chatSelectedRef = doc(this.fireStore, 'Chat', this.selectedChatId);
+    const messageData = {
+      fromId: this.currentUser.getUserId,
+      isRead: false,
+      message: msg,
+      timeSent: Timestamp.now()
+    };
+    return updateDoc(chatSelectedRef, {conversation: arrayUnion(messageData)});
+  }
 
 
   //currentUser: User = null;
@@ -151,12 +169,18 @@ export class ChatService {
       const conversationDoc = await this.pullFullChat(chatRef);
       this.conversationData = conversationDoc.data();
       let lastMessage = '';
+      let timeDiffString = '';
       try {
         //should be -1 to index the last message, but idk why its not working.
-        lastMessage = this.conversationData.conversation[0].message;
-        console.log(lastMessage);
+        const conversationArr = this.conversationData.conversation;
+        timeDiffString = this.getTimeDiffInString(conversationArr, timeDiffString);
+        console.log('The conversation is: ', conversationArr);
+        lastMessage = conversationArr[conversationArr.length - 1].message;
+        console.log('LastMessage is:', lastMessage);
       } catch (error) {
+        //if conversation has not started.
         lastMessage = 'Start chatting with this user.';
+        timeDiffString = '';
       }
       //console.log(conversationData);
       console.log(chatInfo.otherUser);
@@ -168,24 +192,55 @@ export class ChatService {
       const fullName = firstName + lastName;
       console.log(fullName);
       //full name, last message, chat id, other userId.
-      allChatNameAndMessage.set(fullName, [lastMessage,chatInfo.chatID,this.otherUserData.id]);
+      allChatNameAndMessage.set(fullName, [lastMessage,chatInfo.chatID,this.otherUserData.id,timeDiffString]);
       //const mapofnameandmessage = this.allChatNameAndMessage;
       //mapofnameandmessage.set(fullName, lastMessage);
     }
     return allChatNameAndMessage;
   }
 
-  //Chat functionalities
-  addChatMessage(msg) {
-    const chatSelectedRef = doc(this.fireStore, 'Chat', this.selectedChatId);
-    const messageData = {
-      fromId: this.currentUser.getUserId,
-      isRead: false,
-      message: msg,
-      timeSent: Timestamp.now()
-    };
-    return updateDoc(chatSelectedRef, {conversation: arrayUnion(messageData)});
+  private getTimeDiffInString(conversationArr: any, timeDiffString: string) {
+    const lastTimeStamp = conversationArr[conversationArr.length - 1].timeSent.toDate().getTime();
+    console.log(lastTimeStamp);
+    const timeNow = new Date().getTime();
+    const timeDiffInMillisecond = (timeNow - lastTimeStamp);
+    console.log(timeDiffInMillisecond);
+    timeDiffString = this.timeConversion(timeDiffInMillisecond);
+    return timeDiffString;
   }
+
+
+  /**
+   * Convert from milliseconds to HH:MM:SS format.
+   *
+   * @param duration duration in milliseconds
+   * @returns string in the format of HH:MM:SS
+   */
+  private timeConversion(duration: number): string {
+    const portions: string[] = [];
+
+    const msInHour = 1000 * 60 * 60;
+    const hours = Math.trunc(duration / msInHour);
+    if (hours > 0) {
+      portions.push(hours + 'h');
+      duration = duration - (hours * msInHour);
+    }
+
+    const msInMinute = 1000 * 60;
+    const minutes = Math.trunc(duration / msInMinute);
+    if (minutes > 0) {
+      portions.push(minutes + 'm');
+      duration = duration - (minutes * msInMinute);
+    }
+
+    const seconds = Math.trunc(duration / 1000);
+    if (seconds > 0) {
+      portions.push(seconds + 's');
+    }
+
+    return portions.join(' ');
+  }
+
 
   // private getUsers() {
   //   return this.afs.collection('users').valueChanges({ idField: 'uid' }) as Observable<User[]>;
