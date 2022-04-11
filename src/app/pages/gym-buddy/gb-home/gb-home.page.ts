@@ -115,6 +115,13 @@ export class GbHomePage implements OnInit {
   }
 
   /**
+   * Navigate to update account preferences
+   */
+   public async goToUpdateAcc() {
+    this.router.navigateByUrl('tabs/gym-buddy/gb-update-account-preference', { replaceUrl: true });
+  }
+
+  /**
    * Navigate to Buddy list (Chat Home Page)
    */
   public async goToBuddyList() {

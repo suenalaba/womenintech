@@ -11,10 +11,6 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { HttpClientModule } from '@angular/common/http';
 import { SafePipe } from './home.page';
 
-//import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
-//import { RouteReuseStrategy } from '@angular/router';
-//import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-
 @NgModule({
   imports: [
     IonicModule,
@@ -28,13 +24,6 @@ import { SafePipe } from './home.page';
     }),
     HttpClientModule
   ],
-  //providers: [
-  //  YoutubeVideoPlayer,
-  //  {
-  //    provide: RouteReuseStrategy,
-  //    useClass: IonicRouteStrategy
-  //  }
-  //],
   declarations: [HomePage, SafePipe],
   schemas: [NO_ERRORS_SCHEMA],
 })

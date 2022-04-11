@@ -1,11 +1,19 @@
-<div id="warmup" *ngIf="workoutSection === 'warmup'">
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<div style="height: 100%; display: flex; align-items: center; justify-content: center;" id="warmup" *ngIf="workoutSection === 'warmup'">
   <ion-card>
     <ion-card-header>
       <ion-card-title>WARM UP</ion-card-title>
     </ion-card-header>
   
     <ion-card-content>
-      <!-- YOUTUBE VIDEO HERE-->
+      <ion-card>
+        <iframe 
+          width={{ytVideosWarm[1].ThumbnailWidth}}
+          height={{ytVideosWarm[1].ThumbnailHeight}}
+          [src]="ytVideosWarm[1].URL | safe">
+        </iframe>
+      </ion-card>
     </ion-card-content>
   </ion-card>
 </div>
@@ -46,17 +54,21 @@
 </div>
 
 
-<div id="COOLDOWN" *ngIf="workoutSection === 'cooldown'">
+<div style="height: 100%; display: flex; align-items: center; justify-content: center;" id="COOLDOWN" *ngIf="workoutSection === 'cooldown'">
   <ion-card>
     <ion-card-header>
       <ion-card-title>COOL DOWN</ion-card-title>
     </ion-card-header>
-  
     <ion-card-content>
-      <!-- YOUTUBE VIDEO HERE-->
+      <ion-card>
+        <iframe 
+          width={{ytVideosCool[1].ThumbnailWidth}}
+          height={{ytVideosCool[1].ThumbnailHeight}}
+          [src]="ytVideosCool[1].URL | safe">
+        </iframe>
+      </ion-card>
     </ion-card-content>
   </ion-card>
-  <h1> lets get phsyical!</h1>
 </div>
 
 <p>Next: {{nextComponent()}}</p>

@@ -7,15 +7,39 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <!-- <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Settings Test</ion-title>
     </ion-toolbar>
-  </ion-header>
+  </ion-header> -->
 
   <ion-button (click)="logout()">
     <ion-icon slot="icon-only" name="log-out"></ion-icon>
   </ion-button>
 
-  <app-explore-container name="Settings"></app-explore-container>
+  <ion-content>
+    <!-- <form> -->
+    <h2>{{this.userInfo.firstName}}</h2>
+    <div *ngFor="let ss of settingstat; let i = index;">
+    <ion-card>
+      <ion-card-content>
+          <ion-card-title class="exercise-title"> {{ss.stat}} </ion-card-title>
+          <div class="value"> {{settingvalue[i]}} </div>
+          
+          
+          
+            <!-- <div class="input-align">
+              <div *ngFor="let set of exercises" class="set">
+                <h3>Set {{set.no}} </h3>  
+                <h3>{{set.reps}} Reps </h3> 
+              </div>
+            </div> -->
+      </ion-card-content>
+    </ion-card>
+    </div>
+  </ion-content>
+
+  <!-- <div class="created" *ngIf="workout.workoutStatus === 'created'"> WORKOUT NOT STARTED </div> -->
+
+  <!-- <app-explore-container name="Settings"></app-explore-container> -->
 </ion-content>
