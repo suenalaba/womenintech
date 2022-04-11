@@ -1,3 +1,68 @@
+<ion-content>
+  <div class="header ion-padding">
+    <div class="info">
+      <ion-icon name="chevron-back-outline" (click)="navigateChatPageToBuddyListPage()"></ion-icon>
+      <ion-avatar>
+        <img src="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="">
+      </ion-avatar>
+      <span class="details">
+        <h1>{{getSelectedChatBuddyName()}}</h1>
+        <!-- <h1>Bryan Leow</h1> -->
+        <p>Hitting the gym</p>
+      </span>
+    </div>
+    <div class="share-workout">
+      <!-- think of adding a button here to share workout.-->
+      <ion-icon name="share-social-outline"></ion-icon>
+    </div>
+  </div>
+  <div class="conversation ion-padding">
+    <div class="chat-section" id="chat" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+      <div class="chat" *ngFor="let message of allChatMessages | async">
+      <!-- <div class="chat"> -->
+        <!--*ngIf="item.messageText === myVar" class="bordered"-->
+        <div *ngIf="isSentByMe(message.fromId) === false" class="yours messages">
+          <div *ngIf="isNotLastMessageSentByOther(message.fromId, message.isRead) === true" class="message other">
+            {{message.message}}
+          </div>
+          <!-- <div class="message other">
+            You there?
+          </div> -->
+          <div *ngIf="isLastMessageSentByOther(message.fromId, message.isRead) === true" class="last-message-other">
+            <ion-avatar>
+              <img src="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="">
+            </ion-avatar>
+            <div *ngIf="isLastMessageSentByOther(message.fromId, message.isRead) === true" class="message last">
+              {{message.message}}
+            </div>
+          </div>
+          <span>{{ message.timeSent?.toMillis() | date:'shortTime' }}</span>
+        </div>
+        <div *ngIf="isSentByMe(message.fromId) === true" class ="mine messages">
+          <div *ngIf="isNotLastMessageSentByMe(message.fromId, message.isRead) === true" class="message">
+            {{message.message}}
+          </div>
+          <div *ngIf="isLastMessageSentByMe(message.fromId, message.isRead) === true" class="message last">
+            {{message.message}}
+          </div>
+          <span>
+            <ion-icon name = "checkmark-done-outline"></ion-icon>{{ message.timeSent?.toMillis() | date:'shortTime' }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="message-input">
+      <ion-input placeholder="Say something nice..." [(ngModel)]="newMessage" autoGrow="true"
+      rows="1" maxLength="500"></ion-input> <!-- [(ngModel)]="newMessage" autoGrow="true"
+        rows="1" maxLength="500"  -->
+      <div class="send-button">
+        <!-- <ion-button icon-only (click)="sendMessage()" [disabled]="newMessage === ''"></ion-button> -->
+        <ion-icon name="send-sharp" (click)="sendMessage()"></ion-icon>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
 <!--
 <ion-content>
   <div class="header ion-padding">
@@ -102,8 +167,8 @@
 </ng-container>
 -->
 
-
-<ion-header>
+<!-- starts from here the OG.-->
+<!-- <ion-header>
   <ion-toolbar color="primary">
     <ion-title>{{getSelectedChatBuddyName()}}</ion-title>
     <ion-buttons slot="start">
@@ -149,4 +214,4 @@
       </ion-col>
     </ion-row>
   </ion-toolbar>
-</ion-footer>
+</ion-footer> -->

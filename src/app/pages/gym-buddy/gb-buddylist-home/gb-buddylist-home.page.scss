@@ -13,7 +13,7 @@ ion-header {
 }
 //7c7899,fff
 ion-content {
-  -background: #7c7899;
+  --background: #7c7899;
   .tabs {
     margin-top: 20px;
     font-family: "Nato Sans HK", sans-serif;
@@ -45,6 +45,17 @@ ion-content {
     padding-top: 0;
   }
   .heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #7c7899;
+    h1 {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    ion-icon {
+      font-size: 1.5rem;
+    }
   }
   .chats {
     margin-top:15px;
@@ -72,30 +83,39 @@ ion-content {
           letter-spacing: 0.5;
           font-weight: bold;
         }
-        .info-div {
-          position: absolute;
-          right: 0;
-          font-size: 0.8rem;
-          color: #7c7899;
-          font-weight: bolder;
-          text-align: right;
-          p {
-            opacity: 0.5;
-          }
-          ion-icon{
-            font-size: 1.3rem;
-          }
-          ion-badge {
-            font-size: 11px;
-            margin-bottom: 5px;
-            --padding-start: 5px;
-            --padding-end: 5px;
-            --padding-bottom: 5px;
-            --padding-top: 5px;
-            --background: red;
-          }
+      }
+      .info-div {
+        position: absolute;
+        right: 0;
+        font-size: 0.8rem;
+        color: #7c7899;
+        font-weight: bolder;
+        text-align: right;
+        p {
+          opacity: 0.5;
+          margin-top: 1px;
+        }
+        ion-icon{
+          font-size: 1.3rem;
+        }
+        ion-badge {
+          font-size: 11px;
+          margin-bottom: 2px;
+          --padding-start: 5px;
+          --padding-end: 5px;
+          --padding-bottom: 5px;
+          --padding-top: 5px;
+          --background: rgb(46, 245, 6);
         }
       }
     }
   }
+  ion-fab-button{
+    position: fixed;
+    z-index: 111;
+    bottom: 30px;
+    right: 15px;
+    --background: #feacac
+  }
 }
+
