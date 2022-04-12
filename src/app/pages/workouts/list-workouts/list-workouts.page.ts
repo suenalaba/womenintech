@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 import { CreateWorkoutComponent } from '../../../components/create-workout/create-workout.component';
 import { TabsPage } from 'src/app/tabs/tabs.page';
+import { EditWorkoutComponent } from 'src/app/components/edit-workout/edit-workout.component';
 @Component({
   selector: 'app-list-workouts',
   templateUrl: './list-workouts.page.html',

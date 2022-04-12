@@ -49,12 +49,17 @@ export class ChatService {
   private selectedChatId: string = null;
   private selectedChatUserName: string = null; //username of the other party.
   private selectedOtherUserId: string = null;
+  private selectedOtherUserProfilePicture: string = null;
 
   private currentUser: GymBuddyProfileInfo = null;
   constructor(private fireStore: Firestore, private loadingController: LoadingController) {
     /*this.afAuth.onAuthStateChanged((user) => {
       this.currentUser = user;
     });*/
+  }
+
+  public get getSelectedOtherUserProfilePicture() {
+    return this.selectedOtherUserProfilePicture;
   }
 
   public get getCurrentUser() {
@@ -71,6 +76,10 @@ export class ChatService {
 
   public get getSelectedChatId() {
     return this.selectedChatId;
+  }
+
+  public set setSelectedOtherUserProfilePicture(profilePicture: string) {
+    this.selectedOtherUserProfilePicture = profilePicture;
   }
 
   public set setSelectedChatUserName(userName: string) {
@@ -191,8 +200,9 @@ export class ChatService {
       const lastName = this.otherUserData.lastName;
       const fullName = firstName + lastName;
       console.log(fullName);
+      const profilePicture = this.otherUserData.gymBuddyDetails.profilePicture;
       //full name, last message, chat id, other userId.
-      allChatNameAndMessage.set(fullName, [lastMessage,chatInfo.chatID,this.otherUserData.id,timeDiffString]);
+      allChatNameAndMessage.set(fullName, [lastMessage,chatInfo.chatID,this.otherUserData.id,timeDiffString,profilePicture]);
       //const mapofnameandmessage = this.allChatNameAndMessage;
       //mapofnameandmessage.set(fullName, lastMessage);
     }

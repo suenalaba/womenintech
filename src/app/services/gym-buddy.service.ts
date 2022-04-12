@@ -43,7 +43,10 @@ export class GymBuddyService {
       personalTrainStyle: details.personalStyle,
       locationPreference: details.locationPref,
       buddyTraits: details.buddyTraits,
-      buddyTrainStyle: details.buddyTrainStyle
+      buddyTrainStyle: details.buddyTrainStyle,
+      chats:details.chats,
+      matches:details.matches,
+      unmatches:details.unmatches
     };
 
     const noteDocRef = doc(this.fireStore, `Users`, uid);

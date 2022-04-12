@@ -121,6 +121,9 @@ export class GbUpdateAccountPreferencePage implements OnInit {
       locationPref: new FormArray([],[Validators.required,Validators.maxLength(2)]),
       buddyTraits: new FormArray([],[Validators.required,Validators.maxLength(3)]),
       buddyTrainStyle: new FormArray([],[Validators.required,Validators.maxLength(2)]),
+      matches: new FormArray([],[Validators.required,Validators.maxLength(2)]),
+      unmatches: new FormArray([],[Validators.required,Validators.maxLength(2)]),
+      chats: new FormArray([],[Validators.required,Validators.maxLength(2)]),
     });
     this.fillUpPreviousInformation();
   }
@@ -441,14 +444,23 @@ export class GbUpdateAccountPreferencePage implements OnInit {
       }
     });
     if(this.imgFilePath) {
-      console.log("imgpath:",this.imgFilePath);
+      console.log('imgpath:',this.imgFilePath);
       this.gymBuddyPersonalFormData.value.profilePicture=this.imgFilePath;
     }
+    this.currentUser.matches.forEach((element) => {
+      this.gymBuddyPersonalFormData.value.matches.push(element);
+    });
+    this.currentUser.unmatches.forEach((element) => {
+      this.gymBuddyPersonalFormData.value.unmatches.push(element);
+    });
+    this.currentUser.chats.forEach((element) => {
+      this.gymBuddyPersonalFormData.value.chats.push(element);
+    });
   }
   /**
    * Signs up for gym buddy
    */
-  async signUpForGymBuddy() {
+  async updateGymBuddy() {
     this.populateForm();
     console.log(this.currentUser.getUserId);
     console.log(this.gymBuddyPersonalFormData.value);

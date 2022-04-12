@@ -27,9 +27,9 @@
         <ion-icon name="search-sharp"></ion-icon>
       </div>
       <div class="chats">
-        <ion-item lines="none" *ngFor="let eachChat of getChatNameAndMessagesMap | keyvalue" (click)="navigateBuddyListToChat(eachChat.key,eachChat.value[1],eachChat.value[2])">
+        <ion-item lines="none" *ngFor="let eachChat of getChatNameAndMessagesMap | keyvalue" (click)="navigateBuddyListToChat(eachChat.key,eachChat.value[1],eachChat.value[2], eachChat.value[4])">
           <ion-avatar slot="start">
-            <img src = "https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="">
+            <img src = {{eachChat.value[4]}} alt="">
           </ion-avatar>
           <ion-label class="ion-text-nowrap">
             <h2>{{eachChat.key}}</h2>
