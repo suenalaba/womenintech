@@ -4,10 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { GbUpdateAccountPreferencePage } from './gb-update-account-preference.page';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: GbUpdateAccountPreferencePage
-  }
+  {path: '', component: GbUpdateAccountPreferencePage},
 ];
 
 @NgModule({

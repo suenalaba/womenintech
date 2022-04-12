@@ -41,8 +41,6 @@ export class GbHomePage implements OnInit {
     //private gymBuddyService: GymBuddyService,
     private loadingController: LoadingController,
     private dbRetrieveService: DbRetrieveService,
-    //private alertController: AlertController,
-    //private cameraService: CameraService
 
   ) { }
 

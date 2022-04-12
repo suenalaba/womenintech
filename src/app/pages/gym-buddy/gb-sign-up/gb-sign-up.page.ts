@@ -78,10 +78,6 @@ export class GbSignUpPage implements OnInit {
 
   private slides: any;
 
-  /*private userinfo: any;
-  private gender: any;
-  private birthday: any;
-  private injury: any;*/
   private userInfo;
   private fullName: string;
   private userId: string;

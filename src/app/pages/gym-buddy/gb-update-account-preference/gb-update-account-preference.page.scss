@@ -1,0 +1,43 @@
+ion-item.item-interactive-disabled ion-label{
+  color: black;
+  }
+
+  ion-list-header{
+    text-align:left;
+    font-size:15px;
+
+  }
+
+  ion-title{
+    text-overflow: inherit;
+    white-space: normal;
+  }
+
+  ion-card{
+    margin:0;
+
+    ion-card-content{
+      padding:0;
+    }
+  }
+
+  ion-card-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    ion-card-title{
+      font-size:20px;
+    }
+  }
+
+  ion-card{
+    box-shadow:none !important
+  }
+
+  ion-button.back-btn{
+    --background: transparent;
+    --color:black;
+    --padding-end: 0px;
+    --padding-start: 0px;
+  }
