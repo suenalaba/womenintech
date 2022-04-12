@@ -111,7 +111,7 @@ export class WorkoutsService {
   }
 
   async getCompletedWorkouts(uid) {
-    let querySnapshot = await getDocs(query(collection(this.firestore, `Users/${uid}/CompletedWorkouts`), orderBy('dateCompleted')));
+    let querySnapshot = await getDocs(query(collection(this.firestore, `Users/${uid}/CompletedWorkouts`), orderBy('dateCompleted', 'desc')));
     return querySnapshot;
   }
 

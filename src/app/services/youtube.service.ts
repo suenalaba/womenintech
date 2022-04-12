@@ -19,25 +19,23 @@ export class YoutubeService {
    */
   getYoutubeAPI(searchTerm) {
     const APIKEY = 'AIzaSyD7U_0cft4oeknyAxfmh8m3gflsUw0-o3w'; // l.kh.b
-    //
     //'AIzaSyDH-momG79qABXUQ623_YYZrExXltFPq1k'; //bkhl
-    const YOUTUBE_NUM_SEARCH_RESULTS = 3;
+    //
+    //'AIzaSyCRi3DvIBgO884dMmYmxKP2Kz8NQYrHecA' //rkz
+    const YOUTUBE_NUM_SEARCH_RESULTS = 1;
 
     console.log('searching youtube for ', searchTerm);
     const url = 'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults='+YOUTUBE_NUM_SEARCH_RESULTS+'&q=' + searchTerm + '&key=' + APIKEY;
-    const parsedVideos = [];
+    const parsedVideos = {};
     this.http.get<any>(url).subscribe((data) => { //needs to be <any> so that it can call .items on data without compile error
       const response = data.items;
       for (let i = 0; i < YOUTUBE_NUM_SEARCH_RESULTS; i++)
       {
-        const tempDict = {};
-        tempDict['Title'] = response[i].snippet.title;
-        tempDict['URL'] = 'https://www.youtube.com/embed/' + response[i].id.videoId;
-        tempDict['ThumbnailURL'] = response[i].snippet.thumbnails.high.url;
-        tempDict['ThumbnailWidth'] = response[i].snippet.thumbnails.high.width;
-        tempDict['ThumbnailHeight'] = response[i].snippet.thumbnails.high.height;
-
-        parsedVideos[i] = tempDict;
+        parsedVideos['Title'] = response[i].snippet.title;
+        parsedVideos['URL'] = 'https://www.youtube.com/embed/' + response[i].id.videoId;
+        parsedVideos['ThumbnailURL'] = response[i].snippet.thumbnails.high.url;
+        parsedVideos['ThumbnailWidth'] = response[i].snippet.thumbnails.high.width;
+        parsedVideos['ThumbnailHeight'] = response[i].snippet.thumbnails.high.height;
       }
     });
     return parsedVideos;

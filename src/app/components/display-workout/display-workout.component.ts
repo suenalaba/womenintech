@@ -87,17 +87,17 @@ export class DisplayWorkoutComponent implements OnInit {
   }
 
   async getVideos() {
-    this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(results => {
+    this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(async results => {
       let durn: number;
       this.workoutIntensity = results.intensity;
       if(this.workoutIntensity=='low') { durn = 2; }
       else if(this.workoutIntensity=='hard') { durn=10; }
       else { durn=5; }
 
-      this.ytVideosWarm = this.ytService.getYoutubeAPI('warm up ' + durn + ' minutes');
+      this.ytVideosWarm = await this.ytService.getYoutubeAPI('warm up ' + durn + ' minutes');
       console.log('warm', this.ytVideosWarm);
 
-      this.ytVideosCool = this.ytService.getYoutubeAPI('cool down ' + durn + ' minutes');
+      this.ytVideosCool = await this.ytService.getYoutubeAPI('cool down ' + durn + ' minutes');
       console.log('cool', this.ytVideosCool);
     });
   }
