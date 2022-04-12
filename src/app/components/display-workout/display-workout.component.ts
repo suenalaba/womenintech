@@ -3,11 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { WorkoutDetails } from 'src/app/class/WorkoutDetails';
+import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 
 import { UserService } from '../../services/user.service'; //youtube api
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-display-workout',
@@ -21,7 +22,8 @@ export class DisplayWorkoutComponent implements OnInit {
     private workoutService: WorkoutsService) { }
   @Input() section: string;
   @Input() workoutDetails: any;
-  
+  @Input() stopwatch: number;
+
   workoutId: string;
   userId: string;
 
@@ -181,7 +183,11 @@ export class DisplayWorkoutComponent implements OnInit {
     console.log("next exercise:" , this.workoutSection, this.exerciseIndex, this.workoutRoutine.length)
     let l = this.workoutRoutine.length
 
-
+    this.workoutDetails.currExercise = {
+      section: this.workoutSection,
+      index: this.workoutSection == 'exercsie'? this.exerciseIndex : -1,
+    }
+    
     if(this.workoutSection=="warmup"){
       this.buttonText = "NEXT EXERCISE" 
       this.workoutSection = "exercise"
@@ -222,7 +228,20 @@ export class DisplayWorkoutComponent implements OnInit {
  
 
   async goToSummary(){
-    this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId}});
+    // window.localStorage.setItem("workoutDetails", JSON.stringify(this.workoutDetails));
+    if(this.workoutDetails.workoutStatus == "completed"){
+      this.workoutDetails.currExercise = {
+        section: '',
+        index: -1,
+      }
+      this.workoutDetails.stopwatch = this.stopwatch;
+      this.workoutDetails.dateCompleted = Timestamp.fromDate((new Date()));
+      this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails)
+      await this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId}});
+      console.log(this.workoutDetails)
+    }else{
+      await this.router.navigateByUrl('/tabs/workouts');
+    }
   }
 
 }

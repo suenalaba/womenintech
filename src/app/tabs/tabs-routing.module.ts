@@ -82,6 +82,10 @@ const routes: Routes = [
             path: 'gb-share-workout-modal',
             loadChildren: () => import('../pages/gym-buddy/gb-share-workout-modal/gb-share-workout-modal.module').then(
               m => m.GbShareWorkoutModalPageModule)
+            },
+          {
+            path: 'gb-update-account-preference',
+            loadChildren: () => import('../pages/gym-buddy/gb-update-account-preference/gb-update-account-preference.module').then( m => m.GbUpdateAccountPreferencePageModule)
           },
         ]
       },
