@@ -17,6 +17,7 @@ import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 import { TouchSequence } from 'selenium-webdriver';
 import { getHeapCodeStatistics } from 'v8';
 import { Router } from '@angular/router';
+import { CompletedWorkout } from 'src/app/class/CreateWorkoutDesc';
 
 
 Swiper.use([Autoplay]);
@@ -44,7 +45,7 @@ export class HomePage implements OnInit {
   ytVideos: any[];
 
   workoutTimeSeries: number[];
-  workoutTimeIndex: string[]; 
+  workoutTimeIndex: string[];
 
   public static completedWorkouts: any;
   thisWkWorkouts: any;
@@ -53,9 +54,9 @@ export class HomePage implements OnInit {
     private authService: AuthenticationService,
     private userService: UserService,
     private loadingCtrl: LoadingController,
-    private ytService: YoutubeService,
     private workoutService: WorkoutsService,
     private router: Router,
+    private ytService: YoutubeService,
   ) { this.onResize(); this.ytVideos = []; this.thisWkWorkouts = []; }
 
   @HostListener('window:resize', ['$event'])
@@ -101,6 +102,7 @@ export class HomePage implements OnInit {
   }
 
   async filterWorkouts() {
+    this.thisWkWorkouts = [];
     HomePage.completedWorkouts = await this.workoutService.getCompletedWorkouts(JSON.parse(localStorage.getItem('userID')));
     for (let i = 0; i < HomePage.completedWorkouts.docs.length; i++) {
       var tdy = new Date();
@@ -108,16 +110,23 @@ export class HomePage implements OnInit {
         await this.thisWkWorkouts.push(HomePage.completedWorkouts.docs[i].data());
       }
     }
+    console.log('end filterWorkout');
   }
 
   async loadText(){
     const loading = await this.loadingCtrl.create();
-    await loading.present();
+    // await loading.present();
 
-    this.welcomeText = 'Welcome back, ' + this.userInfo.firstName;
+    if(HomePage.completedWorkouts.docs.length == 0) {
+      this.welcomeText = 'Welcome aboard ' + this.userInfo.firstName + '!';
+    } else {
+      this.welcomeText = 'Welcome back, ' + this.userInfo.firstName;
+    }
+    
     var tdy = new Date();
     this.today = String(tdy.getDate()) + ' ' + String(tdy.toLocaleString('default', { month: 'long' })) + ' ' + String(tdy.getFullYear()) + ', ' + String(tdy.toLocaleString('default', { weekday: 'long' }));
 
+    this.cals = 0;
     let durnInt = 0;
     for (let i = 0; i < this.thisWkWorkouts.length; i++) {
       durnInt += parseInt(this.thisWkWorkouts[i].stopwatch);
@@ -127,26 +136,45 @@ export class HomePage implements OnInit {
     this.durn = `${Math.round(durnInt/60 * 100) / 100} mins`;
 
     loading.dismiss();
+    console.log('end loadtext');
   }
 
   async getVideos() {
     const loading = await this.loadingCtrl.create();
     await loading.present();
+    this.ytVideos = [];
 
-    this.basedOnWorkout = `Based on workout: ${this.thisWkWorkouts[0].workoutName}`;
-    let latestWorkout = this.thisWkWorkouts[0].workoutRoutine;
+    // FIRST TIME USERS (NO WORKOUT COMPLETED)
+    if(HomePage.completedWorkouts.docs.length == 0) {
+      this.basedOnWorkout = `Get started on your first exercise!`;
 
-    for (let i = 0; i < latestWorkout.length; i++) {
-      let searchTerm = '';
-      searchTerm += latestWorkout[i].exerciseName;
+      let genderr = '';
       if (this.userInfo.gender != "others") {
-        searchTerm += this.userInfo.gender;
+        genderr += this.userInfo.gender;
       }
-      let ytVid = this.ytService.getYoutubeAPI(searchTerm);
-      this.ytVideos.push(ytVid);
+      this.ytVideos.push(this.ytService.getYoutubeAPI('exercise for beginners '+genderr));
+      this.ytVideos.push(this.ytService.getYoutubeAPI('exercise for '+this.userInfo.userDetails.fitnessGoal+' '+genderr));
+      if (this.userInfo.userDetails.areaOfInjury) {
+        this.ytVideos.push(this.ytService.getYoutubeAPI('exercise for injury '+this.userInfo.userDetails.areaOfInjury));
+      }
+    } else {
+    // HAS COMPLETED A WORKOUT
+      this.basedOnWorkout = `Based on workout: ${HomePage.completedWorkouts.docs[0].data().workoutName}`;
+      let latestWorkout = HomePage.completedWorkouts.docs[0].data().workoutRoutine;
+
+      for (let i = 0; i < latestWorkout.length; i++) {
+        let searchTerm = '';
+        searchTerm += latestWorkout[i].exerciseName;
+        if (this.userInfo.gender != "others") {
+          searchTerm += ' ' + this.userInfo.gender;
+        }
+        let ytVid = this.ytService.getYoutubeAPI(searchTerm);
+        this.ytVideos.push(ytVid);
+      }
     }
 
     loading.dismiss();
+    console.log('end getvid');
   }
 
   async loadGraph() {
@@ -155,7 +183,8 @@ export class HomePage implements OnInit {
 
     this.workoutTimeIndex = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     var tdy = new Date();
-    var shift = tdy.getDay();
+    console.log(tdy);
+    var shift = tdy.getDay()-1;
     while (shift--) {
       var temp = this.workoutTimeIndex.shift()
       this.workoutTimeIndex.push(temp);
@@ -174,14 +203,19 @@ export class HomePage implements OnInit {
       var lowerBound = upperBound-24*60*60;
       var curTime = this.thisWkWorkouts[ptr].dateCompleted.seconds;
       if (lowerBound <= curTime && curTime <= upperBound) {
-        this.workoutTimeSeries[this.workoutTimeSeries.length-1-i] += parseInt(this.thisWkWorkouts[ptr].stopwatch);
+        this.workoutTimeSeries[this.workoutTimeSeries.length-1-i] += parseInt(this.thisWkWorkouts[ptr].stopwatch)/60;
         ptr++;
       }
       else{
         i++;
       }
     }
+    for (let j = 0; j < this.workoutTimeSeries.length; j++) {
+      this.workoutTimeSeries[j] = Math.round(this.workoutTimeSeries[j] * 100) / 100;
+    }
+
     loading.dismiss();
+    console.log('end loadgraph');
   }
 
   async swiperSlideChanged(e) {
@@ -218,7 +252,7 @@ export class HomePage implements OnInit {
       },
       series: [
         {
-          name: 'Time Recorded',
+          name: 'Exercise Minutes',
           type: 'line',
           data: this.workoutTimeSeries,
           markPoint: {
@@ -243,7 +277,14 @@ export class HomePage implements OnInit {
   }
 
   goStats() {
-    this.router.navigate(['stats']);
+    this.router.navigate(['/tabs/stats']);
+  }
+
+  async doRefresh() {
+    await this.filterWorkouts();
+    this.loadText();
+    this.getVideos();
+    this.loadGraph();
   }
 
 }

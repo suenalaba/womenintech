@@ -21,7 +21,7 @@ export class DisplayWorkoutComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, 
     private alertController: AlertController, private user: UserService,
     private workoutService: WorkoutsService, windowRef: WindowRefService,
-    private ytService: YoutubeService) { 
+    private ytService: YoutubeService,) { 
       this._window = windowRef.nativeWindow; 
     }
   @Input() section: string;
