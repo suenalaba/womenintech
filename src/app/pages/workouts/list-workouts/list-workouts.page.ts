@@ -96,7 +96,7 @@ export class ListWorkoutsPage implements OnInit {
 
   getBuddyClass(wo){
     if(wo.createdBy != this.userInfo.id){
-      return 'workout'
+      return 'buddy'
     }
 
   }
