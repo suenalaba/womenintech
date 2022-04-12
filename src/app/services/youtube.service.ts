@@ -19,7 +19,8 @@ export class YoutubeService {
    */
   getYoutubeAPI(searchTerm) {
     const APIKEY = 'AIzaSyD7U_0cft4oeknyAxfmh8m3gflsUw0-o3w'; // l.kh.b
-    //AIzaSyDH-momG79qABXUQ623_YYZrExXltFPq1k; //bkhl
+    //
+    //'AIzaSyDH-momG79qABXUQ623_YYZrExXltFPq1k'; //bkhl
     const YOUTUBE_NUM_SEARCH_RESULTS = 3;
 
     console.log('searching youtube for ', searchTerm);

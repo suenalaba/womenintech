@@ -13,6 +13,7 @@ import { UserService } from '../../services/user.service';
 import { YoutubeService } from 'src/app/services/youtube.service';
 
 import { HostListener } from '@angular/core';
+import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 
 Swiper.use([Autoplay]);
 SwiperCore.use([Pagination]);
@@ -44,6 +45,7 @@ export class HomePage implements OnInit {
     private userService: UserService,
     private loadingCtrl: LoadingController,
     private ytService: YoutubeService,
+    private workoutService: WorkoutsService,
   ) { this.onResize(); }
 
   @HostListener('window:resize', ['$event'])
@@ -114,13 +116,21 @@ export class HomePage implements OnInit {
 
     let searchTerm = '';
 
-    if (this.userInfo.gender == "others") {
-      searchTerm = "deadlift"
-    }
-    else {
-      searchTerm = "deadlift " + this.userInfo.gender;
-    }
-    this.ytVideos = this.ytService.getYoutubeAPI(searchTerm);
+    let res = await this.workoutService.getAllWorkout(JSON.parse(localStorage.getItem('userID')));
+    (await res).forEach(async (doc) => {
+      let workout = doc.data();
+      let choice = Math.floor(Math.random() * (workout.workoutRoutine.length - 0 + 1)) + 0
+      let exName = await workout.workoutRoutine[choice].exerciseName
+
+      if (this.userInfo.gender == "others") {
+        searchTerm = exName
+      }
+      else {
+        searchTerm = exName + this.userInfo.gender;
+      }
+
+      this.ytVideos = this.ytService.getYoutubeAPI(searchTerm);
+    });
 
     loading.dismiss();
   }
