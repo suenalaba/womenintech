@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button (click)="goHome()">
+      Back
+    </ion-button>
+    <ion-title>Your Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let workout of workouts">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-card-header style="font-size:20px">
+            {{ workout.workoutName }}
+          </ion-card-header>
+        </ion-col>
+        <ion-col>
+          Total Sets<br/>
+          <ion-card-header>
+            {{ workout.totalSets }}
+          </ion-card-header>
+        </ion-col>
+        <ion-col>
+          Total Reps<br/>
+          <ion-card-header>
+            {{ workout.totalReps }}
+          </ion-card-header>
+        </ion-col>
+        <ion-col>
+          Calories<br/>
+          <ion-card-header>
+            {{ workout.caloriesBurnt }}
+          </ion-card-header>
+        </ion-col>
+        <ion-col>
+          {{ workout.dateCompleted }}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+</ion-content>
