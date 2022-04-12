@@ -28,7 +28,10 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 //import { Camera } from '@ionic-native/camera';
 
-
+/**
+ * Services
+ */
+ import { WindowRefService } from '../app/services/window-ref.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -45,7 +48,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     provideStorage(() => getStorage()),
     HttpClientModule,
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, WindowRefService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

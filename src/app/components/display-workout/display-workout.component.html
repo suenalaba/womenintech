@@ -1,4 +1,5 @@
 <script src="https://www.youtube.com/iframe_api"></script>
+<!--<script src="https://sdk.scdn.co/spotify-player.js"></script>-->
 
 <div style="height: 100%; display: flex; align-items: center; justify-content: center;" id="warmup" *ngIf="workoutSection === 'warmup'">
   <ion-card>
@@ -9,9 +10,9 @@
     <ion-card-content>
       <div class="yt-video">
         <iframe 
-          width={{ytVideosWarm[1].ThumbnailWidth}}
-          height={{ytVideosWarm[1].ThumbnailHeight}}
-          [src]="ytVideosWarm[1].URL | safe">
+          width={{ytVideosWarm.ThumbnailWidth}}
+          height={{ytVideosWarm.ThumbnailHeight}}
+          [src]="ytVideosWarm.URL | safe">
         </iframe>
       </div>
     </ion-card-content>
@@ -19,6 +20,15 @@
 </div>
 
 <div id="workout" *ngIf="workoutSection === 'exercise' && currentExercise">
+  <ion-card>
+    aaaa
+    <script>
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        // You can now initialize Spotify.Player and use the SDK
+      };
+      </script>
+  </ion-card>
+
   <ion-card>
     <ion-card-header>
       <ion-card-title>EXERCISES {{exerciseIndex+1}} </ion-card-title>
@@ -62,9 +72,9 @@
     <ion-card-content>
       <div class="yt-video">
         <iframe 
-          width={{ytVideosCool[1].ThumbnailWidth}}
-          height={{ytVideosCool[1].ThumbnailHeight}}
-          [src]="ytVideosCool[1].URL | safe">
+          width={{ytVideosCool.ThumbnailWidth}}
+          height={{ytVideosCool.ThumbnailHeight}}
+          [src]="ytVideosCool.URL | safe">
         </iframe>
       </div>
     </ion-card-content>

@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { DisplayWorkoutComponent } from './display-workout.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { SafePipe } from './display-workout.component';
+import { SafePipe } from 'src/app/services/youtube.service';
 
 @NgModule({
   imports: [ CommonModule, FormsModule, IonicModule, HttpClientModule],
