@@ -5,8 +5,6 @@ import { GymBuddyDetails } from '../class/GymBuddyProfile';
 import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
 import { arrayUnion, updateDoc } from 'firebase/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators'
-import { User, UserDetails } from '../class/user';
 import { UserService } from './user.service';
 import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
 
@@ -38,7 +36,7 @@ export class GymBuddyService {
     const gymBuddyDetails: GymBuddyDetails = {
       isSignUp: true,
       briefIntro: details.briefIntro,
-      //workoutTimePreference: string; //how to create an array to store an array of workouttimepreferences
+      profilePicture:details.profilePicture,
       workoutTimePreference: details.timePref,
       buddyGender: details.buddyPref,
       gymBuddyGoals: details.gymBuddyGoals,
@@ -71,13 +69,6 @@ export class GymBuddyService {
   isSignedUp(){
     return this.authState.value;
   }
-
-  uploadProfilePicture(imgPath:string,userID) {
-    console.log("uploaded image");
-    const noteDocRef = doc(this.fireStore, `Users`, userID);
-    return updateDoc(noteDocRef,{ "gymBuddyDetails.profilePicture" : imgPath});
-  }
-
 
   updateMatches(user : GymBuddyProfileInfo,userID) {
     //console.log(details);
