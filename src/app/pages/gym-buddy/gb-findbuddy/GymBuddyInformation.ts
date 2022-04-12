@@ -15,6 +15,7 @@ export class GymBuddyProfileInfo {
   private buddyTrainStyle?: string[];
   private userInfo;
   private gymBuddyInfo;
+  private _isSignUp: boolean;
 
   private _matches?: string[];
   private _unmatches?: string[];
@@ -35,6 +36,7 @@ export class GymBuddyProfileInfo {
     this.userId = this.userInfo.id;
     this.gender=this.userInfo.gender;
     this.gymBuddyInfo=this.userInfo.gymBuddyDetails;
+    this._isSignUp=this.userInfo.gymBuddyDetails.isSignUp;
     this.workoutTimePreference = this.userInfo.gymBuddyDetails.workoutTimePreference;
     this.buddyGender = this.userInfo.gymBuddyDetails.buddyGender;
     this.gymBuddyGoals = this.userInfo.gymBuddyDetails.gymBuddyGoals;
@@ -118,6 +120,12 @@ export class GymBuddyProfileInfo {
   }
   public get profilePicture(): string {
     return this._profilePicture;
+  }
+  public get isSignUp(): boolean {
+    return this._isSignUp;
+  }
+  public set isSignUp(value: boolean) {
+    this._isSignUp = value;
   }
 
   public get matches(): string[] {
