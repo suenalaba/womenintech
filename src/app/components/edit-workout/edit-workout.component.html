@@ -1,0 +1,32 @@
+<ion-content>
+  <form [formGroup]="userWorkoutUpdates">
+    <ion-card>
+      <ion-card-content>
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Number of sets</ion-label>
+            <div class="input-align">
+              <ion-input (ionInput)="getSets($event.target.value)" type="number" value="{{sets.sets}}"
+                formControlName="sets"></ion-input>
+              <span>Sets</span>
+            </div>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Number of repetitions</ion-label>
+            <div class="input-align">
+              <ion-input (ionInput)="getReps($event.target.value)" type="number" value="{{sets.reps}}"
+                formControlName="reps"></ion-input>
+              <span>Reps</span>
+            </div>
+          </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="btn-grp">
+      <ion-button expand="block" color="light" (click)="updateWorkoutDetails()">
+        UPDATE
+      </ion-button>
+    </div>
+  </form>
+
+</ion-content>

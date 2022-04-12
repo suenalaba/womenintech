@@ -37,7 +37,16 @@
     --width: 90% !important;
     position: absolute;
     --background: transparent !important;
+}
 
+/* Modal  */
+.editWO {
+  --backdrop-opacity: 0.8 !important;
+  --height: 40% !important;
+  --width: 90% !important;
+  position: absolute;
+  --background: transparent !important;
+  overflow: hidden;
 }
 
 // Small Modal for Gb Chat Page delete icon.
