@@ -12,7 +12,8 @@
   
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large"> {{ welcomeText }} </ion-title>
+      <ion-title slot="start" size="large"> {{ welcomeText }} </ion-title>
+      <ion-button slot="end" (click)="doRefresh()">Refresh</ion-button>
     </ion-toolbar>
     <ion-toolbar mode="md">
       <ion-title size="small"> {{ today }} </ion-title>
@@ -47,6 +48,9 @@
             </ion-col>
           </ion-row>
         </ion-grid>
+        <ion-button expand="block" (click)="goStats()">
+          See More
+        </ion-button>
       </ion-card>
     </ng-template>
 
