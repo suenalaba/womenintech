@@ -36,7 +36,7 @@
 
             <!-- Profile Picture -->
             <ion-card class="ion-text-center" *ngIf="!isFileUploading && !isFileUploaded">
-              <ion-label position="stacked">Choose Images to Upload</ion-label>
+              <ion-list-header>Choose Images to Upload</ion-list-header>
               <ion-card-content>
                 <ion-button color="primary" size="medium">
                   <input type="file" (change)="uploadImage($event.target.files)" />
@@ -60,7 +60,10 @@
                   <!-- for each item in workoutList print it-->
                   <ion-label>{{entry.text}}</ion-label>
                   <ion-text>{{entry.time}}</ion-text>
-                  <ion-checkbox formArrayName="timePref" slot="start" (click)="storeGBTimePrefData(entry)"></ion-checkbox>
+                  <ion-checkbox
+                  formArrayName="timePref" slot="start"
+                  [(ngModel)]="entry.isChecked" [ngModelOptions]="{standalone: true}"
+                  (click)="checkTimePref(entry)"></ion-checkbox>
                 </ion-item>
               </ion-list>
 
@@ -80,11 +83,11 @@
             <ion-list *ngIf="gymBuddyGoalsList">
               <ion-list-header>Goals you want to achieve with your buddy</ion-list-header>
               <ion-label position="stacked">Select up to 3 strengths</ion-label>
-              <ion-item *ngFor="let entry of gymBuddyGoalsList">
+              <ion-item *ngFor="let entry of gymBuddyGoalsList" >
                 <!-- for each item in workoutList print it-->
                 <ion-label>{{entry.text}}</ion-label>
-                <ion-checkbox slot="start" formArrayName="gymBuddyGoals"
-                  (click)="storeGBGoalsData(entry); checkGymBuddyGoals(entry);"
+                <ion-checkbox slot="start"  formArrayName="gymBuddyGoals" [(ngModel)]="entry.isChecked" [ngModelOptions]="{standalone: true}"
+                  (click)="checkGymBuddyGoals(entry);"
                   [disabled]="!entry.isChecked && gymBuddyGoalsChecked === gymBuddyGoalsLimit"></ion-checkbox>
               </ion-item>
             </ion-list>
@@ -94,8 +97,8 @@
               <ion-label position="stacked">Select up to 3 strengths</ion-label>
               <ion-item *ngFor="let entry of personalTraitsList">
                 <ion-label>{{entry.text}}</ion-label>
-                <ion-checkbox slot="start" formArrayName="personalTraits"
-                  (click)="storeGBPersonalTraitsData(entry); checkPersonalTraits(entry);"
+                <ion-checkbox slot="start" formArrayName="personalTraits" [(ngModel)]="entry.isChecked" [ngModelOptions]="{standalone: true}"
+                  (click)="checkPersonalTraits(entry);"
                   [disabled]="!entry.isChecked && personalTraitsChecked === personalTraitsLimit"></ion-checkbox>
               </ion-item>
             </ion-list>
@@ -105,8 +108,8 @@
               <ion-label position="stacked">Select up to 2 styles</ion-label>
               <ion-item *ngFor="let entry of personalStyleList">
                 <ion-label>{{entry.text}}</ion-label>
-                <ion-checkbox slot="start" formArrayName="personalStyle"
-                  (click)="storeGBPersonalStylesData(entry); checkPersonalTrainStyle(entry);"
+                <ion-checkbox slot="start" formArrayName="personalStyle" [(ngModel)]="entry.isChecked" [ngModelOptions]="{standalone: true}"
+                  (click)="checkPersonalTrainStyle(entry);"
                   [disabled]="!entry.isChecked && personalTrainStyleChecked === personalTrainStyleLimit"></ion-checkbox>
               </ion-item>
             </ion-list>
@@ -116,8 +119,8 @@
               <ion-label position="stacked">Select up to 2 locations</ion-label>
               <ion-item *ngFor="let entry of locationPrefList">
                 <ion-label>{{entry.text}}</ion-label>
-                <ion-checkbox slot="start" formArrayName="locationPref"
-                  (click)="storeGBPrefLocationsData(entry); checkLocationPref(entry);"
+                <ion-checkbox slot="start" formArrayName="locationPref" [(ngModel)]="entry.isChecked" [ngModelOptions]="{standalone: true}"
+                  (click)="checkLocationPref(entry);"
                   [disabled]="!entry.isChecked && locationPrefChecked === locationPrefLimit"></ion-checkbox>
               </ion-item>
             </ion-list>
@@ -143,8 +146,8 @@
               <ion-label position="stacked">Select up to 3 strengths</ion-label>
               <ion-item *ngFor="let entry of buddyTraitsList">
                 <ion-label>{{entry.text}}</ion-label>
-                <ion-checkbox slot="start" formArrayName="buddyTraits"
-                  (click)="storeGBBuddyTraitsData(entry); checkBuddyTraits(entry);"
+                <ion-checkbox slot="start" formArrayName="buddyTraits" [(ngModel)]="entry.isChecked" [ngModelOptions]="{standalone: true}"
+                  (click)="checkBuddyTraits(entry);"
                   [disabled]="!entry.isChecked && buddyTraitsChecked === buddyTraitsLimit"></ion-checkbox>
               </ion-item>
             </ion-list>
@@ -154,8 +157,8 @@
               <ion-label position="stacked">Select up to 2 styles</ion-label>
               <ion-item *ngFor="let entry of buddyStyleList">
                 <ion-label>{{entry.text}}</ion-label>
-                <ion-checkbox slot="start" formArrayName="buddyTrainStyle"
-                  (click)="storeGBBuddyTrainStyleData(entry); checkBuddyTrainStyle(entry);"
+                <ion-checkbox slot="start" formArrayName="buddyTrainStyle" [(ngModel)]="entry.isChecked" [ngModelOptions]="{standalone: true}"
+                  (click)="checkBuddyTrainStyle(entry);"
                   [disabled]="!entry.isChecked && buddyTrainStyleChecked === buddyTrainStyleLimit"></ion-checkbox>
               </ion-item>
             </ion-list>
