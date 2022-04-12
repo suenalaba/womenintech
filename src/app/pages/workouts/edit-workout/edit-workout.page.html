@@ -4,26 +4,94 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <!-- <form> -->
-  <h2>Your past workouts</h2>
-  <h4>Your workout description</h4>
-  <div *ngFor="let ex of workout">
-  <ion-card>
-    <ion-card-content>
-      <!-- <ion-item class="ion-margin-bottom" lines="none"> -->
-        <!-- <ion-label position="stacked">{{ex.exercise}}</ion-label> -->
-        <ion-card-title class="exercise-title"> {{ex.exercise}} </ion-card-title>
+<ion-content  *ngIf="workoutDetails">
+  <!-- <form> --> 
+  <h2>{{workoutDetails.wName}}</h2>
+
+  
+  <div (click)="workoutEdit(workout.id)" *ngFor="let e of workoutDetails.workoutRoutine; let i = index" class="workout-update">
+    <ion-button id="trigger-button">Click to edit</ion-button>
+    <ion-card>
+      <ion-card-content>
+      <ion-item class="ion-margin-bottom" lines="none">
+        <ion-label position="stacked">{{e.exerciseName}}</ion-label>
+        <!-- <ion-card-title class="exercise-title"> {{workoutDetails.wName}} </ion-card-title> -->
           <div class="input-align">
-            <div *ngFor="let set of exercises" class="set">
-              <h3>Set {{set.no}} </h3>  
-              <h3>{{set.reps}} Reps </h3> 
+            <div *ngFor="let set of counter(e.sets.sets); let i = index" class="set">
+              <h3>Set {{i+1}} </h3>  
+              <h3>{{e.sets.reps}} Reps </h3> 
             </div>
+            <!-- <div [innerHTML]="displayExercise(e.sets)"> </div> -->
           </div>
-      <!-- </ion-item> -->
+      </ion-item>
     </ion-card-content>
-  </ion-card>
-  </div>
+    </ion-card>
+    
+  </div>  
+
+  <!-- Use a trigger -->
+  <!-- <ion-button id="trigger-button">Click to open modal</ion-button> -->
+  <ion-modal trigger="trigger-button">
+    <ng-template>
+      <ion-content>
+        <form (ngSubmit)="updateDetails()" [formGroup]="userUpdates">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Any changes?</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item class="ion-margin-bottom">
+                <ion-label position="stacked">Workout Name</ion-label>
+                <div class="input-align">
+                  <ion-input type="text" value="{{workoutDetails.workoutRoutine.wName}}" formControlName="workoutname"></ion-input>
+                </div>
+              </ion-item>
+      
+              <ion-item class="ion-margin-bottom">
+                <ion-label position="stacked">Number of sets</ion-label>
+                <div class="input-align">
+                  <ion-input type="number" value="{{workoutDetails.workoutRoutine.sets.sets}}" formControlName="workoutsets"></ion-input>
+                  <span>Set</span>
+                </div>
+                <ion-note slot="error" *ngIf="weight.dirty && weight.errors">Enter valid sets</ion-note>
+              </ion-item>
+        
+              <ion-item class="ion-margin-bottom">
+                <ion-label position="stacked">Number of repetitions</ion-label>
+                <div class="input-align">
+                  <ion-input type="number" value="{{workoutDetails.workoutRoutine.sets.reps}}" formControlName="workoutreps"></ion-input>
+                  <span>Reps</span>
+                </div>
+                <ion-note slot="error" *ngIf="weight.dirty && weight.errors">Enter valid repetitions</ion-note>
+              </ion-item>
+      
+            </ion-card-content>
+          </ion-card>
+        
+          <div class="btn-grp">
+            <ion-button expand="block" color="light" *ngIf="formChange" type="submit">
+              UPDATE
+            </ion-button>
+            <ion-button expand="block" color="light" *ngIf="!formChange" type="submit">
+              NEXT
+            </ion-button>
+            <ion-button expand="block" fill="outline" color="danger" (click)="cancel()">
+              CANCEL
+            </ion-button>
+          </div>
+        </form>
+  
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+  
+ 
+
+  
+
+
+  
+
 <!-- </form> -->
 </ion-content>
 

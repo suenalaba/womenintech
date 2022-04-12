@@ -105,7 +105,7 @@ export class ListWorkoutsPage implements OnInit {
         text: 'Edit',
         handler: () => {
           console.log('Play clicked');
-          this.editWorkout(id);
+          this.editWorkout(id, this.userInfo.id);
         }
       }, {
         text: 'Delete',
@@ -133,8 +133,8 @@ export class ListWorkoutsPage implements OnInit {
     this.router.navigate(['/start-workout'], { queryParams: { wid: wid, uid: uid}});
   }
 
-  async editWorkout(id){
-    await this.router.navigate(['/tabs/workouts/edit-workout'], { queryParams: { id: id }});
+  async editWorkout(wid, uid){
+    await this.router.navigate(['/tabs/workouts/edit-workout'], { queryParams: { wid: wid, uid: uid }});
   }
 
   deleteWorkout(wid,uid){
