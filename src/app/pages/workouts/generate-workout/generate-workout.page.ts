@@ -62,10 +62,10 @@ export class GenerateWorkoutPage implements OnInit {
     
       this.exerciseList = this.workoutDesc.workoutRoutine
 
-      if(this.workoutDesc.intensity=='Low') { this.warmUpTime = "2.5 mins" ; this.coolDownTime = "2.5 mins"; this.workoutTime = "10 mins"}
-      if(this.workoutDesc.intensity=='Moderate') { this.warmUpTime = "5 mins" ; this.coolDownTime = "5 mins"; this.workoutTime = "20 mins" }
-      if(this.workoutDesc.intensity=='Vigorous') { this.warmUpTime = "5 mins" ; this.coolDownTime = "5 mins"; this.workoutTime = "50 mins" }
-      if(this.workoutDesc.intensity=='Hard') { this.warmUpTime = "10 mins" ; this.coolDownTime = "10 mins"; this.workoutTime = "70 mins" }
+      if(this.workoutDesc.duration=='15 Mins') { this.warmUpTime = "2.5 mins" ; this.coolDownTime = "2.5 mins"; this.workoutTime = "10 mins"}
+      if(this.workoutDesc.duration=='30 Mins') { this.warmUpTime = "5 mins" ; this.coolDownTime = "5 mins"; this.workoutTime = "20 mins" }
+      if(this.workoutDesc.duration=='60 Mins') { this.warmUpTime = "5 mins" ; this.coolDownTime = "5 mins"; this.workoutTime = "50 mins" }
+      if(this.workoutDesc.duration=='90 Mins > ') { this.warmUpTime = "10 mins" ; this.coolDownTime = "10 mins"; this.workoutTime = "70 mins" }
     });
 
     this.loadingCtrl.dismiss();

@@ -65,7 +65,7 @@ export class ListWorkoutsPage implements OnInit {
    })
   }
 
-  async ionViewDidEnter(){
+  async ionViewWillEnter(){
     await this.loadUserWorkouts(JSON.parse(localStorage.getItem('userID')));
     this.filterWorkout('all');
   }
@@ -81,15 +81,16 @@ export class ListWorkoutsPage implements OnInit {
     });
 
     this.allWorkouts = this.workouts;
-    console.log(this.allWorkouts)
   }
 
   getDate(date){
-    let newDate = new Date(date.seconds*1000)
+    if(date){
+      let newDate = new Date(date.seconds*1000)
     let mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
     let strDate = newDate.getDate() + " " + mS[newDate.getMonth()] +" " + newDate.getFullYear()
     return strDate;
-    console.log(strDate)
+    }return ''
+    
   }
 
   async workoutAction(id) {

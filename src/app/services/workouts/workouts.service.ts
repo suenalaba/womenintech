@@ -9,7 +9,7 @@ import { user } from '@angular/fire/auth';
 import { Firestore, collection, doc, setDoc, docData, Timestamp, query, getDocs } from '@angular/fire/firestore';
 import { onSnapshot, orderBy, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
-import { WorkoutDesc } from '../../class/CreateWorkoutDesc';
+import { CompletedWorkout, WorkoutDesc } from '../../class/CreateWorkoutDesc';
 import { WorkoutDetails } from '../../class/WorkoutDetails';
 import { WorkoutAPIService } from './workout-API.service';
 
@@ -116,6 +116,18 @@ export class WorkoutsService {
 
   async updateWorkout(wid, uid){
 
+  }
+
+  async storeCompletedWorkout(completeWorkout, uid){
+    let workout: CompletedWorkout = completeWorkout
+    console.log(workout)
+    let timestamp = Timestamp.fromDate(new Date());
+
+     /*store to firebase firestore (firestore, collection, the very long string is the path)*/
+     const noteDocRef = doc(this.firestore, `Users/${uid}/CompletedWorkouts/${timestamp}`);
+    
+     /* must update doc, cannot add doc */
+    await setDoc(noteDocRef, workout);
   }
 
 

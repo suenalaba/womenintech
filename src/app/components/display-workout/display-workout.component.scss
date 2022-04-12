@@ -12,6 +12,14 @@ ion-card-title.exercise-title {
   margin-bottom: 10px;
 }
 
+div.yt-video{
+    width:100%;
+
+    iframe{
+        width:100%;
+        height: auto;
+    }
+}
 // div.sets{
 //     margin-top:20px;
 //     display: flex;
