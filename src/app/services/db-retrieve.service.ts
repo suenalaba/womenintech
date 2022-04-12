@@ -37,12 +37,12 @@ export class DbRetrieveService {
         //or the user's gender.
     }
     else {
-      q = query(usersDB, where('gymBuddyDetails.isSignUp', '==', true),
-          where('gymBuddyDetails.buddyGender', 'in', ['no_preference', gender])); //For testing purposes if not enough samples
-      /*q = query(usersDB, where('gymBuddyDetails.isSignUp', '==', true), //that user must have signed up for gym buddy
+      // q = query(usersDB, where('gymBuddyDetails.isSignUp', '==', true),
+      //     where('gymBuddyDetails.buddyGender', 'in', ['no_preference', gender])); //For testing purposes if not enough samples
+      q = query(usersDB, where('gymBuddyDetails.isSignUp', '==', true), //that user must have signed up for gym buddy
           where('gender', '==', preferredGender), //that user's gender is the preferredGender of me.
           where('gymBuddyDetails.buddyGender', 'in', ['no_preference', gender]), //that users preferred buddy gender, is me or no pref
-          where('id', '!=', id)); //guard clause so you don't find yourself */
+          where('id', '!=', id)); //guard clause so you don't find yourself
     }
 
     //query snapshot object
