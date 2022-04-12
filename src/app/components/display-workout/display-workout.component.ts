@@ -21,7 +21,8 @@ export class DisplayWorkoutComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, 
     private alertController: AlertController, private user: UserService,
     private workoutService: WorkoutsService, windowRef: WindowRefService,
-    private ytService: YoutubeService,) { 
+    //private ytService: YoutubeService,
+    ) { 
       this._window = windowRef.nativeWindow; 
     }
   @Input() section: string;
@@ -94,10 +95,12 @@ export class DisplayWorkoutComponent implements OnInit {
       else if(this.workoutIntensity=='hard') { durn=10; }
       else { durn=5; }
 
-      this.ytVideosWarm = await this.ytService.getYoutubeAPI('warm up ' + durn + ' minutes');
+      const ytService = YoutubeService.getInstance();
+
+      this.ytVideosWarm = await ytService.getYoutubeAPI('warm up ' + durn + ' minutes');
       console.log('warm', this.ytVideosWarm);
 
-      this.ytVideosCool = await this.ytService.getYoutubeAPI('cool down ' + durn + ' minutes');
+      this.ytVideosCool = await ytService.getYoutubeAPI('cool down ' + durn + ' minutes');
       console.log('cool', this.ytVideosCool);
     });
   }
@@ -130,6 +133,8 @@ export class DisplayWorkoutComponent implements OnInit {
 
     this.workoutRoutine[this.exerciseIndex].sets.sets = this.currentExercise.sets.sets+1;
     this.workSets.push(this.currentExercise.sets.reps)
+
+    this.workoutDetails.workoutRoutine = this.workoutRoutine
     window.localStorage.setItem("workoutRoutine", JSON.stringify(this.workoutRoutine));
   }
 
@@ -137,6 +142,7 @@ export class DisplayWorkoutComponent implements OnInit {
     if(this.workSets.length > 0){
       this.workSets.splice(this.selectedSet,1)
       this.workoutRoutine[this.exerciseIndex].sets.sets = this.currentExercise.sets.sets-1;
+      this.workoutDetails.workoutRoutine = this.workoutRoutine
       window.localStorage.setItem("workoutRoutine", JSON.stringify(this.workoutRoutine));
     }
     

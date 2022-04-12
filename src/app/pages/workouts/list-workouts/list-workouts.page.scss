@@ -45,8 +45,8 @@ ion-card div.workout-tags{
     padding-right:10px;
 }
 
-ion-card.workout{
-  border: 1px solid blue;
+ion-card.buddy{
+    box-shadow: 0px 0px 8px 1px rgba(25,158,224,1);
 }
 
 
@@ -60,7 +60,3 @@ a.show-tag{
     font-size:12px;
 }
 
-div.buddies{
-  color:blue;
-    border-color: cadetblue;
-}
