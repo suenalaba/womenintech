@@ -19,7 +19,7 @@
   </ion-header>
 
   <!-- Add content here -->
-  <div *ngIf="workouts.length!=0">
+  <div>
     <ion-item lines="none">
       <ion-select value="all" interface="popover" class="filter-workout"
         [interfaceOptions]="{'cssClass': 'filter-popover'}" (ionChange)="filterWorkout($event.detail.value)">

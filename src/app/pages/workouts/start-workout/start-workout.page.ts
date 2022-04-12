@@ -63,7 +63,12 @@ export class StartWorkoutPage implements OnInit {
       window.localStorage.setItem("workoutRoutine",JSON.stringify(this.workoutRoutine));
       window.localStorage.setItem("workoutDetails",JSON.stringify(this.workoutDetails));
 
-    });
+    },
+    error=>{
+      console.log(error)
+      this.router.navigateByUrl('/tabs/workouts', {replaceUrl: true});
+    }
+    );
   }
 
   ionViewWillLeave() {
@@ -135,6 +140,7 @@ export class StartWorkoutPage implements OnInit {
           id: 'cancel-button',
           handler: (blah) => {
             console.log('Confirm Cancel: blah');
+            this.toggleTimer();
           }
         }, {
           text: 'Okay',
@@ -179,6 +185,9 @@ export class StartWorkoutPage implements OnInit {
         section: '',
         index: -1,
       }
+      this.workoutDetails.dateCompleted = Timestamp.fromDate((new Date()));
+
+      console.log(this.workoutDetails)
       msg = "Workout completed!"
       this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails).then(()=>this.presentToast(msg))
     }
@@ -195,14 +204,22 @@ export class StartWorkoutPage implements OnInit {
   async presentAlert() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Workout Paused',
+      header: 'Your Workout is Paused',
       // subHeader: 'Subtitle',
       backdropDismiss: false,
-      message: 'Continue?',
+      message: 'Do you want to continue?',
       buttons: [{
-        text: 'OK',
+        text: 'Yes',
         handler: (blah) => {
           this.toggleTimer()
+        }
+      },{
+        text: "No",
+        role: 'cancel',
+        id: 'cancel-button',
+        handler: (blah) => {
+          console.log('Confirm Cancel: blah');
+          this.stopWorkout();
         }
       }],
       
