@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { WorkoutDetails } from 'src/app/class/WorkoutDetails';
+import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { WorkoutDetails } from 'src/app/class/WorkoutDetails';
 })
 export class DisplayWorkoutComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private router: Router, private alertController: AlertController) { }
+  constructor(private route: ActivatedRoute, private router: Router, private alertController: AlertController, private workoutService: WorkoutsService) { }
   @Input() section: string;
   @Input() workoutDetails: any;
   
@@ -195,7 +196,18 @@ export class DisplayWorkoutComponent implements OnInit {
  
 
   async goToSummary(){
-    this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId}});
+    // window.localStorage.setItem("workoutDetails", JSON.stringify(this.workoutDetails));
+    if(this.workoutDetails.workoutStatus == "completed"){
+      this.workoutDetails.currExercise = {
+        section: '',
+        index: -1,
+      }
+      this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails)
+
+      await this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId}});
+    }else{
+      await this.router.navigateByUrl('/tabs/workouts');
+    }
   }
 
 }
