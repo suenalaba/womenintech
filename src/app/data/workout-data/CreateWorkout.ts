@@ -7,7 +7,8 @@ export const Intensity: CreateWorkoutDesc[] = [
         info: '< 3.0 METs',
         value: 'low',
         name: 'intensity',
-        color: 'warning'
+        color: 'warning',
+        mets: 3.0,
     },
     {
         id: 2,
@@ -15,7 +16,8 @@ export const Intensity: CreateWorkoutDesc[] = [
         info: '3.0 - 6.0 METs',
         value: 'moderate',
         name: 'intensity',
-        color: 'warning'
+        color: 'warning',
+        mets: 4.5,
     },
     {
         id: 3,
@@ -23,7 +25,8 @@ export const Intensity: CreateWorkoutDesc[] = [
         info: '6.0 - 9.0 METs',
         value: 'vigorous',
         name: 'intensity',
-        color: 'warning'
+        color: 'warning',
+        mets: 7.0,
     },
     {
         id: 4,
@@ -31,7 +34,8 @@ export const Intensity: CreateWorkoutDesc[] = [
         info: '> 9.0 METs',
         value: 'hard',
         name: 'intensity',
-        color: 'warning'
+        color: 'warning',
+        mets: 9.0,
     }
 ]
 

@@ -10,8 +10,71 @@
     <h2>WORKOUT SUMMARY</h2>
   </div>
 
-  <div>
+  <div *ngIf="workoutDetails && userDetails">
     <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{workoutDetails.wName}}
+        </ion-card-title>
+        <ion-card-subtitle>
+          {{getDate(workoutDetails.dateCompleted)}}
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="ion-align-self-center">
+            <ion-col class="ion-align-self-center">
+              <div>
+                <h3> Total Sets </h3>
+                <p> {{getTotalSets(workoutDetails.workoutRoutine)}} </p>
+              </div>
+
+            </ion-col>
+            <ion-col>
+              <h3> Total Reps </h3>
+              <p> {{getTotalReps(workoutDetails.workoutRoutine)}} </p>
+            </ion-col>
+
+          </ion-row>
+          <ion-row class="ion-align-self-center">
+            <ion-col>
+              <h3>Calories Burnt</h3>
+              <p> {{ getCalories(workoutDetails, userDetails) }} </p>
+            </ion-col>
+            <ion-col>
+              <h3>Duration </h3>
+              <p> {{ getDuration(workoutDetails.stopwatch) }}</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <div class="fitness">
+          <p>FITNESS</p>
+          <!-- <ion-progress-bar color="primary" value="0.5"></ion-progress-bar> -->
+          <div class="animated-progress progress-fitness">
+            <span [style.width.%]="fitnessVal"></span>
+          </div>
+        </div>
+
+        <div class="strength">
+          <p>STRENGTH</p>
+          <!-- <ion-progress-bar color="primary" value="0.5"></ion-progress-bar> -->
+          <div class="animated-progress progress-strength">
+            <span [style.width.%]="strengthVal"></span>
+          </div>
+        </div>
+
+        <form (ngSubmit)="workoutDone()" [formGroup]="workoutNotes">
+          <h2>WORKOUT NOTES</h2>
+          <ion-item class="workout-notes">
+            <ion-textarea rows="6" placeholder="Enter any notes here..." formControlName="notes"></ion-textarea>
+          </ion-item>
+
+        <ion-button expand="block" color="dark" type="submit"> DONE </ion-button>
+        </form>
+
+      </ion-card-content>
 
     </ion-card>
   </div>

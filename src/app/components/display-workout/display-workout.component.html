@@ -7,13 +7,13 @@
     </ion-card-header>
   
     <ion-card-content>
-      <ion-card>
+      <div class="yt-video">
         <iframe 
           width={{ytVideosWarm[1].ThumbnailWidth}}
           height={{ytVideosWarm[1].ThumbnailHeight}}
           [src]="ytVideosWarm[1].URL | safe">
         </iframe>
-      </ion-card>
+      </div>
     </ion-card-content>
   </ion-card>
 </div>
@@ -60,17 +60,15 @@
       <ion-card-title>COOL DOWN</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-card>
+      <div class="yt-video">
         <iframe 
           width={{ytVideosCool[1].ThumbnailWidth}}
           height={{ytVideosCool[1].ThumbnailHeight}}
           [src]="ytVideosCool[1].URL | safe">
         </iframe>
-      </ion-card>
+      </div>
     </ion-card-content>
   </ion-card>
 </div>
-
-<p>Next: {{nextComponent()}}</p>
 <ion-button expand="block" color="dark" (click)="nextExercise()"> {{ buttonText }}</ion-button>
-
+<p style="margin-right:10px; text-align: right;">Next: {{nextComponent()}}</p>
