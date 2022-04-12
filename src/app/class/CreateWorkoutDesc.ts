@@ -30,6 +30,7 @@ export class WorkoutDesc {
     };
     dateCompleted?: Timestamp;
     workoutRoutine: WorkoutDetails [];
+    createdBy: string;
 }
 
 export class CompletedWorkout {
@@ -45,3 +46,4 @@ export class CompletedWorkout {
     totalReps: number;
     workoutNotes: string;
 }
+

@@ -1,7 +1,7 @@
 /**
- * 
+ *
  * COMMUNICATES WITH FIREBASE
- * 
+ *
  */
 
 import { Injectable } from '@angular/core';
@@ -31,11 +31,11 @@ export class WorkoutsService {
 
     return new Promise(resolve => {
       this.workoutAPI.loadExercises().subscribe(r => {
-        // Shuffle array 
+        // Shuffle array
         console.log(r);
         this.exerciseData = this.shuffle(r);
 
-        //Filter array further 
+        //Filter array further
         //Extract exercises based on time
         this.userWorkout = this.exerciseData.slice(0, 5);
         console.log(this.userWorkout);
@@ -51,6 +51,7 @@ export class WorkoutsService {
           equipment: val.equipment,
           dateCreated: timestamp,
           workoutStatus: "created",
+          createdBy: uid,
           tags: [val.intensity, val.duration, val.location, val.equipment],
           workoutRoutine: val.routine
         };
@@ -61,7 +62,7 @@ export class WorkoutsService {
         resolve(timestamp.seconds)
       });
     });
-    
+
   }
 
   formatWorkoutRoutine() {
@@ -95,7 +96,7 @@ export class WorkoutsService {
 
      /*store to firebase firestore (firestore, collection, the very long string is the path)*/
      const noteDocRef = doc(this.firestore, `Users/${uid}/Workouts/${wid}`);
-    
+
      /* must update doc, cannot add doc */
     await setDoc(noteDocRef, workout);
   }

@@ -39,7 +39,7 @@ export class ListWorkoutsPage implements OnInit {
 
   ngOnInit() {
     this.loadUserDetails();
-    
+
   }
 
   async createWorkout(){
@@ -53,7 +53,7 @@ export class ListWorkoutsPage implements OnInit {
   }
 
    /**
-   * 
+   *
    * load user info from user service
    */
   async loadUserDetails(){
@@ -90,7 +90,10 @@ export class ListWorkoutsPage implements OnInit {
     let strDate = newDate.getDate() + " " + mS[newDate.getMonth()] +" " + newDate.getFullYear()
     return strDate;
     }return ''
-    
+
+  }
+  get getUserID(){
+    return this.userInfo.id;
   }
 
   async workoutAction(id) {
@@ -174,13 +177,15 @@ export class ListWorkoutsPage implements OnInit {
   filterWorkout(filter){
     this.workouts = this.allWorkouts;
     this.filterBy =  filter;
-    
+
     if(this.filterBy=='not_started'){
       this.workouts = this.workouts.filter(a => a.workoutStatus == "created");
     }else if(this.filterBy=='in_progress'){
       this.workouts = this.workouts.filter(a => a.workoutStatus == "in_progress");
     }else if(this.filterBy=='completed'){
       this.workouts = this.workouts.filter(a => a.workoutStatus == "completed");
+    }else if(this.filterBy=='buddy'){
+      this.workouts = this.workouts.filter(a => a.createdBy !== this.userInfo.id);
     }else{
       this.workouts = this.allWorkouts;
     }
