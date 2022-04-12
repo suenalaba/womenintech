@@ -24,8 +24,6 @@ export class GymBuddyService {
     return this.potentialMatchDetails;
   }
   authState = new BehaviorSubject(false);
-  private userInfo;
-  private isSignUp: boolean;
 
   constructor(private auth: Auth, private fireStore: Firestore, private userService: UserService, private platform: Platform,) {
     this.platform.ready().then(() => {
