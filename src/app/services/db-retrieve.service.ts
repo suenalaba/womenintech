@@ -77,6 +77,7 @@ export class DbRetrieveService {
   public async setCurrentUser() {
     const loading = await this.loadingController.create();
     const id = JSON.parse(localStorage.getItem('userID')); //get id string from localStorage
+    console.log("id:",id);
     const ref = doc(this.firestore, 'Users', id); //object ref refers to information in the firebase
     const user = await this.singlePullFromDB(ref); //pull ref, and store in user object.
     this.currentUserDataDoc = user;

@@ -8,6 +8,7 @@ export class CreateWorkoutDesc {
     value: string;
     name: string;
     color?: string;
+    mets?: number;
 }
 
 export class WorkoutDesc {
@@ -31,3 +32,18 @@ export class WorkoutDesc {
     workoutRoutine: WorkoutDetails [];
     createdBy: string;
 }
+
+export class CompletedWorkout {
+    workoutName: string;
+    workoutId: string;
+    stopwatch: number;
+    dateCompleted?: Timestamp;
+    workoutRoutine: WorkoutDetails [];
+    strength: number;
+    fitness: number;
+    caloriesBurnt: number;
+    totalSets: number;
+    totalReps: number;
+    workoutNotes: string;
+}
+

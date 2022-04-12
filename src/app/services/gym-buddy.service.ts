@@ -21,6 +21,7 @@ export class GymBuddyService {
   public getPotentialMatchDetails() {
     return this.potentialMatchDetails;
   }
+
   authState = new BehaviorSubject(false);
 
   constructor(private auth: Auth, private fireStore: Firestore, private userService: UserService, private platform: Platform,) {
@@ -47,11 +48,6 @@ export class GymBuddyService {
 
     const noteDocRef = doc(this.fireStore, `Users`, uid);
     console.log(this.auth);
-
-    /* store to local storage --scratched */
-    // this.userService.getUserById(this.auth.currentUser.uid).subscribe(res => {
-    //   localStorage.setItem('userInfo', JSON.stringify(res));
-    // });
 
     return updateDoc(noteDocRef,{ gymBuddyDetails });
   }

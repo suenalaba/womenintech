@@ -10,8 +10,6 @@ import { personalTrainStyle, buddyTrainStyle } from 'src/app/data/gym-buddy-data
 import { locationPreference } from 'src/app/data/gym-buddy-data/LocationPreference';
 import SwiperCore, { Keyboard, Pagination, Scrollbar } from 'swiper';
 import { GymBuddyService } from 'src/app/services/gym-buddy.service';
-import { User } from 'src/app/class/user';
-import { UserService } from 'src/app/services/user.service';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 import {
@@ -74,7 +72,6 @@ export class GbSignUpPage implements OnInit {
 
 
   private slides: any;
-
   private loadingPresent = true;
 
   // File upload task
@@ -98,13 +95,11 @@ export class GbSignUpPage implements OnInit {
   private currentUser: GymBuddyProfileInfo;
 
   constructor(
-    private formBuilder: FormBuilder,
     private dbRetrieve: DbRetrieveService,
     private gymBuddyService: GymBuddyService,
     private toastCtrl: ToastController,
     private router: Router,
     private loadingController: LoadingController,
-    private userService: UserService,
     private afs: AngularFirestore,
     private afStorage: AngularFireStorage
   ) {
@@ -132,11 +127,17 @@ export class GbSignUpPage implements OnInit {
       buddyTrainStyle: new FormArray([],[Validators.required,Validators.maxLength(2)]),
     });
   }
+
+  /**
+   * Gets the full name of the curent user
+   */
   public get getFullName() {
     return this.currentUser.name;
   }
 
-
+  /**
+   * Converts the image and uploads it to Firebase
+   */
   uploadImage(event: FileList) {
     const file = event.item(0);
     // Image validation
@@ -180,6 +181,10 @@ export class GbSignUpPage implements OnInit {
       })
     );
   }
+
+  /**
+   * Stores the image into the "imagesCollection" in Firebase
+   */
   storeFilesFirebase(image: imgFile) {
     const fileId = this.afs.createId();
     this.filesCollection
@@ -193,7 +198,9 @@ export class GbSignUpPage implements OnInit {
       });
   }
 
-  /* limit number of checks for gymBuddyGoals */
+  /**
+   * Tracks the number of WORKOUT TIME PREFERENCES that the user has selected
+   */
   checkTimePref(entry) {
     if (!entry.isChecked){
       this.gymBuddyTimePref++;
@@ -202,7 +209,9 @@ export class GbSignUpPage implements OnInit {
     }
   }
 
-  /* limit number of checks for gymBuddyGoals */
+  /**
+   * Tracks the number of GYM GOALS that the user has selected
+   */
   checkGymBuddyGoals(entry) {
     if (!entry.isChecked){
       this.gymBuddyGoalsChecked++;
@@ -210,7 +219,9 @@ export class GbSignUpPage implements OnInit {
       this.gymBuddyGoalsChecked--;
     }
   }
-  /*limit number of checks for personal traits */
+  /**
+   * Tracks the number of PERSONAL TRAITS that the user has selected
+   */
   checkPersonalTraits(entry) {
     if (!entry.isChecked){
       this.personalTraitsChecked++;
@@ -218,7 +229,9 @@ export class GbSignUpPage implements OnInit {
       this.personalTraitsChecked--;
     }
   }
-  /*limit number of checks for personal traits */
+  /**
+   * Tracks the number of PERSONAL TRAIN STYLES that the user has selected
+   */
   checkPersonalTrainStyle(entry) {
     if (!entry.isChecked){
       this.personalTrainStyleChecked++;
@@ -226,7 +239,9 @@ export class GbSignUpPage implements OnInit {
       this.personalTrainStyleChecked--;
     }
   }
-  /*limit number of checks for location preference */
+  /**
+   * Tracks the number of LOCATION PREFERENCES that the user has selected
+   */
   checkLocationPref(entry) {
     if (!entry.isChecked){
       this.locationPrefChecked++;
@@ -234,7 +249,9 @@ export class GbSignUpPage implements OnInit {
       this.locationPrefChecked--;
     }
   }
-  /*limit number of checks for buddy traits */
+  /**
+   * Tracks the number of BUDDY TRAITS that the user has selected
+   */
   checkBuddyTraits(entry) {
     if (!entry.isChecked){
       this.buddyTraitsChecked++;
@@ -242,7 +259,9 @@ export class GbSignUpPage implements OnInit {
       this.buddyTraitsChecked--;
     }
   }
-  /*limit number of checks for personal traits */
+  /**
+   * Tracks the number of BUDDY TRAIN STYLES that the user has selected
+   */
   checkBuddyTrainStyle(entry) {
     if (!entry.isChecked){
       this.buddyTrainStyleChecked++;
@@ -250,7 +269,9 @@ export class GbSignUpPage implements OnInit {
       this.buddyTrainStyleChecked--;
     }
   }
-  /* check the first page validity */
+  /**
+   * Checks if the user has selected at least 1 option for each field for the first page
+   */
   checkGBFirstPageValidity() {
     if (this.locationPrefChecked === 0) {
       return false;
@@ -275,7 +296,9 @@ export class GbSignUpPage implements OnInit {
     }
     return true;
   }
-
+  /**
+   * Checks if the user has selected at least 1 option for each field for the second page
+   */
   checkGBSecondPageValidity() {
     if (this.buddyTraitsChecked === 0) {
       return false;
@@ -285,9 +308,12 @@ export class GbSignUpPage implements OnInit {
     }
     return true;
   }
-  async signUpForGymBuddy() {
 
-    //Workout Time Preference
+  /**
+   * Populates the form with the list of inputs that are selected
+   */
+  populateForm(){
+      //Workout Time Preference
     this.timePrefList.forEach((element) => {
       if(element.isChecked==true){
         this.gymBuddyPersonalFormData.value.timePref.push(element.value);
@@ -339,17 +365,22 @@ export class GbSignUpPage implements OnInit {
       console.log("imgpath:",this.imgFilePath);
       this.gymBuddyPersonalFormData.value.profilePicture=this.imgFilePath;
     }
+  }
+  /**
+   * Signs up for gym buddy
+   */
+  async signUpForGymBuddy() {
+
+    this.populateForm();
     console.log(this.currentUser.getUserId);
     console.log(this.gymBuddyPersonalFormData.value);
     if(this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.currentUser.getUserId)){
       console.log("Successful Update");
     }
-
     const toast = await this.toastCtrl.create({
       message: 'User updated!',
       duration: 2000
     });
-
     toast.present();
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
@@ -358,7 +389,6 @@ export class GbSignUpPage implements OnInit {
     this.slides = swiper;
     this.slideIndex = this.slides.activeIndex;
     this.progress = this.getProgress(this.slides.activeIndex);
-
   }
 
   public slideDidChange() {
@@ -366,12 +396,10 @@ export class GbSignUpPage implements OnInit {
     if (!this.slides) {
       return;
     }
-
     console.table({
       isBeginning: this.slides.isBeginning,
       isEnd: this.slides.isEnd
     });
-
     this.progress = this.getProgress(this.slides.activeIndex);
   }
 
