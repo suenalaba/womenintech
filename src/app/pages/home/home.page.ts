@@ -15,6 +15,8 @@ import { YoutubeService } from 'src/app/services/youtube.service';
 import { HostListener } from '@angular/core';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 import { TouchSequence } from 'selenium-webdriver';
+import { getHeapCodeStatistics } from 'v8';
+import { Router } from '@angular/router';
 
 
 Swiper.use([Autoplay]);
@@ -44,6 +46,7 @@ export class HomePage implements OnInit {
   workoutTimeSeries: number[];
   workoutTimeIndex: string[]; 
 
+  public static completedWorkouts: any;
   thisWkWorkouts: any;
 
   constructor(
@@ -52,6 +55,7 @@ export class HomePage implements OnInit {
     private loadingCtrl: LoadingController,
     private ytService: YoutubeService,
     private workoutService: WorkoutsService,
+    private router: Router,
   ) { this.onResize(); this.ytVideos = []; this.thisWkWorkouts = []; }
 
   @HostListener('window:resize', ['$event'])
@@ -97,11 +101,11 @@ export class HomePage implements OnInit {
   }
 
   async filterWorkouts() {
-    let completedWorkouts = await this.workoutService.getCompletedWorkouts(JSON.parse(localStorage.getItem('userID')));
-    for (let i = 0; i < completedWorkouts.docs.length; i++) {
+    HomePage.completedWorkouts = await this.workoutService.getCompletedWorkouts(JSON.parse(localStorage.getItem('userID')));
+    for (let i = 0; i < HomePage.completedWorkouts.docs.length; i++) {
       var tdy = new Date();
-      if(completedWorkouts.docs[i].data().dateCompleted.seconds>=tdy.getTime()/1000-7*24*60*60) {
-        await this.thisWkWorkouts.push(completedWorkouts.docs[i].data());
+      if(HomePage.completedWorkouts.docs[i].data().dateCompleted.seconds>=tdy.getTime()/1000-7*24*60*60) {
+        await this.thisWkWorkouts.push(HomePage.completedWorkouts.docs[i].data());
       }
     }
   }
@@ -237,4 +241,9 @@ export class HomePage implements OnInit {
       ]
     };
   }
+
+  goStats() {
+    this.router.navigate(['stats']);
+  }
+
 }

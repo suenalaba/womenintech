@@ -52,6 +52,15 @@ const routes: Routes = [
     path: 'workout-summary',
     loadChildren: () => import('./pages/workouts/workout-summary/workout-summary.module').then( m => m.WorkoutSummaryPageModule)
   },
+  {
+    path: 'stats',
+    loadChildren: () => import('./pages/stats/stats.module').then( m => m.StatsPageModule)
+  },
+  {
+    path: 'home',
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule)
+  },
+
   /*
   {
     path: 'gb-update-account-preference',
