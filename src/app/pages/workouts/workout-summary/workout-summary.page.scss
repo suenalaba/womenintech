@@ -3,6 +3,22 @@ ion-card{
     box-shadow: none !important;
 }
 
+ion-card-title, ion-card-subtitle{
+  text-align: center;
+}
+
+ion-row{
+  text-align: center;
+  height: 80px;
+}
+
+
+h3.title {
+  color: black;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 .logo-header {
     display: flex;
     flex-direction: column;
@@ -17,7 +33,7 @@ ion-card{
   
   .animated-progress {
     width: 300px;
-    height: 30px;
+    height: 20px;
     border-radius: 25px;
     margin: 20px 10px;
     border: 1px solid rgb(109, 109, 109);
