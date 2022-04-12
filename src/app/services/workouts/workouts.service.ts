@@ -120,10 +120,6 @@ export class WorkoutsService {
     await deleteDoc(doc(this.firestore, `Users/${uid}/Workouts/${wid}`));
   }
 
-  async updateWorkout(wid, uid){
-
-  }
-
   async storeCompletedWorkout(completeWorkout, uid){
     let workout: CompletedWorkout = completeWorkout
     console.log(workout)

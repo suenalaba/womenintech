@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 })
 export class CreateWorkoutComponent implements OnInit {
   @Input() userInfo: User;
+  
   userDetails: UserDetails;
   public listInjuries = areaOfInjury;
   public listGoals = fitnessGoals;
