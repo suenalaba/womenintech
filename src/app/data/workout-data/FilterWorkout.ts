@@ -11,5 +11,9 @@ export const FilterWorkoutList = [
         value:"completed",
         title:"Completed"
     },
+    {
+      value:"buddy",
+      title:"My Buddy's Workouts"
+  },
 
 ]

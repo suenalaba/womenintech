@@ -42,31 +42,31 @@
 
 
   <ion-card *ngFor="let workout of workouts">
-    <div (click)="workoutAction(workout.id)" class="workout-details">
-      <ion-card-header>
-        <ion-card-title>
-          {{workout.wName}}
-        </ion-card-title>
-        <ion-card-subtitle>
-          {{workout.wDescription}}
-        </ion-card-subtitle>
-      </ion-card-header>
-      <div class="progress" *ngIf="workout.workoutStatus === 'in_progress'"> STILL IN PROGRESS </div>
-      <div class="done" *ngIf="workout.workoutStatus === 'completed'">
-        <span> WORKOUT COMPLETED </span>
-        <span>ON {{getDate(workout.dateCompleted)}}</span>
+    <!-- <div class="buddies" *ngIf="workout.createdBy !== {getUserID}"> -->
+      <div (click)="workoutAction(workout.id)" class="workout-details">
+        <ion-card-header>
+          <ion-card-title>
+            {{workout.wName}}
+          </ion-card-title>
+          <ion-card-subtitle>
+            {{workout.wDescription}}
+          </ion-card-subtitle>
+        </ion-card-header>
+        <div class="progress" *ngIf="workout.workoutStatus === 'in_progress'"> STILL IN PROGRESS </div>
+        <div class="done" *ngIf="workout.workoutStatus === 'completed'">
+          <span> WORKOUT COMPLETED </span>
+          <span>ON {{getDate(workout.dateCompleted)}}</span>
+        </div>
+        <div class="created" *ngIf="workout.workoutStatus === 'created'"> WORKOUT NOT STARTED </div>
+
       </div>
-      <div class="created" *ngIf="workout.workoutStatus === 'created'"> WORKOUT NOT STARTED </div>
-
-    </div>
-    <div [hidden]=ishidden class="workout-tags" *ngIf="workout.tags">
-      <ion-chip *ngFor="let tag of workout.tags" [color]="getTagText(tag).color">
-        <ion-label>
-          {{getTagText(tag).text}}
-        </ion-label>
-      </ion-chip>
-    </div>
-
+      <div [hidden]=ishidden class="workout-tags" *ngIf="workout.tags">
+        <ion-chip *ngFor="let tag of workout.tags" [color]="getTagText(tag).color">
+          <ion-label>
+            {{getTagText(tag).text}}
+          </ion-label>
+        </ion-chip>
+      </div>
   </ion-card>
 
 </ion-content>
