@@ -66,16 +66,22 @@ export class GbBuddylistHomePage implements OnInit {
     this.activeTab = e.target.value;
   }
 
+  get getProfilePicture() {
+    return this.currentUser.profilePicture;
+  }
+
   public async navigateBuddyListToGBHome() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
-  public async navigateBuddyListToChat(selectedChatUserName: string, selectedChatId: string, otherUserIdOfSelectedChat: string) {
+  public async navigateBuddyListToChat(selectedChatUserName: string, selectedChatId: string,
+      otherUserIdOfSelectedChat: string, otherUserProfilePictureOfSelectedChat: string) {
     console.log('This chat ID was selected: ' + selectedChatId);
     //set the selected chat in the chat service, so the navigation will be selected accordingly.
     this.chatService.setSelectedOtherUserId = otherUserIdOfSelectedChat;
     this.chatService.setSelectedChatId = selectedChatId;
     this.chatService.setSelectedChatUserName = selectedChatUserName;
+    this.chatService.setSelectedOtherUserProfilePicture = otherUserProfilePictureOfSelectedChat;
     this.router.navigateByUrl('tabs/gym-buddy/gb-chat', { replaceUrl: true });
   }
 

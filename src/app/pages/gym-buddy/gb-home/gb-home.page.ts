@@ -33,6 +33,11 @@ export class GbHomePage implements OnInit {
 
    }
 
+   public get getAge() {
+     if(this.currentUser)
+      {return this.currentUser.age;}
+    return 0;
+   }
 
   public get getFullName() {
     // this.fullName = this.userInfo.firstName + ' ' + this.userInfo.lastName;
@@ -57,7 +62,7 @@ export class GbHomePage implements OnInit {
   }
 
   public get getProfilePicture() {
-    return this.profilePicture
+    return this.profilePicture;
   }
 
   async ngOnInit() {

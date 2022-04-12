@@ -27,6 +27,7 @@ export class GbChatPage implements OnInit, AfterContentChecked {
 
   private buddyName: string = null;
   private buddyUserId: string = null;
+  private buddyProfilePicture: string = null;
 
   //public currentUserId: string = this.currentUser.getUserId;
   //@ViewChild(IonContent) content: IonContent;
@@ -41,6 +42,10 @@ export class GbChatPage implements OnInit, AfterContentChecked {
 
   public getSelectedChatBuddyName() {
     return this.buddyName;
+  }
+
+  public getSelectedChatBuddyProfilePicture() {
+    return this.buddyProfilePicture;
   }
 
   ngAfterContentChecked() {
@@ -61,6 +66,7 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     this.modalDataResponse = false;
     this.allChatMessages = this.chatService.getAllChatMessages();
     this.buddyName = this.chatService.getSelectedChatUserName;
+    this.buddyProfilePicture = this.chatService.getSelectedOtherUserProfilePicture;
     this.buddyUserId = this.chatService.getSelectedOtherUserId;
     this.currentUser = this.chatService.getCurrentUser;
     /*this.currentUser = await this.chatService.retrieveCurrentUser();*/
@@ -139,6 +145,10 @@ export class GbChatPage implements OnInit, AfterContentChecked {
 
   public getCurrentUserId() {
     return this.currentUser.getUserId;
+  }
+
+  get getProfilePicture() {
+    return this.currentUser.profilePicture;
   }
 
   public isSentByMe(fromId: string): boolean {

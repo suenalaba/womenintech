@@ -11,6 +11,9 @@ export class GymBuddyDetails {
   locationPreference?: string[];
   buddyTraits?: string[];
   buddyTrainStyle?: string[];
+  chats?: string[];
+  matches?: string[];
+  unmatches?: string[];
   profilePicture?: string;
 }
 
