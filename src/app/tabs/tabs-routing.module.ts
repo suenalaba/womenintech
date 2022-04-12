@@ -85,7 +85,8 @@ const routes: Routes = [
             },
           {
             path: 'gb-update-account-preference',
-            loadChildren: () => import('../pages/gym-buddy/gb-update-account-preference/gb-update-account-preference.module').then( m => m.GbUpdateAccountPreferencePageModule)
+            loadChildren: () => import('../pages/gym-buddy/gb-update-account-preference/gb-update-account-preference.module').then(
+              m => m.GbUpdateAccountPreferencePageModule)
           },
         ]
       },

@@ -81,7 +81,6 @@ export class GbChatPage implements OnInit, AfterContentChecked {
         this.modalDataResponse = modalDataResponse.data;
         console.log('Modal Sent Data : '+ modalDataResponse.data);
         //navigate back to buddy list page.
-        console.log('going here.');
         this.navigateChatPageToBuddyListPage();
       } else {
         //don't do anything
@@ -99,7 +98,7 @@ export class GbChatPage implements OnInit, AfterContentChecked {
       cssClass: 'small-modal'
     });
 
-    modal.onDidDismiss().then((modalDataResponse) => {
+    modal.onDidDismiss().then(async (modalDataResponse) => {
       if (modalDataResponse.data === true) {
         //proceed to share workout.
         //share workout over fireStore.
@@ -107,7 +106,8 @@ export class GbChatPage implements OnInit, AfterContentChecked {
         console.log('Modal Sent Data : '+ modalDataResponse.data);
         //navigate back to buddy list page.
         console.log('going here.');
-        this.navigateToWorkoutListPage();
+        await this.chatService.shareWorkout(this.getCurrentUserId(),this.buddyUserId);
+        //this.navigateToWorkoutListPage();
       } else {
         //don't do anything
         this.modalDataResponse = modalDataResponse.data;
