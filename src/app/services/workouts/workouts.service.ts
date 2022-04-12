@@ -110,6 +110,11 @@ export class WorkoutsService {
     return querySnapshot;
   }
 
+  async getCompletedWorkouts(uid) {
+    let querySnapshot = await getDocs(query(collection(this.firestore, `Users/${uid}/CompletedWorkouts`), orderBy('dateCompleted')));
+    return querySnapshot;
+  }
+
   async deleteWorkout(wid, uid) {
     await deleteDoc(doc(this.firestore, `Users/${uid}/Workouts/${wid}`));
   }
@@ -124,7 +129,7 @@ export class WorkoutsService {
     let timestamp = Timestamp.fromDate(new Date());
 
      /*store to firebase firestore (firestore, collection, the very long string is the path)*/
-     const noteDocRef = doc(this.firestore, `Users/${uid}/CompletedWorkouts/${timestamp}`);
+     const noteDocRef = doc(this.firestore, `Users/${uid}/CompletedWorkouts/${timestamp.seconds}`);
     
      /* must update doc, cannot add doc */
     await setDoc(noteDocRef, workout);

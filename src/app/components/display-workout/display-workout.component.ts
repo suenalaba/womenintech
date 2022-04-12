@@ -9,6 +9,7 @@ import { UserService } from '../../services/user.service';
 import { YoutubeService } from 'src/app/services/youtube.service';
 
 import { WindowRefService } from '../../services/window-ref.service';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-display-workout',

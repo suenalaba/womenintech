@@ -119,6 +119,9 @@ export class HomePage implements OnInit {
     let res = await this.workoutService.getAllWorkout(JSON.parse(localStorage.getItem('userID')));
     (await res).forEach(async (doc) => {
       let workout = doc.data();
+      console.log('workouts', workout);
+
+
       let choice = Math.floor(Math.random() * (workout.workoutRoutine.length - 0 + 1)) + 0
       let exName = await workout.workoutRoutine[choice].exerciseName
 
