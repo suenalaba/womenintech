@@ -32,29 +32,29 @@ export class DisplayGymsPage implements OnInit {
         longitude: "103.8475568003505"
     },
     {
-        title: "The Jungle MMA",
-        latitude: "1.2869044389498587",
-        longitude: "103.84963819451265"
+        title: "NTU Sports and Recreation Centre (SRC) Hall D",
+        latitude: "1.349639123551359",
+        longitude: "103.68782849842782"
     },
     {
-        title: "Evolve MMA (Clarke Quay Central)",
-        latitude: "1.2896832895355255",
-        longitude: "103.84702072975008"
+        title: "NTU Staff Club Gym",
+        latitude: "1.3511795141546894",
+        longitude: "103.68801192920789"
     },
     {
-      title: "Revolution Cecil St",
-      latitude: "1.2798575868211335",
-      longitude: "103.84866199709363"
+      title: "The Wave",
+      latitude: "1.349309039723673",
+      longitude: "103.68944268929248"
     },
     {
-      title: "BoOm Singapore",
-      latitude: "1.2825082733779776",
-      longitude: "103.84954627373418"
+      title: "North Hill Gym, Binjai Hall 19A",
+      latitude: "1.3548348111666786",
+      longitude: "103.68787552913615"
     },
     {
-      title: "UFIT CBD Hub - Club Street",
-      latitude: "1.2827022160371604",
-      longitude: "103.84666523691632"
+      title: "Spartans Boxing Club Jurong West",
+      latitude: "1.3503332109014345",
+      longitude: "103.70296136890298"
     },
     {
       title: "Amore Fitness & Define",
@@ -115,7 +115,7 @@ export class DisplayGymsPage implements OnInit {
   }
 
   showMap() {
-    const location = new google.maps.LatLng(1.2909820563409422, 103.84604372592945);
+    const location = new google.maps.LatLng(1.3463732682538614, 103.68140508360123);
     const options = {
       center: location,
       zoom: 15,

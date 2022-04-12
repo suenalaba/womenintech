@@ -119,7 +119,6 @@ export class WorkoutSummaryPage implements OnInit {
     let intensity = this.listIntensity.find(x => x.value === w.intensity).mets
     this.calories = (duration*(intensity*3.5*weight)/200);
     return (duration*(intensity*3.5*weight)/200).toFixed(3);
-
     //Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
   }
 

@@ -6,7 +6,8 @@
     "target": "es2018",
     "types": [
       "jasmine",
-      "node"
+      "node",
+      "spotify-web-playback-sdk"
     ]
   }
 }

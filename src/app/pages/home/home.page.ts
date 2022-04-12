@@ -9,12 +9,13 @@ import { User } from '../../class/user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { EChartsOption } from 'echarts';
 import { waitForAsync } from '@angular/core/testing';
-import { UserService } from '../../services/user.service'; //youtube api
+import { UserService } from '../../services/user.service';
+import { YoutubeService } from 'src/app/services/youtube.service';
 
 import { HostListener } from '@angular/core';
+import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
+import { TouchSequence } from 'selenium-webdriver';
 
-import { Pipe, PipeTransform } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 Swiper.use([Autoplay]);
 SwiperCore.use([Pagination]);
@@ -31,22 +32,27 @@ export class HomePage implements OnInit {
 
   welcomeText: string = '';
   today: string = '';
+  basedOnWorkout: string = '';
 
   cals: number = 0;
   durn: string = '0 mins';
 
   chartOptions: EChartsOption;
 
-  ytVideos: any;
+  ytVideos: any[];
 
-  dataSeries: number[];
+  workoutTimeSeries: number[];
+  workoutTimeIndex: string[]; 
+
+  thisWkWorkouts: any;
 
   constructor(
     private authService: AuthenticationService,
     private userService: UserService,
     private loadingCtrl: LoadingController,
-    private user: UserService,
-  ) { this.onResize(); }
+    private ytService: YoutubeService,
+    private workoutService: WorkoutsService,
+  ) { this.onResize(); this.ytVideos = []; this.thisWkWorkouts = []; }
 
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
@@ -80,20 +86,24 @@ export class HomePage implements OnInit {
     pagination: true,
   };
 
-  // ngAfterContentChecked(): void{
-  //   if (this.swiper) {
-  //     this.swiper.updateSwiper({});
-  //   }
-  // }
-
   ngOnInit() {
-    this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res)=>{
+    this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe(async (res)=>{
       this.userInfo = res;
+      await this.filterWorkouts();
       this.loadText();
       this.getVideos();
       this.loadGraph();
     });
+  }
 
+  async filterWorkouts() {
+    let completedWorkouts = await this.workoutService.getCompletedWorkouts(JSON.parse(localStorage.getItem('userID')));
+    for (let i = 0; i < completedWorkouts.docs.length; i++) {
+      var tdy = new Date();
+      if(completedWorkouts.docs[i].data().dateCompleted.seconds>=tdy.getTime()/1000-7*24*60*60) {
+        await this.thisWkWorkouts.push(completedWorkouts.docs[i].data());
+      }
+    }
   }
 
   async loadText(){
@@ -104,8 +114,13 @@ export class HomePage implements OnInit {
     var tdy = new Date();
     this.today = String(tdy.getDate()) + ' ' + String(tdy.toLocaleString('default', { month: 'long' })) + ' ' + String(tdy.getFullYear()) + ', ' + String(tdy.toLocaleString('default', { weekday: 'long' }));
 
-    this.cals = 69;
-    this.durn = `${14} mins`;
+    let durnInt = 0;
+    for (let i = 0; i < this.thisWkWorkouts.length; i++) {
+      durnInt += parseInt(this.thisWkWorkouts[i].stopwatch);
+      this.cals += this.thisWkWorkouts[i].caloriesBurnt;
+    }
+    this.cals = Math.round(this.cals * 100) / 100
+    this.durn = `${Math.round(durnInt/60 * 100) / 100} mins`;
 
     loading.dismiss();
   }
@@ -114,15 +129,18 @@ export class HomePage implements OnInit {
     const loading = await this.loadingCtrl.create();
     await loading.present();
 
-    let searchTerm = '';
+    this.basedOnWorkout = `Based on workout: ${this.thisWkWorkouts[0].workoutName}`;
+    let latestWorkout = this.thisWkWorkouts[0].workoutRoutine;
 
-    if (this.userInfo.gender == "others") {
-      searchTerm = "deadlift"
+    for (let i = 0; i < latestWorkout.length; i++) {
+      let searchTerm = '';
+      searchTerm += latestWorkout[i].exerciseName;
+      if (this.userInfo.gender != "others") {
+        searchTerm += this.userInfo.gender;
+      }
+      let ytVid = this.ytService.getYoutubeAPI(searchTerm);
+      this.ytVideos.push(ytVid);
     }
-    else {
-      searchTerm = "deadlift " + this.userInfo.gender;
-    }
-    this.ytVideos = this.user.getYoutubeAPI(searchTerm);
 
     loading.dismiss();
   }
@@ -131,8 +149,34 @@ export class HomePage implements OnInit {
     const loading = await this.loadingCtrl.create();
     await loading.present();
 
-    this.dataSeries = [10, 18, 3, 15, 3, 3, 1]
+    this.workoutTimeIndex = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    var tdy = new Date();
+    var shift = tdy.getDay();
+    while (shift--) {
+      var temp = this.workoutTimeIndex.shift()
+      this.workoutTimeIndex.push(temp);
+    }
+    var temp = this.workoutTimeIndex.shift();
+    temp += ' (TODAY) '
+    this.workoutTimeIndex.push(temp);
 
+    console.log(this.thisWkWorkouts);
+    this.workoutTimeSeries = new Array(this.workoutTimeIndex.length).fill(0);
+    var ptr = 0;
+    let i = 0;
+    while (i<this.workoutTimeIndex.length && ptr < this.thisWkWorkouts.length) {
+      console.log(ptr);
+      var upperBound = tdy.getTime()/1000-i*24*60*60;
+      var lowerBound = upperBound-24*60*60;
+      var curTime = this.thisWkWorkouts[ptr].dateCompleted.seconds;
+      if (lowerBound <= curTime && curTime <= upperBound) {
+        this.workoutTimeSeries[this.workoutTimeSeries.length-1-i] += parseInt(this.thisWkWorkouts[ptr].stopwatch);
+        ptr++;
+      }
+      else{
+        i++;
+      }
+    }
     loading.dismiss();
   }
 
@@ -160,7 +204,7 @@ export class HomePage implements OnInit {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        data: this.workoutTimeIndex,
       },
       yAxis: {
         type: 'value',
@@ -172,7 +216,7 @@ export class HomePage implements OnInit {
         {
           name: 'Time Recorded',
           type: 'line',
-          data: this.dataSeries,
+          data: this.workoutTimeSeries,
           markPoint: {
             data: [
               { type: 'max', name: 'Max' },
@@ -192,16 +236,5 @@ export class HomePage implements OnInit {
         },
       ]
     };
-  }
-}
-
-@Pipe({
-  name: 'safe'
-})
-export class SafePipe implements PipeTransform {
-
-  constructor(private sanitizer: DomSanitizer) { }
-  transform(url) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }
