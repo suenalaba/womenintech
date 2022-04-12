@@ -9,7 +9,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { SwiperModule } from 'swiper/angular';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { HttpClientModule } from '@angular/common/http';
-import { SafePipe } from './home.page';
+import { SafePipe } from 'src/app/services/youtube.service';
 
 @NgModule({
   imports: [

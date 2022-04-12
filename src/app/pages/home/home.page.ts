@@ -9,12 +9,10 @@ import { User } from '../../class/user';
 import { AuthenticationService } from '../../services/authentication.service';
 import { EChartsOption } from 'echarts';
 import { waitForAsync } from '@angular/core/testing';
-import { UserService } from '../../services/user.service'; //youtube api
+import { UserService } from '../../services/user.service';
+import { YoutubeService } from 'src/app/services/youtube.service';
 
 import { HostListener } from '@angular/core';
-
-import { Pipe, PipeTransform } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 Swiper.use([Autoplay]);
 SwiperCore.use([Pagination]);
@@ -45,7 +43,7 @@ export class HomePage implements OnInit {
     private authService: AuthenticationService,
     private userService: UserService,
     private loadingCtrl: LoadingController,
-    private user: UserService,
+    private ytService: YoutubeService,
   ) { this.onResize(); }
 
   @HostListener('window:resize', ['$event'])
@@ -122,7 +120,7 @@ export class HomePage implements OnInit {
     else {
       searchTerm = "deadlift " + this.userInfo.gender;
     }
-    this.ytVideos = this.user.getYoutubeAPI(searchTerm);
+    this.ytVideos = this.ytService.getYoutubeAPI(searchTerm);
 
     loading.dismiss();
   }
@@ -192,16 +190,5 @@ export class HomePage implements OnInit {
         },
       ]
     };
-  }
-}
-
-@Pipe({
-  name: 'safe'
-})
-export class SafePipe implements PipeTransform {
-
-  constructor(private sanitizer: DomSanitizer) { }
-  transform(url) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }
