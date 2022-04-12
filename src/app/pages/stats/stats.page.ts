@@ -13,7 +13,7 @@ export class StatsPage implements OnInit {
   constructor(private router: Router) { this.workouts = []; }
 
   goHome() {
-    this.router.navigate(['home']);
+    this.router.navigate(['/tabs/home']);
   }
   
   ngOnInit() {
@@ -26,7 +26,7 @@ export class StatsPage implements OnInit {
       this.workouts[i].caloriesBurnt = Math.round(this.workouts[i].caloriesBurnt * 100) / 100
       var datee = new Date(this.workouts[i].dateCompleted.seconds * 1000)
       this.workouts[i].dateCompleted = datee.toString().split(' GMT')[0]
-    }
+    } 
     console.log(this.workouts);
   }
 
