@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User, UserDetails } from 'src/app/class/user';
-import { areaOfInjury, armInjuries, Injuries } from 'src/app/data/injuries';
+import { areaOfInjury, armInjuries, legInjuries, backInjuries, handInjuries, feetInjuries, otherInjuries, Injuries } from 'src/app/data/injuries';
 import { fitnessGoals } from 'src/app/data/goals';
 import { UserService } from 'src/app/services/user.service'
 import { Router } from '@angular/router';
@@ -125,15 +125,15 @@ export class CreateWorkoutComponent implements OnInit {
     if (this.injuryArea.value == 'arm') {
       this.selectedInjury = armInjuries
     } else if (this.injuryArea.value == 'leg') {
-      this.selectedInjury = []
+      this.selectedInjury = legInjuries
     } else if (this.injuryArea.value == 'back') {
-      this.selectedInjury = []
+      this.selectedInjury = backInjuries
     } else if (this.injuryArea.value == 'hand') {
-      this.selectedInjury = []
+      this.selectedInjury = handInjuries
     } else if (this.injuryArea.value == 'feet') {
-      this.selectedInjury = []
+      this.selectedInjury = feetInjuries
     } else if (this.injuryArea.value == 'others') {
-      this.selectedInjury = []
+      this.selectedInjury = otherInjuries
     }
     else {
       this.selectedInjury = []
