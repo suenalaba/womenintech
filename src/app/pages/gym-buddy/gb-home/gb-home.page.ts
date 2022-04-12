@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { AlertController } from '@ionic/angular';
-import { CameraService } from 'src/app/services/camera.service';
-import { userInfo } from 'os';
-import { user } from 'rxfire/auth';
+
 import { GymBuddyDetails } from 'src/app/class/GymBuddyProfile';
 import { User } from 'src/app/class/user';
 import { gymBuddyGoals } from 'src/app/data/gym-buddy-data/GymBuddyGoals';
@@ -41,8 +38,6 @@ export class GbHomePage implements OnInit {
     //private gymBuddyService: GymBuddyService,
     private loadingController: LoadingController,
     private dbRetrieveService: DbRetrieveService,
-    //private alertController: AlertController,
-    //private cameraService: CameraService
 
   ) { }
 
