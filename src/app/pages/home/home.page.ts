@@ -14,8 +14,6 @@ import { YoutubeService } from 'src/app/services/youtube.service';
 
 import { HostListener } from '@angular/core';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
-import { TouchSequence } from 'selenium-webdriver';
-import { getHeapCodeStatistics } from 'v8';
 import { Router } from '@angular/router';
 import { CompletedWorkout } from 'src/app/class/CreateWorkoutDesc';
 
@@ -56,7 +54,7 @@ export class HomePage implements OnInit {
     private loadingCtrl: LoadingController,
     private workoutService: WorkoutsService,
     private router: Router,
-    private ytService: YoutubeService,
+    //private ytService: YoutubeService,
   ) { this.onResize(); this.ytVideos = []; this.thisWkWorkouts = []; }
 
   @HostListener('window:resize', ['$event'])
@@ -152,10 +150,11 @@ export class HomePage implements OnInit {
       if (this.userInfo.gender != "others") {
         genderr += this.userInfo.gender;
       }
-      this.ytVideos.push(this.ytService.getYoutubeAPI('exercise for beginners '+genderr));
-      this.ytVideos.push(this.ytService.getYoutubeAPI('exercise for '+this.userInfo.userDetails.fitnessGoal+' '+genderr));
+      const ytService = YoutubeService.getInstance();
+      this.ytVideos.push(ytService.getYoutubeAPI('exercise for beginners '+genderr));
+      this.ytVideos.push(ytService.getYoutubeAPI('exercise for '+this.userInfo.userDetails.fitnessGoal+' '+genderr));
       if (this.userInfo.userDetails.areaOfInjury) {
-        this.ytVideos.push(this.ytService.getYoutubeAPI('exercise for injury '+this.userInfo.userDetails.areaOfInjury));
+        this.ytVideos.push(ytService.getYoutubeAPI('exercise for injury '+this.userInfo.userDetails.areaOfInjury));
       }
     } else {
     // HAS COMPLETED A WORKOUT
@@ -168,7 +167,8 @@ export class HomePage implements OnInit {
         if (this.userInfo.gender != "others") {
           searchTerm += ' ' + this.userInfo.gender;
         }
-        let ytVid = this.ytService.getYoutubeAPI(searchTerm);
+        const ytService = YoutubeService.getInstance();
+        let ytVid = ytService.getYoutubeAPI(searchTerm);
         this.ytVideos.push(ytVid);
       }
     }
@@ -281,6 +281,13 @@ export class HomePage implements OnInit {
   }
 
   async doRefresh() {
+    await this.filterWorkouts();
+    this.loadText();
+    this.getVideos();
+    this.loadGraph();
+  }
+
+  async doRefresh2(event) {
     await this.filterWorkouts();
     this.loadText();
     this.getVideos();
