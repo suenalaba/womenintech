@@ -33,9 +33,12 @@ export class UserService {
    * returns the top 3 results' 1) video title, 2) video url, and 3) video thumbnail
    */
   getYoutubeAPI(searchTerm) {
+    const APIKEY = 'AIzaSyD7U_0cft4oeknyAxfmh8m3gflsUw0-o3w'; // l.kh.b
+    //AIzaSyDH-momG79qABXUQ623_YYZrExXltFPq1k; //bkhl
     const YOUTUBE_NUM_SEARCH_RESULTS = 3;
+
     console.log('searching youtube for ', searchTerm);
-    const url = 'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=3&q=' + searchTerm + '&key=AIzaSyDH-momG79qABXUQ623_YYZrExXltFPq1k';
+    const url = 'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults='+YOUTUBE_NUM_SEARCH_RESULTS+'&q=' + searchTerm + '&key=' + APIKEY;
     const parsedVideos = [];
     this.http.get<any>(url).subscribe((data) => { //needs to be <any> so that it can call .items on data without compile error
       const response = data.items;

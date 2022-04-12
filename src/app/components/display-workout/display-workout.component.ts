@@ -5,6 +5,9 @@ import { WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { WorkoutDetails } from 'src/app/class/WorkoutDetails';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 
+import { UserService } from '../../services/user.service'; //youtube api
+import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-display-workout',
@@ -13,13 +16,16 @@ import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 })
 export class DisplayWorkoutComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private router: Router, private alertController: AlertController, private workoutService: WorkoutsService) { }
+  constructor(private route: ActivatedRoute, private router: Router, 
+    private alertController: AlertController, private user: UserService,
+    private workoutService: WorkoutsService) { }
   @Input() section: string;
   @Input() workoutDetails: any;
   
   workoutId: string;
   userId: string;
 
+  workoutIntensity: string;
   workoutSection: string;
   exerciseiString: string;
   exerciseIndex: number;
@@ -33,8 +39,12 @@ export class DisplayWorkoutComponent implements OnInit {
 
   workSets = [];
 
+  ytVideosWarm: any;
+  ytVideosCool: any;
+
   ngOnInit() {
-    this.getExercises()
+    this.getExercises();
+    this.getVideos();
     this.displayExercise();
   }
 
@@ -54,6 +64,22 @@ export class DisplayWorkoutComponent implements OnInit {
     this.exerciseIndex = parseInt(this.exerciseiString)
 
     this.displayExercise();
+  }
+
+  async getVideos() {
+    this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(results => {
+      let durn: number;
+      this.workoutIntensity = results.intensity;
+      if(this.workoutIntensity=='low') { durn = 2; }
+      else if(this.workoutIntensity=='hard') { durn=10; }
+      else { durn=5; }
+
+      this.ytVideosWarm = this.user.getYoutubeAPI('warm up ' + durn + ' minutes');
+      console.log('warm', this.ytVideosWarm);
+
+      this.ytVideosCool = this.user.getYoutubeAPI('cool down ' + durn + ' minutes');
+      console.log('cool', this.ytVideosCool);
+    });
   }
 
   displayExercise() {
@@ -210,4 +236,16 @@ export class DisplayWorkoutComponent implements OnInit {
     }
   }
 
+}
+
+
+@Pipe({
+  name: 'safe'
+})
+export class SafePipe implements PipeTransform {
+
+  constructor(private sanitizer: DomSanitizer) { }
+  transform(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
 }

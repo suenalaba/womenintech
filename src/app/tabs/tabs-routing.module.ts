@@ -73,6 +73,16 @@ const routes: Routes = [
             path: 'gb-chat',
             loadChildren: () => import('../pages/gym-buddy/gb-chat/gb-chat.module').then(m => m.GbChatPageModule),
           },
+          {
+            path: 'delete-buddy-modal-page',
+            loadChildren: () => import('../pages/gym-buddy/gb-delete-buddy-modal/gb-delete-buddy-modal.module').then(
+              m => m.GbDeleteBuddyModalPageModule)
+          },
+          {
+            path: 'gb-share-workout-modal',
+            loadChildren: () => import('../pages/gym-buddy/gb-share-workout-modal/gb-share-workout-modal.module').then(
+              m => m.GbShareWorkoutModalPageModule)
+          },
         ]
       },
       {

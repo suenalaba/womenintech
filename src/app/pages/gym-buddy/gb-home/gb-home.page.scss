@@ -7,6 +7,15 @@ ion-content {
   height: 50vh;
   width: 100%;
   --bullet-background-active: #ef94d7;
+  i{
+    position: absolute;
+    z-index: 2;
+    margin: 20px;
+    background: #fdfcfc;
+    padding: 3px 9px;
+    font-size: 1.7rem;
+    border-radius: 11px;
+  }
   img {
     width: 100vw;
     max-width: 100vw;
