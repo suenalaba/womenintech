@@ -267,14 +267,20 @@ export class ChatService {
     console.log('pass1');
     const querySnapshotOfMyWorkouts = await getDocs(q2);
     console.log('pass2');
-    querySnapshotOfMyWorkouts.forEach((myDoc) => {
+    querySnapshotOfMyWorkouts.forEach(async (myDoc) => {
       console.log(myDoc.id, ' => ', myDoc.data());
       if (!existingWorkoutIds.includes(myDoc.id)) {
         console.log(myDoc.id);
+        console.log(myDoc.data().wDescription);
+        const tempDescription=myDoc.data().wDescription +'\n           Created By: '+ this.currentUser.name;
+        console.log('temp description:',tempDescription);
+        const tempDoc = JSON.parse(JSON.stringify(myDoc.data()));
+        tempDoc.wDescription=tempDescription;
+        console.log('After change: ', tempDoc);
         //if the existing workouts of the other user does not contain the workout I have, then add.
         //workoutsToBeAdded.push(document.data());
         const timestamp = Timestamp.fromDate(new Date());
-        setDoc(doc(this.fireStore, 'Users', otherUserId, 'Workouts', timestamp.seconds.toString()), myDoc.data());
+        await setDoc(doc(this.fireStore, 'Users', otherUserId, 'Workouts', myDoc.id), tempDoc);
       }
     });
     console.log('Workouts to be added have been added! ');
