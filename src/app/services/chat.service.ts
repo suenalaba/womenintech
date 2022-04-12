@@ -242,6 +242,47 @@ export class ChatService {
     console.log('removed');
   }
 
+  public async shareWorkout(currentUserId: string, otherUserId: string) {
+    //array of existing workouts the other user already has.
+    const existingWorkoutIds: string[] = [];
+    //const workoutsToBeAdded = [];
+    console.log('Sharing workout...');
+    //const workoutRefDoc = doc(this.fireStore, `Users`, currentUserId, `Workouts`);
+    //console.log('Workout List', workoutRefDoc);
+    // const q = query(collection(this.fireStore, `Users`, currentUserId,`Workouts`), where('id', 'not-in',
+    //     ['1648458669']));
+    //query all the workout documents the other user already has.
+    const q = query(collection(this.fireStore, `Users`, otherUserId,`Workouts`));
+    const querySnapshotOfOthersWorkouts = await getDocs(q);
+    querySnapshotOfOthersWorkouts.forEach((otherDoc) => {
+    //doc.data() is never undefined for query doc snapshots
+      console.log(otherDoc.id, ' => ', otherDoc.data());
+      //store existing ids of workouts the other user already have so there won't be duplication.
+      existingWorkoutIds.push(otherDoc.id);
+    });
+    console.log('Workouts have been checked');
+    //now add workout docs where the document id does not exist in the array
+    //query the existing workouts for the current user.
+    const q2 = query(collection(this.fireStore, `Users`, currentUserId,`Workouts`));
+    console.log('pass1');
+    const querySnapshotOfMyWorkouts = await getDocs(q2);
+    console.log('pass2');
+    querySnapshotOfMyWorkouts.forEach((myDoc) => {
+      console.log(myDoc.id, ' => ', myDoc.data());
+      if (!existingWorkoutIds.includes(myDoc.id)) {
+        console.log(myDoc.id);
+        //if the existing workouts of the other user does not contain the workout I have, then add.
+        //workoutsToBeAdded.push(document.data());
+        const timestamp = Timestamp.fromDate(new Date());
+        setDoc(doc(this.fireStore, 'Users', otherUserId, 'Workouts', timestamp.seconds.toString()), myDoc.data());
+      }
+    });
+    console.log('Workouts to be added have been added! ');
+
+    //now add workouts to be added as a new document.
+  }
+
+
   private getTimeDiffInString(conversationArr: any, timeDiffString: string) {
     const lastTimeStamp = conversationArr[conversationArr.length - 1].timeSent.toDate().getTime();
     console.log(lastTimeStamp);

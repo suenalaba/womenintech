@@ -29,4 +29,5 @@ export class WorkoutDesc {
     };
     dateCompleted?: Timestamp;
     workoutRoutine: WorkoutDetails [];
+    createdBy: string;
 }
