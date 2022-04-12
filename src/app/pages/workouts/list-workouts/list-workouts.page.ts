@@ -93,6 +93,13 @@ export class ListWorkoutsPage implements OnInit {
     }return ''
 
   }
+
+  getBuddyClass(wo){
+    if(wo.createdBy != this.userInfo.id){
+      return 'buddy'
+    }
+
+  }
   get getUserID(){
     return this.userInfo.id;
   }

@@ -43,7 +43,7 @@ export class HomePage implements OnInit {
   ytVideos: any[];
 
   workoutTimeSeries: number[];
-  workoutTimeIndex: string[]; 
+  workoutTimeIndex: string[];
 
   public static completedWorkouts: any;
   thisWkWorkouts: any;
@@ -113,7 +113,7 @@ export class HomePage implements OnInit {
 
   async loadText(){
     const loading = await this.loadingCtrl.create();
-    await loading.present();
+    // await loading.present();
 
     if(HomePage.completedWorkouts.docs.length == 0) {
       this.welcomeText = 'Welcome aboard ' + this.userInfo.firstName + '!';

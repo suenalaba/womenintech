@@ -133,6 +133,8 @@ export class DisplayWorkoutComponent implements OnInit {
 
     this.workoutRoutine[this.exerciseIndex].sets.sets = this.currentExercise.sets.sets+1;
     this.workSets.push(this.currentExercise.sets.reps)
+
+    this.workoutDetails.workoutRoutine = this.workoutRoutine
     window.localStorage.setItem("workoutRoutine", JSON.stringify(this.workoutRoutine));
   }
 
@@ -140,6 +142,7 @@ export class DisplayWorkoutComponent implements OnInit {
     if(this.workSets.length > 0){
       this.workSets.splice(this.selectedSet,1)
       this.workoutRoutine[this.exerciseIndex].sets.sets = this.currentExercise.sets.sets-1;
+      this.workoutDetails.workoutRoutine = this.workoutRoutine
       window.localStorage.setItem("workoutRoutine", JSON.stringify(this.workoutRoutine));
     }
     

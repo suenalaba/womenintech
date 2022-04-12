@@ -107,7 +107,7 @@ export class WorkoutSummaryPage implements OnInit {
   getTotalReps(sets){
     let totalReps = 0;
     for(let i=0; i<sets.length;i++){
-      totalReps += sets[i].sets.reps
+      totalReps = (sets[i].sets.reps * sets[i].sets.sets)+totalReps
     }
     this.totalReps = totalReps
     return totalReps;
