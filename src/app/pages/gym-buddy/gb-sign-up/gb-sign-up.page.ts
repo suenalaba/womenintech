@@ -22,11 +22,14 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
+import { DbRetrieveService } from 'src/app/services/db-retrieve.service';
+import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
 export interface imgFile {
   name: string;
   filepath: string;
   size: number;
 }
+
 
 SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
 
@@ -53,6 +56,8 @@ export class GbSignUpPage implements OnInit {
   progress = 0.0;
   slideIndex = 0;
 
+  public gymBuddyTimePref = 0;
+
   public gymBuddyGoalsChecked = 0;
   public gymBuddyGoalsLimit = 3;
   public personalTraitsChecked = 0;
@@ -68,20 +73,7 @@ export class GbSignUpPage implements OnInit {
   public buddyTrainStyleLimit = 2;
 
 
-  private selectedGymBuddyGoals = [];
-  private selectedWorkoutTimes = [];
-  private selectedPersonalTraits = [];
-  private selectedPersonalStyles = [];
-  private selectedLocations = [];
-  private selectedBuddyTraits = [];
-  private selectedBuddyTrainStyles = [];
-
   private slides: any;
-
-  private userInfo;
-  private fullName: string;
-  private userId: string;
-  private personalTraitsFormArray = [];
 
   private loadingPresent = true;
 
@@ -103,10 +95,11 @@ export class GbSignUpPage implements OnInit {
   isFileUploaded: boolean;
   private filesCollection: AngularFirestoreCollection<imgFile>;
   private imgFilePath: string;
-
+  private currentUser: GymBuddyProfileInfo;
 
   constructor(
     private formBuilder: FormBuilder,
+    private dbRetrieve: DbRetrieveService,
     private gymBuddyService: GymBuddyService,
     private toastCtrl: ToastController,
     private router: Router,
@@ -114,47 +107,23 @@ export class GbSignUpPage implements OnInit {
     private userService: UserService,
     private afs: AngularFirestore,
     private afStorage: AngularFireStorage
-	){
+  ) {
     this.isFileUploading = false;
     this.isFileUploaded = false;
     // Define uploaded files collection
     this.filesCollection = afs.collection<imgFile>('imagesCollection');
     this.files = this.filesCollection.valueChanges();
-
   }
-
-  public get getFullName() {
-    return this.fullName;
-  }
-
   ngOnInit() {
-
-    // this.checkGymBuddySignUp();
-
-
-    //getting data from local storage which was imported from firebase
-    /*let userinfo_string  = localStorage.getItem('userInfo');
-    this.userinfo =  JSON.parse(userinfo_string);
-    this.gender = this.userinfo.gender;
-    this.birthday = this.userinfo.birthday;
-    console.log(this.gender);
-    console.log(this.birthday);
-    this.injury = this.userinfo.userDetails.injury;
-    console.log(this.injury);*/
-    /*get User Details*/
-    this.loadUserDetails()
-
-    //loadingController
-    //create service to check if person sign up already
-    //if person havent sign up stay
-    //else redirect
-
-
-
+    this.currentUser = this.dbRetrieve.retrieveCurrentUser();
+    if(this.currentUser.isSignUp) {
+      this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
+    }
     this.gymBuddyPersonalFormData = new FormGroup({
-      briefIntro: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      briefIntro: new FormControl("", [Validators.required, Validators.minLength(3)]),
       timePref: new FormArray([],Validators.required),
-      buddyPref: new FormControl('',Validators.required),
+      imgFile: new FormControl(""),
+      buddyPref: new FormControl("",Validators.required),
       gymBuddyGoals: new FormArray([],[Validators.required,Validators.maxLength(3)]),
       personalTraits: new FormArray([],[Validators.required,Validators.maxLength(3)]),
       personalStyle: new FormArray([],[Validators.required,Validators.maxLength(2)]),
@@ -162,47 +131,11 @@ export class GbSignUpPage implements OnInit {
       buddyTraits: new FormArray([],[Validators.required,Validators.maxLength(3)]),
       buddyTrainStyle: new FormArray([],[Validators.required,Validators.maxLength(2)]),
     });
-    //this.personaltraits = this.gymBuddyPersonalFormData.get('personalTraits') as FormArray;
-    /*this.gymBuddyPersonalFormData = new FormGroup({
-      //title: new FormControl(),
-      briefIntro: new FormControl(),
-      timePref: new FormControl(),
-      buddyPref: new FormControl(),
-      gymBuddyGoals: new FormControl(),
-      personalTraits: new FormControl(),
-      personalStyle: new FormControl(),
-      locationPref: new FormControl(),
-      buddyTraits: new FormControl(),
-      buddyTrainStyle: new FormControl()
-    });*/
+  }
+  public get getFullName() {
+    return this.currentUser.name;
   }
 
-  /**
-   *
-   * load user info from user service
-   */
-
-  async loadUserDetails(){
-    const loading = await this.loadingController.create();
-   await loading.present();
-   this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res) =>{
-    if(res.gymBuddyDetails.isSignUp) {
-      this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
-      loading.dismiss();
-    }
-
-     this.userInfo = res;
-     console.log(this.userInfo);
-     /*get full name*/
-     this.fullName = this.userInfo.firstName + ' ' + this.userInfo.lastName;
-     console.log(this.fullName);
-     /* get user Id */
-     this.userId = this.userInfo.id;
-     console.log(this.userId);
-
-     loading.dismiss();
-   })
-  }
 
   uploadImage(event: FileList) {
     const file = event.item(0);
@@ -260,219 +193,78 @@ export class GbSignUpPage implements OnInit {
       });
   }
 
-  /* store gymBuddyGoals data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
+  /* limit number of checks for gymBuddyGoals */
+  checkTimePref(entry) {
+    if (!entry.isChecked){
+      this.gymBuddyTimePref++;
+    } else {
+      this.gymBuddyTimePref--;
+    }
+  }
 
-  storeGBGoalsData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.gymBuddyGoals.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.gymBuddyGoals.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.gymBuddyGoals.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.gymBuddyGoals.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy preferred workout time data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-
-  storeGBTimePrefData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.timePref.push(entry.value);
-      entry.isChecked = true;
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.timePref.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.timePref.splice(index,1); //2nd parameter means remove 1 item only
-      entry.isChecked = false;
-      }
-    }
-    this.gymBuddyPersonalFormData.value.timePref.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy personal traits data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-
-  storeGBPersonalTraitsData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.personalTraits.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.personalTraits.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.personalTraits.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.personalTraits.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy personal training style data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-
-  storeGBPersonalStylesData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.personalStyle.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.personalStyle.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.personalStyle.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.personalStyle.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy preferred locations data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-
-  storeGBPrefLocationsData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.locationPref.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.locationPref.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.locationPref.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.locationPref.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy preferred buddy traits data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-  storeGBBuddyTraitsData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.buddyTraits.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.buddyTraits.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.buddyTraits.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.buddyTraits.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy preferred buddy training style data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-  storeGBBuddyTrainStyleData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.buddyTrainStyle.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.buddyTrainStyle.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.buddyTrainStyle.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.buddyTrainStyle.forEach((element) => {
-      console.log(element);
-    });
-  }
   /* limit number of checks for gymBuddyGoals */
   checkGymBuddyGoals(entry) {
     if (!entry.isChecked){
       this.gymBuddyGoalsChecked++;
-      entry.isChecked = true;
-      console.log(this.gymBuddyGoalsChecked);
     } else {
       this.gymBuddyGoalsChecked--;
-      entry.isChecked = false;
-      console.log(this.gymBuddyGoalsChecked);
     }
   }
   /*limit number of checks for personal traits */
   checkPersonalTraits(entry) {
     if (!entry.isChecked){
       this.personalTraitsChecked++;
-      entry.isChecked = true;
-      console.log(this.personalTraitsChecked);
     } else {
       this.personalTraitsChecked--;
-      entry.isChecked = false;
-      console.log(this.personalTraitsChecked);
     }
   }
   /*limit number of checks for personal traits */
   checkPersonalTrainStyle(entry) {
     if (!entry.isChecked){
       this.personalTrainStyleChecked++;
-      entry.isChecked = true;
-      console.log(this.personalTrainStyleChecked);
     } else {
       this.personalTrainStyleChecked--;
-      entry.isChecked = false;
-      console.log(this.personalTrainStyleChecked);
     }
   }
   /*limit number of checks for location preference */
   checkLocationPref(entry) {
     if (!entry.isChecked){
       this.locationPrefChecked++;
-      entry.isChecked = true;
-      console.log(this.locationPrefChecked);
     } else {
       this.locationPrefChecked--;
-      entry.isChecked = false;
-      console.log(this.locationPrefChecked);
     }
   }
   /*limit number of checks for buddy traits */
   checkBuddyTraits(entry) {
     if (!entry.isChecked){
       this.buddyTraitsChecked++;
-      entry.isChecked = true;
-      console.log(this.buddyTraitsChecked);
     } else {
       this.buddyTraitsChecked--;
-      entry.isChecked = false;
-      console.log(this.buddyTraitsChecked);
     }
   }
   /*limit number of checks for personal traits */
   checkBuddyTrainStyle(entry) {
     if (!entry.isChecked){
       this.buddyTrainStyleChecked++;
-      entry.isChecked = true;
-      console.log(this.buddyTrainStyleChecked);
     } else {
       this.buddyTrainStyleChecked--;
-      entry.isChecked = false;
-      console.log(this.buddyTrainStyleChecked);
     }
   }
   /* check the first page validity */
   checkGBFirstPageValidity() {
-    if (this.gymBuddyPersonalFormData.value.locationPref.length === 0) {
+    if (this.locationPrefChecked === 0) {
       return false;
     }
-    if (this.gymBuddyPersonalFormData.value.personalStyle.length === 0) {
+    if (this.personalTrainStyleChecked === 0) {
       return false;
     }
-    if (this.gymBuddyPersonalFormData.value.gymBuddyGoals.length === 0) {
+    if (this.gymBuddyGoalsChecked === 0) {
       return false;
     }/**/
-    if (this.gymBuddyPersonalFormData.value.timePref.length === 0) {
+    if (this.gymBuddyTimePref === 0) {
       return false;
     }
-    if (this.gymBuddyPersonalFormData.value.personalTraits.length === 0) {
+    if (this.personalTraitsChecked === 0) {
       return false;
     }
     if (this.gymBuddyPersonalFormData.value.buddyPref === '') {
@@ -485,41 +277,74 @@ export class GbSignUpPage implements OnInit {
   }
 
   checkGBSecondPageValidity() {
-    if (this.gymBuddyPersonalFormData.value.buddyTraits.length === 0) {
+    if (this.buddyTraitsChecked === 0) {
       return false;
     }
-    if (this.gymBuddyPersonalFormData.value.buddyTrainStyle.length === 0) {
+    if (this.buddyTrainStyleChecked === 0) {
       return false;
     }
     return true;
   }
   async signUpForGymBuddy() {
-    //console.log(this.gymBuddyPersonalFormData.value);
-    this.selectedGymBuddyGoals.forEach((element) => {
-      console.log(element);
+
+    //Workout Time Preference
+    this.timePrefList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.timePref.push(element.value);
+      }
     });
-    this.selectedWorkoutTimes.forEach((element) => {
-      console.log(element);
+
+    //Gym Buddy Goals
+    this.gymBuddyGoalsList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.gymBuddyGoals.push(element.value);
+      }
     });
-    this.selectedPersonalTraits.forEach((element) => {
-      console.log(element);
+
+    //Personal traits
+    this.personalTraitsList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.personalTraits.push(element.value);
+      }
     });
-    this.selectedPersonalStyles.forEach((element) => {
-      console.log(element);
+
+    //Personal train style
+    this.personalStyleList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.personalStyle.push(element.value);
+      }
     });
-    this.selectedLocations.forEach((element) => {
-      console.log(element);
+
+    //Preferred Location
+    this.locationPrefList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.locationPref.push(element.value);
+      }
     });
-    this.selectedBuddyTraits.forEach((element) => {
-      console.log(element);
+
+    //Buddy Traits
+    this.buddyTraitsList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.buddyTraits.push(element.value);
+      }
     });
-    this.selectedBuddyTrainStyles.forEach((element) => {
-      console.log(element);
+
+    //Buddy Train Style
+    this.buddyStyleList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.buddyTrainStyle.push(element.value);
+      }
     });
-    console.log(this.userId);
+    if(this.imgFilePath) {
+      console.log("imgpath:",this.imgFilePath);
+      this.gymBuddyPersonalFormData.value.profilePicture=this.imgFilePath;
+    }
+    console.log(this.currentUser.getUserId);
     console.log(this.gymBuddyPersonalFormData.value);
-    this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.userId);
-    this.gymBuddyService.uploadProfilePicture(this.imgFilePath,this.userId);
+    if(this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.currentUser.getUserId)){
+      console.log("Successful Update");
+    }
+
     const toast = await this.toastCtrl.create({
       message: 'User updated!',
       duration: 2000
