@@ -209,6 +209,14 @@ export class ChatService {
     return allChatNameAndMessage;
   }
 
+  /**
+   * Deletes all references of a match between 2 users when either one chooses
+   * to unMatch the other party.
+   *
+   * @param chatId reference ID of chat document in database.
+   * @param currentUserId reference ID of the primary user initiating the unMatch.
+   * @param otherUserId reference ID of the secondary user that is getting unMatched.
+   */
   public async deleteMatch(chatId: string, currentUserId: string, otherUserId: string) {
     //remove chat reference for both users. 'chats' field array being edited.
     await this.removeChatReferenceFromBothUsers(chatId, currentUserId, otherUserId);

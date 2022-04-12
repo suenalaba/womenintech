@@ -40,9 +40,8 @@
     <ion-button (click)="createWorkout()">Create a Workout</ion-button>
   </div>
 
-
-  <ion-card *ngFor="let workout of workouts">
-    <!-- <div class="buddies" *ngIf="workout.createdBy !== {getUserID}"> -->
+<div *ngFor="let workout of workouts">
+  <ion-card [class]="getBuddyClass(workout)">
       <div (click)="workoutAction(workout.id)" class="workout-details">
         <ion-card-header>
           <ion-card-title>
@@ -68,5 +67,5 @@
         </ion-chip>
       </div>
   </ion-card>
-
+</div>
 </ion-content>
