@@ -11,6 +11,6 @@ export class GymBuddyDetails {
   locationPreference?: string[];
   buddyTraits?: string[];
   buddyTrainStyle?: string[];
-  imgFile?: string;
+  profilePicture?: string;
 }
 

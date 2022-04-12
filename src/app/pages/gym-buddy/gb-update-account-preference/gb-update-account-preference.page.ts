@@ -10,7 +10,6 @@ import { personalTrainStyle, buddyTrainStyle } from 'src/app/data/gym-buddy-data
 import { locationPreference } from 'src/app/data/gym-buddy-data/LocationPreference';
 import SwiperCore, { Keyboard, Pagination, Scrollbar } from 'swiper';
 import { GymBuddyService } from 'src/app/services/gym-buddy.service';
-import { User } from 'src/app/class/user';
 import { UserService } from 'src/app/services/user.service';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
@@ -70,20 +69,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   public buddyTrainStyleLimit = 2;
 
 
-  private selectedGymBuddyGoals = [];
-  private selectedWorkoutTimes = [];
-  private selectedPersonalTraits = [];
-  private selectedPersonalStyles = [];
-  private selectedLocations = [];
-  private selectedBuddyTraits = [];
-  private selectedBuddyTrainStyles = [];
-
   private slides: any;
-
-  private userInfo;
-  private fullName: string;
-  private userId: string;
-  private personalTraitsFormArray = [];
 
   private loadingPresent = true;
 
@@ -129,6 +115,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
     this.gymBuddyPersonalFormData = new FormGroup({
       briefIntro: new FormControl(this.currentUser.getbriefIntro, [Validators.required, Validators.minLength(3)]),
       timePref: new FormArray([],Validators.required),
+      profilePicture: new FormControl(""),
       buddyPref: new FormControl(this.currentUser.getPrefBuddyGender,Validators.required),
       gymBuddyGoals: new FormArray([],[Validators.required,Validators.maxLength(3)]),
       personalTraits: new FormArray([],[Validators.required,Validators.maxLength(3)]),
@@ -142,26 +129,26 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**Fills up the past information for all relevant fields */
   private fillUpPreviousInformation(){
 
+    //Profile Picture
+    if(this.currentUser.profilePicture){
+      this.imgFilePath=this.currentUser.profilePicture;
+    }
+
     //Workout Time Preference
     this.currentUser.getWorkoutTimePreference.forEach(element => {
       for (var i = 0; i < this.timePrefList.length; i++) {
         if(this.timePrefList[i].value==element){
           this.timePrefList[i].isChecked=true;
           this.gymBuddyTimePref++;
-          this.gymBuddyPersonalFormData.value.timePref.push(element);
         }
       }
     });
-
 
     //Gym Buddy Goals
     this.currentUser.getGymBuddyGoals.forEach(element => {
       for (var i = 0; i < this.gymBuddyGoalsList.length; i++) {
         if(this.gymBuddyGoalsList[i].value==element){
-          this.storeGBGoalsData(this.gymBuddyGoalsList[i]);
           this.gymBuddyGoalsList[i].isChecked=true;
-          //this.gymBuddyPersonalFormData.value.gymBuddyGoals.push(element);
-          console.log("length:",this.gymBuddyPersonalFormData.value.gymBuddyGoals.length)
           this.gymBuddyGoalsChecked++;
         }
       }
@@ -172,7 +159,6 @@ export class GbUpdateAccountPreferencePage implements OnInit {
       for (var i = 0; i < this.personalTraitsList.length; i++) {
         if(this.personalTraitsList[i].value==element){
           this.personalTraitsList[i].isChecked=true;
-          this.gymBuddyPersonalFormData.value.personalTraits.push(element);
           this.personalTraitsChecked++;
         }
       }
@@ -183,7 +169,6 @@ export class GbUpdateAccountPreferencePage implements OnInit {
       for (var i = 0; i < this.personalStyleList.length; i++) {
         if(this.personalStyleList[i].value==element){
           this.personalStyleList[i].isChecked=true;
-          this.gymBuddyPersonalFormData.value.personalStyle.push(element);
           this.personalTrainStyleChecked++;
         }
       }
@@ -194,7 +179,6 @@ export class GbUpdateAccountPreferencePage implements OnInit {
       for (var i = 0; i < this.locationPrefList.length; i++) {
         if(this.locationPrefList[i].value==element){
           this.locationPrefList[i].isChecked=true;
-          this.gymBuddyPersonalFormData.value.locationPref.push(element);
           this.locationPrefChecked++;
         }
       }
@@ -205,7 +189,6 @@ export class GbUpdateAccountPreferencePage implements OnInit {
       for (var i = 0; i < this.buddyTraitsList.length; i++) {
         if(this.buddyTraitsList[i].value==element){
           this.buddyTraitsList[i].isChecked=true;
-          this.gymBuddyPersonalFormData.value.buddyTraits.push(element);
           this.buddyTraitsChecked++;
         }
       }
@@ -216,7 +199,6 @@ export class GbUpdateAccountPreferencePage implements OnInit {
       for (var i = 0; i < this.buddyStyleList.length; i++) {
         if(this.buddyStyleList[i].value==element){
           this.buddyStyleList[i].isChecked=true;
-          this.gymBuddyPersonalFormData.value.buddyTrainStyle.push(element);
           this.buddyTrainStyleChecked++;
         }
       }
@@ -283,136 +265,6 @@ export class GbUpdateAccountPreferencePage implements OnInit {
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  /* store gymBuddyGoals data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-
-  storeGBGoalsData(entry) {
-    console.log("length:",this.gymBuddyPersonalFormData.value.gymBuddyGoals.length)
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.gymBuddyGoals.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.gymBuddyGoals.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.gymBuddyGoals.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    console.log("length:",this.gymBuddyPersonalFormData.value.gymBuddyGoals.length)
-    this.gymBuddyPersonalFormData.value.gymBuddyGoals.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy preferred workout time data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-
-  storeGBTimePrefData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.timePref.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.timePref.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.timePref.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.timePref.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy personal traits data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-
-  storeGBPersonalTraitsData(entry) {
-    this.gymBuddyPersonalFormData.value.personalTraits.forEach((element) => {
-      console.log(element);
-    });
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.personalTraits.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.personalTraits.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.personalTraits.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.personalTraits.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy personal training style data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-
-  storeGBPersonalStylesData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.personalStyle.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.personalStyle.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.personalStyle.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.personalStyle.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy preferred locations data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-
-  storeGBPrefLocationsData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.locationPref.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.locationPref.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.locationPref.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.locationPref.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy preferred buddy traits data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-  storeGBBuddyTraitsData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.buddyTraits.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.buddyTraits.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.buddyTraits.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.buddyTraits.forEach((element) => {
-      console.log(element);
-    });
-  }
-  /* stores gym buddy preferred buddy training style data
-  * if entry is not checked, check it and store the data
-  * else find its index and remove it from the array. (uncheck)
-  */
-  storeGBBuddyTrainStyleData(entry) {
-    if (!entry.isChecked) {
-      this.gymBuddyPersonalFormData.value.buddyTrainStyle.push(entry.value);
-    } else {
-      const index = this.gymBuddyPersonalFormData.value.buddyTrainStyle.indexOf(entry.value);
-      if (index > -1) {
-      this.gymBuddyPersonalFormData.value.buddyTrainStyle.splice(index,1); //2nd parameter means remove 1 item only
-      }
-    }
-    this.gymBuddyPersonalFormData.value.buddyTrainStyle.forEach((element) => {
-      console.log(element);
-    });
   }
 
   /* limit number of checks for gymBuddyGoals */
@@ -490,57 +342,84 @@ export class GbUpdateAccountPreferencePage implements OnInit {
       return false;
     }
     if (this.gymBuddyPersonalFormData.value.buddyPref === '') {
-      console.log("gender")
       return false;
     }
     if (this.gymBuddyPersonalFormData.value.briefIntro === '') {
-      console.log("intro")
       return false;
     }
     return true;
   }
 
   checkGBSecondPageValidity() {
-    if (this.gymBuddyPersonalFormData.value.buddyTraits.length === 0) {
+    if (this.buddyTraitsChecked === 0) {
       return false;
     }
-    if (this.gymBuddyPersonalFormData.value.buddyTrainStyle.length === 0) {
+    if (this.buddyTrainStyleChecked === 0) {
       return false;
     }
     return true;
   }
-  async signUpForGymBuddy() {
+  async updateGymBuddy() {
+
+    //Workout Time Preference
+    this.timePrefList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.timePref.push(element.value);
+      }
+    });
+
+    //Gym Buddy Goals
     this.gymBuddyGoalsList.forEach((element) => {
       if(element.isChecked==true){
         this.gymBuddyPersonalFormData.value.gymBuddyGoals.push(element.value);
       }
     });
-    //console.log(this.gymBuddyPersonalFormData.value);
-    this.selectedGymBuddyGoals.forEach((element) => {
-      console.log(element);
+
+    //Personal traits
+    this.personalTraitsList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.personalTraits.push(element.value);
+      }
     });
-    this.selectedWorkoutTimes.forEach((element) => {
-      console.log(element);
+
+    //Personal train style
+    this.personalStyleList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.personalStyle.push(element.value);
+      }
     });
-    this.selectedPersonalTraits.forEach((element) => {
-      console.log(element);
+
+    //Preferred Location
+    this.locationPrefList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.locationPref.push(element.value);
+      }
     });
-    this.selectedPersonalStyles.forEach((element) => {
-      console.log(element);
+
+    //Buddy Traits
+    this.buddyTraitsList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.buddyTraits.push(element.value);
+      }
     });
-    this.selectedLocations.forEach((element) => {
-      console.log(element);
+
+    //Buddy Train Style
+    this.buddyStyleList.forEach((element) => {
+      if(element.isChecked==true){
+        this.gymBuddyPersonalFormData.value.buddyTrainStyle.push(element.value);
+      }
     });
-    this.selectedBuddyTraits.forEach((element) => {
-      console.log(element);
-    });
-    this.selectedBuddyTrainStyles.forEach((element) => {
-      console.log(element);
-    });
-    console.log(this.userId);
+    if(this.imgFilePath) {
+      console.log("imgpath:",this.imgFilePath);
+      this.gymBuddyPersonalFormData.value.profilePicture=this.imgFilePath;
+
+    }
+    console.log(this.currentUser.getUserId);
     console.log(this.gymBuddyPersonalFormData.value);
-    this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.userId);
-    this.gymBuddyService.uploadProfilePicture(this.imgFilePath,this.userId);
+    if(this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.currentUser.getUserId)){
+      console.log("Successful Update");
+    }
+
     const toast = await this.toastCtrl.create({
       message: 'User updated!',
       duration: 2000
