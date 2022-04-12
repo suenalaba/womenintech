@@ -125,6 +125,9 @@ export class GbSignUpPage implements OnInit {
       locationPref: new FormArray([],[Validators.required,Validators.maxLength(2)]),
       buddyTraits: new FormArray([],[Validators.required,Validators.maxLength(3)]),
       buddyTrainStyle: new FormArray([],[Validators.required,Validators.maxLength(2)]),
+      matches: new FormArray([],[Validators.required,Validators.maxLength(2)]),
+      unmatches: new FormArray([],[Validators.required,Validators.maxLength(2)]),
+      chats: new FormArray([],[Validators.required,Validators.maxLength(2)]),
     });
   }
 
@@ -364,6 +367,14 @@ export class GbSignUpPage implements OnInit {
     if(this.imgFilePath) {
       console.log("imgpath:",this.imgFilePath);
       this.gymBuddyPersonalFormData.value.profilePicture=this.imgFilePath;
+    }
+    else{
+      if(this.currentUser.getGender==='male'){
+        this.gymBuddyPersonalFormData.value.profilePicture="https://firebasestorage.googleapis.com/v0/b/witfit-cca15.appspot.com/o/filesStorage%2F1649766691840_guy%202.jpg?alt=media&token=e2107bcf-ca5e-413f-8be3-9a5cd5dd25ee";
+      }
+      else{
+        this.gymBuddyPersonalFormData.value.profilePicture="https://firebasestorage.googleapis.com/v0/b/witfit-cca15.appspot.com/o/filesStorage%2F1649766533671_girl.jpg?alt=media&token=7d81c18e-9a3b-4d5c-bed5-c6ba44c89a0c"
+      }
     }
   }
   /**

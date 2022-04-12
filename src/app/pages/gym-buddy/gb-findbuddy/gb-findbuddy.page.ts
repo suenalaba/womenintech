@@ -216,6 +216,7 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
     this.currentUser = this.dbRetrieve.retrieveCurrentUser();
     //this.recommendationEngine = new RecommendationEngine(this.currentUser);
     this.findBuddyQuery= new FindBuddyQuery(this.dbRetrieve,this.currentUser);
+    console.log(this.potentialMatches[this.potentialMatches.length - 1].profilePicture);
     // this.recommendationEngine.getAllMatches(await this.findBuddyQuery.findBuddyQuery());
     // // First user to be displayed
     // while (true) {

@@ -19,11 +19,13 @@ export class GymBuddyProfileInfo {
 
   private _matches?: string[];
   private _unmatches?: string[];
+  private _chats?: string[];
+
 
   //To display
   private _name: string;
   private briefIntro?: string;
-  private _age: string;
+  private _age='20';
   private _profilePicture?: string;
 
 
@@ -49,12 +51,24 @@ export class GymBuddyProfileInfo {
       else this.matches = this.userInfo.gymBuddyDetails.matches;
     if(!this.userInfo.gymBuddyDetails.unmatches) this.unmatches=[];
       else this.unmatches = this.userInfo.gymBuddyDetails.unmatches;
+    if(!this.userInfo.gymBuddyDetails.chats) this.chats=[];
+      else this.chats = this.userInfo.gymBuddyDetails.chats;
 
     //Information needed for display
+    // const birthday=new Date(this.userInfo.birthday);
+    const birthday = Date.parse(this.userInfo.birthday);
+    const today = new Date().getTime();
+    const totalAgeInMilliseconds = today - birthday;
+    this._age = String(Math.floor(totalAgeInMilliseconds / 31536000000));
+    // const d1Y = birthday.getFullYear();
+    // const d2Y = today.getFullYear();
+    // const d1M = birthday.getMonth();
+    // const d2M = today.getMonth();
+    // const months=((d2M+12*d2Y)-(d1M+12*d1Y))/12;
 
     this._name=this.userInfo.firstName+" "+ this.userInfo.lastName;
     this.briefIntro = this.userInfo.gymBuddyDetails.briefIntro;
-    this._age=this.userInfo.age;
+    // this._age=String(Math.floor(months));
     this._profilePicture=this.userInfo.gymBuddyDetails.profilePicture;
   }
 
@@ -150,6 +164,13 @@ export class GymBuddyProfileInfo {
 
   public checkMatches(userID: string) : boolean{
     return this.matches.includes(userID);
+  }
+
+  public get chats(): string[] {
+    return this._chats;
+  }
+  public set chats(value: string[]) {
+    this._chats = value;
   }
 
   //not sure what is a better design, update individually, or take array as a parameter
