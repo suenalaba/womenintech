@@ -103,6 +103,16 @@ export class StartWorkoutPage implements OnInit {
     });
   }
 
+  nextComponent(){
+    if(this.workoutSection == "warmup"){
+      return this.workoutRoutine[0].exerciseName
+    }else if(this.workoutSection =="exercise" && this.exerciseIndex < this.workoutRoutine.length-1){
+      return this.workoutRoutine[this.exerciseIndex].exerciseName
+    }else if(this.workoutSection =="exercise" && this.exerciseIndex == this.workoutRoutine.length-1){
+      return "Cool Down"
+    }
+  }
+
   async goToSummary(){
     this.saveWorkout();
     this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId}});
