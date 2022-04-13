@@ -33,9 +33,13 @@ export class YoutubeService {
    * returns the results' 1) video title, 2) video url, and 3) video thumbnail
    */
   getYoutubeAPI(searchTerm) {
-    const APIKEY = 'AIzaSyDGp0pRQ-nr7k67SH2Gz7jDovryFdYoZwc'//rxdnstk
-
-    //13.04.2022 2.45am none of these work
+    const APIKEY = 'AIzaSyAu6XSE7LGtxxHJmP_m0yQAKfRZODD_FDQ' //mn4m
+    // fresh api keys:
+    // 'AIzaSyDmTKmRx9nb2X5vXhR6yTa-tmhwfn--sns' //M560
+    // 'AIzaSyApxaBF3ddo3wMeIqfr3OEBtbrBPst92jU' //G560
+    
+    // hit the limit:
+    //'AIzaSyDGp0pRQ-nr7k67SH2Gz7jDovryFdYoZwc'//rxdnstk
     //'AIzaSyAPry9QnN6oQQUk4ibdx4lTGmEioVkgRfI' //bkhl2
     //'AIzaSyCdWBniI98tMsvFoVUdCsf43FwI6kDQ8oI' //blkh
     //'AIzaSyCRi3DvIBgO884dMmYmxKP2Kz8NQYrHecA' //rkz
