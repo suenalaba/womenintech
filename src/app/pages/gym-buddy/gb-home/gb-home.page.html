@@ -6,7 +6,6 @@
         <ion-icon icon-only name="settings-outline"></ion-icon>
       </ion-button>
       </i>
-    <!-- <img src="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="">-->
     <img src= {{getProfilePicture}} alt="">
   </div>
   <div class="profile-info">
@@ -71,65 +70,3 @@
   </ion-button>
 </ion-footer>
 
-
-
-<!-- back up
-<ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
-    <ion-title>
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large" class="ion-text-center">Gym Buddy</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-card class="ion-text-center">
-    <ion-card-header size="large" style="font-size:20px">Your Profile</ion-card-header>
-    <ion-card-content>
-      <ion-item-divider style="text-align: center">
-        <ion-text>
-          {{getFullName}}
-        </ion-text>
-      </ion-item-divider>
-
-      <ion-item-divider>
-        <ion-text class="ion-text-center">
-          {{getBriefIntro}}
-        </ion-text>
-      </ion-item-divider>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-content>
-      <ion-item-divider>
-        <ion-text>
-          Preferred Workout Time: {{ getPrefWorkoutTime.join(", ")}}
-        </ion-text>
-      </ion-item-divider>
-      <ion-item-divider>
-        <ion-text>
-          My goals: {{ getGymBuddyGoals.join(", ") }}
-        </ion-text>
-      </ion-item-divider>
-      <ion-item-divider>
-        <ion-text>
-          Area of expertise: {{ getPersonalTraits.join(", ") }}
-        </ion-text>
-      </ion-item-divider>
-    </ion-card-content>
-  </ion-card>
-  <ion-button expand="block" color = "dark" (click)="goToFindBuddy()">
-    FIND A BUDDY
-  </ion-button>
-  <ion-button expand="block" color = "dark" (click)="goToBuddyList()">
-    BUDDY LIST
-  </ion-button>
-
-
-</ion-content>
--->

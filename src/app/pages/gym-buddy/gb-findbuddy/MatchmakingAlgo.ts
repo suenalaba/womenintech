@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { GymBuddyProfileInfo } from './GymBuddyInformation';
-import { DbRetrieveService } from './../../../services/db-retrieve.service';
 
+/**
+ * This control class calculates the score between the current user and each other,
+ * the main logic of the Matchmaking Algorithm of the application.
+ */
 export class MatchmakingAlgo {
 
   private static readonly TIME_AND_LOC_PREF_WEIGHTAGE = 10;
@@ -10,50 +14,45 @@ export class MatchmakingAlgo {
   private static readonly TWO_SELECTIONS = 2;
   private static readonly THREE_SELECTIONS = 3;
   private static readonly TRAITS_AND_STYLE_SELECTIONS = 10;
-  /* dictionary <userid, matchscore>*/
-  //private contentFilterScoreMap: { [key: string]: number} = {};
-  /*private contentFilterScoreMap: Record<string, number> = {
-    //key1: 'val1',
-    //key2: 'val2',
- };*/
- //let scores = new Map<string, number>();
+
   private contentFilterScoreMap: Map<string, number>;
 
   constructor() {
       this.contentFilterScoreMap = new Map<string, number>([]);
   }
 
+  /**
+   * Getter for the map of scores.
+   */
   public get getContentFilterScoreMap() {
     this.contentFilterScoreMap.forEach((id,scores) => console.log(id,scores));
     return this.contentFilterScoreMap;
   }
 
+  /**
+   * Remove the suggestion from the map after polling the suggestion.
+   *
+   * @param highestScoreId Highest score existing in the map
+   */
   public deleteIdFromContentFilterScoreMap(highestScoreId) {
     this.contentFilterScoreMap.delete(highestScoreId);
   }
 
+  /**
+   * Calculates the Matching score between current user and each other gym buddy profile and stores the results in a map.
+   *
+   * @param currentUser gym buddy profile of the current user
+   * @param arrayOfProfiles array of gym buddy profiles
+   */
   public async calculateMatchingScores(currentUser: GymBuddyProfileInfo, arrayOfProfiles: Array<GymBuddyProfileInfo>) {
     let matchScore;
     let anotherUserId;
-    /* Pseudo code for Matchmaking Algo
-    *  For each value in K:V pair in localStorage(dictionary of documents in app)
-    * extract the Value and extract the gym buddy profile using json parser
-    * each time, creating an object of a gym buddy profile.
-    * store each object(gym buddy profile) inside an array of gym buddy profile objects
-    * Terminate for loop
-    * Run a new for loop, looping through the array of gym buddy profile objects
-    * calculate the matching score between each user
-    * get the string id of the other user
-    * store in hashmap <id,matching score>
-    * this hashmap is to be used in recommendation engine */
-    //calculate matching score
     arrayOfProfiles.forEach(anotherUser => {
       matchScore = this.getTotalMatchScore(currentUser, anotherUser);
       //get id to store
       anotherUserId = anotherUser.getUserId;
       //store to hashmap: key is the other user id, value: total matching score.
       this.contentFilterScoreMap.set(anotherUserId,matchScore);
-      //return matchScore;
     });
   }
 

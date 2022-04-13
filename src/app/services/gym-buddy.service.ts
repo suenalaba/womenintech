@@ -2,35 +2,57 @@ import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { Auth } from '@angular/fire/auth';
 import { GymBuddyDetails } from '../class/GymBuddyProfile';
-import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
-import { arrayUnion, updateDoc } from 'firebase/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Firestore,doc } from '@angular/fire/firestore';
+import { updateDoc } from 'firebase/firestore';
+import { BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
 import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
 
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * This service acts as a facade class between the main control class of the application and the database.
+ * This class also facilitates the transfer of information between control classes.
+ */
 export class GymBuddyService {
+
   potentialMatchDetails: (GymBuddyProfileInfo)[] = [];
 
-  public setPotentialMatchDetails(potentialMatches: (GymBuddyProfileInfo)[]) {
-    this.potentialMatchDetails = potentialMatches;
-  }
-
-  public getPotentialMatchDetails() {
-    return this.potentialMatchDetails;
-  }
-
-  authState = new BehaviorSubject(false);
+  private authState = new BehaviorSubject(false);
 
   constructor(private auth: Auth, private fireStore: Firestore, private userService: UserService, private platform: Platform,) {
     this.platform.ready().then(() => {
       this.isUserSignedUpGymBuddy();
     });
    }
-  /* store user's gym buddy details to firebase and local storage */
-  addGymBuddyDetails(details, uid) {
+
+  /**
+   * Setter to set the array of GymBuddyProfile.
+   *
+   * @param potentialMatches Array of Gym Buddy Profiles
+   */
+  public setPotentialMatchDetails(potentialMatches: (GymBuddyProfileInfo)[]) {
+    this.potentialMatchDetails = potentialMatches;
+  }
+  /**
+   * Gets an array of potential match details.
+   *
+   * @returns an array of potential match details.
+   */
+  public getPotentialMatchDetails() {
+    return this.potentialMatchDetails;
+  }
+
+
+  /**
+   * Stores user's Gym Buddy Details to firebase.
+   *
+   * @param details Details from the form filled by the user.
+   * @param uid User ID of the current user.
+   * @returns an updated document of gym buddy details that was stored to database.
+   */
+  public addGymBuddyDetails(details, uid) {
     //console.log(details);
     const gymBuddyDetails: GymBuddyDetails = {
       isSignUp: true,
@@ -55,32 +77,26 @@ export class GymBuddyService {
     return updateDoc(noteDocRef,{ gymBuddyDetails });
   }
 
-  /* checks if a user is signed up for gym buddy, return true if user has signed up */
-  isUserSignedUpGymBuddy(){
-    console.log("checking.....")
+  /**
+   * Checks if user has already signed up for gym buddy and returns an observable.
+   *
+   * @returns true if the user has signed up for gym buddy.
+   */
+  public isUserSignedUpGymBuddy(){
     this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe(res=>{
-      if(res.gymBuddyDetails.isSignUp) this.authState.next(true);
-    })
+      if(res.gymBuddyDetails.isSignUp) {
+        this.authState.next(true);
+      }
+    });
   }
 
-  isSignedUp(){
+  /**
+   * Getter to check if user has signed up for gym buddy.
+   *
+   * @returns true if user has signed up for gym buddy.
+   */
+  public isSignedUp(){
     return this.authState.value;
   }
-
-  updateMatches(user : GymBuddyProfileInfo,userID) {
-    //console.log(details);
-    const noteDocRef = doc(this.fireStore, `Users`, user.getUserId);
-
-    return updateDoc(noteDocRef,{ "gymBuddyDetails.matches" : arrayUnion(userID)});
-  }
-
-  updateUnmatches(user : GymBuddyProfileInfo,userID) {
-    //console.log(details);
-    const noteDocRef = doc(this.fireStore, `Users`, user.getUserId);
-
-    return updateDoc(noteDocRef,{ "gymBuddyDetails.unmatches" : arrayUnion(userID)});
-  }
-
-
 
 }
