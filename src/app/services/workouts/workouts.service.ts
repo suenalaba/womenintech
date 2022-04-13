@@ -38,8 +38,12 @@ export class WorkoutsService {
         // Shuffle array
         console.log(r);
         this.exerciseData = this.shuffle(r);
+        let injury =""
+        if(userDetails.areaOfInjury!=''){
 
-        let injury = this.injuries.find(x => x.value === userDetails.areaOfInjury).text
+          injury = this.injuries.find(x => x.value === userDetails.areaOfInjury).text
+        }
+
 
         this.exerciseData  = this.exerciseData.filter(x => x.category.name != injury);
 

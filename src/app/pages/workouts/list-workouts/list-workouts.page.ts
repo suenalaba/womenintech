@@ -67,6 +67,7 @@ export class ListWorkoutsPage implements OnInit {
   }
 
   async ionViewWillEnter(){
+    console.log("ion view enter")
     await this.loadUserWorkouts(JSON.parse(localStorage.getItem('userID')));
     this.filterWorkout('all');
   }
