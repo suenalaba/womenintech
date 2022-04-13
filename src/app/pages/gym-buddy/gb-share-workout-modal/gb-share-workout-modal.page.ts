@@ -6,6 +6,9 @@ import { ModalController } from '@ionic/angular';
   templateUrl: './gb-share-workout-modal.page.html',
   styleUrls: ['./gb-share-workout-modal.page.scss'],
 })
+/**
+ * This class initializes the information to be displayed on the share workout interface and stores any information the user inputs.
+ */
 export class GbShareWorkoutModalPage implements OnInit {
 
   private optionList = ['Share workouts', 'Return to chat'];
@@ -13,6 +16,9 @@ export class GbShareWorkoutModalPage implements OnInit {
   constructor(private modalController: ModalController) { }
 
 
+  /**
+   * Getter for the option list to be displayed to the user.
+   */
   public get getOptionList() {
     return this.optionList;
   }
@@ -21,6 +27,12 @@ export class GbShareWorkoutModalPage implements OnInit {
   }
 
 
+  /**
+   * Navigates the user back to the chat interface and dismisses the popup.
+   * The user's choice is returned to the chat interface.
+   *
+   * @param response user's input choice.
+   */
   public async navigateBack(response: string) {
     //navigate back to chat.
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types
@@ -33,6 +45,12 @@ export class GbShareWorkoutModalPage implements OnInit {
     await this.modalController.dismiss(isChoiceDelete);
   }
 
+  /**
+   * Getter for the color of the button to be display on the user interface.
+   *
+   * @param option the option displayed to the user.
+   * @returns color of the button to be display, 'success' color for the share workout button and 'danger' for the cancel button.
+   */
   public getColorOfButton(option: string): string {
     if(option === 'Share workouts') {
       return 'success';
