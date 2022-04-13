@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, IonicSwiper, LoadingController, ToastController } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { areaOfInjury, armInjuries } from '../../../data/injuries';
+import { areaOfInjury, armInjuries, legInjuries, backInjuries, handInjuries, feetInjuries, otherInjuries } from '../../../data/injuries';
 import { fitnessGoals } from '../../../data/goals';
 
 import SwiperCore, { Keyboard, Pagination, Scrollbar } from 'swiper';
@@ -182,15 +182,15 @@ export class UserDetailsPage implements OnInit {
     if (this.selectedRadioGroup.value == 'arm') {
       this.selectedInjury = armInjuries
     } else if (this.selectedRadioGroup.value == 'leg') {
-      this.selectedInjury = []
+      this.selectedInjury = legInjuries
     } else if (this.selectedRadioGroup.value == 'back') {
-      this.selectedInjury = []
+      this.selectedInjury = backInjuries
     } else if (this.selectedRadioGroup.value == 'hand') {
-      this.selectedInjury = []
+      this.selectedInjury = handInjuries
     } else if (this.selectedRadioGroup.value == 'feet') {
-      this.selectedInjury = []
+      this.selectedInjury = feetInjuries
     } else if (this.selectedRadioGroup.value == 'others') {
-      this.selectedInjury = []
+      this.selectedInjury = otherInjuries
     }
     else {
       this.selectedInjury = []

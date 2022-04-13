@@ -5,7 +5,6 @@ import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } fro
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
-import { WorkoutAlgoService } from 'src/app/services/workouts/workout-algo.service'
 import { WorkoutAPIService } from 'src/app/services/workouts/workout-API.service';
 
 @Component({
@@ -39,7 +38,6 @@ export class CreateWorkoutsPage implements OnInit {
     private workoutService: WorkoutsService,
     private loadingCtrl: LoadingController,
     private nav: NavController,
-    private workoutAlgo: WorkoutAlgoService,
     private workoutAPI: WorkoutAPIService
 
   ) {
