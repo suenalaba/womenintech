@@ -39,6 +39,16 @@ export class WorkoutsService {
         console.log(r);
         this.exerciseData = this.shuffle(r);
 
+        let injury = this.injuries.find(x => x.value === userDetails.areaOfInjury).text
+
+        this.exerciseData  = this.exerciseData.filter(x => x.category.name != injury);
+
+        if(workoutInfo.equipment == "no_equipment"){
+          this.exerciseData = this.exerciseData.filter(y=>y.equipment.length == 0);
+        }else{
+          this.exerciseData = this.exerciseData.filter(y=>y.equipment.length != 0);
+        }
+
         //Filter array further
         //Extract exercises based on time
         this.userWorkout = this.exerciseData.slice(0, 5);
@@ -71,11 +81,7 @@ export class WorkoutsService {
 
   formatWorkoutRoutine(workoutDesc: WorkoutDesc, userDetails: UserDetails) {
     let routine = [];
-
-    let areaOfInjury = this.injuries.find(x => x.value === userDetails.areaOfInjury).text
-    let equipment = workoutDesc.equipment
     
-
     for (let i = 0; i < this.userWorkout.length; ++i) {
       let exercise: WorkoutDetails = {
         category: this.userWorkout[i].category.name,
@@ -92,14 +98,7 @@ export class WorkoutsService {
       routine.push(exercise);
     }
 
-    routine  = routine.filter(x => x.category.name != areaOfInjury);
-
-    if(equipment == "no_equipment"){
-      return routine.filter(y=>y.equipment.length == 0);
-    }else{
-      return routine.filter(y=>y.equipment.length != 0);
-    }
-  
+    return routine;
   }
 
   async saveWorkout(wid, uid, userWorkout) {
