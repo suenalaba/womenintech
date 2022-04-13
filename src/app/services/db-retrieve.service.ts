@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
-import { addDoc, arrayUnion, DocumentReference, DocumentSnapshot, getDoc, Query, updateDoc } from 'firebase/firestore';
-import { query, where, getDocs,collectionGroup } from 'firebase/firestore';
+import { Firestore, collection, doc } from '@angular/fire/firestore';
+import { addDoc, arrayUnion,  DocumentSnapshot, getDoc, Query, updateDoc } from 'firebase/firestore';
+import { query, where, getDocs } from 'firebase/firestore';
 import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInformation';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Class that stores information to the database for gym buddy data and reads in the data requested by the gym buddy control classes.
+ */
 export class DbRetrieveService {
 
   private currentUserDataDoc: DocumentSnapshot<any>;
@@ -19,6 +22,7 @@ export class DbRetrieveService {
 
 
   /**
+   * Filter the potential buddies based on preferred gender and ensure that user's dont match themselves.
    *
    * @param preferredGender User's preferred gender of the gym buddy.
    * @param gender User's gender.
@@ -51,12 +55,12 @@ export class DbRetrieveService {
     const dictOfProfiles = new Map<string, GymBuddyProfileInfo>();
     console.log('Matched users: ');
     //loop through query snapshot, extract each document.
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((eachUserDoc) => {
       //create a new gym buddy profile for each person that matches query.
-      const person = new GymBuddyProfileInfo(doc.data());
+      const person = new GymBuddyProfileInfo(eachUserDoc.data());
       console.log('user id: ', person.getUserId);
-      dictOfProfiles[doc.id] = person; //dictionary key: id, value: Gym Buddy Profile Info object.
-      console.log(dictOfProfiles[doc.id]); //print the gym buddy profile.
+      dictOfProfiles[eachUserDoc.id] = person; //dictionary key: id, value: Gym Buddy Profile Info object.
+      console.log(dictOfProfiles[eachUserDoc.id]); //print the gym buddy profile.
     });
     return dictOfProfiles;
   }
@@ -77,12 +81,19 @@ export class DbRetrieveService {
   public async setCurrentUser() {
     const loading = await this.loadingController.create();
     const id = JSON.parse(localStorage.getItem('userID')); //get id string from localStorage
-    console.log("id:",id);
+    console.log('id: ',id);
     const ref = doc(this.firestore, 'Users', id); //object ref refers to information in the firebase
     const user = await this.singlePullFromDB(ref); //pull ref, and store in user object.
     this.currentUserDataDoc = user;
   }
 
+  /**
+   * Updates the matches field in the database users collection for the specific user.
+   *
+   * @param user GymBuddyProfile of primary user.
+   * @param userID reference ID of primary user.
+   * @returns updated document of matches.
+   */
   public updateMatches(user: GymBuddyProfileInfo,userID) {
     //console.log(details);
     const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
@@ -90,6 +101,13 @@ export class DbRetrieveService {
     return updateDoc(noteDocRef,{ 'gymBuddyDetails.matches' : arrayUnion(userID)});
   }
 
+  /**
+   * Updates the unMatches field in the database users collection for the specific user.
+   *
+   * @param user GymBuddyProfile of primary user.
+   * @param userID reference ID of primary user.
+   * @returns updated document of unMatches.
+   */
   public updateUnMatches(user: GymBuddyProfileInfo,userID) {
     //console.log(details);
     const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
@@ -98,7 +116,7 @@ export class DbRetrieveService {
   }
 
   /**
-   * Create a chat with both users.
+   * Create a chat with both users in the Chat collection in the database.
    *
    * @param currentUserId Primary user id
    * @param recommendedUserId Secondary user id to create the chat with.
@@ -152,8 +170,4 @@ export class DbRetrieveService {
     const querySnapshot = await getDocs(q);
     return querySnapshot;
   }
-
-
-
-
 }
