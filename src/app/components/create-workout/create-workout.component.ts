@@ -76,12 +76,14 @@ export class CreateWorkoutComponent implements OnInit {
 
   getPeriodDate(pd) {
     let dateTemp = []
-    if (pd != ''){
+
+    if (pd == "false"){
       dateTemp =pd.split('-')
       return dateTemp[2]+"/"+dateTemp[1]+"/"+dateTemp[0]
     }
-    else
+    else{
       return "No Information"
+    }
   }
 
   // Easy access for form fields
@@ -165,9 +167,7 @@ export class CreateWorkoutComponent implements OnInit {
   }
 
   showDateInput() {
-
     this.isShown = !this.isShown;
-
   }
 
 }

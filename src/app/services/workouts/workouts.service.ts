@@ -5,13 +5,15 @@
  */
 
 import { Injectable } from '@angular/core';
-import { user } from '@angular/fire/auth';
+import { User, user } from '@angular/fire/auth';
 import { Firestore, collection, doc, setDoc, docData, Timestamp, query, getDocs } from '@angular/fire/firestore';
 import { onSnapshot, orderBy, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
+import { UserDetails } from 'src/app/class/user';
 import { CompletedWorkout, WorkoutDesc } from '../../class/CreateWorkoutDesc';
 import { WorkoutDetails } from '../../class/WorkoutDetails';
 import { WorkoutAPIService } from './workout-API.service';
+import { areaOfInjury } from 'src/app/data/injuries';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +24,13 @@ export class WorkoutsService {
   exerciseData = [];
   userWorkout = [];
 
+  injuries = areaOfInjury;
+
   constructor(private firestore: Firestore, private workoutAPI: WorkoutAPIService) {
 
   }
 
-  async createWorkout(val, uid) {
+  async createWorkout(workoutInfo, uid, userDetails) {
     let timestamp = Timestamp.fromDate(new Date());
 
     return new Promise(resolve => {
@@ -40,20 +44,20 @@ export class WorkoutsService {
         this.userWorkout = this.exerciseData.slice(0, 5);
         console.log(this.userWorkout);
 
-        val.routine = this.formatWorkoutRoutine();
+        workoutInfo.routine = this.formatWorkoutRoutine(workoutInfo, userDetails);
 
         const docData: WorkoutDesc = {
-          wName: val.wName,
-          wDescription: val.wDescription,
-          intensity: val.intensity,
-          duration: val.duration,
-          location: val.location,
-          equipment: val.equipment,
+          wName: workoutInfo.wName,
+          wDescription: workoutInfo.wDescription,
+          intensity: workoutInfo.intensity,
+          duration: workoutInfo.duration,
+          location: workoutInfo.location,
+          equipment: workoutInfo.equipment,
           dateCreated: timestamp,
           workoutStatus: "created",
           createdBy: uid,
-          tags: [val.intensity, val.duration, val.location, val.equipment],
-          workoutRoutine: val.routine
+          tags: [workoutInfo.intensity, workoutInfo.duration, workoutInfo.location, workoutInfo.equipment],
+          workoutRoutine: workoutInfo.routine
         };
 
         console.log(docData);
@@ -65,8 +69,12 @@ export class WorkoutsService {
 
   }
 
-  formatWorkoutRoutine() {
+  formatWorkoutRoutine(workoutDesc: WorkoutDesc, userDetails: UserDetails) {
     let routine = [];
+
+    let areaOfInjury = this.injuries.find(x => x.value === userDetails.areaOfInjury).text
+    let equipment = workoutDesc.equipment
+    
 
     for (let i = 0; i < this.userWorkout.length; ++i) {
       let exercise: WorkoutDetails = {
@@ -76,10 +84,6 @@ export class WorkoutsService {
         id: this.userWorkout[i].id,
         exerciseName: this.userWorkout[i].name,
         images: this.extractValue(this.userWorkout[i], 'images.image'),
-        /**
-         * change this @gabrieltangs
-         * sets for each exercise
-         */
         sets: {
           sets: 3,
           reps: 10
@@ -87,7 +91,15 @@ export class WorkoutsService {
       };
       routine.push(exercise);
     }
-    return routine;
+
+    routine  = routine.filter(x => x.category.name != areaOfInjury);
+
+    if(equipment == "no_equipment"){
+      return routine.filter(y=>y.equipment.length == 0);
+    }else{
+      return routine.filter(y=>y.equipment.length != 0);
+    }
+  
   }
 
   async saveWorkout(wid, uid, userWorkout) {

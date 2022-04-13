@@ -6,6 +6,8 @@ import { AlertController, LoadingController, NavController } from '@ionic/angula
 import { Router } from '@angular/router';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 import { WorkoutAPIService } from 'src/app/services/workouts/workout-API.service';
+import { UserDetails } from 'src/app/class/user';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-create-workouts',
@@ -23,6 +25,7 @@ export class CreateWorkoutsPage implements OnInit {
   createWorkoutForm: FormGroup;
 
   workoutDesc: WorkoutDesc;
+  userDetails: UserDetails;
 
   private workoutId: any;
 
@@ -31,6 +34,8 @@ export class CreateWorkoutsPage implements OnInit {
   exerciseData = [];
   userWorkout = [];
 
+  userId: string;
+
   constructor(
     private fb: FormBuilder,
     private alertController: AlertController,
@@ -38,7 +43,8 @@ export class CreateWorkoutsPage implements OnInit {
     private workoutService: WorkoutsService,
     private loadingCtrl: LoadingController,
     private nav: NavController,
-    private workoutAPI: WorkoutAPIService
+    private workoutAPI: WorkoutAPIService,
+    private userService: UserService
 
   ) {
 
@@ -46,6 +52,8 @@ export class CreateWorkoutsPage implements OnInit {
 
   ngOnInit() {
     this.buildForm();
+    this.userId = JSON.parse(localStorage.getItem('userID'));
+    this.getUserDetails();
   }
 
   buildForm() {
@@ -58,6 +66,13 @@ export class CreateWorkoutsPage implements OnInit {
       equipment: ['', [Validators.required]]
     });
   }
+
+  getUserDetails(){
+    this.userService.getUserById(this.userId).subscribe(res=>{
+      this.userDetails = res.userDetails
+    })
+  }
+
 
   submitWorkoutDesc() {
     if (this.createWorkoutForm.status == "INVALID") {
@@ -99,14 +114,16 @@ export class CreateWorkoutsPage implements OnInit {
     let wid = 0;
     let uid = JSON.parse(localStorage.getItem('userID'));
 
+    let areaOfInjury = ''
+    let equipment = ''
+
     this.presentLoadingWithOptions().then(() => {
-      this.workoutService.createWorkout(this.workoutDesc, uid).then((res)=>{
+      this.workoutService.createWorkout(this.workoutDesc, this.userId, this.userDetails).then((res)=>{
         console.log(res)
+
         this.goToStartWorkout(res)
       })
     });
-
-
 
 
     /******* !!! figure out how to return subscription ********/
