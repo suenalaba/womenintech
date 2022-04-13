@@ -31,7 +31,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 /**
  * Services
  */
- import { WindowRefService } from '../app/services/window-ref.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -48,7 +47,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     provideStorage(() => getStorage()),
     HttpClientModule,
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, WindowRefService],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

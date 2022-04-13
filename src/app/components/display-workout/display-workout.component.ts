@@ -8,7 +8,6 @@ import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 import { UserService } from '../../services/user.service';
 import { YoutubeService } from 'src/app/services/youtube.service';
 
-import { WindowRefService } from '../../services/window-ref.service';
 import { Timestamp } from 'firebase/firestore';
 
 @Component({
@@ -20,11 +19,9 @@ export class DisplayWorkoutComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private router: Router, 
     private alertController: AlertController, private user: UserService,
-    private workoutService: WorkoutsService, windowRef: WindowRefService,
+    private workoutService: WorkoutsService
     //private ytService: YoutubeService,
-    ) { 
-      this._window = windowRef.nativeWindow; 
-    }
+    ) { }
   @Input() section: string;
   @Input() workoutDetails: any; 
   @Input() stopwatch: number;

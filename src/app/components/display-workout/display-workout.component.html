@@ -1,5 +1,4 @@
 <script src="https://www.youtube.com/iframe_api"></script>
-<!--<script src="https://sdk.scdn.co/spotify-player.js"></script>-->
 
 <div style="height: 100%; display: flex; align-items: center; justify-content: center;" id="warmup" *ngIf="workoutSection === 'warmup'">
   <ion-card>
@@ -20,13 +19,6 @@
 </div>
 
 <div id="workout" *ngIf="workoutSection === 'exercise' && currentExercise">
-  <ion-card>
-    <script>
-      window.onSpotifyWebPlaybackSDKReady = () => {
-        // You can now initialize Spotify.Player and use the SDK
-      };
-      </script>
-  </ion-card>
 
   <ion-card>
     <ion-card-header>
