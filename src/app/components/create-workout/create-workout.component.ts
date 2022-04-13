@@ -36,6 +36,7 @@ export class CreateWorkoutComponent implements OnInit {
     this.userInfo = this.navParams.get('userInfo');
     this.userDetails = this.userInfo.userDetails;
     console.log(this.userInfo, this.userDetails);
+
     this.userUpdates = this.fb.group({
       height: [this.userDetails.height, [Validators.required, Validators.minLength(3)]],
       weight: [this.userDetails.weight, [Validators.required, Validators.minLength(2)]],
@@ -68,6 +69,12 @@ export class CreateWorkoutComponent implements OnInit {
     this.userUpdates.valueChanges.subscribe(selectedValue => {
       this.formChange = true;
     })
+
+    if(this.userDetails.areaOfInjury!=''){
+      console.log(this.userDetails.areaOfInjury)
+      this.injuryChange(this.userDetails.areaOfInjury)
+      // this.injuryChange(this.listInjuries.this.userDetails.areaOfInjury)
+    }
   }
 
   closeModal() {
@@ -76,12 +83,14 @@ export class CreateWorkoutComponent implements OnInit {
 
   getPeriodDate(pd) {
     let dateTemp = []
-    if (pd != ''){
+
+    if (pd == "false"){
       dateTemp =pd.split('-')
       return dateTemp[2]+"/"+dateTemp[1]+"/"+dateTemp[0]
     }
-    else
+    else{
       return "No Information"
+    }
   }
 
   // Easy access for form fields
@@ -121,19 +130,19 @@ export class CreateWorkoutComponent implements OnInit {
     return this.userUpdates.get('injuryType');
   }
 
-  injuryChange(event) {
-    this.injuryArea = event.detail;
-    if (this.injuryArea.value == 'arm') {
+  injuryChange(injury) {
+    this.injuryArea = injury;
+    if (this.injuryArea == 'arm') {
       this.selectedInjury = armInjuries
-    } else if (this.injuryArea.value == 'leg') {
+    } else if (this.injuryArea == 'leg') {
       this.selectedInjury = legInjuries
-    } else if (this.injuryArea.value == 'back') {
+    } else if (this.injuryArea == 'back') {
       this.selectedInjury = backInjuries
-    } else if (this.injuryArea.value == 'hand') {
+    } else if (this.injuryArea == 'hand') {
       this.selectedInjury = handInjuries
-    } else if (this.injuryArea.value == 'feet') {
+    } else if (this.injuryArea == 'feet') {
       this.selectedInjury = feetInjuries
-    } else if (this.injuryArea.value == 'others') {
+    } else if (this.injuryArea == 'others') {
       this.selectedInjury = otherInjuries
     }
     else {
@@ -165,9 +174,7 @@ export class CreateWorkoutComponent implements OnInit {
   }
 
   showDateInput() {
-
     this.isShown = !this.isShown;
-
   }
 
 }

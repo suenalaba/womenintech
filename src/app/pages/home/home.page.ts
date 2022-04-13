@@ -289,9 +289,14 @@ export class HomePage implements OnInit {
 
   async doRefresh2(event) {
     await this.filterWorkouts();
-    this.loadText();
-    this.getVideos();
-    this.loadGraph();
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      this.loadText();
+      this.getVideos();
+      this.loadGraph();
+      event.target.complete();
+    }, 1000);
+   
   }
 
 }

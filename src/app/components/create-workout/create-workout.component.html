@@ -47,7 +47,7 @@
 
       <ion-item class="ion-margin-bottom" lines="none" *ngIf="injury.value==='yes'">
         <ion-label position="stacked">What is your injury?</ion-label>
-        <ion-select formControlName="areaOfInjury" (ionChange)="injuryChange($event)">
+        <ion-select formControlName="areaOfInjury" (ionChange)="injuryChange($event.detail.value)">
           <ion-select-option *ngFor="let i of listInjuries" [value]="i.value">{{i.text}}</ion-select-option>
         </ion-select>
         <ion-note slot="error" *ngIf="areaOfInjury.errors && areaOfInjury.errors">Select an area of injury</ion-note>
