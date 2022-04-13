@@ -10,17 +10,9 @@ import { ChatService } from 'src/app/services/chat.service';
 })
 export class GbBuddylistHomePage implements OnInit {
 
+  public activeTab = 'chats'; //for tab
 
-  private static readonly CHATID_INDEX = 1;
-
-  activeTab = 'chats'; //for tab
-
-  //array of hashmap storing <chatID, chatId> & <otherUser: otherUserId>
-  //private allChatInfo: Map<string, string>[] = [];
-  //private allChatInfo: string[] = [];
   private allChatInfo;
-  //private allChatInfo: Map<string, string>[] boardPopulation= (HashMap<String, Integer>[])
-  //Map<string, GymBuddyProfileInfo>;
   private currentUser: GymBuddyProfileInfo;
   private chatNameAndMessagesMap: Map<string, string[]>;
 
@@ -33,6 +25,10 @@ export class GbBuddylistHomePage implements OnInit {
     private loadingController: LoadingController
   ) { }
 
+  public get getProfilePicture() {
+    return this.currentUser.profilePicture;
+  }
+
   public get getAllChatInfoList() {
     return this.allChatInfo;
   }
@@ -41,6 +37,10 @@ export class GbBuddylistHomePage implements OnInit {
     return this.chatNameAndMessagesMap;
   }
 
+  /**
+   * Invoked the moment the class is instantiated.
+   * It fetches current user, chat information and chat names and messages from chat service.
+   */
   async ngOnInit() {
     //display loading controller.
     this.showLoading();
@@ -48,32 +48,35 @@ export class GbBuddylistHomePage implements OnInit {
     this.currentUser = await this.chatService.retrieveCurrentChatUser();
     console.log('The current user is: ' + this.currentUser.getUserId);
     this.allChatInfo = await this.chatService.retrieveAllChatsFromDB();
-    //this.chatService.testPullFromDb();
-    //console.log(this.allChatInfo);
-    //console.log(this.allChatInfo[0].chatID);
-    //console.log(this.allChatInfo[0].otherUser);
-    //this.chatService.getGbListHomeDisplayFromDB();
     this.chatNameAndMessagesMap = await this.chatService.getGbListHomeDisplayFromDB();
-    // this.chatNameAndMessagesMap.forEach((value: string[], key: string) => {
-    //   console.log('Printing key value pair 1');
-    //   console.log(key, value[0], value[1], value[2],value[3]);
-    // });
     //dismiss loading.
     this.dismissLoading();
   }
 
+  /**
+   * An ionic tab function that updates the tab upon detection of user action.
+   *
+   * @param e user action log.
+   */
   public segmentChange(e) {
     this.activeTab = e.target.value;
   }
 
-  get getProfilePicture() {
-    return this.currentUser.profilePicture;
-  }
-
+  /**
+   *  This method is called upon button trigger by user that will navigate the user to the gym buddy home page.
+   */
   public async navigateBuddyListToGBHome() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
+  /**
+   * This method is called upon button trigger by user that will navigate the user to the selected chat.
+   *
+   * @param selectedChatUserName username of the secondary user
+   * @param selectedChatId chat reference id of the chat
+   * @param otherUserIdOfSelectedChat secondary user's user id
+   * @param otherUserProfilePictureOfSelectedChat secondary user's profile picture reference
+   */
   public async navigateBuddyListToChat(selectedChatUserName: string, selectedChatId: string,
       otherUserIdOfSelectedChat: string, otherUserProfilePictureOfSelectedChat: string) {
     console.log('This chat ID was selected: ' + selectedChatId);
@@ -85,6 +88,13 @@ export class GbBuddylistHomePage implements OnInit {
     this.router.navigateByUrl('tabs/gym-buddy/gb-chat', { replaceUrl: true });
   }
 
+  /**
+   * Checks whether there is any message in the chat, if there is an existing message, the chat is not new
+   * and the method will return false.
+   *
+   * @param message each message of the chat.
+   * @returns true if the chat is new.
+   */
   public isNewChat(message: string) {
     if(message === 'Start chatting with this user.') {
       return true;
@@ -93,6 +103,9 @@ export class GbBuddylistHomePage implements OnInit {
     }
   }
 
+  /**
+   * To display a loading toast while user waits for the page to load.
+   */
   private async showLoading() {
     this.loadingPresent = true;
     const load = await this.loadingController.create({
@@ -102,6 +115,9 @@ export class GbBuddylistHomePage implements OnInit {
     await load.present();
   }
 
+  /**
+   * To dismiss the loading toast once information has loaded.
+   */
   private async dismissLoading() {
     if (this.loadingPresent) {
       await this.loadingController.dismiss();
