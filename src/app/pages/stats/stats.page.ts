@@ -26,6 +26,7 @@ export class StatsPage implements OnInit {
       this.workouts[i].caloriesBurnt = Math.round(this.workouts[i].caloriesBurnt * 100) / 100
       var datee = new Date(this.workouts[i].dateCompleted.seconds * 1000)
       this.workouts[i].dateCompleted = datee.toString().split(' GMT')[0]
+      this.workouts[i].totalSets += this.workouts[i].totalReps;
     } 
     console.log(this.workouts);
   }
