@@ -8,6 +8,11 @@ import { ChatService } from 'src/app/services/chat.service';
   templateUrl: './gb-buddylist-home.page.html',
   styleUrls: ['./gb-buddylist-home.page.scss'],
 })
+
+/**
+ * This class is use to initialize contents in the chat display home page.
+ * The class also detects any changes based on user inputs and acts as intermediate class for data routing to the back end.
+ */
 export class GbBuddylistHomePage implements OnInit {
 
   public activeTab = 'chats'; //for tab
