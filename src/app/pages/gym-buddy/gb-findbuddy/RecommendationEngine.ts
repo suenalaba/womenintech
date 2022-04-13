@@ -1,8 +1,11 @@
 import { MatchmakingAlgo } from './MatchmakingAlgo';
-import { DbRetrieveService } from './../../../services/db-retrieve.service';
 import { GymBuddyProfileInfo } from './GymBuddyInformation';
 
 
+/**
+ * This class instantiates the Matchmaking Algorithm to get all the scores and filters the highest score.
+ * The recommendation engine's main purpose is to poll and recommend the buddy with the highest matching score.
+ */
 export class RecommendationEngine {
 
   private matchmakingAlgo: MatchmakingAlgo;
@@ -35,7 +38,12 @@ export class RecommendationEngine {
       return this.dictOfProfiles[highestScoreId];
     }
   }
-//if (Object.prototype.hasOwnProperty.call(foo, key))
+
+  /**
+   * Getter to get all the profile of other users.
+   *
+   * @param dictOfProfiles dictionary that contains gym buddy profiles
+   */
   public getAllMatches(dictOfProfiles) {
     this.dictOfProfiles = dictOfProfiles;
     const arrayOfProfiles= new Array<GymBuddyProfileInfo>(); //initialize an array to store gym buddy profiles that was queried.
@@ -48,7 +56,6 @@ export class RecommendationEngine {
     }
     console.log('array of profiles: ', arrayOfProfiles);
     this.matchmakingAlgo.calculateMatchingScores(this.userInfo,arrayOfProfiles);
-    //this.matchmakingAlgo.getContentFilterScoreMap;
   }
 
   /**
