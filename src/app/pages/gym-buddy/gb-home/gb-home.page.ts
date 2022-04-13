@@ -11,6 +11,9 @@ import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
   templateUrl: './gb-home.page.html',
   styleUrls: ['./gb-home.page.scss'],
 })
+/**
+ * This class initializes the display for the gym buddy home page and logs the user input into the application control.
+ */
 export class GbHomePage implements OnInit {
 
   private timePrefList = workoutTimePreference;
@@ -33,6 +36,7 @@ export class GbHomePage implements OnInit {
 
    }
 
+   //getter and setter functions
    public get getAge() {
      if(this.currentUser)
       {return this.currentUser.age;}
@@ -40,12 +44,10 @@ export class GbHomePage implements OnInit {
    }
 
   public get getFullName() {
-    // this.fullName = this.userInfo.firstName + ' ' + this.userInfo.lastName;
     return this.fullName;
   }
 
   public get getBriefIntro() {
-    // this.briefIntro = this.gymBuddyInfo.briefIntro;
     return this.briefIntro;
   }
 
@@ -65,19 +67,23 @@ export class GbHomePage implements OnInit {
     return this.profilePicture;
   }
 
+  /**
+   * Main entry point into the page, which initialises when the class is instantiated.
+   * It will retrieve the current user data from the database and set user details if the user has already signed up for gym buddy.
+   */
   async ngOnInit() {
     await this.dbRetrieveService.setCurrentUser();
     this.currentUser=this.dbRetrieveService.retrieveCurrentUser();
-    /** checks if the user has signed up for Gym Buddy */
-    // if(this.gymBuddyService.isSignedUp())
-    //check if user is signed up.
-
     this.checkIfUserIsSignedUp();
     this.setUserDetails();
-    //this line only follows if user is signed up, basically to set the status of current user.
-
   }
 
+  /**
+   * Gets the index of the element to display and returns the corresponding color to display the element.
+   *
+   * @param i The index of element to display.
+   * @returns The color to display for the element.
+   */
   public getColor(i: number) {
     i = i % 5;
     const colors = ['#ED93D5','#94DAEC','#FB6175','#EFBCFF','#F2D28A'];
@@ -85,31 +91,32 @@ export class GbHomePage implements OnInit {
   }
 
   /**
-   * Navigate to find a buddy.
+   * This method is called when the user clicks the button to go to find buddy interface, the method will call the application router.
+   * The router will route the user to the find a buddy page.
    */
   public async goToFindBuddy() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-find-buddy-boarding', { replaceUrl: true });
-    //this.router.navigateByUrl('tabs/gym-buddy/gb-findbuddy', { replaceUrl: true });
-    //pages/gym-buddy/gb-find-buddy-boarding/gb-find-buddy-boarding.module
   }
 
   /**
-   * Navigate to update account preferences
+   * This method is called when the user clicks the button to update account preferences, the method will call the application router.
+   * The router will route the user to the update account preferences page.
    */
    public async goToUpdateAcc() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-update-account-preference', { replaceUrl: true });
   }
 
   /**
-   * Navigate to Buddy list (Chat Home Page)
+   * This method is called when the user clicks the button to go to the buddy list page, the method will call the application router.
+   * The router will route the user to the buddy list page.
    */
   public async goToBuddyList() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-buddylist-home', { replaceUrl: true });
   }
 
   /**
-   * CALLING USER DYNAMICALLY, check if user is signed up.
-   * If yes, load info else, reroute to sign up page.
+   * This methods check if user is signed up.
+   * If the user is not signed up, the user will be routed to the gym buddy sign up page.
    */
   private async checkIfUserIsSignedUp(){
     const loading = await this.loadingController.create();
@@ -124,8 +131,7 @@ export class GbHomePage implements OnInit {
   private setUserDetails() {
     this.fullName = this.currentUser.name;
       this.briefIntro = this.currentUser.getbriefIntro;
-      console.log("Profile picture:")
-      console.log(this.currentUser.profilePicture)
+      console.log(this.currentUser.profilePicture);
       this.profilePicture=this.currentUser.profilePicture;
 
       this.setWorkoutTimeTextDisplay();
@@ -136,41 +142,28 @@ export class GbHomePage implements OnInit {
   private setPersonalTraitsTextDisplay() {
     this.personalTraits = [];
     for (const val of this.personalTraitsList) {
-      //console.log(val.value);
-      //console.log(this.gymBuddyInfo.workoutTimePreference);
       if (this.currentUser.getPersonalTraits.includes(val.value)) {
-        //console.log(val.text);
         this.personalTraits.push(val.text);
       }
-      //console.log(this.prefWorkoutTime);
     }
   }
 
   private setGymBuddyGoalsTextDisplay() {
     this.gymBuddyGoals = [];
     for (const val of this.buddyGoalsList) {
-      //console.log(val.value);
-      //console.log(this.gymBuddyInfo.workoutTimePreference);
       if (this.currentUser.getGymBuddyGoals.includes(val.value)) {
-        //console.log(val.text);
         this.gymBuddyGoals.push(val.text);
       }
-      //console.log(this.prefWorkoutTime);
     }
   }
 
   private setWorkoutTimeTextDisplay() {
     this.prefWorkoutTime = [];
     for (const val of this.timePrefList) {
-      //console.log(val.value);
-      //console.log(this.gymBuddyInfo.workoutTimePreference);
       if (this.currentUser.getWorkoutTimePreference.includes(val.value)) {
-        //console.log(val.text);
-        //convert all but first letter to lower case.
         val.text = val.text.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
         this.prefWorkoutTime.push(val.text);
       }
-      //console.log(this.prefWorkoutTime);
     }
   }
 }

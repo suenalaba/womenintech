@@ -200,6 +200,7 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
 
   /**
    * Getter for the current user profile as an object.
+   *
    * @returns Gym Buddy Profile Info object of the current user.
    */
   public getCurrentUser(): GymBuddyProfileInfo {
