@@ -33,12 +33,18 @@ export class YoutubeService {
    * returns the results' 1) video title, 2) video url, and 3) video thumbnail
    */
   getYoutubeAPI(searchTerm) {
-    const APIKEY = 'AIzaSyAu6XSE7LGtxxHJmP_m0yQAKfRZODD_FDQ' //mn4m
-    // fresh api keys:
-    // 'AIzaSyDmTKmRx9nb2X5vXhR6yTa-tmhwfn--sns' //M560
-    // 'AIzaSyApxaBF3ddo3wMeIqfr3OEBtbrBPst92jU' //G560
+    const APIKEYar = ['AIzaSyDmTKmRx9nb2X5vXhR6yTa-tmhwfn--sns', //M560
+                      'AIzaSyApxaBF3ddo3wMeIqfr3OEBtbrBPst92jU', //G560
+                      'AIzaSyCGUCYsNQpCM34NwbSzmG-web56Sik8Pbo', //ESp
+                      'AIzaSyChbvnT57XxBmNfrN4nLnGICNg3YDhbEo0', //tranz
+                      'AIzaSyBpnu2GzUd4BIQ3241u1cPnz4JQ72erN9w', //kryzs
+                     ]
+    var choicee = Math.floor(Math.random() * (APIKEYar.length - 0 + 1)) + 0;
+    const APIKEY = APIKEYar[choicee];
+    console.log('using key ', APIKEY);
     
     // hit the limit:
+    //'AIzaSyAu6XSE7LGtxxHJmP_m0yQAKfRZODD_FDQ' //mn4m
     //'AIzaSyDGp0pRQ-nr7k67SH2Gz7jDovryFdYoZwc'//rxdnstk
     //'AIzaSyAPry9QnN6oQQUk4ibdx4lTGmEioVkgRfI' //bkhl2
     //'AIzaSyCdWBniI98tMsvFoVUdCsf43FwI6kDQ8oI' //blkh
