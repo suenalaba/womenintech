@@ -45,6 +45,7 @@ export class GenerateWorkoutPage implements OnInit {
     this.getWorkoutDetails(this.workoutId, this.userId);
   }
  /**
+  * function to retrieve workout details and format the relevant details 
   * 
   * @param wid workout id
   * @param uid user id
@@ -75,22 +76,41 @@ export class GenerateWorkoutPage implements OnInit {
     this.loadingCtrl.dismiss();
   }
 
-  goBack(){
-    this.nav.navigateBack(['tabs/workouts'], { animated: true })
+  /**
+   * navigate user back to workouts
+   */
+  async goBack(){
+    await this.nav.navigateBack(['tabs/workouts'], { animated: true })
   }
 
-  goGymMap(){
-    this.router.navigateByUrl('tabs/workouts/display-gyms', { replaceUrl: true })
+  /**
+   * navigate user to view location of gyms and parks
+   */
+  async goGymMap(){
+    await this.router.navigateByUrl('tabs/workouts/display-gyms', { replaceUrl: true })
   }
 
-  deleteWorkout(){
-    this.presentAlertConfirm();
-  }
-
+  /**
+   * triggered when user wants to start their workout
+   * navigate user to start their workout
+   */
   async startWorkout(){
     await this.router.navigate(['/start-workout'], { queryParams: { wid: this.workoutId, uid: this.userId } });
   }
 
+ /**
+   * triggered when user wants to a delete workout
+   */
+  deleteWorkout(){
+    this.presentAlertConfirm();
+  }
+
+  /**
+   * function to display alert dialog 
+   * it has 2 buttons that the user can select,
+   * cancel: do not delete workout
+   * yes: confirm delete workout
+   */
   async presentAlertConfirm() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',

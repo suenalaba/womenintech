@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Timestamp } from 'firebase/firestore';
 import { timer } from 'rxjs';
@@ -32,7 +32,7 @@ export class StartWorkoutPage implements OnInit {
   timerDuration: number;
   displayTimer: string;
 
-  constructor(private workoutExercise: WorkoutAPIService, 
+  constructor(
     private route: ActivatedRoute, private router: Router, 
     private workoutService: WorkoutsService, private alertController: AlertController, private toastController: ToastController) { }
 
@@ -48,6 +48,12 @@ export class StartWorkoutPage implements OnInit {
     this.getWorkoutDetails(this.workoutId, this.userId);
   }
 
+  /**
+   * function to get user's workout 
+   * 
+   * @param wid workout id
+   * @param uid user id
+   */
   async getWorkoutDetails(wid: string, uid: string) {
     console.log(wid)
 
@@ -71,11 +77,20 @@ export class StartWorkoutPage implements OnInit {
     );
   }
 
+  /**
+   * Fired when the component routing from is about to animate.
+   */
   ionViewWillLeave() {
     this.isRunning = false;
     console.log(this.timerDuration)
   }
 
+  /**
+   * function to retrieve workout information 
+   * declare variables based on the workout status 
+   * 
+   * @param res workout information
+   */
   getMoreWorkoutDetails(res: WorkoutDesc) {
     console.log(res.workoutStatus)
     if (res.workoutStatus == "created" || res.workoutStatus == "completed") {
@@ -93,6 +108,9 @@ export class StartWorkoutPage implements OnInit {
     this.navToSection()
   }
 
+  /**
+   * change params of route
+   */
   navToSection() {
     console.log("Current page:" + this.workoutSection + " " + this.exerciseIndex)
     this.router.navigate([], {
@@ -156,6 +174,9 @@ export class StartWorkoutPage implements OnInit {
     await alert.present();
   }
 
+  /**
+   * fucntion to format data and save workout to firebase
+   */
   async saveWorkout(){
     let ReceivedData = window.localStorage.getItem("workoutRoutine");
     this.workoutRoutine = JSON.parse(ReceivedData);

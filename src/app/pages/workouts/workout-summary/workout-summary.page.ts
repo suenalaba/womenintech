@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { CompletedWorkout, CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
-import { User, UserDetails } from 'src/app/class/user';
-import { WorkoutDetails } from 'src/app/class/WorkoutDetails';
+import { User } from 'src/app/class/user';
 import { Intensity } from 'src/app/data/workout-data/CreateWorkout';
 import { UserService } from 'src/app/services/user.service';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
@@ -34,8 +33,13 @@ export class WorkoutSummaryPage implements OnInit {
   calories: number;
 
   
-  constructor(private workoutService: WorkoutsService, private fb: FormBuilder, private loadingCtrl:LoadingController,
-    private route: ActivatedRoute, private router: Router,private userService: UserService) { }
+  constructor(
+    private workoutService: WorkoutsService, 
+    private fb: FormBuilder, 
+    private loadingCtrl:LoadingController,
+    private route: ActivatedRoute, 
+    private router: Router,
+    private userService: UserService) { }
 
   ngOnInit() {
     this.workoutNotes = this.fb.group({
@@ -49,10 +53,11 @@ export class WorkoutSummaryPage implements OnInit {
 
     this.showWorkoutSummary()
     this.getUserDetails()
-
-    
   }
 
+  /**
+   * get workout details
+   */
   showWorkoutSummary() {
     this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(res => {
       console.log(res)
@@ -62,6 +67,9 @@ export class WorkoutSummaryPage implements OnInit {
     })
   }
 
+  /**
+   * get user details
+   */
   getUserDetails(){
     this.userService.getUserById(this.userId).subscribe(res=>{
       this.userDetails = res
@@ -70,7 +78,10 @@ export class WorkoutSummaryPage implements OnInit {
     })
   }
 
-
+/**
+ * format date 
+ * @param date Timestamp
+ */
   getDate(date) {
     if (date) {
       let newDate = new Date(date.seconds * 1000)
@@ -82,6 +93,11 @@ export class WorkoutSummaryPage implements OnInit {
 
   }
 
+  /**
+   * get time from date 
+   * 
+   * @param date date object of timestamp
+   */
   formatAMPM(date) {
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -93,7 +109,11 @@ export class WorkoutSummaryPage implements OnInit {
     return strTime;
   }
 
-
+/**
+ * compute number of sets
+ * 
+ * @param sets workout sets
+ */
   getTotalSets(sets){
     let totalSets = 0;
     for(let i=0; i<sets.length;i++){
@@ -104,6 +124,11 @@ export class WorkoutSummaryPage implements OnInit {
 
   }
 
+/**
+ * compute number of reps
+ * 
+ * @param sets workout sets
+ */
   getTotalReps(sets){
     let totalReps = 0;
     for(let i=0; i<sets.length;i++){
@@ -113,6 +138,12 @@ export class WorkoutSummaryPage implements OnInit {
     return totalReps;
   }
 
+/**
+ * compute total calories burnt
+ * 
+ * @param w workout details
+ * @param u user details
+ */
   getCalories(w: WorkoutDesc, u: User){
     let weight = u.userDetails.weight ? u.userDetails.weight : 50
     let duration = w.stopwatch % 3600 / 60;
@@ -122,6 +153,12 @@ export class WorkoutSummaryPage implements OnInit {
     //Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
   }
 
+  /**
+   * compute the statistics for user performance
+   * 
+   * @param wd workout details
+   * @param ud user details
+   */
   getStats(wd: WorkoutDesc, ud: User){
     let intensity = this.listIntensity.find(x => x.value === wd.intensity).mets
     // let duration = wd.stopwatch % 3600 / 60;
@@ -136,6 +173,11 @@ export class WorkoutSummaryPage implements OnInit {
     console.log(this.strengthVal)
   }
 
+  /**
+   * get age of user
+   * 
+   * @param dateString user's birthday
+   */
   getAge(dateString) {
     var today = new Date();
     var birthDate = new Date(dateString);
@@ -171,6 +213,9 @@ export class WorkoutSummaryPage implements OnInit {
     return hours + ':' + minutes + ':' + seconds;
   }
 
+  /**
+   * format workout and save completed workout
+   */
   async workoutDone(){
     this.workoutCompleted = {
       workoutName: this.workoutDetails.wName,
