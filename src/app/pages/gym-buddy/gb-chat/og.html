@@ -1,0 +1,170 @@
+<ion-content>
+  <div class="header ion-padding">
+    <div class="info">
+      <ion-icon name="chevron-back-outline" (click)="navigateChatPageToBuddyListPage()"></ion-icon>
+      <ion-avatar>
+        <img src="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="">
+      </ion-avatar>
+      <span class="details">
+        <h1>{{getSelectedChatBuddyName()}}</h1>
+        <p>Hitting the gym</p>
+      </span>
+    </div>
+    <div class="share-workout">
+      <ion-icon name="american-football-outline"></ion-icon>
+    </div>
+  </div>
+  <div class="conversation ion-padding">
+    <div class="chat-section" id="chat">
+      <div class="chat">
+        <div class="your messages">
+          <div class="message other">
+            Hey
+          </div>
+          <div class="message other">
+            You there?
+          </div>
+          <div class="last-message-other">
+            <ion-avatar>
+              <img src="https://media-exp1.licdn.com/dms/image/C5603AQF9ARlKu4OEnQ/profile-displayphoto-shrink_800_800/0/1645845891083?e=1654128000&v=beta&t=XZy_KCUHo-LgpdfjL1LWmQ18jOfv_IGtr1pKskaCBhA" alt="">
+            </ion-avatar>
+            <div class="message last">
+              Hello how's going?
+            </div>
+          </div>
+          <span>1:4pm</span>
+        </div>
+        <div class ="mine messages">
+          <div class="message">
+            great thanks!
+          </div>
+          <div class="message last">
+            How about you?
+          </div>
+          <span>
+            <ion-icon name = "checkmark-done-outline"></ion-icon>1.44pm
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="message input">
+      <ion-input placeholder="Type your message..."></ion-input> <!-- [(ngModel)]="newMessage" autoGrow="true"
+        rows="1" maxLength="500"  -->
+      <div class="send-button">
+        <!-- <ion-button (click)="sendMessage()" [disabled]="newMessage === ''"></ion-button> -->
+        <ion-icon name="send-sharp"></ion-icon>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+
+<!--
+<ion-header>
+  <ion-toolbar>
+    <ion-title>gb-chat</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+</ion-content>
+-->
+
+<!--
+  <ng-container *ngIf="chat$ | async as chat">
+
+    <div class="top">
+      <p>
+          https://firestore-megachat.firebaseapp.com/chats/{{ chat.id }}
+      </p>
+    </div>
+
+
+    <div class="chat">
+
+
+      <div class="msg" *ngFor="let msg of chat.messages; trackBy: trackByCreated">
+
+        <div class="user">
+          <img [src]="msg.user?.photoURL">
+          <div>{{ msg.user?.displayName }}</span></div>
+        </div>
+
+        <p>{{ msg.content }}</p>
+
+      </div>
+
+    </div>
+
+    <div class="form">
+      <input [(ngModel)]="newMsg" (keydown.enter)="submit(chat.id)">
+
+      <button (click)="submit(chat.id)">Send</button>
+    </div>
+
+</ng-container>
+-->
+
+<!--
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{getSelectedChatBuddyName()}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="navigateChatPageToBuddyListPage()">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+
+  <ion-grid>
+    <ion-row *ngFor="let message of allChatMessages">
+      <ion-col size="9" class="message"
+        [offset]="message.fromId === '{{getCurrentUserId()}}' ? 3 : 0"
+        [ngClass]="getUserClass(message.fromId)">
+        <b>{{ message.fromId }}</b><br>
+        <span>{{ message.message }}
+        </span>
+        <div class="time ion-text-right"><br>{{ message.timeSent?.toMillis() | date:'short' }}</div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="light">
+    <ion-row class="ion-align-items-center">
+      <ion-col size="10">
+        <ion-textarea autoGrow="true" class="message-input" rows="1" maxLength="500" [(ngModel)]="newMessage" >
+        </ion-textarea>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button expand="block" fill="clear" color="primary" [disabled]="newMessage === ''"
+          class="msg-btn" (click)="sendMessage()">
+          <ion-icon name="send" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
+-->
+
+
+        <!-- <ion-grid>
+          <ion-row *ngFor="let message of allChatMessages">
+            <ion-col size="9" class="message"
+              [offset]="message.fromId === '{{getCurrentUserId()}}' ? 3 : 0"
+              [ngClass]="{ 'my-message': message.fromId === '{{getCurrentUserId()}}',
+                  'other-message': message.fromId === '{{getCurrentUserId()}}' }">
+              <b>{{ message.fromId }}</b><br>
+              <span>{{ message.message }}
+              </span>
+              <div class="time ion-text-right"><br>{{ message.timeSent?.toMillis() | date:'short' }}</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid> -->
