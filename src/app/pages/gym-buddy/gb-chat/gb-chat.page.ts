@@ -1,10 +1,8 @@
 import { AfterContentChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { IonContent, ModalController } from '@ionic/angular';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ChatService } from 'src/app/services/chat.service';
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
-import { updateCurrentUser } from 'firebase/auth';
 import { GbDeleteBuddyModalPage } from '../gb-delete-buddy-modal/gb-delete-buddy-modal.page';
 import { GbShareWorkoutModalPage } from '../gb-share-workout-modal/gb-share-workout-modal.page';
 @Component({
@@ -13,66 +11,69 @@ import { GbShareWorkoutModalPage } from '../gb-share-workout-modal/gb-share-work
   styleUrls: ['./gb-chat.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
+/**
+ * This class is use to initialize contents in the chat page and updates in real time through the observer pattern.
+ * The class also detects any changes based on user inputs and acts as intermediate class for data routing to the back end.
+ */
 export class GbChatPage implements OnInit, AfterContentChecked {
 
   @ViewChild(IonContent) content: IonContent;
 
   public modalDataResponse = false;
-
-  newMessage = '';
-  allChatMessages;
-  messages: Observable<any[]>;
+  public newMessage = '';
+  public allChatMessages;
   private currentUser: GymBuddyProfileInfo = null;
-  private otherUser: GymBuddyProfileInfo = null;
 
   private buddyName: string = null;
   private buddyUserId: string = null;
   private buddyProfilePicture: string = null;
 
-  //public currentUserId: string = this.currentUser.getUserId;
-  //@ViewChild(IonContent) content: IonContent;
-
-  //messages: Observable<any[]>;
 
 
-  constructor(private chatService: ChatService,
-              private router: Router,
-              private cdRef: ChangeDetectorRef,
-              public modalController: ModalController) {}
+  constructor(private chatService: ChatService, private router: Router,
+      private cdRef: ChangeDetectorRef, public modalController: ModalController) {}
 
+  /**
+   * A getter for the secondary user's name for display.
+   *
+   * @returns full name of the secondary user.
+   */
   public getSelectedChatBuddyName() {
     return this.buddyName;
   }
 
+  /**
+   * A getter for the secondary user's profile picture.
+   *
+   * @returns secondary user profile picture as a url that can be display as an image.
+   */
   public getSelectedChatBuddyProfilePicture() {
     return this.buddyProfilePicture;
   }
 
+  /**
+   * A callback method that is invoked immediately after the default change detector has completed checking all of the directive's content.
+   */
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
 }
-
+  /**
+   * This method is invoked upon entry point into the page. It displays all the chat messages with real-time updates.
+   * This method subscribes to the observable in chat service.
+   */
   async ngOnInit() {
-    // this.chatService.myObservable.subscribe((val) => {
-    //   console.log(val);
-    //   this.allChatMessages = val;
-    //   console.log('This is what was imported: ', this.allChatMessages);
-    // });
-    // this.chatService.getAllChatMessages().subscribe((val) => {
-    //   console.log(val);
-    //   this.allChatMessages = val;
-    //   console.log('This is what was imported: ', this.allChatMessages);
-    // });
     this.modalDataResponse = false;
     this.allChatMessages = this.chatService.getAllChatMessages();
     this.buddyName = this.chatService.getSelectedChatUserName;
     this.buddyProfilePicture = this.chatService.getSelectedOtherUserProfilePicture;
     this.buddyUserId = this.chatService.getSelectedOtherUserId;
     this.currentUser = this.chatService.getCurrentUser;
-    /*this.currentUser = await this.chatService.retrieveCurrentUser();*/
-    //this.messages = this.chatService.getChatMessages();
   }
 
+  /**
+   * This method is called when the user clicks on the delete user function, a modal will pop up for further user action.
+   */
   public async openDeleteModal() {
     const modal = await this.modalController.create({
       component: GbDeleteBuddyModalPage,
@@ -98,6 +99,9 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     await modal.present();
   }
 
+  /**
+   * This method is called when the user clicks on the share workout function, a modal will pop for further user action.
+   */
   public async openShareModal() {
     const modal = await this.modalController.create({
       component: GbShareWorkoutModalPage,
@@ -111,7 +115,6 @@ export class GbChatPage implements OnInit, AfterContentChecked {
         this.modalDataResponse = modalDataResponse.data;
         console.log('Modal Sent Data : '+ modalDataResponse.data);
         //navigate back to buddy list page.
-        console.log('going here.');
         await this.chatService.shareWorkout(this.getCurrentUserId(),this.buddyUserId);
         //this.navigateToWorkoutListPage();
       } else {
@@ -124,6 +127,12 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     await modal.present();
   }
 
+  /**
+   * Getter to get whether the user is a primary user or secondary user.
+   *
+   * @param fromId reference id of the user.
+   * @returns 'my-message' if the user is the primary user and 'other-message' if the message is by the secondary user.
+   */
   public getUserClass(fromId: string){
     console.log(fromId);
     if (fromId === this.getCurrentUserId()) {
@@ -136,24 +145,24 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     }
   }
 
-  public isMyMessage(fromId: string) {
-    if (fromId === this.getCurrentUserId()) {
-      return true;
-    }
-    return false;
-  }
-
+  /**
+   * Getter for the current user id.
+   *
+   * @returns the current user id.
+   */
   public getCurrentUserId() {
     return this.currentUser.getUserId;
   }
 
-  get getProfilePicture() {
-    return this.currentUser.profilePicture;
-  }
-
+  /**
+   * Checks whether message is sent by the primary user id.
+   *
+   * @param fromId reference id of the person sends the message.
+   * @returns true if the message is sent by the primary user.
+   */
   public isSentByMe(fromId: string): boolean {
     if (fromId === this.getCurrentUserId()) {
-      return true; //sent by me.
+      return true;
     } else {
       return false;
     }
@@ -162,8 +171,9 @@ export class GbChatPage implements OnInit, AfterContentChecked {
   /**
    * Checks whether message is sent by the primary app user(myself).
    *
-   * @param fromId the User Id that sent the message.
-   * @returns true if it's a message sent by primary user.
+   * @param fromId the reference id of the user that sent the message.
+   * @param isLastMessage a boolean that checks whether message was the last sent message.
+   * @returns true if it's a message sent by primary user and is not the last message.
    */
   public isNotLastMessageSentByMe(fromId: string, isLastMessage: boolean): boolean {
     if (fromId === this.getCurrentUserId() && !isLastMessage) {
@@ -172,6 +182,13 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     return false;
   }
 
+  /**
+   * Checks whether a message is sent by the secondary user and is not the last message.
+   *
+   * @param fromId the reference id of the user that sent the message.
+   * @param isLastMessage a boolean that checks whether message was the last sent message.
+   * @returns true if it's a message sent by secondary user and is not the last message.
+   */
   public isNotLastMessageSentByOther(fromId: string, isLastMessage: boolean): boolean {
     if (fromId !== this.getCurrentUserId() && !isLastMessage) {
       return true;
@@ -179,6 +196,13 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     return false;
   }
 
+  /**
+   * This method checks whether a message was the last sent message by the primary user.
+   *
+   * @param fromId the reference id of the user sending the message.
+   * @param isLastMessage a boolean that checks whether it is the last message by primary user.
+   * @returns true if a message was the last sent message by the primary user.
+   */
   public isLastMessageSentByMe(fromId: string, isLastMessage: boolean): boolean {
     if (fromId === this.getCurrentUserId() && isLastMessage) {
       return true;
@@ -186,6 +210,13 @@ export class GbChatPage implements OnInit, AfterContentChecked {
     return false;
   }
 
+  /**
+   * This methods check whether a message was the last sent message by the secondary user.
+   *
+   * @param fromId the reference id of the user sending the message.
+   * @param isLastMessage a boolean that checks whether the message was the last message
+   * @returns true if a message was sent the last sent message by the secondary user.
+   */
   public isLastMessageSentByOther(fromId: string, isLastMessage): boolean {
     if (fromId !== this.getCurrentUserId() && isLastMessage) {
       return true;
@@ -194,31 +225,27 @@ export class GbChatPage implements OnInit, AfterContentChecked {
   }
 
 
-
-  /*sendMessage() {
-    this.chatService.addChatMessage(this.newMsg).then(() => {
-      this.newMsg = '';
-      this.content.scrollToBottom();
-    });
-  }
-
-  signOut() {
-    this.chatService.signOut().then(() => {
-      this.router.navigateByUrl('/', { replaceUrl: true });
-    });
-  }
-
-*/
-  async navigateChatPageToBuddyListPage() {
+  /**
+   * This method is triggered on user click and will navigate the user to the gym buddy list home page.
+   */
+  public async navigateChatPageToBuddyListPage() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-buddylist-home', { replaceUrl: true });
   }
 
-  async navigateToWorkoutListPage() {
+  /**
+   * This method is triggered on user click and will navigate the user to workout list page.
+   */
+  public async navigateToWorkoutListPage() {
     this.router.navigateByUrl('tabs/workouts', { replaceUrl: true });
   }
 
 
-  sendMessage() {
+  /**
+   * Adds chat messages to the chat service and scrolls to bottom when a new message is pinged.
+   *
+   * @returns if the user message is empty.
+   */
+  public sendMessage() {
     if(this.newMessage === '') {
       return; //don't do anything if its an empty message.
     }

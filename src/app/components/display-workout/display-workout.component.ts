@@ -5,7 +5,7 @@ import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 
 import YoutubeService from 'src/app/services/youtube.service';
 
-import { WindowRefService } from '../../services/window-ref.service';
+// import { WindowRefService } from '../../../services/window-ref.service';
 import { Timestamp } from 'firebase/firestore';
 
 @Component({
@@ -16,10 +16,11 @@ import { Timestamp } from 'firebase/firestore';
 export class DisplayWorkoutComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private router: Router, 
-    private workoutService: WorkoutsService, windowRef: WindowRefService,
+    private workoutService: WorkoutsService, 
+    // windowRef: WindowRefService,
     //private ytService: YoutubeService,
     ) { 
-      this._window = windowRef.nativeWindow; 
+      // this._window = windowRef.nativeWindow; 
     }
   @Input() section: string;
   @Input() workoutDetails: any; 
@@ -109,7 +110,7 @@ export class DisplayWorkoutComponent implements OnInit {
 
 
   /**
-   * display exercises  
+   * display exercises based on user last's session 
    */
   displayExercise() {
     this.workSets = []
@@ -133,6 +134,9 @@ export class DisplayWorkoutComponent implements OnInit {
 
   }
 
+  /**
+   * add more sets to an exercise in workout
+   */
   addSet(){
     this.setClick = false;
     this.selectedSet = -1;
@@ -144,6 +148,9 @@ export class DisplayWorkoutComponent implements OnInit {
     window.localStorage.setItem("workoutRoutine", JSON.stringify(this.workoutRoutine));
   }
 
+  /**
+   * remove set from an exercise in workout
+   */
   removeSet(){
     if(this.workSets.length > 0){
       this.workSets.splice(this.selectedSet,1)
@@ -154,6 +161,11 @@ export class DisplayWorkoutComponent implements OnInit {
     
   }
 
+  /**
+   * function to toggle delete button in html 
+   * 
+   * @param i index of set
+   */
   deleteSet(i){
     console.log(i, this.setClick)
     if(this.setClick){

@@ -1,25 +1,21 @@
-import { Component, OnInit, ElementRef, QueryList, ViewChildren, AfterViewInit, NgZone } from '@angular/core';
+import { Component, OnInit, ElementRef, QueryList, ViewChildren, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { RecommendationEngine } from './RecommendationEngine';
 import { FindBuddyQuery } from './FindBuddyQuery';
 import { DbRetrieveService } from './../../../services/db-retrieve.service';
 import { GymBuddyProfileInfo } from './GymBuddyInformation';
-import { threadId } from 'worker_threads';
-import { GestureController, LoadingController, Platform } from '@ionic/angular';
+import { GestureController, Platform } from '@ionic/angular';
 import { GymBuddyService } from 'src/app/services/gym-buddy.service';
-import { GestureControllerService } from 'src/app/services/gesture-controller.service';
 import { IonCard } from '@ionic/angular';
 
-export interface CardData {
-  imageId: string;
-  state: 'default' | 'flipped' | 'matched';
-}
 
 @Component({
   selector: 'app-gb-findbuddy',
   templateUrl: './gb-findbuddy.page.html',
   styleUrls: ['./gb-findbuddy.page.scss'],
 })
+/**
+ * This class is to display the find a buddy page which displays recommendations of buddies to the user based on their profile.
+ */
 export class GbFindbuddyPage implements OnInit, AfterViewInit {
 
   /**
@@ -27,56 +23,11 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
    */
   @ViewChildren(IonCard, { read: ElementRef }) cards: QueryList<ElementRef>;
 
+  /**
+   * An array of potential matches based on the matchmaking algorithm to be displayed to the user.
+   */
+  public potentialMatches: (GymBuddyProfileInfo)[] = [];
 
-
-  // people = [
-  //   {
-  //     id: '0',
-  //     name: 'Bryan',
-  //     briefIntro: 'Loves a hustle',
-  //     goals: ['Gain muscle mass', 'Lose Weight'],
-  //     strengths: ['Powerlifting', 'Aerobic'],
-  //     style: ['high intensity', 'weights'],
-  //     location: ['outdoor', 'gym'],
-  //     time: ['Morning', 'Night'],
-  //     age: 23,
-  //     img:
-  //       'https://images.pexels.com/photos/145939/pexels-photo-145939.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-  //     //power: 0,
-  //   },
-  //   {
-  //     id: '1',
-  //     name: 'Gladys',
-  //     briefIntro: 'Transient and temporary',
-  //     goals: ['Increase Stamina', 'Lift heavier'],
-  //     strengths: ['Ploymetric', 'Pilates'],
-  //     style: ['Flexibility', 'Yoga'],
-  //     location: ['Studio', 'Park'],
-  //     time: ['Afternoon', 'Evening'],
-  //     age: 23,
-  //     img:
-  //       'https://images.pexels.com/photos/33045/lion-wild-africa-african.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-  //     //power: 0,
-  //   },
-  //   {
-  //     id: '2',
-  //     name: 'Zhi Kai',
-  //     briefIntro: 'Fearless and adventurous',
-  //     goals: ['Gain muscle mass', 'Lose Weight'],
-  //     strengths: ['Powerlifting', 'Aerobic'],
-  //     style: ['high intensity', 'weights'],
-  //     location: ['outdoor', 'gym'],
-  //     time: ['Morning', 'Night'],
-  //     age: 23,
-  //     img:
-  //       'https://images.pexels.com/photos/36717/amazing-animal-beautiful-beautifull.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-  //     //power: 0,
-  //   },
-  // ];
-  potentialMatches: (GymBuddyProfileInfo)[] = [];
-
-
-  private recommendationEngine;
   private currentUser: GymBuddyProfileInfo;
   private recommendedUser: GymBuddyProfileInfo;
   private findBuddyQuery: FindBuddyQuery;
@@ -84,16 +35,18 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
 
 
   constructor(
-    private loadingController: LoadingController,
     private router: Router,
     private dbRetrieve: DbRetrieveService,
-    //private gestureControlService: GestureControllerService
     private gestureCtrl: GestureController,
-    private zone: NgZone,
     private platform: Platform,
     private gbService: GymBuddyService
   ) { }
 
+  /**
+   * Gets the full name of the recommended user for display.
+   *
+   * @returns the full name of the recommended user.
+   */
   public get getFullName() {
     if(this.recommendedUser) {
       return this.recommendedUser.name;
@@ -101,6 +54,11 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
     return 'Full Name';
   }
 
+  /**
+   * Gets the age of the recommended user for display.
+   *
+   * @returns the age of the recommended user.
+   */
   public get getAge() {
     if(this.recommendedUser) {
       return this.recommendedUser.age;
@@ -108,6 +66,11 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
     return 'Age';
   }
 
+  /**
+   * Gets the brief intro of the user for display.
+   *
+   * @returns a text string of the brief intro of the recommended user.
+   */
   public get getBriefIntro() {
     if(this.recommendedUser) {
       return this.recommendedUser.getbriefIntro;
@@ -115,6 +78,11 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
     return 'Brief Introduction';
   }
 
+  /**
+   * Gets the text url of the profile picture for display.
+   *
+   * @returns a text string of the profile picture url.
+   */
   public get getProfilePicture() {
     if(this.recommendedUser) {
       return this.recommendedUser.profilePicture;
@@ -122,11 +90,12 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
     return 'Profile Picture';
   }
 
-  public get getMoreGymBuddyInformation() {
-    return 'More Information';
-  }
-
-  useSwiperGesture(cardArray) {
+  /**
+   * Allows the user to swipe on the display to match or unMatch the recommended buddy.
+   *
+   * @param cardArray array of ion cards that contains user information to display.
+   */
+  public useSwiperGesture(cardArray) {
     for (const card of cardArray) {
       //const card = eachCard;
       // console.log("card", card);
@@ -176,7 +145,12 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
     }
   }
 
-  // STYLE OF CARD WHEN GESTURE START
+  /**
+   * Sets the card color when the user swipes based on the direction of swipe.
+   *
+   * @param x the horizontal velocity based on the swiping gesture generated by the user.
+   * @param element the card that was swiped.
+   */
   setCardColor(x, element) {
     let color = '';
     const abs = Math.abs(x);
@@ -191,91 +165,60 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
     element.style.background = color;
   }
 
-  decimalToHex(d, padding) {
-    let hex = Number(d).toString(16);
-    padding =
-      typeof padding === 'undefined' || padding === null
-        ? (padding = 2)
-        : padding;
 
-    while (hex.length < padding) {
-      hex = '0' + hex;
-    }
-    return hex;
-  }
-
+  /**
+   * Gets the index of the element to display and returns the corresponding color to display the element.
+   *
+   * @param i The index of element to display.
+   * @returns The color to display for the element.
+   */
   public getColor(i: number) {
     i = i % 5;
     const colors = ['#ED93D5','#94DAEC','#FB6175','#EFBCFF','#F2D28A'];
     return colors[i];
   }
 
+  /**
+   * Main entry point to the page that gets called when the class is instantiated.
+   * It will populate the list of potential matches to display to the user as cards.
+   */
   ngOnInit() {
     this.potentialMatches = this.gbService.getPotentialMatchDetails();
-    console.log('Say hi to these people: ', this.potentialMatches);
     this.currentUser = this.dbRetrieve.retrieveCurrentUser();
-    //this.recommendationEngine = new RecommendationEngine(this.currentUser);
     this.findBuddyQuery= new FindBuddyQuery(this.dbRetrieve,this.currentUser);
     console.log(this.potentialMatches[this.potentialMatches.length - 1].profilePicture);
-    // this.recommendationEngine.getAllMatches(await this.findBuddyQuery.findBuddyQuery());
-    // // First user to be displayed
-    // while (true) {
-    //   const potentialMatch: GymBuddyProfileInfo = this.recommendationEngine.pollMatch();
-    //   console.log(potentialMatch);
-    //   if (potentialMatch != null) {
-    //     console.log(potentialMatch);
-    //     //means potential match is not null (still have matches)
-    //     this.potentialMatches.push(potentialMatch);
-    //   } else {
-    //     console.log('instant chao');
-    //     break;
-    //   }
-    // }
-    //console.log(this.potentialMatches[0]);
-    //this.recommendedUser = this.potentialMatches
-    // this.recommendedUser=this.recommendationEngine.pollMatch();
-    // console.log(this.recommendedUser);
   }
 
+  /**
+   * A lifecycle hook that is called after Angular has fully initialized a component's view.
+   *This method is used to handle any additional initialization tasks.
+   */
   ngAfterViewInit() {
     const cardArray = this.cards.toArray();
     this.useSwiperGesture(cardArray);
-    // this.gestureControlService.getSwipeStatus().subscribe((val) => {
-    //   console.log(val);
-    //   if (val === true) {
-    //     this.matchBuddy();
-    //   } else {
-    //     this.unmatchBuddy();
-    //   }
-    // });
   }
 
-
+  /**
+   * Getter for the current user profile as an object.
+   *
+   * @returns Gym Buddy Profile Info object of the current user.
+   */
   public getCurrentUser(): GymBuddyProfileInfo {
     return this.currentUser;
   }
 
-
-
-
+  /**
+   * This method is called when the user clicks a button to navigate back to the home page. The router will be called to route the user.
+   */
   public async goToGBHome() {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
-  // public async matchBuddy() {
-  //   this.findBuddyQuery.addMatches(this.recommendedUser.getUserId);
-  //   if(this.recommendedUser.checkMatches(this.currentUser.getUserId)){
-  //         this.createChat(this.currentUser.getUserId, this.recommendedUser.getUserId);
-  //   }
-  //   this.recommendedUser=this.recommendationEngine.pollMatch();
-  //   if(!this.recommendedUser){
-  //     this.displayNoMoreMatches();
-  //   }
-  //   else {
-  //     console.log('Match Buddy');
-  //   }
-  // }
-
+  /**
+   * This method is called when the user selects to match the buddy.
+   * The data will be sent over to the find buddy query so that information is stored in the back end.
+   * If both users have opted to match a chat will be created.
+   */
   public async matchBuddy() {
     //ion cards are displayed from the last element of array to first.
     const matchedPerson = this.potentialMatches.pop();
@@ -290,17 +233,10 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
     }
   }
 
-  // public async unmatchBuddy() {
-  //   this.recommendedUser=this.recommendationEngine.pollMatch();
-  //   if(!this.recommendedUser){
-  //     this.displayNoMoreMatches();
-  //   }
-  //   else{
-  //     console.log('UnMatch Buddy');
-  //     this.findBuddyQuery.addUnmatches(this.recommendedUser.getUserId);
-  //   }
-  // }
-
+  /**
+   * This method will be called when the user selects to unMatch the buddy.
+   * The data will be sent over to find buddy query object so that information will be stored in the back end.
+   */
   public async unmatchBuddy() {
     //ion cards are displayed from the last element of array to first.
     const unmatchedPerson = this.potentialMatches.pop(); //remove last element of array
@@ -311,16 +247,26 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
     }
   }
 
-  //Display something and prevent the user from matching and unmatching
   private displayNoMoreMatches() {
     console.log('No more matches');
   }
 
-  //this should probably be in a seperate class -> i just put this here as a placeholder
   private createChat(userId1: string , userId2: string) {
     this.findBuddyQuery.createChatQuery(userId1, userId2);
     console.log('Chat created');
   }
 
+  private decimalToHex(d, padding) {
+    let hex = Number(d).toString(16);
+    padding =
+      typeof padding === 'undefined' || padding === null
+        ? (padding = 2)
+        : padding;
+
+    while (hex.length < padding) {
+      hex = '0' + hex;
+    }
+    return hex;
+  }
 
 }
