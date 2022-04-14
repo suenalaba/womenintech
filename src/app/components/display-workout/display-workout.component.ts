@@ -15,17 +15,17 @@ import { Timestamp } from 'firebase/firestore';
 })
 export class DisplayWorkoutComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private router: Router, 
-    private workoutService: WorkoutsService, 
+  constructor(private route: ActivatedRoute, private router: Router,
+    private workoutService: WorkoutsService,
     // windowRef: WindowRefService,
     //private ytService: YoutubeService,
-    ) { 
-      // this._window = windowRef.nativeWindow; 
-    }
+  ) {
+    // this._window = windowRef.nativeWindow; 
+  }
   @Input() section: string;
-  @Input() workoutDetails: any; 
+  @Input() workoutDetails: any;
   @Input() stopwatch: number;
-  
+
   private _window: Window;
 
   workoutId: string;
@@ -55,7 +55,7 @@ export class DisplayWorkoutComponent implements OnInit {
     this.displayExercise();
   }
 
-  runSpotify(){
+  runSpotify() {
     // (<any>window).onSpotifyWebPlaybackSDKReady = () => {
     //   const token = '[My access token]';
     //   const player = new Spotify.Player({
@@ -69,7 +69,7 @@ export class DisplayWorkoutComponent implements OnInit {
   /**
    * Get list of exercises for user
    */
-  async getExercises(){
+  async getExercises() {
     this.route.queryParamMap.subscribe(params => {
       this.workoutSection = params.get('workoutSection');
       this.exerciseiString = params.get('exerciseIndex');
@@ -94,9 +94,9 @@ export class DisplayWorkoutComponent implements OnInit {
     this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(async results => {
       let durn: number;
       this.workoutIntensity = results.intensity;
-      if(this.workoutIntensity=='low') { durn = 2; }
-      else if(this.workoutIntensity=='hard') { durn=10; }
-      else { durn=5; }
+      if (this.workoutIntensity == 'low') { durn = 2; }
+      else if (this.workoutIntensity == 'hard') { durn = 10; }
+      else { durn = 5; }
 
       const ytService = YoutubeService.getInstance();
 
@@ -115,7 +115,7 @@ export class DisplayWorkoutComponent implements OnInit {
   displayExercise() {
     this.workSets = []
 
-    if(this.workoutSection == "warmup"){
+    if (this.workoutSection == "warmup") {
       this.buttonText = "FINISH WARM UP"
       this.exerciseIndex = 0;
     }
@@ -124,7 +124,7 @@ export class DisplayWorkoutComponent implements OnInit {
       this.exerciseIndex = this.exerciseIndex
       this.currentExercise = this.workoutRoutine[this.exerciseIndex]
 
-      for(let i=0; i < this.currentExercise.sets.sets; i++){
+      for (let i = 0; i < this.currentExercise.sets.sets; i++) {
         this.workSets.push(this.currentExercise.sets.reps)
       }
 
@@ -137,11 +137,11 @@ export class DisplayWorkoutComponent implements OnInit {
   /**
    * add more sets to an exercise in workout
    */
-  addSet(){
+  addSet() {
     this.setClick = false;
     this.selectedSet = -1;
 
-    this.workoutRoutine[this.exerciseIndex].sets.sets = this.currentExercise.sets.sets+1;
+    this.workoutRoutine[this.exerciseIndex].sets.sets = this.currentExercise.sets.sets + 1;
     this.workSets.push(this.currentExercise.sets.reps)
 
     this.workoutDetails.workoutRoutine = this.workoutRoutine
@@ -151,14 +151,14 @@ export class DisplayWorkoutComponent implements OnInit {
   /**
    * remove set from an exercise in workout
    */
-  removeSet(){
-    if(this.workSets.length > 0){
-      this.workSets.splice(this.selectedSet,1)
-      this.workoutRoutine[this.exerciseIndex].sets.sets = this.currentExercise.sets.sets-1;
+  removeSet() {
+    if (this.workSets.length > 0) {
+      this.workSets.splice(this.selectedSet, 1)
+      this.workoutRoutine[this.exerciseIndex].sets.sets = this.currentExercise.sets.sets - 1;
       this.workoutDetails.workoutRoutine = this.workoutRoutine
       window.localStorage.setItem("workoutRoutine", JSON.stringify(this.workoutRoutine));
     }
-    
+
   }
 
   /**
@@ -166,67 +166,76 @@ export class DisplayWorkoutComponent implements OnInit {
    * 
    * @param i index of set
    */
-  deleteSet(i){
+  deleteSet(i) {
     console.log(i, this.setClick)
-    if(this.setClick){
+    if (this.setClick) {
       this.setClick = false;
-      this.selectedSet= -1;
-    }else if(!this.setClick && this.workSets.length != 1){
-      this.setClick = true; 
+      this.selectedSet = -1;
+    } else if (!this.setClick && this.workSets.length != 1) {
+      this.setClick = true;
       this.selectedSet = i;
     }
   }
 
-  dismiss(){
+  dismiss() {
     this.setClick = false;
-    this.selectedSet= -1;
+    this.selectedSet = -1;
   }
 
-  nextComponent(){
-    if(this.workoutSection == "warmup"){
+  /**
+   * triggeed when next button is clicked, will return text for button
+   */
+  nextComponent() {
+    if (this.workoutSection == "warmup") {
       return this.workoutRoutine[0].exerciseName
-    }else if(this.workoutSection =="exercise" && this.exerciseIndex < this.workoutRoutine.length-1){
-      return this.workoutRoutine[this.exerciseIndex+1].exerciseName
-    }else if(this.workoutSection =="exercise" && this.exerciseIndex == this.workoutRoutine.length-1){
+    } else if (this.workoutSection == "exercise" && this.exerciseIndex < this.workoutRoutine.length - 1) {
+      return this.workoutRoutine[this.exerciseIndex + 1].exerciseName
+    } else if (this.workoutSection == "exercise" && this.exerciseIndex == this.workoutRoutine.length - 1) {
       return "Cool Down"
-    }else if(this.workoutSection =="cooldown"){
+    } else if (this.workoutSection == "cooldown") {
       return "Workout Done"
     }
   }
 
+  /**
+   * Exercises to be displayed
+   */
   nextExercise() {
-    console.log("next exercise:" , this.workoutSection, this.exerciseIndex, this.workoutRoutine.length)
+    console.log("next exercise:", this.workoutSection, this.exerciseIndex, this.workoutRoutine.length)
     let l = this.workoutRoutine.length
 
     this.workoutDetails.currExercise = {
       section: this.workoutSection,
-      index: this.workoutSection == 'exercsie'? this.exerciseIndex : -1,
+      index: this.workoutSection == 'exercsie' ? this.exerciseIndex : -1,
     }
-    
-    if(this.workoutSection=="warmup"){
-      this.buttonText = "NEXT EXERCISE" 
+
+    if (this.workoutSection == "warmup") {
+      this.buttonText = "NEXT EXERCISE"
       this.workoutSection = "exercise"
       this.exerciseIndex = 0;
       this.navToSection();
       this.displayExercise();
-    }else if(this.exerciseIndex < l-1 && this.workoutSection=="exercise"){
-      this.exerciseIndex = this.exerciseIndex+1;
+    } else if (this.exerciseIndex < l - 1 && this.workoutSection == "exercise") {
+      this.exerciseIndex = this.exerciseIndex + 1;
       this.displayExercise();
-      this.buttonText = this.exerciseIndex == l-1 ? "START COOLDOWN" : "NEXT EXERCISE" ;
+      this.buttonText = this.exerciseIndex == l - 1 ? "START COOLDOWN" : "NEXT EXERCISE";
       this.workoutSection = "exercise"
       this.navToSection()
-    }else if(this.exerciseIndex == l-1 && this.workoutSection=='exercise'){
+    } else if (this.exerciseIndex == l - 1 && this.workoutSection == 'exercise') {
       this.workoutSection = "cooldown"
       this.buttonText = "FINISH COOLDOWN";
       this.exerciseIndex = -1;
       this.navToSection()
-    }else if(this.workoutSection=='cooldown'){
+    } else if (this.workoutSection == 'cooldown') {
       this.buttonText = "FINISH COOLDOWN"
       this.workoutDetails.workoutStatus = "completed"
       this.goToSummary()
     }
   }
 
+  /**
+   * navigate to workout and change it's parameters
+   */
   navToSection() {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -240,10 +249,12 @@ export class DisplayWorkoutComponent implements OnInit {
       // do not trigger navigation
     });
   }
- 
 
-  async goToSummary(){
-    if(this.workoutDetails.workoutStatus == "completed"){
+  /**
+   * navigate user to workout summary
+   */
+  async goToSummary() {
+    if (this.workoutDetails.workoutStatus == "completed") {
       this.workoutDetails.currExercise = {
         section: '',
         index: -1,
@@ -251,9 +262,9 @@ export class DisplayWorkoutComponent implements OnInit {
       this.workoutDetails.stopwatch = this.stopwatch;
       this.workoutDetails.dateCompleted = Timestamp.fromDate((new Date()));
       this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails)
-      await this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId}});
+      await this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId } });
       console.log(this.workoutDetails)
-    }else{
+    } else {
       await this.router.navigateByUrl('/tabs/workouts');
     }
   }
