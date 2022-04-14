@@ -50,7 +50,7 @@ export class EditWorkoutComponent implements OnInit {
   }
 
   /**
-   * update user sets and reps
+   * update user sets and reps, will return value back to main edit page
    */
    updateWorkoutDetails() {
     console.log(this.userWorkoutUpdates.controls['sets'].value)
