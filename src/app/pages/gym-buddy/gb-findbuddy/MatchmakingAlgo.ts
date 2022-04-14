@@ -15,6 +15,10 @@ export class MatchmakingAlgo {
   private static readonly TWO_SELECTIONS = 2;
   private contentFilterScoreMap: Map<string, number>;
 
+  constructor() {
+    this.contentFilterScoreMap = new Map<string, number>([]);
+  }
+
   /**
    * Getter for the map of scores.
    */
@@ -22,10 +26,32 @@ export class MatchmakingAlgo {
     this.contentFilterScoreMap.forEach((id,scores) => console.log(id,scores));
     return this.contentFilterScoreMap;
   }
+  /**
+   * Calculates the Matching score between current user and each other gym buddy profile and stores the results in a map.
+   *
+   * @param currentUser gym buddy profile of the current user
+   * @param arrayOfProfiles array of gym buddy profiles
+   */
+     public async calculateMatchingScores(currentUser: GymBuddyProfileInfo, arrayOfProfiles: Array<GymBuddyProfileInfo>) {
+      let matchScore;
+      let anotherUserId;
+      arrayOfProfiles.forEach(anotherUser => {
+        matchScore = this.getTotalMatchScore(currentUser, anotherUser);
+        //get id to store
+        anotherUserId = anotherUser.getUserId;
+        //store to hashmap: key is the other user id, value: total matching score.
+        this.contentFilterScoreMap.set(anotherUserId,matchScore);
+      });
+    }
+    /**
+     * Remove the suggestion from the map after polling the suggestion.
+     *
+     * @param highestScoreId Highest score existing in the map
+     */
+    public deleteIdFromContentFilterScoreMap(highestScoreId) {
+      this.contentFilterScoreMap.delete(highestScoreId);
+    }
 
-  constructor() {
-      this.contentFilterScoreMap = new Map<string, number>([]);
-  }
 
   private getGoalsScore(currentUser: GymBuddyProfileInfo, anotherUser: GymBuddyProfileInfo) {
     let goalsScore = 0;
@@ -102,30 +128,5 @@ export class MatchmakingAlgo {
     return traitsStyleScore;
   }
 
-  /**
-   * Calculates the Matching score between current user and each other gym buddy profile and stores the results in a map.
-   *
-   * @param currentUser gym buddy profile of the current user
-   * @param arrayOfProfiles array of gym buddy profiles
-   */
-  public async calculateMatchingScores(currentUser: GymBuddyProfileInfo, arrayOfProfiles: Array<GymBuddyProfileInfo>) {
-    let matchScore;
-    let anotherUserId;
-    arrayOfProfiles.forEach(anotherUser => {
-      matchScore = this.getTotalMatchScore(currentUser, anotherUser);
-      //get id to store
-      anotherUserId = anotherUser.getUserId;
-      //store to hashmap: key is the other user id, value: total matching score.
-      this.contentFilterScoreMap.set(anotherUserId,matchScore);
-    });
-  }
 
-  /**
-   * Remove the suggestion from the map after polling the suggestion.
-   *
-   * @param highestScoreId Highest score existing in the map
-   */
-  public deleteIdFromContentFilterScoreMap(highestScoreId) {
-    this.contentFilterScoreMap.delete(highestScoreId);
-  }
 }
