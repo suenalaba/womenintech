@@ -11,16 +11,20 @@ import { UserService } from '../../services/user.service';
   templateUrl: 'settings.page.html',
   styleUrls: ['settings.page.scss']
 })
+
+/**
+ * Settings page display
+ */
 export class SettingsPage {
 
-  firstName: string = '';
+  firstName = '';
   userInfo: any;
 
   settingstat= [
-    {"stat": "GENDER"},
-    {"stat": "UNITS OF MEASURE"},
-    {"stat": "DATE OF BIRTH"}
-  ]
+    {stat: 'GENDER'},
+    {stat: 'UNITS OF MEASURE'},
+    {stat: 'DATE OF BIRTH'}
+  ];
 
   ngOnInit() {
     this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res)=>{
@@ -29,23 +33,19 @@ export class SettingsPage {
 
   }
 
-  settingvalue= ["MALE","KG","BIRTHDAY"]
+  settingvalue= ['MALE','KG','BIRTHDAY'];
 
   constructor(
     //private avatarService: AvatarService,
     private authService: AuthenticationService,
     private userService: UserService,
-    private router: Router,
-    private user: UserService,
-    private loadingController: LoadingController,
-    private alertController: AlertController
-  ) {}
+    private router: Router  ) {}
 
   async logout() {
     await this.authService.logout();
     this.router.navigateByUrl('/', { replaceUrl: true });
   }
 
-  
+
 
 }
