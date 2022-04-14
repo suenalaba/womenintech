@@ -105,12 +105,12 @@ export class GbSignUpPage implements OnInit {
     this.filesCollection = afs.collection<ImgFile>('imagesCollection');
     this.files = this.filesCollection.valueChanges();
   }
-  /**
-   * Gets the full name of the curent user
-   */
-     public get getFullName() {
-      return this.currentUser.name;
-    }
+/**
+ * Gets the full name of the curent user
+ */
+  public get getFullName() {
+    return this.currentUser.name;
+  }
   ngOnInit() {
     this.currentUser = this.dbRetrieve.retrieveCurrentUser();
     if(this.currentUser.isSignUp) {
