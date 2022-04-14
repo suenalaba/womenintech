@@ -13,38 +13,135 @@ import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
   styleUrls: ['./start-workout.page.scss'],
 })
 export class StartWorkoutPage implements OnInit {
-
-  workoutId: string;
-  userId: string;
-
-  workoutRoutine: WorkoutDetails[];
-  workoutDetails: WorkoutDesc;
-  workoutJSON: string;
-  exerciseIndex: number = 0;
-
-  buttonText: string;
-  workoutSection: string;
-  loadDisplay: boolean = true;
-
-  isRunning: boolean = false;
-  timerButton: string = 'pause';
-  timerDuration: number;
-  displayTimer: string;
-
+  private buttonText: string;
+  private displayTimer: string;
+  private exerciseIndex: number = 0;
+  private isRunning: boolean = false;
+  private loadDisplay: boolean = true;
+  private timerButton: string = 'pause';
+  private timerDuration: number;
+  private userId: string;
+  private workoutDetails: WorkoutDesc;
+  private workoutId: string;
+  private workoutJSON: string;
+  private workoutRoutine: WorkoutDetails[];
+  private workoutSection: string;
   constructor(
     private route: ActivatedRoute, private router: Router,
     private workoutService: WorkoutsService, private alertController: AlertController, private toastController: ToastController) { }
 
-  ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
-      this.workoutId = params.get('wid');
-      this.userId = params.get('uid');
+  /**
+   * Display the time
+   * @param time current time to show
+   */
+  private getDisplayTimer(time: number) {
+    let hours = '' + Math.floor(time / 3600);
+    let minutes = '' + Math.floor(time % 3600 / 60);
+    let seconds = '' + Math.floor(time % 3600 % 60);
+
+    if (Number(hours) < 10) {
+      hours = '0' + hours;
+    } else {
+      hours = '' + hours;
+    }
+    if (Number(minutes) < 10) {
+      minutes = '0' + minutes;
+    } else {
+      minutes = '' + minutes;
+    }
+    if (Number(seconds) < 10) {
+      seconds = '0' + seconds;
+    } else {
+      seconds = '' + seconds;
+    }
+
+    this.displayTimer = hours + ':' + minutes + ':' + seconds;
+  }
+
+  /**
+   * function to retrieve workout information
+   * declare variables based on the workout status
+   *
+   * @param res workout information
+   */
+  private getMoreWorkoutDetails(res: WorkoutDesc) {
+    console.log(res.workoutStatus);
+    if (res.workoutStatus == 'created' || res.workoutStatus == 'completed') {
+      this.buttonText = 'FINISH WARM UP';
+      this.workoutSection = 'warmup';
+      this.workoutDetails.workoutStatus = 'in_progress';
+      this.workoutDetails.dateStart = Timestamp.fromDate((new Date()));
+
+    } else if (res.workoutStatus == 'in_progress') {
+      this.getDisplayTimer(this.workoutDetails.stopwatch);
+      this.timerDuration =  this.workoutDetails.stopwatch;
+      this.workoutSection = this.workoutDetails.currExercise.section;
+      this.exerciseIndex = this.workoutDetails.currExercise.index;
+    }
+    this.navToSection();
+  }
+
+  /**
+   * Fired when the component routing from is about to animate.
+   */
+  private ionViewWillLeave() {
+    this.isRunning = false;
+    console.log(this.timerDuration);
+  }
+
+  /**
+   * change params of route
+   */
+  private navToSection() {
+    console.log('Current page:' + this.workoutSection + ' ' + this.exerciseIndex);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        workoutSection: this.workoutSection,
+        exerciseIndex: this.exerciseIndex
+      },
+      queryParamsHandling: 'merge',
+      // preserve the existing query params in the route
+      skipLocationChange: false
+      // do not trigger navigation
     });
+  }
 
-    this.timerDuration = 0;
-    this.toggleTimer();
+  private nextComponent(){
+    if(this.workoutSection == 'warmup'){
+      return this.workoutRoutine[0].exerciseName;
+    }else if(this.workoutSection =='exercise' && this.exerciseIndex < this.workoutRoutine.length-1){
+      return this.workoutRoutine[this.exerciseIndex].exerciseName;
+    }else if(this.workoutSection =='exercise' && this.exerciseIndex == this.workoutRoutine.length-1){
+      return 'Cool Down';
+    }
+  }
 
-    this.getWorkoutDetails(this.workoutId, this.userId);
+  /**
+   * Stopwatch functions to control the timer
+   */
+  private stopwatch() {
+    timer(0, 1000).subscribe(ellapsedCycles => {
+      if (this.isRunning) {
+        this.timerDuration++;
+        this.getDisplayTimer(this.timerDuration);
+        this.timerButton = 'pause';
+      } else {
+        this.timerButton = 'play';
+      }
+    });
+  }
+
+  /***
+   * TIMER
+   */
+  private toggleTimer() {
+    this.isRunning = !this.isRunning;
+    this.stopwatch();
+
+    if(!this.isRunning){
+      this.presentAlert();
+    }
   }
 
   /**
@@ -76,72 +173,47 @@ export class StartWorkoutPage implements OnInit {
     );
   }
 
-  /**
-   * Fired when the component routing from is about to animate.
-   */
-  ionViewWillLeave() {
-    this.isRunning = false;
-    console.log(this.timerDuration);
-  }
-
-  /**
-   * function to retrieve workout information
-   * declare variables based on the workout status
-   *
-   * @param res workout information
-   */
-  getMoreWorkoutDetails(res: WorkoutDesc) {
-    console.log(res.workoutStatus);
-    if (res.workoutStatus == 'created' || res.workoutStatus == 'completed') {
-      this.buttonText = 'FINISH WARM UP';
-      this.workoutSection = 'warmup';
-      this.workoutDetails.workoutStatus = 'in_progress';
-      this.workoutDetails.dateStart = Timestamp.fromDate((new Date()));
-
-    } else if (res.workoutStatus == 'in_progress') {
-      this.getDisplayTimer(this.workoutDetails.stopwatch);
-      this.timerDuration =  this.workoutDetails.stopwatch;
-      this.workoutSection = this.workoutDetails.currExercise.section;
-      this.exerciseIndex = this.workoutDetails.currExercise.index;
-    }
-    this.navToSection();
-  }
-
-  /**
-   * change params of route
-   */
-  navToSection() {
-    console.log('Current page:' + this.workoutSection + ' ' + this.exerciseIndex);
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        workoutSection: this.workoutSection,
-        exerciseIndex: this.exerciseIndex
-      },
-      queryParamsHandling: 'merge',
-      // preserve the existing query params in the route
-      skipLocationChange: false
-      // do not trigger navigation
-    });
-  }
-
-  nextComponent(){
-    if(this.workoutSection == 'warmup'){
-      return this.workoutRoutine[0].exerciseName;
-    }else if(this.workoutSection =='exercise' && this.exerciseIndex < this.workoutRoutine.length-1){
-      return this.workoutRoutine[this.exerciseIndex].exerciseName;
-    }else if(this.workoutSection =='exercise' && this.exerciseIndex == this.workoutRoutine.length-1){
-      return 'Cool Down';
-    }
-  }
-
   async goToSummary(){
     this.saveWorkout();
     this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId}});
   }
 
-  async stopWorkout(){
-    await this.presentAlertConfirm();
+  ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      this.workoutId = params.get('wid');
+      this.userId = params.get('uid');
+    });
+
+    this.timerDuration = 0;
+    this.toggleTimer();
+
+    this.getWorkoutDetails(this.workoutId, this.userId);
+  }
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Your Workout is Paused',
+      backdropDismiss: false,
+      message: 'Do you want to continue?',
+      buttons: [{
+        text: 'Yes',
+        handler: (blah) => {
+          this.toggleTimer();
+        }
+      },{
+        text: 'No',
+        role: 'cancel',
+        id: 'cancel-button',
+        handler: (blah) => {
+          console.log('Confirm Cancel: blah');
+          this.stopWorkout();
+        }
+      }],
+
+    });
+
+    await alert.present();
   }
 
   async presentAlertConfirm() {
@@ -171,6 +243,14 @@ export class StartWorkoutPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async presentToast(msg) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000
+    });
+    toast.present();
   }
 
   /**
@@ -213,93 +293,7 @@ export class StartWorkoutPage implements OnInit {
     }
   }
 
-  async presentToast(msg) {
-    const toast = await this.toastController.create({
-      message: msg,
-      duration: 2000
-    });
-    toast.present();
+  async stopWorkout(){
+    await this.presentAlertConfirm();
   }
-
-  async presentAlert() {
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: 'Your Workout is Paused',
-      backdropDismiss: false,
-      message: 'Do you want to continue?',
-      buttons: [{
-        text: 'Yes',
-        handler: (blah) => {
-          this.toggleTimer();
-        }
-      },{
-        text: 'No',
-        role: 'cancel',
-        id: 'cancel-button',
-        handler: (blah) => {
-          console.log('Confirm Cancel: blah');
-          this.stopWorkout();
-        }
-      }],
-
-    });
-
-    await alert.present();
-  }
-
-  /***
-   * TIMER
-   */
-  toggleTimer() {
-    this.isRunning = !this.isRunning;
-    this.stopwatch();
-
-    if(!this.isRunning){
-      this.presentAlert();
-    }
-  }
-
-  /**
-   * Stopwatch functions to control the timer
-   */
-  stopwatch() {
-    timer(0, 1000).subscribe(ellapsedCycles => {
-      if (this.isRunning) {
-        this.timerDuration++;
-        this.getDisplayTimer(this.timerDuration);
-        this.timerButton = 'pause';
-      } else {
-        this.timerButton = 'play';
-      }
-    });
-  }
-
-  /**
-   * Display the time
-   * @param time current time to show
-   */
-  getDisplayTimer(time: number) {
-    let hours = '' + Math.floor(time / 3600);
-    let minutes = '' + Math.floor(time % 3600 / 60);
-    let seconds = '' + Math.floor(time % 3600 % 60);
-
-    if (Number(hours) < 10) {
-      hours = '0' + hours;
-    } else {
-      hours = '' + hours;
-    }
-    if (Number(minutes) < 10) {
-      minutes = '0' + minutes;
-    } else {
-      minutes = '' + minutes;
-    }
-    if (Number(seconds) < 10) {
-      seconds = '0' + seconds;
-    } else {
-      seconds = '' + seconds;
-    }
-
-    this.displayTimer = hours + ':' + minutes + ':' + seconds;
-  }
-
 }

@@ -11,22 +11,17 @@ import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
   styleUrls: ['./generate-workout.page.scss'],
 })
 export class GenerateWorkoutPage implements OnInit {
-
-  workoutId: string;
-  userId: string;
-
-  workoutDesc: WorkoutDesc;
-  warmUpTime: string; 
-  coolDownTime: string;
-  workoutTime: string;
-  
-  listIntensity: CreateWorkoutDesc[] = Intensity;
-  listDuration: CreateWorkoutDesc[] = Duration;
-  listLocation: CreateWorkoutDesc[] = wLocation;
-  listEquipment: CreateWorkoutDesc[] = Equipment;
-
-  exerciseList = []
-
+  private coolDownTime: string;
+  private exerciseList = []
+  private listDuration: CreateWorkoutDesc[] = Duration;
+  private listEquipment: CreateWorkoutDesc[] = Equipment;
+  private listIntensity: CreateWorkoutDesc[] = Intensity;
+  private listLocation: CreateWorkoutDesc[] = wLocation;
+  private userId: string;
+  private warmUpTime: string;
+  private workoutDesc: WorkoutDesc;
+  private workoutId: string;
+  private workoutTime: string;
   constructor(
     private router: Router, 
     private route: ActivatedRoute,
@@ -35,15 +30,13 @@ export class GenerateWorkoutPage implements OnInit {
     private nav: NavController,
     private alertController: AlertController) { }
 
-  ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
-      let wid = params.get('wid');
-      this.workoutId = wid;
-   })
-    this.userId = JSON.parse(localStorage.getItem("userID"));
-
-    this.getWorkoutDetails(this.workoutId, this.userId);
+ /**
+   * triggered when user wants to a delete workout
+   */
+  private deleteWorkout(){
+    this.presentAlertConfirm();
   }
+
  /**
   * function to retrieve workout details and format the relevant details 
   * 
@@ -90,19 +83,14 @@ export class GenerateWorkoutPage implements OnInit {
     await this.router.navigateByUrl('tabs/workouts/display-gyms', { replaceUrl: true })
   }
 
-  /**
-   * triggered when user wants to start their workout
-   * navigate user to start their workout
-   */
-  async startWorkout(){
-    await this.router.navigate(['/start-workout'], { queryParams: { wid: this.workoutId, uid: this.userId } });
-  }
+  ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      let wid = params.get('wid');
+      this.workoutId = wid;
+   })
+    this.userId = JSON.parse(localStorage.getItem("userID"));
 
- /**
-   * triggered when user wants to a delete workout
-   */
-  deleteWorkout(){
-    this.presentAlertConfirm();
+    this.getWorkoutDetails(this.workoutId, this.userId);
   }
 
   /**
@@ -140,4 +128,11 @@ export class GenerateWorkoutPage implements OnInit {
     await alert.present();
   }
 
+  /**
+   * triggered when user wants to start their workout
+   * navigate user to start their workout
+   */
+  async startWorkout(){
+    await this.router.navigate(['/start-workout'], { queryParams: { wid: this.workoutId, uid: this.userId } });
+  }
 }

@@ -15,24 +15,21 @@ import { UserService } from '../../services/user.service';
  */
 export class SettingsPage {
 
-  firstName = '';
-  userInfo: any;
-
-  settingvalue = ['MALE','KG','BIRTHDAY'];
-
-  settingstat= [
+  private firstName = '';
+  private settingstat= [
     {stat: 'GENDER'},
     {stat: 'UNITS OF MEASURE'},
     {stat: 'DATE OF BIRTH'}
   ];
-
+  private settingvalue = ['MALE','KG','BIRTHDAY'];
+  private userInfo: any;
   constructor(
     //private avatarService: AvatarService,
     private authService: AuthenticationService,
     private userService: UserService,
     private router: Router  ) {}
 
-  ngOnInit() {
+  private ngOnInit() {
     this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe((res)=>{
       this.userInfo = res;
     });

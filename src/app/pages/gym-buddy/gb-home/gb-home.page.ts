@@ -15,19 +15,16 @@ import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
  * This class initializes the display for the gym buddy home page and logs the user input into the application control.
  */
 export class GbHomePage implements OnInit {
-
-  private timePrefList = workoutTimePreference;
-  private buddyGoalsList = gymBuddyGoals;
-  private personalTraitsList = personalTraits;
-  private fullName: string;
-  private profilePicture: string;
   private briefIntro: string;
-  private prefWorkoutTime: string[] = [];
+  private buddyGoalsList = gymBuddyGoals;
+  private currentUser: GymBuddyProfileInfo;
+  private fullName: string;
   private gymBuddyGoals: string[] = [];
   private personalTraits: string[] = [];
-  private currentUser: GymBuddyProfileInfo;
-
-
+  private personalTraitsList = personalTraits;
+  private prefWorkoutTime: string[] = [];
+  private profilePicture: string;
+  private timePrefList = workoutTimePreference;
   constructor(
     private router: Router,
     private loadingController: LoadingController,

@@ -14,9 +14,22 @@ import { AuthenticationService } from './../../../services/authentication.servic
  * Class for the app's central sign up page
  */
 export class SignUpPage implements OnInit {
-  credentials: FormGroup;
+  private credentials: FormGroup;
 
-  loadingPresent = true;
+  private loadingPresent = true;
+
+  get birthday() {
+    return this.credentials.get('birthday');
+  }
+
+  get confirmPassword() {
+    return this.credentials.get('confirmPassword');
+  }
+
+  get email() {
+    return this.credentials.get('email');
+  }
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
@@ -47,10 +60,6 @@ export class SignUpPage implements OnInit {
     return this.credentials.get('lastName');
   }
 
-  get confirmPassword() {
-    return this.credentials.get('confirmPassword');
-  }
-
   get password() {
     return this.credentials.get('password');
   }
@@ -59,16 +68,8 @@ export class SignUpPage implements OnInit {
     return this.credentials.get('username');
   }
 
-  get email() {
-    return this.credentials.get('email');
-  }
-
   get gender() {
     return this.credentials.get('gender');
-  }
-
-  get birthday() {
-    return this.credentials.get('birthday');
   }
 
   /**
@@ -77,7 +78,7 @@ export class SignUpPage implements OnInit {
    *
    * @param password user password
    */
-  equalto(field_name): ValidatorFn {
+  private equalto(field_name): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
       const input = control.value;

@@ -14,22 +14,26 @@ import { GymBuddyService } from 'src/app/services/gym-buddy.service';
  * The class is used to initialize the display and contents of the find buddy boarding page and loads user information in the background.
  */
 export class GbFindBuddyBoardingPage implements OnInit {
-
+  private currentUser: GymBuddyProfileInfo;
+  private findBuddyQuery: FindBuddyQuery;
+  private recommendationEngine;
   /**
    * An array of gym buddy profiles suggested by the matching algorithm.
    */
   public potentialMatches: (GymBuddyProfileInfo)[] = [];
-
-
-  private recommendationEngine;
-  private currentUser: GymBuddyProfileInfo;
-  private findBuddyQuery: FindBuddyQuery;
-
   constructor(
     private router: Router,
     private dbRetrieve: DbRetrieveService,
     private gbService: GymBuddyService
   ) { }
+
+  /**
+   * This method is called when user selects the button to navigate to find a buddy page.
+   * This will route the page to the next page.
+   */
+   public async goToFindBuddy() {
+    this.router.navigateByUrl('tabs/gym-buddy/gb-findbuddy', { replaceUrl: true });
+  }
 
   /**
    * Main entry point into the page that runs when the class is instantiated.
@@ -58,13 +62,5 @@ export class GbFindBuddyBoardingPage implements OnInit {
       }
     }
     this.gbService.setPotentialMatchDetails(this.potentialMatches);
-  }
-
-  /**
-   * This method is called when user selects the button to navigate to find a buddy page.
-   * This will route the page to the next page.
-   */
-   public async goToFindBuddy() {
-    this.router.navigateByUrl('tabs/gym-buddy/gb-findbuddy', { replaceUrl: true });
   }
 }

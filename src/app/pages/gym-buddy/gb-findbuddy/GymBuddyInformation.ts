@@ -1,6 +1,10 @@
 import { userInfo } from "os";
 
 export class GymBuddyProfileInfo {
+  private _age='20';
+  private _chats?: string[];
+  private _isSignUp: boolean;
+  private _matches?: string[];
   private userId: string;
 
   //workoutTimePreference: string; //how to create an array to store an array of workouttimepreferences
@@ -15,17 +19,10 @@ export class GymBuddyProfileInfo {
   private buddyTrainStyle?: string[];
   private userInfo;
   private gymBuddyInfo;
-  private _isSignUp: boolean;
-
-  private _matches?: string[];
   private _unmatches?: string[];
-  private _chats?: string[];
-
-
   //To display
   private _name: string;
   private briefIntro?: string;
-  private _age='20';
   private _profilePicture?: string;
 
 

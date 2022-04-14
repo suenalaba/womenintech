@@ -6,9 +6,10 @@ import { GymBuddyProfileInfo } from './GymBuddyInformation';
 
 export class FindBuddyQuery {
 
-  //private dbRetrieve: DbRetrieveService;
-  private dbRetrieve: DbRetrieveService;
+  
   private currentUser: GymBuddyProfileInfo;
+//private dbRetrieve: DbRetrieveService;
+  private dbRetrieve: DbRetrieveService;
   private gender;
   private preferredGender;
   //private currentUser: GymBuddyProfileInfo;

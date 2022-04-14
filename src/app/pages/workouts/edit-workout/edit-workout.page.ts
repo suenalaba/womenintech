@@ -14,21 +14,17 @@ import { EditWorkoutComponent } from 'src/app/components/edit-workout/edit-worko
   styleUrls: ['./edit-workout.page.scss'],
 })
 export class EditWorkoutPage implements OnInit {
-  userWorkoutUpdates: FormGroup;
+  private currentExercise: WorkoutDetails;
+  private exerciseIndex: number;
+  private exerciseList: WorkoutDetails[];
+  private formChange = false;
+  private loadingPresent = true;
+  private userId: string;
+  private userWorkoutUpdates: FormGroup;
 
-  workoutDetails: WorkoutDesc;
-  exerciseList: WorkoutDetails[];
-
-  workoutId: string;
-  userId: string;
-  exerciseIndex: number;
-
-  currentExercise: WorkoutDetails;
-
-  loadingPresent = true;
-  formChange = false;
-
-  workSets = [];
+  private workoutDetails: WorkoutDesc;
+  private workoutId: string;
+  private workSets = [];
 
   constructor(
     private fb: FormBuilder,
@@ -41,27 +37,35 @@ export class EditWorkoutPage implements OnInit {
     private toastController: ToastController
   ) { }
 
-  ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
-      this.workoutId = params.get('wid');
-      this.userId = params.get('uid');
-    })
-
-    this.getWorkoutDetails(this.workoutId, this.userId);
+  /**
+   * Generate a form to edit workout details
+   */
+  private buildEditForm() {
+    this.userWorkoutUpdates = this.fb.group({
+      wName: [this.workoutDetails.wName],
+      wDesc: [this.workoutDetails.wDescription]
+    });
   }
 
   /**
-   * update workout information when save workout is clicked 
+   * fucntion to dismiss modal 
    */
-  async updateWorkoutDetails() {
-    this.workoutDetails.wDescription = this.userWorkoutUpdates.value.wDesc
-    this.workoutDetails.wName = this.userWorkoutUpdates.value.wName
-    console.log(this.workoutDetails)
-    await this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails).then(() => {
-      this.presentToast("Workout is saved!")
-      this.goToWorkout()
-    })
+  private cancel() {
+    this.modalController.dismiss({
+      'dismissed': true
+    });
   }
+
+  /**
+   * The loading indicator is dismissed 
+   */
+  async dismissLoading() {
+    if (this.loadingPresent) {
+      await this.loadingController.dismiss();
+    }
+    this.loadingPresent = false;
+  }
+
   /**
    * edit workout component is displayed for user to edit a specifc exercise's sets and reps 
    * 
@@ -81,15 +85,6 @@ export class EditWorkoutPage implements OnInit {
       backdropDismiss: true,
     });
     return await modal.present();
-  }
-
-  /**
-   * fucntion to dismiss modal 
-   */
-  cancel() {
-    this.modalController.dismiss({
-      'dismissed': true
-    });
   }
 
   /**
@@ -113,22 +108,20 @@ export class EditWorkoutPage implements OnInit {
   }
 
   /**
-   * Generate a form to edit workout details
-   */
-  private buildEditForm() {
-    this.userWorkoutUpdates = this.fb.group({
-      wName: [this.workoutDetails.wName],
-      wDesc: [this.workoutDetails.wDescription]
-    });
-  }
-
-  /**
    * Navigate to workout page
    */
   async goToWorkout() {
     this.router.navigateByUrl('/tabs/workouts', { replaceUrl: true });
   }
 
+  ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      this.workoutId = params.get('wid');
+      this.userId = params.get('uid');
+    })
+
+    this.getWorkoutDetails(this.workoutId, this.userId);
+  }
 
   /**
    * display toast message 
@@ -171,14 +164,16 @@ export class EditWorkoutPage implements OnInit {
   }
 
   /**
-   * The loading indicator is dismissed 
+   * update workout information when save workout is clicked 
    */
-  async dismissLoading() {
-    if (this.loadingPresent) {
-      await this.loadingController.dismiss();
-    }
-    this.loadingPresent = false;
+  async updateWorkoutDetails() {
+    this.workoutDetails.wDescription = this.userWorkoutUpdates.value.wDesc
+    this.workoutDetails.wName = this.userWorkoutUpdates.value.wName
+    console.log(this.workoutDetails)
+    await this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails).then(() => {
+      this.presentToast("Workout is saved!")
+      this.goToWorkout()
+    })
   }
-
 }
 

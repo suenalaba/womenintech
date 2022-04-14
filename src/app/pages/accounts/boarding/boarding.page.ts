@@ -15,7 +15,11 @@ export class BoardingPage implements OnInit {
 
   constructor(private router: Router, private authService: AuthenticationService,) { }
 
-  ngOnInit() {
+  /**
+   * when next button is clicked
+   */
+  private next() {
+    this.slides.slideNext();
   }
 
   /**
@@ -23,23 +27,18 @@ export class BoardingPage implements OnInit {
    *
    * @param swiper
    */
-  setSwiperInstance(swiper: any) {
+  private setSwiperInstance(swiper: any) {
     this.slides = swiper;
 
   }
 
   /**
-   * when next button is clicked
-   */
-  next() {
-    this.slides.slideNext();
-  }
-
-  /**
    * start button is clicked
    */
-  start(){
+  private start(){
     this.router.navigateByUrl('/tabs', { replaceUrl: true });
   }
 
+  ngOnInit() {
+  }
 }

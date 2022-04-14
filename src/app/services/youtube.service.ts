@@ -13,9 +13,6 @@ import { delay } from 'rxjs/operators';
 export default class YoutubeService {
   private static instance: YoutubeService;
 
-  constructor(
-  ) { }
-
   /**
    * Controls access to the singleton instance of YoutubeService. Everyone will interface with this and only this
    *
@@ -27,6 +24,9 @@ export default class YoutubeService {
     }
     return YoutubeService.instance;
   }
+
+  constructor(
+  ) { }
 
   /**
    * Function to search the Youtube API and parse the result

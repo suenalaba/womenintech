@@ -70,7 +70,7 @@ export class AuthenticationService {
    * @param value user information
    * @param uid user id
    */
-  createUser(value, uid) {
+  private createUser(value, uid) {
     console.log(uid);
     let create: User = {
       id: uid,

@@ -13,9 +13,6 @@ export class GbShareWorkoutModalPage implements OnInit {
 
   private optionList = ['Share workouts', 'Return to chat'];
 
-  constructor(private modalController: ModalController) { }
-
-
   /**
    * Getter for the option list to be displayed to the user.
    */
@@ -23,9 +20,21 @@ export class GbShareWorkoutModalPage implements OnInit {
     return this.optionList;
   }
 
-  ngOnInit() {
-  }
+  constructor(private modalController: ModalController) { }
 
+  /**
+   * Getter for the color of the button to be display on the user interface.
+   *
+   * @param option the option displayed to the user.
+   * @returns color of the button to be display, 'success' color for the share workout button and 'danger' for the cancel button.
+   */
+  public getColorOfButton(option: string): string {
+    if(option === 'Share workouts') {
+      return 'success';
+    } else {
+      return 'danger';
+    }
+  }
 
   /**
    * Navigates the user back to the chat interface and dismisses the popup.
@@ -45,17 +54,6 @@ export class GbShareWorkoutModalPage implements OnInit {
     await this.modalController.dismiss(isChoiceDelete);
   }
 
-  /**
-   * Getter for the color of the button to be display on the user interface.
-   *
-   * @param option the option displayed to the user.
-   * @returns color of the button to be display, 'success' color for the share workout button and 'danger' for the cancel button.
-   */
-  public getColorOfButton(option: string): string {
-    if(option === 'Share workouts') {
-      return 'success';
-    } else {
-      return 'danger';
-    }
+  ngOnInit() {
   }
 }

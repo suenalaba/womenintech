@@ -11,10 +11,10 @@ import { AuthenticationService } from './../../../services/authentication.servic
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  credentials: FormGroup;
-  errorgroup: [];
+  private credentials: FormGroup;
+  private errorgroup: [];
 
-  loadingPresent = true;
+  private loadingPresent = true;
 
   constructor(
     private fb: FormBuilder,
@@ -101,7 +101,7 @@ export class LoginPage implements OnInit {
    *
    * @param formGroup : the array of values in the form
    */
-  validateAllFormFields(formGroup: FormGroup) {
+  private validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
       if (control instanceof FormControl) {

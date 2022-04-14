@@ -15,21 +15,21 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./create-workouts.page.scss'],
 })
 export class CreateWorkoutsPage implements OnInit {
-  listIntensity: CreateWorkoutDesc[] = Intensity;
-  listDuration: CreateWorkoutDesc[] = Duration;
-  listLocation: CreateWorkoutDesc[] = wLocation;
-  listEquipment: CreateWorkoutDesc[] = Equipment;
+  private createWorkoutForm: FormGroup;
+  private errors = [];
+  private exerciseData = [];
+  private listDuration: CreateWorkoutDesc[] = Duration;
+  private listEquipment: CreateWorkoutDesc[] = Equipment;
+  private listIntensity: CreateWorkoutDesc[] = Intensity;
+  private listLocation: CreateWorkoutDesc[] = wLocation;
+  private userDetails: UserDetails;
+  private userId: string;
+  private userWorkout = [];
+  private workoutDesc: WorkoutDesc;
 
-  createWorkoutForm: FormGroup;
-
-  workoutDesc: WorkoutDesc;
-  userDetails: UserDetails;
-
-  errors = [];
-  exerciseData = [];
-  userWorkout = [];
-
-  userId: string;
+  public get workoutAPI(): WorkoutAPIService {
+    return this._workoutAPI;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -42,23 +42,10 @@ export class CreateWorkoutsPage implements OnInit {
     private userService: UserService
   ) { }
 
-  public get workoutAPI(): WorkoutAPIService {
-    return this._workoutAPI;
-  }
-  public set workoutAPI(value: WorkoutAPIService) {
-    this._workoutAPI = value;
-  }
-
-  ngOnInit() {
-    this.buildForm();
-    this.userId = JSON.parse(localStorage.getItem('userID'));
-    this.getUserDetails();
-  }
-
   /**
    * build workout form
    */
-  buildForm() {
+  private buildForm() {
     this.createWorkoutForm = this.fb.group({
       wName: ['', [Validators.required]],
       wDescription: ['', [Validators.required]],
@@ -72,14 +59,35 @@ export class CreateWorkoutsPage implements OnInit {
   /**
    * get user details from firebase
    */
-  getUserDetails(){
+  private getUserDetails(){
     this.userService.getUserById(this.userId).subscribe(res=>{
       this.userDetails = res.userDetails
     })
   }
 
+  /**
+   * fucntion to navigate user back to all workouts 
+   */
+  private goBack() {
+    this.nav.navigateBack(['tabs/workouts'], { animated: true })
+  }
 
-  submitWorkoutDesc() {
+  /**
+  * Shuffles array in place.
+  * @param {Array} a items An array containing the items.
+  */
+  private shuffle(arr) {
+    let j, x, index;
+    for (index = arr.length - 1; index > 0; index--) {
+      j = Math.floor(Math.random() * (index + 1));
+      x = arr[index];
+      arr[index] = arr[j];
+      arr[j] = x;
+    }
+    return arr;
+  }
+
+  private submitWorkoutDesc() {
     if (this.createWorkoutForm.status == "INVALID") {
       this.presentAlert()
     } else {
@@ -88,30 +96,11 @@ export class CreateWorkoutsPage implements OnInit {
   }
 
   /**
-   * alert display triggered when form is incomplete
-   */
-  async presentAlert() {
-    this.validateAllFormFields(this.createWorkoutForm)
-
-    const alert = await this.alertController.create({
-      cssClass: '',
-      header: 'Invalid',
-      message: 'Please complete the form',
-      buttons: ['OK']
-    });
-
-    await alert.present();
-
-    const { role } = await alert.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
-  }
-
-  /**
    * fucntion for form validation 
    * 
    * @param formGroup createWorkoutForm
    */
-  validateAllFormFields(formGroup: FormGroup) {
+  private validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
       if (control instanceof FormControl) {
@@ -150,11 +139,29 @@ export class CreateWorkoutsPage implements OnInit {
     await this.router.navigate(['/tabs/workouts/generate-workout'], { queryParams: { wid: id } });
   }
 
+  ngOnInit() {
+    this.buildForm();
+    this.userId = JSON.parse(localStorage.getItem('userID'));
+    this.getUserDetails();
+  }
+
   /**
-   * fucntion to navigate user back to all workouts 
+   * alert display triggered when form is incomplete
    */
-  goBack() {
-    this.nav.navigateBack(['tabs/workouts'], { animated: true })
+  async presentAlert() {
+    this.validateAllFormFields(this.createWorkoutForm)
+
+    const alert = await this.alertController.create({
+      cssClass: '',
+      header: 'Invalid',
+      message: 'Please complete the form',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
   }
 
   /**
@@ -169,20 +176,7 @@ export class CreateWorkoutsPage implements OnInit {
     return await loading.present();
   }
 
-  /**
-  * Shuffles array in place.
-  * @param {Array} a items An array containing the items.
-  */
-  shuffle(arr) {
-    let j, x, index;
-    for (index = arr.length - 1; index > 0; index--) {
-      j = Math.floor(Math.random() * (index + 1));
-      x = arr[index];
-      arr[index] = arr[j];
-      arr[j] = x;
-    }
-    return arr;
+  public set workoutAPI(value: WorkoutAPIService) {
+    this._workoutAPI = value;
   }
-
-
 }

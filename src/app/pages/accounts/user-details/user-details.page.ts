@@ -20,16 +20,15 @@ SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
  * Page to display details the user keyed in
  */
 export class UserDetailsPage implements OnInit {
-  progress = 0.0;
-  slideIndex = 0;
+  private gender: any;
+  private progress = 0.0;
+  private selectedInjury = [];
+  private slideIndex = 0;
 
   public listInjuries = areaOfInjury;
   public listGoals = fitnessGoals;
 
-  userDetailsForm: FormGroup;
-
-  private selectedInjury = [];
-  private gender: any;
+  private userDetailsForm: FormGroup;
   private slides: any;
   private userSignUp: any;
 
@@ -87,7 +86,7 @@ export class UserDetailsPage implements OnInit {
   /**
    * Function to create user details form
    */
-  buildForm() {
+  private buildForm() {
     this.userDetailsForm = this.fb.group({
       height: ['', [Validators.required, Validators.minLength(3)]],
       weight: ['', [Validators.required, Validators.minLength(2)]],
@@ -144,7 +143,7 @@ export class UserDetailsPage implements OnInit {
    * @param swiper swiper page
    */
 
-  setSwiperInstance(swiper: any) {
+  private setSwiperInstance(swiper: any) {
     this.slides = swiper;
     this.slideIndex = this.slides.activeIndex;
     this.progress = this.getProgress(this.slides.activeIndex);
@@ -182,7 +181,7 @@ export class UserDetailsPage implements OnInit {
   /**
    * triggered when next button is clicked and will move slide to the next page
    */
-  nextPage() {
+  private nextPage() {
     console.log(this.slides);
     console.log(this.userDetailsForm);
 
@@ -192,7 +191,7 @@ export class UserDetailsPage implements OnInit {
   /**
    * triggered when the back button is clicked and will return user to previous slide
    */
-  prevPage() {
+  private prevPage() {
     this.slides.slidePrev();
   }
 
@@ -201,7 +200,7 @@ export class UserDetailsPage implements OnInit {
    *
    * @param event radio event when value is changed
    */
-  radioInjuryChange(event) {
+  private radioInjuryChange(event) {
     this.selectedRadioGroup = event.detail;
     console.log(event);
     if (this.selectedRadioGroup.value == 'arm') {

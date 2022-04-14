@@ -19,15 +19,67 @@ import { areaOfInjury } from 'src/app/data/injuries';
   providedIn: 'root'
 })
 export class WorkoutsService {
-  workoutDesc: WorkoutDesc;
-
-  exerciseData = [];
-  userWorkout = [];
-
-  injuries = areaOfInjury;
-
+  private exerciseData = [];
+  private injuries = areaOfInjury;
+  private userWorkout = [];
+  private workoutDesc: WorkoutDesc;
   constructor(private firestore: Firestore, private workoutAPI: WorkoutAPIService) {
 
+  }
+
+  private extractValue(arr, prop) { 
+    let extractedValue = [];
+    for (let i = 0; i < arr.length; ++i) {
+
+      // extract value from property
+      extractedValue.push(arr[i][prop]);
+    }
+    return extractedValue;
+  }
+
+  /**
+   * format workout routine 
+   * 
+   * @param workoutDesc workout details
+   * @param userDetails user details
+   */
+  private formatWorkoutRoutine(workoutDesc: WorkoutDesc, userDetails: UserDetails) {
+    let routine = [];
+    
+    for (let i = 0; i < this.userWorkout.length; ++i) {
+      let exercise: WorkoutDetails = {
+        category: this.userWorkout[i].category.name,
+        equipment: this.extractValue(this.userWorkout[i], 'equipment.name'),
+        exerciseDesc: this.userWorkout[i].description,
+        id: this.userWorkout[i].id,
+        exerciseName: this.userWorkout[i].name,
+        images: this.extractValue(this.userWorkout[i], 'images.image'),
+        sets: {
+          sets: 3,
+          reps: 10
+        }
+      };
+      routine.push(exercise);
+    }
+
+    return routine;
+  }
+
+  /****** HELPFUL FUNCTIONS  ********/
+
+  /**
+  * Shuffles array in place.
+  * @param {Array} a items An array containing the items.
+  */
+  private shuffle(arr) {
+    let j, x, index;
+    for (index = arr.length - 1; index > 0; index--) {
+      j = Math.floor(Math.random() * (index + 1));
+      x = arr[index];
+      arr[index] = arr[j];
+      arr[j] = x;
+    }
+    return arr;
   }
 
   /**
@@ -91,60 +143,12 @@ export class WorkoutsService {
   }
 
   /**
-   * format workout routine 
-   * 
-   * @param workoutDesc workout details
-   * @param userDetails user details
-   */
-  formatWorkoutRoutine(workoutDesc: WorkoutDesc, userDetails: UserDetails) {
-    let routine = [];
-    
-    for (let i = 0; i < this.userWorkout.length; ++i) {
-      let exercise: WorkoutDetails = {
-        category: this.userWorkout[i].category.name,
-        equipment: this.extractValue(this.userWorkout[i], 'equipment.name'),
-        exerciseDesc: this.userWorkout[i].description,
-        id: this.userWorkout[i].id,
-        exerciseName: this.userWorkout[i].name,
-        images: this.extractValue(this.userWorkout[i], 'images.image'),
-        sets: {
-          sets: 3,
-          reps: 10
-        }
-      };
-      routine.push(exercise);
-    }
-
-    return routine;
-  }
-
-  /**
-   * save and store workout 
-   * 
-   * @param wid workout id
-   * @param uid user id
-   * @param userWorkout workout details
-   */
-  async saveWorkout(wid, uid, userWorkout) {
-    let workout: WorkoutDesc = userWorkout
-    console.log(workout)
-
-     /*store to firebase firestore (firestore, collection, the very long string is the path)*/
-     const noteDocRef = doc(this.firestore, `Users/${uid}/Workouts/${wid}`);
-
-     /* must update doc, cannot add doc */
-    await setDoc(noteDocRef, workout);
-  }
-
-  /**
-   * get specific workout from user 
-   * 
+   * delete specific workout from user
    * @param wid workout id
    * @param uid user id
    */
-  getWorkout(wid, uid): Observable<WorkoutDesc> {
-    const noteDocRef = doc(this.firestore, `Users/${uid}/Workouts/${wid}`);
-    return docData(noteDocRef, { idField: 'id' }) as Observable<WorkoutDesc>;
+  async deleteWorkout(wid, uid) {
+    await deleteDoc(doc(this.firestore, `Users/${uid}/Workouts/${wid}`));
   }
 
   /**
@@ -167,12 +171,32 @@ export class WorkoutsService {
   }
 
   /**
-   * delete specific workout from user
+   * get specific workout from user 
+   * 
    * @param wid workout id
    * @param uid user id
    */
-  async deleteWorkout(wid, uid) {
-    await deleteDoc(doc(this.firestore, `Users/${uid}/Workouts/${wid}`));
+  getWorkout(wid, uid): Observable<WorkoutDesc> {
+    const noteDocRef = doc(this.firestore, `Users/${uid}/Workouts/${wid}`);
+    return docData(noteDocRef, { idField: 'id' }) as Observable<WorkoutDesc>;
+  }
+
+  /**
+   * save and store workout 
+   * 
+   * @param wid workout id
+   * @param uid user id
+   * @param userWorkout workout details
+   */
+  async saveWorkout(wid, uid, userWorkout) {
+    let workout: WorkoutDesc = userWorkout
+    console.log(workout)
+
+     /*store to firebase firestore (firestore, collection, the very long string is the path)*/
+     const noteDocRef = doc(this.firestore, `Users/${uid}/Workouts/${wid}`);
+
+     /* must update doc, cannot add doc */
+    await setDoc(noteDocRef, workout);
   }
 
   /**
@@ -191,35 +215,5 @@ export class WorkoutsService {
     
      /* must update doc, cannot add doc */
     await setDoc(noteDocRef, workout);
-  }
-
-
-
-  /****** HELPFUL FUNCTIONS  ********/
-
-  /**
-  * Shuffles array in place.
-  * @param {Array} a items An array containing the items.
-  */
-  shuffle(arr) {
-    let j, x, index;
-    for (index = arr.length - 1; index > 0; index--) {
-      j = Math.floor(Math.random() * (index + 1));
-      x = arr[index];
-      arr[index] = arr[j];
-      arr[j] = x;
-    }
-    return arr;
-  }
-
-
-  extractValue(arr, prop) { 
-    let extractedValue = [];
-    for (let i = 0; i < arr.length; ++i) {
-
-      // extract value from property
-      extractedValue.push(arr[i][prop]);
-    }
-    return extractedValue;
   }
 }

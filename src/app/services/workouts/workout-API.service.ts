@@ -13,12 +13,22 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class WorkoutAPIService {
-  data: [];
-  error: string;
+  private data: [];
+  private error: string;
 
   constructor(private http: HttpClient) {
     this.data = [];
     this.error = '';
+  }
+
+  /**
+   * http request to api
+   */
+  private prepareDataRequest(): Observable<object> {
+    // Define the data URL
+    const dataUrl = 'https://wger.de/api/v2/exerciseinfo/?limit=500';
+    // Prepare the request
+    return this.http.get(dataUrl)
   }
 
   /**
@@ -38,15 +48,5 @@ export class WorkoutAPIService {
         return throwError(error); // From 'rxjs'
       })
     ); // end of pipe
-  }
-
-  /**
-   * http request to api
-   */
-  private prepareDataRequest(): Observable<object> {
-    // Define the data URL
-    const dataUrl = 'https://wger.de/api/v2/exerciseinfo/?limit=500';
-    // Prepare the request
-    return this.http.get(dataUrl)
   }
 }

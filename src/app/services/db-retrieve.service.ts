@@ -20,6 +20,61 @@ export class DbRetrieveService {
     private loadingController: LoadingController
     ) { }
 
+  /**
+   * Returns promise as a query snapshot.
+   *
+   * @param q query object.
+   * @returns gets all the docs matching the query.
+   */
+  private async pullFromDB(q) {
+    const querySnapshot = await getDocs(q);
+    return querySnapshot;
+  }
+
+  /**
+   * Reads the document to be fetched and get the document snapshot with document contents.
+   *
+   * @param q reference of the document to fetch
+   * @returns querySnapshot A Promise resolved with a querySnapshot containing the current document contents.
+   */
+  private async singlePullFromDB(q) {
+    const querySnapshot = await getDoc(q);
+    return querySnapshot;
+  }
+
+  /**
+   * Updates the chat field in firestore for both users that matched.
+   * The chat field in firestore stores an array of hashmaps.
+   * Each hashmap K:V => ChatId: UserId of the other party in the chat.
+   * => OtherUser: the userId of the other person in the chat.
+   *
+   * @param currentUserId User Id of Primary user.
+   * @param chatId Chat Id of the chat between both parties.
+   * @param recommendedUserId User Id of the buddy you matched with. (Secondary User).
+   */
+  private updateChatForEachUser(currentUserId: string, chatId: string, recommendedUserId: string) {
+    const curUserDocRef = doc(this.firestore, `Users`, currentUserId);
+    updateDoc(curUserDocRef, { 'gymBuddyDetails.chats': arrayUnion({chatID: chatId,
+    otherUser: recommendedUserId})});
+    const recUserDocRef = doc(this.firestore, `Users`, recommendedUserId);
+    updateDoc(recUserDocRef, { 'gymBuddyDetails.chats': arrayUnion({chatID: chatId,
+    otherUser: currentUserId})});
+  }
+
+  /**
+   * Create a chat with both users in the Chat collection in the database.
+   *
+   * @param currentUserId Primary user id
+   * @param recommendedUserId Secondary user id to create the chat with.
+   */
+  public async createChatInFireStore(currentUserId: string, recommendedUserId: string) {
+    const newChatDoc = await addDoc(collection(this.firestore, 'Chat'), {
+      chatUsers: [currentUserId, recommendedUserId]
+    });
+    const chatId = newChatDoc.id;
+    console.log('Document written with ID: ', chatId);
+    this.updateChatForEachUser(currentUserId, chatId, recommendedUserId);
+  }
 
   /**
    * Filter the potential buddies based on preferred gender and ensure that user's dont match themselves.
@@ -113,61 +168,5 @@ export class DbRetrieveService {
     const noteDocRef = doc(this.firestore, `Users`, user.getUserId);
 
     return updateDoc(noteDocRef,{ 'gymBuddyDetails.unmatches' : arrayUnion(userID)});
-  }
-
-  /**
-   * Create a chat with both users in the Chat collection in the database.
-   *
-   * @param currentUserId Primary user id
-   * @param recommendedUserId Secondary user id to create the chat with.
-   */
-  public async createChatInFireStore(currentUserId: string, recommendedUserId: string) {
-    const newChatDoc = await addDoc(collection(this.firestore, 'Chat'), {
-      chatUsers: [currentUserId, recommendedUserId]
-    });
-    const chatId = newChatDoc.id;
-    console.log('Document written with ID: ', chatId);
-    this.updateChatForEachUser(currentUserId, chatId, recommendedUserId);
-  }
-
-  /**
-   * Updates the chat field in firestore for both users that matched.
-   * The chat field in firestore stores an array of hashmaps.
-   * Each hashmap K:V => ChatId: UserId of the other party in the chat.
-   * => OtherUser: the userId of the other person in the chat.
-   *
-   * @param currentUserId User Id of Primary user.
-   * @param chatId Chat Id of the chat between both parties.
-   * @param recommendedUserId User Id of the buddy you matched with. (Secondary User).
-   */
-  private updateChatForEachUser(currentUserId: string, chatId: string, recommendedUserId: string) {
-    const curUserDocRef = doc(this.firestore, `Users`, currentUserId);
-    updateDoc(curUserDocRef, { 'gymBuddyDetails.chats': arrayUnion({chatID: chatId,
-    otherUser: recommendedUserId})});
-    const recUserDocRef = doc(this.firestore, `Users`, recommendedUserId);
-    updateDoc(recUserDocRef, { 'gymBuddyDetails.chats': arrayUnion({chatID: chatId,
-    otherUser: currentUserId})});
-  }
-
-  /**
-   * Reads the document to be fetched and get the document snapshot with document contents.
-   *
-   * @param q reference of the document to fetch
-   * @returns querySnapshot A Promise resolved with a querySnapshot containing the current document contents.
-   */
-  private async singlePullFromDB(q) {
-    const querySnapshot = await getDoc(q);
-    return querySnapshot;
-  }
-
-  /**
-   * Returns promise as a query snapshot.
-   *
-   * @param q query object.
-   * @returns gets all the docs matching the query.
-   */
-  private async pullFromDB(q) {
-    const querySnapshot = await getDocs(q);
-    return querySnapshot;
   }
 }

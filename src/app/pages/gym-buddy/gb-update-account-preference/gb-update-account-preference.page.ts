@@ -35,21 +35,19 @@ SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
   styleUrls: ['./gb-update-account-preference.page.scss'],
 })
 export class GbUpdateAccountPreferencePage implements OnInit {
-  @ViewChild(IonContent, { static: false }) content: IonContent;
-
-  gymBuddyPersonalFormData: FormGroup;
-  timePrefList = workoutTimePreference;
-  genderList = buddyGender;
-  gymBuddyGoalsList = gymBuddyGoals;
-  personalTraitsList = personalTraits;
-  personalStyleList = personalTrainStyle;
-  locationPrefList = locationPreference;
-
-  buddyTraitsList = buddyTraits;
-  buddyStyleList = buddyTrainStyle;
-
-  progress = 0.0;
-  slideIndex = 0;
+  private buddyStyleList = buddyTrainStyle;
+  private buddyTraitsList = buddyTraits;
+  @ViewChild(IonContent, { static: false }) private content: IonContent;
+  private currentUser: GymBuddyProfileInfo;
+  private gymBuddyPersonalFormData: FormGroup;
+  private timePrefList = workoutTimePreference;
+  private genderList = buddyGender;
+  private gymBuddyGoalsList = gymBuddyGoals;
+  private personalTraitsList = personalTraits;
+  private personalStyleList = personalTrainStyle;
+  private locationPrefList = locationPreference;
+  private progress = 0.0;
+  private slideIndex = 0;
 
   public gymBuddyTimePref = 0;
 
@@ -73,25 +71,23 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   private loadingPresent = true;
 
   // File upload task
-  fileUploadTask: AngularFireUploadTask;
+  private fileUploadTask: AngularFireUploadTask;
   // Upload progress
-  percentageVal: Observable<number>;
+  private percentageVal: Observable<number>;
   // Track file uploading with snapshot
-  trackSnapshot: Observable<any>;
+  private trackSnapshot: Observable<any>;
   // Uploaded File URL
-  UploadedImageURL: Observable<string>;
+  private UploadedImageURL: Observable<string>;
   // Uploaded image collection
-  files: Observable<imgFile[]>;
+  private files: Observable<imgFile[]>;
   // Image specifications
-  imgName: string;
-  imgSize: number;
+  private imgName: string;
+  private imgSize: number;
   // File uploading status
-  isFileUploading: boolean;
-  isFileUploaded: boolean;
+  private isFileUploading: boolean;
+  private isFileUploaded: boolean;
   private filesCollection: AngularFirestoreCollection<imgFile>;
   private imgFilePath: string;
-  private currentUser: GymBuddyProfileInfo;
-
   constructor(
     private formBuilder: FormBuilder,
     private dbRetrieve: DbRetrieveService,
@@ -220,7 +216,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Converts the image and uploads it to Firebase
    */
-  uploadImage(event: FileList) {
+  private uploadImage(event: FileList) {
     const file = event.item(0);
     // Image validation
     if (file.type.split('/')[0] !== 'image') {
@@ -267,7 +263,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Stores the image into the "imagesCollection" in Firebase
    */
-  storeFilesFirebase(image: imgFile) {
+  private storeFilesFirebase(image: imgFile) {
     const fileId = this.afs.createId();
     this.filesCollection
       .doc(fileId)
@@ -283,7 +279,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Tracks the number of WORKOUT TIME PREFERENCES that the user has selected
    */
-  checkTimePref(entry) {
+  private checkTimePref(entry) {
     if (!entry.isChecked){
       this.gymBuddyTimePref++;
     } else {
@@ -294,7 +290,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Tracks the number of GYM GOALS that the user has selected
    */
-  checkGymBuddyGoals(entry) {
+  private checkGymBuddyGoals(entry) {
     if (!entry.isChecked){
       this.gymBuddyGoalsChecked++;
     } else {
@@ -304,7 +300,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Tracks the number of PERSONAL TRAITS that the user has selected
    */
-  checkPersonalTraits(entry) {
+  private checkPersonalTraits(entry) {
     if (!entry.isChecked){
       this.personalTraitsChecked++;
     } else {
@@ -314,7 +310,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Tracks the number of PERSONAL TRAIN STYLES that the user has selected
    */
-  checkPersonalTrainStyle(entry) {
+  private checkPersonalTrainStyle(entry) {
     if (!entry.isChecked){
       this.personalTrainStyleChecked++;
     } else {
@@ -324,7 +320,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Tracks the number of LOCATION PREFERENCES that the user has selected
    */
-  checkLocationPref(entry) {
+  private checkLocationPref(entry) {
     if (!entry.isChecked){
       this.locationPrefChecked++;
     } else {
@@ -334,7 +330,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Tracks the number of BUDDY TRAITS that the user has selected
    */
-  checkBuddyTraits(entry) {
+  private checkBuddyTraits(entry) {
     if (!entry.isChecked){
       this.buddyTraitsChecked++;
     } else {
@@ -344,7 +340,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Tracks the number of BUDDY TRAIN STYLES that the user has selected
    */
-  checkBuddyTrainStyle(entry) {
+  private checkBuddyTrainStyle(entry) {
     if (!entry.isChecked){
       this.buddyTrainStyleChecked++;
     } else {
@@ -354,7 +350,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Checks if the user has selected at least 1 option for each field for the first page
    */
-  checkGBFirstPageValidity() {
+  private checkGBFirstPageValidity() {
     if (this.locationPrefChecked === 0) {
       return false;
     }
@@ -381,7 +377,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Checks if the user has selected at least 1 option for each field for the second page
    */
-  checkGBSecondPageValidity() {
+  private checkGBSecondPageValidity() {
     if (this.buddyTraitsChecked === 0) {
       return false;
     }
@@ -394,7 +390,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
     /**
    * Populates the form with the list of inputs that are selected
    */
-     populateForm(){
+     private populateForm(){
       //Workout Time Preference
     this.timePrefList.forEach((element) => {
       if(element.isChecked==true){
@@ -475,7 +471,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
     this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
-  setSwiperInstance(swiper: any) {
+  private setSwiperInstance(swiper: any) {
     this.slides = swiper;
     this.slideIndex = this.slides.activeIndex;
     this.progress = this.getProgress(this.slides.activeIndex);
@@ -506,13 +502,13 @@ export class GbUpdateAccountPreferencePage implements OnInit {
     return val;
   }
 
-  nextPage(){
+  private nextPage(){
     console.log(this.slides);
     this.content.scrollToTop(1500);
     this.slides.slideNext();
   }
 
-  prevPage(){
+  private prevPage(){
     this.slides.slidePrev();
   }
 

@@ -18,20 +18,32 @@ import { Router } from '@angular/router';
  * Creates a workout
  */
 export class CreateWorkoutComponent implements OnInit {
-  @Input() userInfo: User;
+  private formChange = false;
+  private injuryArea: any;
+  private isShown = false;
+  private selectedInjury: Injuries[];
+  private userDetails: UserDetails;
+  @Input() private userInfo: User;
+  private userUpdates: FormGroup;
 
-  userDetails: UserDetails;
-  userUpdates: FormGroup;
-  selectedInjury: Injuries[];
+  get areaOfInjury() {
+    return this.userUpdates.get('areaOfInjury');
+  }
+
+  get fitnessGoal() {
+    return this.userUpdates.get('fitnessGoal');
+  }
+
+  get healthCond() {
+    return this.userUpdates.get('healthCond');
+  }
+
+  get healthCondName() {
+    return this.userUpdates.get('healthCondName');
+  }
 
   public listInjuries = areaOfInjury;
   public listGoals = fitnessGoals;
-
-  isShown = false;
-  formChange = false;
-
-  private injuryArea: any;
-
   constructor(private navParams: NavParams,
     private modalController: ModalController,
     private fb: FormBuilder,
@@ -51,24 +63,8 @@ export class CreateWorkoutComponent implements OnInit {
     return this.userUpdates.get('injury');
   }
 
-  get healthCond() {
-    return this.userUpdates.get('healthCond');
-  }
-
-  get healthCondName() {
-    return this.userUpdates.get('healthCondName');
-  }
-
-  get fitnessGoal() {
-    return this.userUpdates.get('fitnessGoal');
-  }
-
   get menstruationCycle() {
     return this.userUpdates.get('menstruationCycle');
-  }
-
-  get areaOfInjury() {
-    return this.userUpdates.get('areaOfInjury');
   }
 
   get injuryType() {
@@ -119,7 +115,7 @@ export class CreateWorkoutComponent implements OnInit {
     }
   }
 
-  closeModal() {
+  private closeModal() {
     this.modalController.dismiss();
   }
 
@@ -128,7 +124,7 @@ export class CreateWorkoutComponent implements OnInit {
    *
    * @param pd Period Date
    */
-  getPeriodDate(pd) {
+  private getPeriodDate(pd) {
     let dateTemp = [];
 
     if (pd == 'false'){
@@ -145,7 +141,7 @@ export class CreateWorkoutComponent implements OnInit {
    *
    * @param injury
    */
-  injuryChange(injury) {
+  private injuryChange(injury) {
     this.injuryArea = injury;
     if (this.injuryArea == 'arm') {
       this.selectedInjury = armInjuries;
@@ -165,7 +161,7 @@ export class CreateWorkoutComponent implements OnInit {
     }
   }
 
-  cancel() {
+  private cancel() {
     this.modalController.dismiss({
       'dismissed': true
     });
@@ -194,7 +190,7 @@ export class CreateWorkoutComponent implements OnInit {
 
   }
 
-  showDateInput() {
+  private showDateInput() {
     this.isShown = !this.isShown;
   }
 

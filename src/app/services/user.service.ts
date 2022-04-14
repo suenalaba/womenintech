@@ -18,11 +18,16 @@ export class UserService {
     private firestore: Firestore
   ) { }
 
-  /*get the id to retrieve whatever information you want*/
-  getUserById(id): Observable<User> {
-    const noteDocRef = doc(this.firestore, `Users/${id}`);
-    return docData(noteDocRef, { idField: 'id' }) as Observable<User>;
-  }
+  
+
+    /**
+     * Get user profile pics from storage
+     */
+    private getProfilePictures(){
+      //1. list all images in user profile folder
+
+      //2. get all of its the download url into an array
+    }
 
   /**
    * Function to allow users to upload an image as their profile pic
@@ -30,7 +35,7 @@ export class UserService {
    * @param file the image users choose to upload
    * @param id the id of the registered user
    */
-    uploadProfilePicture(i, file, id) {
+    private uploadProfilePicture(i, file, id) {
       const storage = getStorage();
       const storageRef = ref(storage, `Users/${id}-${i}`);
 
@@ -70,14 +75,11 @@ export class UserService {
         });
     }
 
-    /**
-     * Get user profile pics from storage
-     */
-    getProfilePictures(){
-      //1. list all images in user profile folder
-
-      //2. get all of its the download url into an array
-    }
+/*get the id to retrieve whatever information you want*/
+  getUserById(id): Observable<User> {
+    const noteDocRef = doc(this.firestore, `Users/${id}`);
+    return docData(noteDocRef, { idField: 'id' }) as Observable<User>;
+  }
 
   /***
    * Update user workout profile

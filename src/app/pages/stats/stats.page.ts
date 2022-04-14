@@ -11,25 +11,21 @@ import { HomePage } from '../home/home.page';
  * Statistics page when people click See More
  */
 export class StatsPage implements OnInit {
-  workouts: any[];
+  private workouts: any[];
 
   constructor(private router: Router) { this.workouts = []; }
 
   /**
    * Navigate back home
    */
-  goHome() {
+  private goHome() {
     this.router.navigate(['/tabs/home']);
-  }
-
-  ngOnInit() {
-    this.loadWorkouts();
   }
 
   /**
    * Get the list of workouts and parse statistics for display
    */
-  loadWorkouts() {
+  private loadWorkouts() {
     for (let i = 0; i < HomePage.completedWorkouts.docs.length; i++) {
       this.workouts.push(HomePage.completedWorkouts.docs[i].data());
       this.workouts[i].caloriesBurnt = Math.round(this.workouts[i].caloriesBurnt * 100) / 100;
@@ -40,4 +36,7 @@ export class StatsPage implements OnInit {
     console.log(this.workouts);
   }
 
+  ngOnInit() {
+    this.loadWorkouts();
+  }
 }

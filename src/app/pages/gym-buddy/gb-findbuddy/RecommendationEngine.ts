@@ -7,36 +7,30 @@ import { GymBuddyProfileInfo } from './GymBuddyInformation';
  * The recommendation engine's main purpose is to poll and recommend the buddy with the highest matching score.
  */
 export class RecommendationEngine {
-
+  private dictOfProfiles: Map<string, GymBuddyProfileInfo>;
   private matchmakingAlgo: MatchmakingAlgo;
   private userInfo: GymBuddyProfileInfo;
-  private dictOfProfiles: Map<string, GymBuddyProfileInfo>;
-
   constructor(gymBuddyProfileInfo: GymBuddyProfileInfo) {
     this.matchmakingAlgo = new MatchmakingAlgo();
     this.userInfo = gymBuddyProfileInfo;
   }
 
   /**
-   * Get the Gym Buddy Profile that will be suggested because it has the highest matching score.
+   * Get the Highest Score from the Content Filter Score Map.
    *
-   * @returns Gym Buddy Profile Object of User with the highest matching score.
+   * @param contentFilterScoreMap HashMap of key:Buddy User Id, Value: Score.
+   * @returns the user Id of the highest score.
    */
-  public pollMatch() {
-    const contentFilterScoreMap = this.matchmakingAlgo.getContentFilterScoreMap;
-
-    /* returns the match with the highest score */
-    const highestScoreId = this.getHighestScoreId(contentFilterScoreMap);
-
-    //remove the match after founds
-    this.matchmakingAlgo.deleteIdFromContentFilterScoreMap(highestScoreId);
-    if (highestScoreId === '') {
-      //if highestScoreId is empty string, means no more matches to return
-      return null;
-    }
-    else {
-      return this.dictOfProfiles[highestScoreId];
-    }
+  private getHighestScoreId(contentFilterScoreMap: Map<string, number>) {
+    let highestScore = -1;
+    let highestScoreId = '';
+    contentFilterScoreMap.forEach((matchingScore: number, id: string) => {
+      if (matchingScore > highestScore) {
+        highestScore = matchingScore;
+        highestScoreId = id;
+      }
+    });
+    return highestScoreId;
   }
 
   /**
@@ -59,20 +53,24 @@ export class RecommendationEngine {
   }
 
   /**
-   * Get the Highest Score from the Content Filter Score Map.
+   * Get the Gym Buddy Profile that will be suggested because it has the highest matching score.
    *
-   * @param contentFilterScoreMap HashMap of key:Buddy User Id, Value: Score.
-   * @returns the user Id of the highest score.
+   * @returns Gym Buddy Profile Object of User with the highest matching score.
    */
-  private getHighestScoreId(contentFilterScoreMap: Map<string, number>) {
-    let highestScore = -1;
-    let highestScoreId = '';
-    contentFilterScoreMap.forEach((matchingScore: number, id: string) => {
-      if (matchingScore > highestScore) {
-        highestScore = matchingScore;
-        highestScoreId = id;
-      }
-    });
-    return highestScoreId;
+  public pollMatch() {
+    const contentFilterScoreMap = this.matchmakingAlgo.getContentFilterScoreMap;
+
+    /* returns the match with the highest score */
+    const highestScoreId = this.getHighestScoreId(contentFilterScoreMap);
+
+    //remove the match after founds
+    this.matchmakingAlgo.deleteIdFromContentFilterScoreMap(highestScoreId);
+    if (highestScoreId === '') {
+      //if highestScoreId is empty string, means no more matches to return
+      return null;
+    }
+    else {
+      return this.dictOfProfiles[highestScoreId];
+    }
   }
 }
