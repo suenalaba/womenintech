@@ -5,6 +5,7 @@ import { ChatService } from 'src/app/services/chat.service';
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
 import { GbDeleteBuddyModalPage } from '../gb-delete-buddy-modal/gb-delete-buddy-modal.page';
 import { GbShareWorkoutModalPage } from '../gb-share-workout-modal/gb-share-workout-modal.page';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-gb-chat',
   templateUrl: './gb-chat.page.html',
@@ -17,14 +18,15 @@ import { GbShareWorkoutModalPage } from '../gb-share-workout-modal/gb-share-work
  * The class also detects any changes based on user inputs and acts as intermediate class for data routing to the back end.
  */
 export class GbChatPage implements OnInit, AfterContentChecked {
+  @ViewChild(IonContent) private content: IonContent;
+  public allChatMessages: Observable<unknown>;
+  public modalDataResponse = false;
+  public newMessage = '';
   private buddyName: string = null;
   private buddyProfilePicture: string = null;
   private buddyUserId: string = null;
-  @ViewChild(IonContent) private content: IonContent;
   private currentUser: GymBuddyProfileInfo = null;
-  public allChatMessages;
-  public modalDataResponse = false;
-  public newMessage = '';
+
   constructor(private chatService: ChatService, private router: Router,
       private cdRef: ChangeDetectorRef, public modalController: ModalController) {}
 
