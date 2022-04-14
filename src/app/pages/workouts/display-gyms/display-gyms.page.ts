@@ -10,6 +10,9 @@ declare let google: any;
 })
 
 
+/**
+ * Displays map with marks of gym when called 
+ */
 export class DisplayGymsPage implements OnInit {
 
   map: any;
@@ -122,6 +125,9 @@ export class DisplayGymsPage implements OnInit {
     }
   }
 
+  /**
+   * display map when function is called
+   */
   showMap() {
     const location = new google.maps.LatLng(1.3463732682538614, 103.68140508360123);
     const options = {
