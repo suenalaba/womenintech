@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-for-of */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastController, IonicSwiper, LoadingController, IonContent } from '@ionic/angular';
@@ -22,7 +23,7 @@ import {
 } from '@angular/fire/compat/firestore';
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
 import { DbRetrieveService } from 'src/app/services/db-retrieve.service';
-export interface imgFile {
+export interface ImgFile {
   name: string;
   filepath: string;
   size: number;
@@ -35,20 +36,7 @@ SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
   styleUrls: ['./gb-update-account-preference.page.scss'],
 })
 export class GbUpdateAccountPreferencePage implements OnInit {
-  private buddyStyleList = buddyTrainStyle;
-  private buddyTraitsList = buddyTraits;
   @ViewChild(IonContent, { static: false }) private content: IonContent;
-  private currentUser: GymBuddyProfileInfo;
-  private gymBuddyPersonalFormData: FormGroup;
-  private timePrefList = workoutTimePreference;
-  private genderList = buddyGender;
-  private gymBuddyGoalsList = gymBuddyGoals;
-  private personalTraitsList = personalTraits;
-  private personalStyleList = personalTrainStyle;
-  private locationPrefList = locationPreference;
-  private progress = 0.0;
-  private slideIndex = 0;
-
   public gymBuddyTimePref = 0;
 
   public gymBuddyGoalsChecked = 0;
@@ -64,6 +52,20 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   public buddyTraitsLimit = 3;
   public buddyTrainStyleChecked = 0;
   public buddyTrainStyleLimit = 2;
+  private buddyStyleList = buddyTrainStyle;
+  private buddyTraitsList = buddyTraits;
+  private currentUser: GymBuddyProfileInfo;
+  private gymBuddyPersonalFormData: FormGroup;
+  private timePrefList = workoutTimePreference;
+  private genderList = buddyGender;
+  private gymBuddyGoalsList = gymBuddyGoals;
+  private personalTraitsList = personalTraits;
+  private personalStyleList = personalTrainStyle;
+  private locationPrefList = locationPreference;
+  private progress = 0.0;
+  private slideIndex = 0;
+
+
 
 
   private slides: any;
@@ -77,16 +79,16 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   // Track file uploading with snapshot
   private trackSnapshot: Observable<any>;
   // Uploaded File URL
-  private UploadedImageURL: Observable<string>;
+  private uploadedImageURL: Observable<string>;
   // Uploaded image collection
-  private files: Observable<imgFile[]>;
+  private files: Observable<ImgFile[]>;
   // Image specifications
   private imgName: string;
   private imgSize: number;
   // File uploading status
   private isFileUploading: boolean;
   private isFileUploaded: boolean;
-  private filesCollection: AngularFirestoreCollection<imgFile>;
+  private filesCollection: AngularFirestoreCollection<ImgFile>;
   private imgFilePath: string;
   constructor(
     private formBuilder: FormBuilder,
@@ -101,15 +103,22 @@ export class GbUpdateAccountPreferencePage implements OnInit {
     this.isFileUploading = false;
     this.isFileUploaded = false;
     // Define uploaded files collection
-    this.filesCollection = afs.collection<imgFile>('imagesCollection');
+    this.filesCollection = afs.collection<ImgFile>('imagesCollection');
     this.files = this.filesCollection.valueChanges();
   }
+  /**
+   * Gets the full name of the curent user
+   */
+     public get getFullName() {
+      return this.currentUser.name;
+    }
+
   ngOnInit() {
     this.currentUser = this.dbRetrieve.retrieveCurrentUser();
     this.gymBuddyPersonalFormData = new FormGroup({
       briefIntro: new FormControl(this.currentUser.getbriefIntro, [Validators.required, Validators.minLength(3)]),
       timePref: new FormArray([],Validators.required),
-      profilePicture: new FormControl(""),
+      profilePicture: new FormControl(''),
       buddyPref: new FormControl(this.currentUser.getPrefBuddyGender,Validators.required),
       gymBuddyGoals: new FormArray([],[Validators.required,Validators.maxLength(3)]),
       personalTraits: new FormArray([],[Validators.required,Validators.maxLength(3)]),
@@ -124,8 +133,86 @@ export class GbUpdateAccountPreferencePage implements OnInit {
     this.fillUpPreviousInformation();
   }
 
+
   /**
-   * Fills up the past information for all relevant fields
+   * Signs up for gym buddy
+   */
+     async updateGymBuddy() {
+      this.populateForm();
+      console.log(this.currentUser.getUserId);
+      console.log(this.gymBuddyPersonalFormData.value);
+      if(this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.currentUser.getUserId)){
+        console.log('Successful Update');
+      }
+      const toast = await this.toastCtrl.create({
+        message: 'User updated!',
+        duration: 2000
+      });
+      toast.present();
+      this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
+    }
+  /**
+   * Tracks if slide has changed and updates progress
+   *
+   * @returns
+   */
+  public slideDidChange() {
+    console.log('Slide did change');
+    if (!this.slides) {
+      return;
+    }
+
+    console.table({
+      isBeginning: this.slides.isBeginning,
+      isEnd: this.slides.isEnd
+    });
+
+    this.progress = this.getProgress(this.slides.activeIndex);
+  }
+
+  /**
+   * Tracks if slide has changed
+   */
+  public slideWillChange() {
+    console.log('Slide will change');
+  }
+
+  /**
+   * Converts progress into a percentage
+   *
+   * @param i
+   * @returns progress percentage
+   */
+  public getProgress(i){
+    const val = (i+1) * 0.18;
+    console.log(val);
+    return val;
+  }
+
+  /**
+   * Creates loading screen
+   */
+  async showLoading() {
+    this.loadingPresent = true;
+    const load = await this.loadingController.create({
+      message: 'Please wait....',
+
+    });
+    await load.present();
+  }
+
+/**
+ * Dismisses loading screen
+ */
+  async dismissLoading() {
+    if (this.loadingPresent) {
+      await this.loadingController.dismiss();
+    }
+    this.loadingPresent = false;
+  }
+
+ /**
+  * Fills up the past information for all relevant fields
   */
   private fillUpPreviousInformation(){
 
@@ -136,8 +223,8 @@ export class GbUpdateAccountPreferencePage implements OnInit {
 
     //Workout Time Preference
     this.currentUser.getWorkoutTimePreference.forEach(element => {
-      for (var i = 0; i < this.timePrefList.length; i++) {
-        if(this.timePrefList[i].value==element){
+      for (let i = 0; i < this.timePrefList.length; i++) {
+        if(this.timePrefList[i].value===element){
           this.timePrefList[i].isChecked=true;
           this.gymBuddyTimePref++;
         }
@@ -146,8 +233,8 @@ export class GbUpdateAccountPreferencePage implements OnInit {
 
     //Gym Buddy Goals
     this.currentUser.getGymBuddyGoals.forEach(element => {
-      for (var i = 0; i < this.gymBuddyGoalsList.length; i++) {
-        if(this.gymBuddyGoalsList[i].value==element){
+      for (let i = 0; i < this.gymBuddyGoalsList.length; i++) {
+        if(this.gymBuddyGoalsList[i].value===element){
           this.gymBuddyGoalsList[i].isChecked=true;
           this.gymBuddyGoalsChecked++;
         }
@@ -156,8 +243,8 @@ export class GbUpdateAccountPreferencePage implements OnInit {
 
     //Personal traits
     this.currentUser.getPersonalTraits.forEach(element => {
-      for (var i = 0; i < this.personalTraitsList.length; i++) {
-        if(this.personalTraitsList[i].value==element){
+      for (let i = 0; i < this.personalTraitsList.length; i++) {
+        if(this.personalTraitsList[i].value===element){
           this.personalTraitsList[i].isChecked=true;
           this.personalTraitsChecked++;
         }
@@ -166,8 +253,8 @@ export class GbUpdateAccountPreferencePage implements OnInit {
 
     //Personal train style
     this.currentUser.getPersonalTrainStyle.forEach(element => {
-      for (var i = 0; i < this.personalStyleList.length; i++) {
-        if(this.personalStyleList[i].value==element){
+      for (let i = 0; i < this.personalStyleList.length; i++) {
+        if(this.personalStyleList[i].value===element){
           this.personalStyleList[i].isChecked=true;
           this.personalTrainStyleChecked++;
         }
@@ -176,8 +263,8 @@ export class GbUpdateAccountPreferencePage implements OnInit {
 
     //Preferred Location
     this.currentUser.getLocationPreference.forEach(element => {
-      for (var i = 0; i < this.locationPrefList.length; i++) {
-        if(this.locationPrefList[i].value==element){
+      for (let i = 0; i < this.locationPrefList.length; i++) {
+        if(this.locationPrefList[i].value===element){
           this.locationPrefList[i].isChecked=true;
           this.locationPrefChecked++;
         }
@@ -186,8 +273,8 @@ export class GbUpdateAccountPreferencePage implements OnInit {
 
     //Buddy Traits
     this.currentUser.getBuddyTraits.forEach(element => {
-      for (var i = 0; i < this.buddyTraitsList.length; i++) {
-        if(this.buddyTraitsList[i].value==element){
+      for (let i = 0; i < this.buddyTraitsList.length; i++) {
+        if(this.buddyTraitsList[i].value===element){
           this.buddyTraitsList[i].isChecked=true;
           this.buddyTraitsChecked++;
         }
@@ -196,8 +283,8 @@ export class GbUpdateAccountPreferencePage implements OnInit {
 
     //Buddy Train Style
     this.currentUser.getBuddyTrainStyle.forEach(element => {
-      for (var i = 0; i < this.buddyStyleList.length; i++) {
-        if(this.buddyStyleList[i].value==element){
+      for (let i = 0; i < this.buddyStyleList.length; i++) {
+        if(this.buddyStyleList[i].value===element){
           this.buddyStyleList[i].isChecked=true;
           this.buddyTrainStyleChecked++;
         }
@@ -206,12 +293,6 @@ export class GbUpdateAccountPreferencePage implements OnInit {
 
   }
 
-  /**
-   * Gets the full name of the curent user
-   */
-  public get getFullName() {
-    return this.currentUser.name;
-  }
 
   /**
    * Converts the image and uploads it to Firebase
@@ -237,8 +318,8 @@ export class GbUpdateAccountPreferencePage implements OnInit {
     this.trackSnapshot = this.fileUploadTask.snapshotChanges().pipe(
       finalize(() => {
         // Retreive uploaded image storage path
-        this.UploadedImageURL = imageRef.getDownloadURL();
-        this.UploadedImageURL.subscribe(
+        this.uploadedImageURL = imageRef.getDownloadURL();
+        this.uploadedImageURL.subscribe(
           (resp) => {
             this.storeFilesFirebase({
               name: file.name,
@@ -263,7 +344,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
   /**
    * Stores the image into the "imagesCollection" in Firebase
    */
-  private storeFilesFirebase(image: imgFile) {
+  private storeFilesFirebase(image: ImgFile) {
     const fileId = this.afs.createId();
     this.filesCollection
       .doc(fileId)
@@ -387,55 +468,55 @@ export class GbUpdateAccountPreferencePage implements OnInit {
     return true;
   }
 
-    /**
+  /**
    * Populates the form with the list of inputs that are selected
    */
      private populateForm(){
       //Workout Time Preference
     this.timePrefList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.timePref.push(element.value);
       }
     });
 
     //Gym Buddy Goals
     this.gymBuddyGoalsList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.gymBuddyGoals.push(element.value);
       }
     });
 
     //Personal traits
     this.personalTraitsList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.personalTraits.push(element.value);
       }
     });
 
     //Personal train style
     this.personalStyleList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.personalStyle.push(element.value);
       }
     });
 
     //Preferred Location
     this.locationPrefList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.locationPref.push(element.value);
       }
     });
 
     //Buddy Traits
     this.buddyTraitsList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.buddyTraits.push(element.value);
       }
     });
 
     //Buddy Train Style
     this.buddyStyleList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.buddyTrainStyle.push(element.value);
       }
     });
@@ -453,23 +534,7 @@ export class GbUpdateAccountPreferencePage implements OnInit {
       this.gymBuddyPersonalFormData.value.chats.push(element);
     });
   }
-  /**
-   * Signs up for gym buddy
-   */
-  async updateGymBuddy() {
-    this.populateForm();
-    console.log(this.currentUser.getUserId);
-    console.log(this.gymBuddyPersonalFormData.value);
-    if(this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.currentUser.getUserId)){
-      console.log("Successful Update");
-    }
-    const toast = await this.toastCtrl.create({
-      message: 'User updated!',
-      duration: 2000
-    });
-    toast.present();
-    this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
-  }
+
 
   private setSwiperInstance(swiper: any) {
     this.slides = swiper;
@@ -477,31 +542,6 @@ export class GbUpdateAccountPreferencePage implements OnInit {
     this.progress = this.getProgress(this.slides.activeIndex);
 
   }
-
-  public slideDidChange() {
-    console.log('Slide did change');
-    if (!this.slides) {
-      return;
-    }
-
-    console.table({
-      isBeginning: this.slides.isBeginning,
-      isEnd: this.slides.isEnd
-    });
-
-    this.progress = this.getProgress(this.slides.activeIndex);
-  }
-
-  public slideWillChange() {
-    console.log('Slide will change');
-  }
-
-  public getProgress(i){
-    const val = (i+1) * 0.18;
-    console.log(val);
-    return val;
-  }
-
   private nextPage(){
     console.log(this.slides);
     this.content.scrollToTop(1500);
@@ -512,20 +552,6 @@ export class GbUpdateAccountPreferencePage implements OnInit {
     this.slides.slidePrev();
   }
 
-  async showLoading() {
-    this.loadingPresent = true;
-    const load = await this.loadingController.create({
-      message: 'Please wait....',
 
-    });
-    await load.present();
-  }
-
-  async dismissLoading() {
-    if (this.loadingPresent) {
-      await this.loadingController.dismiss();
-    }
-    this.loadingPresent = false;
-  }
 }
 
