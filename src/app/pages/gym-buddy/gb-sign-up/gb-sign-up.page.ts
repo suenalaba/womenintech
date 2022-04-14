@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastController, IonicSwiper, LoadingController, IonContent } from '@ionic/angular';
@@ -22,7 +23,7 @@ import {
 } from '@angular/fire/compat/firestore';
 import { DbRetrieveService } from 'src/app/services/db-retrieve.service';
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
-export interface imgFile {
+export interface ImgFile {
   name: string;
   filepath: string;
   size: number;
@@ -37,20 +38,7 @@ SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
   styleUrls: ['./gb-sign-up.page.scss'],
 })
 export class GbSignUpPage implements OnInit {
-  private buddyStyleList = buddyTrainStyle;
-  private buddyTraitsList = buddyTraits;
   @ViewChild(IonContent, { static: false }) private content: IonContent;
-  private currentUser: GymBuddyProfileInfo;
-  private gymBuddyPersonalFormData: FormGroup;
-  private timePrefList = workoutTimePreference;
-  private genderList = buddyGender;
-  private gymBuddyGoalsList = gymBuddyGoals;
-  private personalTraitsList = personalTraits;
-  private personalStyleList = personalTrainStyle;
-  private locationPrefList = locationPreference;
-  private progress = 0.0;
-  private slideIndex = 0;
-
   public gymBuddyTimePref = 0;
 
   public gymBuddyGoalsChecked = 0;
@@ -67,6 +55,19 @@ export class GbSignUpPage implements OnInit {
   public buddyTrainStyleChecked = 0;
   public buddyTrainStyleLimit = 2;
 
+  private buddyStyleList = buddyTrainStyle;
+  private buddyTraitsList = buddyTraits;
+  private currentUser: GymBuddyProfileInfo;
+  private gymBuddyPersonalFormData: FormGroup;
+  private timePrefList = workoutTimePreference;
+  private genderList = buddyGender;
+  private gymBuddyGoalsList = gymBuddyGoals;
+  private personalTraitsList = personalTraits;
+  private personalStyleList = personalTrainStyle;
+  private locationPrefList = locationPreference;
+  private progress = 0.0;
+  private slideIndex = 0;
+
 
   private slides: any;
   private loadingPresent = true;
@@ -78,16 +79,16 @@ export class GbSignUpPage implements OnInit {
   // Track file uploading with snapshot
   private trackSnapshot: Observable<any>;
   // Uploaded File URL
-  private UploadedImageURL: Observable<string>;
+  private uploadedImageURL: Observable<string>;
   // Uploaded image collection
-  private files: Observable<imgFile[]>;
+  private files: Observable<ImgFile[]>;
   // Image specifications
   private imgName: string;
   private imgSize: number;
   // File uploading status
   private isFileUploading: boolean;
   private isFileUploaded: boolean;
-  private filesCollection: AngularFirestoreCollection<imgFile>;
+  private filesCollection: AngularFirestoreCollection<ImgFile>;
   private imgFilePath: string;
   constructor(
     private dbRetrieve: DbRetrieveService,
@@ -101,19 +102,25 @@ export class GbSignUpPage implements OnInit {
     this.isFileUploading = false;
     this.isFileUploaded = false;
     // Define uploaded files collection
-    this.filesCollection = afs.collection<imgFile>('imagesCollection');
+    this.filesCollection = afs.collection<ImgFile>('imagesCollection');
     this.files = this.filesCollection.valueChanges();
   }
+  /**
+   * Gets the full name of the curent user
+   */
+     public get getFullName() {
+      return this.currentUser.name;
+    }
   ngOnInit() {
     this.currentUser = this.dbRetrieve.retrieveCurrentUser();
     if(this.currentUser.isSignUp) {
       this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
     }
     this.gymBuddyPersonalFormData = new FormGroup({
-      briefIntro: new FormControl("", [Validators.required, Validators.minLength(3)]),
+      briefIntro: new FormControl('', [Validators.required, Validators.minLength(3)]),
       timePref: new FormArray([],Validators.required),
-      imgFile: new FormControl(""),
-      buddyPref: new FormControl("",Validators.required),
+      imgFile: new FormControl(''),
+      buddyPref: new FormControl('',Validators.required),
       gymBuddyGoals: new FormArray([],[Validators.required,Validators.maxLength(3)]),
       personalTraits: new FormArray([],[Validators.required,Validators.maxLength(3)]),
       personalStyle: new FormArray([],[Validators.required,Validators.maxLength(2)]),
@@ -125,13 +132,63 @@ export class GbSignUpPage implements OnInit {
       chats: new FormArray([],[Validators.required,Validators.maxLength(2)]),
     });
   }
+  public slideDidChange() {
+    console.log('Slide did change');
+    if (!this.slides) {
+      return;
+    }
+    console.table({
+      isBeginning: this.slides.isBeginning,
+      isEnd: this.slides.isEnd
+    });
+    this.progress = this.getProgress(this.slides.activeIndex);
+  }
+
+  public slideWillChange() {
+    console.log('Slide will change');
+  }
+
+  public getProgress(i){
+    const val = (i+1) * 0.18;
+    console.log(val);
+    return val;
+  }
+
+  async showLoading() {
+    this.loadingPresent = true;
+    const load = await this.loadingController.create({
+      message: 'Please wait....',
+
+    });
+    await load.present();
+  }
+
+  async dismissLoading() {
+    if (this.loadingPresent) {
+      await this.loadingController.dismiss();
+    }
+    this.loadingPresent = false;
+  }
 
   /**
-   * Gets the full name of the curent user
+   * Signs up for gym buddy
    */
-  public get getFullName() {
-    return this.currentUser.name;
-  }
+     async signUpForGymBuddy() {
+
+      this.populateForm();
+      console.log(this.currentUser.getUserId);
+      console.log(this.gymBuddyPersonalFormData.value);
+      if(this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.currentUser.getUserId)){
+        console.log('Successful Update');
+      }
+      const toast = await this.toastCtrl.create({
+        message: 'User updated!',
+        duration: 2000
+      });
+      toast.present();
+      this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
+    }
+
 
   /**
    * Converts the image and uploads it to Firebase
@@ -157,8 +214,8 @@ export class GbSignUpPage implements OnInit {
     this.trackSnapshot = this.fileUploadTask.snapshotChanges().pipe(
       finalize(() => {
         // Retreive uploaded image storage path
-        this.UploadedImageURL = imageRef.getDownloadURL();
-        this.UploadedImageURL.subscribe(
+        this.uploadedImageURL = imageRef.getDownloadURL();
+        this.uploadedImageURL.subscribe(
           (resp) => {
             this.storeFilesFirebase({
               name: file.name,
@@ -183,7 +240,7 @@ export class GbSignUpPage implements OnInit {
   /**
    * Stores the image into the "imagesCollection" in Firebase
    */
-  private storeFilesFirebase(image: imgFile) {
+  private storeFilesFirebase(image: ImgFile) {
     const fileId = this.afs.createId();
     this.filesCollection
       .doc(fileId)
@@ -313,82 +370,64 @@ export class GbSignUpPage implements OnInit {
   private populateForm(){
       //Workout Time Preference
     this.timePrefList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.timePref.push(element.value);
       }
     });
 
     //Gym Buddy Goals
     this.gymBuddyGoalsList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.gymBuddyGoals.push(element.value);
       }
     });
 
     //Personal traits
     this.personalTraitsList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.personalTraits.push(element.value);
       }
     });
 
     //Personal train style
     this.personalStyleList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.personalStyle.push(element.value);
       }
     });
 
     //Preferred Location
     this.locationPrefList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.locationPref.push(element.value);
       }
     });
 
     //Buddy Traits
     this.buddyTraitsList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.buddyTraits.push(element.value);
       }
     });
 
     //Buddy Train Style
     this.buddyStyleList.forEach((element) => {
-      if(element.isChecked==true){
+      if(element.isChecked===true){
         this.gymBuddyPersonalFormData.value.buddyTrainStyle.push(element.value);
       }
     });
     if(this.imgFilePath) {
-      console.log("imgpath:",this.imgFilePath);
+      console.log('imgpath:',this.imgFilePath);
       this.gymBuddyPersonalFormData.value.profilePicture=this.imgFilePath;
     }
     else{
       if(this.currentUser.getGender==='male'){
-        this.gymBuddyPersonalFormData.value.profilePicture="https://firebasestorage.googleapis.com/v0/b/witfit-cca15.appspot.com/o/filesStorage%2F1649766691840_guy%202.jpg?alt=media&token=e2107bcf-ca5e-413f-8be3-9a5cd5dd25ee";
+        this.gymBuddyPersonalFormData.value.profilePicture='https://firebasestorage.googleapis.com/v0/b/witfit-cca15.appspot.com/o/filesStorage%2F1649766691840_guy%202.jpg?alt=media&token=e2107bcf-ca5e-413f-8be3-9a5cd5dd25ee';
       }
       else{
-        this.gymBuddyPersonalFormData.value.profilePicture="https://firebasestorage.googleapis.com/v0/b/witfit-cca15.appspot.com/o/filesStorage%2F1649766533671_girl.jpg?alt=media&token=7d81c18e-9a3b-4d5c-bed5-c6ba44c89a0c"
+        this.gymBuddyPersonalFormData.value.profilePicture='https://firebasestorage.googleapis.com/v0/b/witfit-cca15.appspot.com/o/filesStorage%2F1649766533671_girl.jpg?alt=media&token=7d81c18e-9a3b-4d5c-bed5-c6ba44c89a0c';
       }
     }
-  }
-  /**
-   * Signs up for gym buddy
-   */
-  async signUpForGymBuddy() {
-
-    this.populateForm();
-    console.log(this.currentUser.getUserId);
-    console.log(this.gymBuddyPersonalFormData.value);
-    if(this.gymBuddyService.addGymBuddyDetails(this.gymBuddyPersonalFormData.value, this.currentUser.getUserId)){
-      console.log("Successful Update");
-    }
-    const toast = await this.toastCtrl.create({
-      message: 'User updated!',
-      duration: 2000
-    });
-    toast.present();
-    this.router.navigateByUrl('tabs/gym-buddy/gb-home', { replaceUrl: true });
   }
 
   private setSwiperInstance(swiper: any) {
@@ -397,27 +436,6 @@ export class GbSignUpPage implements OnInit {
     this.progress = this.getProgress(this.slides.activeIndex);
   }
 
-  public slideDidChange() {
-    console.log('Slide did change');
-    if (!this.slides) {
-      return;
-    }
-    console.table({
-      isBeginning: this.slides.isBeginning,
-      isEnd: this.slides.isEnd
-    });
-    this.progress = this.getProgress(this.slides.activeIndex);
-  }
-
-  public slideWillChange() {
-    console.log('Slide will change');
-  }
-
-  public getProgress(i){
-    const val = (i+1) * 0.18;
-    console.log(val);
-    return val;
-  }
 
   private nextPage(){
     console.log(this.slides);
@@ -429,19 +447,5 @@ export class GbSignUpPage implements OnInit {
     this.slides.slidePrev();
   }
 
-  async showLoading() {
-    this.loadingPresent = true;
-    const load = await this.loadingController.create({
-      message: 'Please wait....',
 
-    });
-    await load.present();
-  }
-
-  async dismissLoading() {
-    if (this.loadingPresent) {
-      await this.loadingController.dismiss();
-    }
-    this.loadingPresent = false;
-  }
 }
