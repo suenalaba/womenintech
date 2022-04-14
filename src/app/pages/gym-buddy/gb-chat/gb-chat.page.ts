@@ -58,6 +58,79 @@ export class GbChatPage implements OnInit, AfterContentChecked {
   }
 
   /**
+   * A callback method that is invoked immediately after the default change detector has completed checking all of the directive's content.
+   */
+  ngAfterContentChecked() {
+    this.cdRef.detectChanges();
+}
+  /**
+   * This method is invoked upon entry point into the page. It displays all the chat messages with real-time updates.
+   * This method subscribes to the observable in chat service.
+   */
+  async ngOnInit() {
+    this.modalDataResponse = false;
+    this.allChatMessages = this.chatService.getAllChatMessages();
+    this.buddyName = this.chatService.getSelectedChatUserName;
+    this.buddyProfilePicture = this.chatService.getSelectedOtherUserProfilePicture;
+    this.buddyUserId = this.chatService.getSelectedOtherUserId;
+    this.currentUser = this.chatService.getCurrentUser;
+  }
+
+  /**
+   * This method is called when the user clicks on the delete user function, a modal will pop up for further user action.
+   */
+  public async openDeleteModal() {
+    const modal = await this.modalController.create({
+      component: GbDeleteBuddyModalPage,
+      cssClass: 'small-modal'
+    });
+
+    modal.onDidDismiss().then((modalDataResponse) => {
+      if (modalDataResponse.data === true) {
+        //proceed to Delete.
+        //delete the match in fireStore.
+        this.chatService.deleteMatch(this.chatService.getSelectedChatId, this.getCurrentUserId(),this.buddyUserId);
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+        //navigate back to buddy list page.
+        this.navigateChatPageToBuddyListPage();
+      } else {
+        //don't do anything
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+      }
+    });
+
+    await modal.present();
+  }
+
+  /**
+   * This method is called when the user clicks on the share workout function, a modal will pop for further user action.
+   */
+  public async openShareModal() {
+    const modal = await this.modalController.create({
+      component: GbShareWorkoutModalPage,
+      cssClass: 'small-modal'
+    });
+
+    modal.onDidDismiss().then(async (modalDataResponse) => {
+      if (modalDataResponse.data === true) {
+        //proceed to share workout.
+        //share workout over fireStore.
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+        //navigate back to buddy list page.
+        await this.chatService.shareWorkout(this.getCurrentUserId(),this.buddyUserId);
+      } else {
+        this.modalDataResponse = modalDataResponse.data;
+        console.log('Modal Sent Data : '+ modalDataResponse.data);
+      }
+    });
+
+    await modal.present();
+  }
+
+  /**
    * Getter to get whether the user is a primary user or secondary user.
    *
    * @param fromId reference id of the user.
@@ -157,81 +230,6 @@ export class GbChatPage implements OnInit, AfterContentChecked {
    */
   public async navigateToWorkoutListPage() {
     this.router.navigateByUrl('tabs/workouts', { replaceUrl: true });
-  }
-
-  /**
-   * A callback method that is invoked immediately after the default change detector has completed checking all of the directive's content.
-   */
-  ngAfterContentChecked() {
-    this.cdRef.detectChanges();
-}
-  /**
-   * This method is invoked upon entry point into the page. It displays all the chat messages with real-time updates.
-   * This method subscribes to the observable in chat service.
-   */
-  async ngOnInit() {
-    this.modalDataResponse = false;
-    this.allChatMessages = this.chatService.getAllChatMessages();
-    this.buddyName = this.chatService.getSelectedChatUserName;
-    this.buddyProfilePicture = this.chatService.getSelectedOtherUserProfilePicture;
-    this.buddyUserId = this.chatService.getSelectedOtherUserId;
-    this.currentUser = this.chatService.getCurrentUser;
-  }
-
-  /**
-   * This method is called when the user clicks on the delete user function, a modal will pop up for further user action.
-   */
-  public async openDeleteModal() {
-    const modal = await this.modalController.create({
-      component: GbDeleteBuddyModalPage,
-      cssClass: 'small-modal'
-    });
-
-    modal.onDidDismiss().then((modalDataResponse) => {
-      if (modalDataResponse.data === true) {
-        //proceed to Delete.
-        //delete the match in fireStore.
-        this.chatService.deleteMatch(this.chatService.getSelectedChatId, this.getCurrentUserId(),this.buddyUserId);
-        this.modalDataResponse = modalDataResponse.data;
-        console.log('Modal Sent Data : '+ modalDataResponse.data);
-        //navigate back to buddy list page.
-        this.navigateChatPageToBuddyListPage();
-      } else {
-        //don't do anything
-        this.modalDataResponse = modalDataResponse.data;
-        console.log('Modal Sent Data : '+ modalDataResponse.data);
-      }
-    });
-
-    await modal.present();
-  }
-
-  /**
-   * This method is called when the user clicks on the share workout function, a modal will pop for further user action.
-   */
-  public async openShareModal() {
-    const modal = await this.modalController.create({
-      component: GbShareWorkoutModalPage,
-      cssClass: 'small-modal'
-    });
-
-    modal.onDidDismiss().then(async (modalDataResponse) => {
-      if (modalDataResponse.data === true) {
-        //proceed to share workout.
-        //share workout over fireStore.
-        this.modalDataResponse = modalDataResponse.data;
-        console.log('Modal Sent Data : '+ modalDataResponse.data);
-        //navigate back to buddy list page.
-        await this.chatService.shareWorkout(this.getCurrentUserId(),this.buddyUserId);
-        //this.navigateToWorkoutListPage();
-      } else {
-        //don't do anything
-        this.modalDataResponse = modalDataResponse.data;
-        console.log('Modal Sent Data : '+ modalDataResponse.data);
-      }
-    });
-
-    await modal.present();
   }
 
   /**
