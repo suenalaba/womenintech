@@ -1,5 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 
+/**
+ *This class converts the raw json file into an entity that
+ *an easily usable user profile
+ */
 export class GymBuddyProfileInfo {
   private _age='20';
   private _chats?: string[];
