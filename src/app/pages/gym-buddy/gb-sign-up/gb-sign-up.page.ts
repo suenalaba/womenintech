@@ -132,6 +132,12 @@ export class GbSignUpPage implements OnInit {
       chats: new FormArray([],[Validators.required,Validators.maxLength(2)]),
     });
   }
+
+  /**
+   * Tracks if slide has changed and updates progress
+   *
+   * @returns
+   */
   public slideDidChange() {
     console.log('Slide did change');
     if (!this.slides) {
@@ -144,16 +150,27 @@ export class GbSignUpPage implements OnInit {
     this.progress = this.getProgress(this.slides.activeIndex);
   }
 
+  /**
+   * Tracks if slide has changed
+   */
   public slideWillChange() {
     console.log('Slide will change');
   }
-
+/**
+ * Converts progress into a percentage
+ *
+ * @param i
+ * @returns progress percentage
+ */
   public getProgress(i){
     const val = (i+1) * 0.18;
     console.log(val);
     return val;
   }
 
+  /**
+   * Creates loading screen
+   */
   async showLoading() {
     this.loadingPresent = true;
     const load = await this.loadingController.create({
@@ -162,7 +179,9 @@ export class GbSignUpPage implements OnInit {
     });
     await load.present();
   }
-
+/**
+ * Dismisses loading screen
+ */
   async dismissLoading() {
     if (this.loadingPresent) {
       await this.loadingController.dismiss();
