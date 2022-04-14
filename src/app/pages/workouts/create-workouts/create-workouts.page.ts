@@ -60,6 +60,9 @@ export class CreateWorkoutsPage implements OnInit {
     this.getUserDetails();
   }
 
+  /**
+   * build workout form
+   */
   buildForm() {
     this.createWorkoutForm = this.fb.group({
       wName: ['', [Validators.required]],
@@ -71,6 +74,9 @@ export class CreateWorkoutsPage implements OnInit {
     });
   }
 
+  /**
+   * get user details from firebase
+   */
   getUserDetails(){
     this.userService.getUserById(this.userId).subscribe(res=>{
       this.userDetails = res.userDetails
@@ -86,6 +92,9 @@ export class CreateWorkoutsPage implements OnInit {
     }
   }
 
+  /**
+   * alert display triggered when form is incomplete
+   */
   async presentAlert() {
     this.validateAllFormFields(this.createWorkoutForm)
 
@@ -102,6 +111,11 @@ export class CreateWorkoutsPage implements OnInit {
     console.log('onDidDismiss resolved with role', role);
   }
 
+  /**
+   * fucntion for form validation 
+   * 
+   * @param formGroup createWorkoutForm
+   */
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
@@ -113,13 +127,13 @@ export class CreateWorkoutsPage implements OnInit {
     });
   }
 
+  /**
+   * function to generate workout for user based on their selections 
+   * 
+   * @param val : form values
+   */
   async generateWorkout(val) {
     this.workoutDesc = val;
-    let wid = 0;
-    let uid = JSON.parse(localStorage.getItem('userID'));
-
-    let areaOfInjury = ''
-    let equipment = ''
 
     this.presentLoadingWithOptions().then(() => {
       this.workoutService.createWorkout(this.workoutDesc, this.userId, this.userDetails).then((res)=>{
@@ -128,25 +142,29 @@ export class CreateWorkoutsPage implements OnInit {
         this.goToStartWorkout(res)
       })
     });
-
-
-    /******* !!! figure out how to return subscription ********/
-    // this.workoutAlgo.generateWorkout(this.workoutAPI.loadExercises()).then(x =>{
-    //   console.log(x)
-    // });
-    /***************/
   }
 
-  async goToStartWorkout(id) {
+  /**
+   * navigate user to view their generated workout 
+   * 
+   * @param id workout id 
+   */
+  async goToStartWorkout(id: any) {
     console.log(id);
     this.loadingCtrl.dismiss();
     await this.router.navigate(['/tabs/workouts/generate-workout'], { queryParams: { wid: id } });
   }
 
+  /**
+   * fucntion to navigate user back to all workouts 
+   */
   goBack() {
     this.nav.navigateBack(['tabs/workouts'], { animated: true })
   }
 
+  /**
+   * loading component presented when workout is being generated 
+   */
   async presentLoadingWithOptions() {
     const loading = await this.loadingCtrl.create({
       message: 'Please wait... </br> We are creating a workout for you!',

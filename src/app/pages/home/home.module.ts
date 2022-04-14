@@ -3,7 +3,6 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
-import { ExploreContainerComponentModule } from '../../explore-container/explore-container.module';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { SwiperModule } from 'swiper/angular';
@@ -16,7 +15,6 @@ import { SafePipe } from 'src/app/services/youtube.service';
     IonicModule,
     CommonModule,
     FormsModule,
-    ExploreContainerComponentModule,
     HomePageRoutingModule,
     SwiperModule,
     NgxEchartsModule.forRoot({

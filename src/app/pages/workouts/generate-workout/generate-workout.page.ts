@@ -25,7 +25,7 @@ export class GenerateWorkoutPage implements OnInit {
   listLocation: CreateWorkoutDesc[] = wLocation;
   listEquipment: CreateWorkoutDesc[] = Equipment;
 
-  exerciseList= [{}, {}, {}, {}, {}]
+  exerciseList = []
 
   constructor(
     private router: Router, 
@@ -44,7 +44,11 @@ export class GenerateWorkoutPage implements OnInit {
 
     this.getWorkoutDetails(this.workoutId, this.userId);
   }
-
+ /**
+  * 
+  * @param wid workout id
+  * @param uid user id
+  */
   async getWorkoutDetails(wid, uid){
     const loading = await this.loadingCtrl.create();
     await loading.present();

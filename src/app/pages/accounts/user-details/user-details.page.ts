@@ -11,7 +11,7 @@ import SwiperCore, { Keyboard, Pagination, Scrollbar } from 'swiper';
 SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
 
 @Component({
-  selector: 'app-user-details',//how come its just app-user-details. isn't user details nested in the app->accounts->user-details
+  selector: 'app-user-details',
   templateUrl: './user-details.page.html',
   styleUrls: ['./user-details.page.scss'],
   encapsulation: ViewEncapsulation.None
@@ -37,18 +37,17 @@ export class UserDetailsPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
-    private alertController: AlertController,
     private router: Router,
-    private loadingController: LoadingController,
     private toastCtrl: ToastController
 
   ) { }
-  ngOnInit(){
-    let userSignUp_string  = localStorage.getItem('userSignUp');
-    this.userSignUp =  JSON.parse(userSignUp_string);
+
+  ngOnInit() {
+    let userSignUp_string = localStorage.getItem('userSignUp');
+    this.userSignUp = JSON.parse(userSignUp_string);
     this.gender = this.userSignUp.gender;
     this.buildForm();
-    
+
     this.injury.valueChanges.subscribe(val => {
       console.log(val)
       if (val === 'yes') {
@@ -75,15 +74,18 @@ export class UserDetailsPage implements OnInit {
     });
 
     if (this.gender === 'female') {
-        this.userDetailsForm.controls['menstruationCycle'].setValidators([Validators.required]);
-      } else {
-        this.userDetailsForm.controls['menstruationCycle'].clearValidators();
-      }
-      this.userDetailsForm.controls['menstruationCycle'].updateValueAndValidity();
-
+      this.userDetailsForm.controls['menstruationCycle'].setValidators([Validators.required]);
+    } else {
+      this.userDetailsForm.controls['menstruationCycle'].clearValidators();
+    }
+    this.userDetailsForm.controls['menstruationCycle'].updateValueAndValidity();
   }
 
-  buildForm(){
+
+  /**
+   * Function to create user details form
+   */
+  buildForm() {
     this.userDetailsForm = this.fb.group({
       height: ['', [Validators.required, Validators.minLength(3)]],
       weight: ['', [Validators.required, Validators.minLength(2)]],
@@ -126,15 +128,19 @@ export class UserDetailsPage implements OnInit {
     return this.userDetailsForm.get('menstruationCycle');
   }
 
-  get areaOfInjury(){
+  get areaOfInjury() {
     return this.userDetailsForm.get('areaOfInjury');
   }
 
-  get injuryType(){
+  get injuryType() {
     return this.userDetailsForm.get('injuryType');
   }
 
-
+  /**
+   * set values for swiper progress
+   * 
+   * @param swiper swiper page
+   */
 
   setSwiperInstance(swiper: any) {
     this.slides = swiper;
@@ -143,6 +149,9 @@ export class UserDetailsPage implements OnInit {
 
   }
 
+  /**
+   * Triggered when swiper goes to next page and progress bar will be updated
+   */
   public slideDidChange() {
     console.log('Slide did change');
     if (!this.slides) return;
@@ -155,27 +164,41 @@ export class UserDetailsPage implements OnInit {
     this.progress = this.getProgress(this.slides.activeIndex);
   }
 
-  public slideWillChange() {
-    console.log('Slide will change');
-  }
 
-  public getProgress(i){
-    let val = (i+1) * 0.18;
+  /**
+   * calculate progress of swiper component
+   * 
+   * @param i slide index
+   */
+  public getProgress(i) {
+    let val = (i + 1) * 0.18;
     console.log(val);
     return val;
   }
 
-  nextPage(){
+
+  /**
+   * triggered when next button is clicked and will move slide to the next page
+   */
+  nextPage() {
     console.log(this.slides);
     console.log(this.userDetailsForm);
 
     this.slides.slideNext();
   }
 
-  prevPage(){
+  /**
+   * triggered when the back button is clicked and will return user to previous slide
+   */
+  prevPage() {
     this.slides.slidePrev();
   }
 
+  /**
+   * this function is to initialize the list of injures based on the area of injury selcted by the user 
+   *  
+   * @param event radio event when value is changed
+   */
   radioInjuryChange(event) {
     this.selectedRadioGroup = event.detail;
     console.log(event)
@@ -197,7 +220,10 @@ export class UserDetailsPage implements OnInit {
     }
   }
 
-  async completeSignUp(){
+  /**
+   * update user details and store into firebase
+   */
+  async completeSignUp() {
     console.log(this.userSignUp.id);
     /*stuff stored in userDetailsForm object */
     /*.value is to access form details */
