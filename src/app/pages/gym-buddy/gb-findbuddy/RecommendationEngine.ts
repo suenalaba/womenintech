@@ -16,29 +16,11 @@ export class RecommendationEngine {
   }
 
   /**
-   * Get the Highest Score from the Content Filter Score Map.
-   *
-   * @param contentFilterScoreMap HashMap of key:Buddy User Id, Value: Score.
-   * @returns the user Id of the highest score.
-   */
-  private getHighestScoreId(contentFilterScoreMap: Map<string, number>) {
-    let highestScore = -1;
-    let highestScoreId = '';
-    contentFilterScoreMap.forEach((matchingScore: number, id: string) => {
-      if (matchingScore > highestScore) {
-        highestScore = matchingScore;
-        highestScoreId = id;
-      }
-    });
-    return highestScoreId;
-  }
-
-  /**
    * Getter to get all the profile of other users.
    *
    * @param dictOfProfiles dictionary that contains gym buddy profiles
    */
-  public getAllMatches(dictOfProfiles) {
+  public getAllMatches(dictOfProfiles: Map<string, GymBuddyProfileInfo>) {
     this.dictOfProfiles = dictOfProfiles;
     const arrayOfProfiles= new Array<GymBuddyProfileInfo>(); //initialize an array to store gym buddy profiles that was queried.
     for (const key in this.dictOfProfiles) {
@@ -73,4 +55,21 @@ export class RecommendationEngine {
       return this.dictOfProfiles[highestScoreId];
     }
   }
+  /**
+   * Get the Highest Score from the Content Filter Score Map.
+   *
+   * @param contentFilterScoreMap HashMap of key:Buddy User Id, Value: Score.
+   * @returns the user Id of the highest score.
+   */
+     private getHighestScoreId(contentFilterScoreMap: Map<string, number>) {
+      let highestScore = -1;
+      let highestScoreId = '';
+      contentFilterScoreMap.forEach((matchingScore: number, id: string) => {
+        if (matchingScore > highestScore) {
+          highestScore = matchingScore;
+          highestScoreId = id;
+        }
+      });
+      return highestScoreId;
+    }
 }
