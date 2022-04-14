@@ -8,6 +8,16 @@
 </ion-header>
 
 <ion-content>
+  <div *ngIf="workouts.length===0">
+    <ion-grid>
+      <ion-row class="fullheight xc">
+        <h2>No past workouts found!</h2>
+      </ion-row>
+      <ion-row class="fullheight xc">
+        <ion-button (click)="goWorkout()">Start a Workout Today</ion-button>
+      </ion-row>
+    </ion-grid>
+  </div>
   <ion-card *ngFor="let workout of workouts">
     <ion-grid>
       <ion-row>

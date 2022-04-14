@@ -18,6 +18,14 @@ export class SignUpPage implements OnInit {
 
   private loadingPresent = true;
 
+  constructor(
+  private fb: FormBuilder,
+  private authService: AuthenticationService,
+  private alertController: AlertController,
+  private router: Router,
+  private loadingController: LoadingController,
+  ) { }
+
   get birthday() {
     return this.credentials.get('birthday');
   }
@@ -30,28 +38,6 @@ export class SignUpPage implements OnInit {
     return this.credentials.get('email');
   }
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthenticationService,
-    private alertController: AlertController,
-    private router: Router,
-    private loadingController: LoadingController,
-  ) { }
-
-  ngOnInit() {
-    this.credentials = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      birthday: ['', [Validators.required]],
-      gender: ['', [Validators.required]],
-      confirmPassword: ['', [Validators.required, this.equalto('password')]],
-      username: ['', [Validators.required, Validators.minLength(5)]]
-    });
-  }
-
-  // Easy access for form fields
   get firstName() {
     return this.credentials.get('firstName');
   }
@@ -72,29 +58,23 @@ export class SignUpPage implements OnInit {
     return this.credentials.get('gender');
   }
 
-  /**
-   * checks if confirm password matches with password, it will return validation error is it does not match,
-   * else it will reutrn null as there is not error
-   *
-   * @param password user password
-   */
-  private equalto(field_name): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } => {
-
-      const input = control.value;
-      const isValid = control.root.value[field_name] == input;
-      if (!isValid) {
-        return { 'equalTo': { isValid } };
-      } else {
-        return null;
-      }
-    };
+  ngOnInit() {
+    this.credentials = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      birthday: ['', [Validators.required]],
+      gender: ['', [Validators.required]],
+      confirmPassword: ['', [Validators.required, this.equalto('password')]],
+      username: ['', [Validators.required, Validators.minLength(5)]]
+    });
   }
 
   /**
    * Navigate to login page
    */
-  async login() {
+   async login() {
     this.router.navigateByUrl('', { replaceUrl: true });
   }
 
@@ -119,7 +99,6 @@ export class SignUpPage implements OnInit {
     } else {
       this.showAlert('Registration failed', 'Please try again!');
     }
-
   }
 
   /**
@@ -157,6 +136,25 @@ export class SignUpPage implements OnInit {
       await this.loadingController.dismiss();
     }
     this.loadingPresent = false;
+  }
+
+  /**
+   * checks if confirm password matches with password, it will return validation error is it does not match,
+   * else it will reutrn null as there is not error
+   *
+   * @param password user password
+   */
+  private equalto(field_name): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+
+      const input = control.value;
+      const isValid = control.root.value[field_name] == input;
+      if (!isValid) {
+        return { 'equalTo': { isValid } };
+      } else {
+        return null;
+      }
+    };
   }
 
 }
