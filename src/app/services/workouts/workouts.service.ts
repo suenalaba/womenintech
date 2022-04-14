@@ -1,11 +1,4 @@
-/**
- *
- * COMMUNICATES WITH FIREBASE
- *
- */
-
 import { Injectable } from '@angular/core';
-import { User, user } from '@angular/fire/auth';
 import { Firestore, collection, doc, setDoc, docData, Timestamp, query, getDocs } from '@angular/fire/firestore';
 import { onSnapshot, orderBy, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
@@ -18,27 +11,25 @@ import { areaOfInjury } from 'src/app/data/injuries';
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Communicates with firebase
+ */
 export class WorkoutsService {
-  workoutDesc: WorkoutDesc;
-
-  exerciseData = [];
-  userWorkout = [];
-
-  injuries = areaOfInjury;
-
-  constructor(private firestore: Firestore, private workoutAPI: WorkoutAPIService) {
-
-  }
+  private exerciseData = [];
+  private injuries = areaOfInjury;
+  private userWorkout = [];
+  private workoutDesc: WorkoutDesc;
+  constructor(private firestore: Firestore, private workoutAPI: WorkoutAPIService) { }
 
   /**
-   * creates new workout for user based on their goals, and selections 
-   * 
+   * creates new workout for user based on their goals, and selections
+   *
    * @param workoutInfo workout information
    * @param uid user id
    * @param userDetails user detials
    */
   async createWorkout(workoutInfo, uid, userDetails) {
-    let timestamp = Timestamp.fromDate(new Date());
+    const timestamp = Timestamp.fromDate(new Date());
 
     return new Promise(resolve => {
       this.workoutAPI.loadExercises().subscribe(r => {
@@ -46,15 +37,15 @@ export class WorkoutsService {
         console.log(r);
         this.exerciseData = this.shuffle(r);
 
-        let injury =""
+        let injury ='';
         if(userDetails.areaOfInjury!=''){
-          injury = this.injuries.find(x => x.value === userDetails.areaOfInjury).text
+          injury = this.injuries.find(x => x.value === userDetails.areaOfInjury).text;
         }
 
 
         this.exerciseData  = this.exerciseData.filter(x => x.category.name != injury);
 
-        if(workoutInfo.equipment == "no_equipment"){
+        if(workoutInfo.equipment == 'no_equipment'){
           this.exerciseData = this.exerciseData.filter(y=>y.equipment.length == 0);
         }else{
           this.exerciseData = this.exerciseData.filter(y=>y.equipment.length != 0);
@@ -75,32 +66,120 @@ export class WorkoutsService {
           location: workoutInfo.location,
           equipment: workoutInfo.equipment,
           dateCreated: timestamp,
-          workoutStatus: "created",
+          workoutStatus: 'created',
           createdBy: uid,
           tags: [workoutInfo.intensity, workoutInfo.duration, workoutInfo.location, workoutInfo.equipment],
           workoutRoutine: workoutInfo.routine
         };
 
         console.log(docData);
-        setDoc(doc(this.firestore, "Users", `${uid}`, "Workouts", timestamp.seconds.toString()), docData);
+        setDoc(doc(this.firestore, 'Users', `${uid}`, 'Workouts', timestamp.seconds.toString()), docData);
 
-        resolve(timestamp.seconds)
+        resolve(timestamp.seconds);
       });
     });
 
   }
 
   /**
-   * format workout routine 
-   * 
+   * delete specific workout from user
+   *
+   * @param wid workout id
+   * @param uid user id
+   */
+  async deleteWorkout(wid, uid) {
+    await deleteDoc(doc(this.firestore, `Users/${uid}/Workouts/${wid}`));
+  }
+
+  /**
+   * get all workouts from user
+   *
+   * @param uid user id
+   */
+  async getAllWorkout(uid) {
+    const querySnapshot = await getDocs(query(collection(this.firestore, `Users/${uid}/Workouts`), orderBy('dateCreated', 'desc')));
+    return querySnapshot;
+  }
+
+  /**
+   * get all completed workouts from user
+   *
+   * @param uid user id
+   */
+  async getCompletedWorkouts(uid) {
+    const querySnapshot = await getDocs(query(collection(
+      this.firestore, `Users/${uid}/CompletedWorkouts`), orderBy('dateCompleted', 'desc')));
+    return querySnapshot;
+  }
+
+  /**
+   * get specific workout from user
+   *
+   * @param wid workout id
+   * @param uid user id
+   */
+  getWorkout(wid, uid): Observable<WorkoutDesc> {
+    const noteDocRef = doc(this.firestore, `Users/${uid}/Workouts/${wid}`);
+    return docData(noteDocRef, { idField: 'id' }) as Observable<WorkoutDesc>;
+  }
+
+  /**
+   * save and store workout
+   *
+   * @param wid workout id
+   * @param uid user id
+   * @param userWorkout workout details
+   */
+  async saveWorkout(wid, uid, userWorkout) {
+    const workout: WorkoutDesc = userWorkout;
+    console.log(workout);
+
+     /*store to firebase firestore (firestore, collection, the very long string is the path)*/
+     const noteDocRef = doc(this.firestore, `Users/${uid}/Workouts/${wid}`);
+
+     /* must update doc, cannot add doc */
+    await setDoc(noteDocRef, workout);
+  }
+
+  /**
+   * save completed workout by user
+   *
+   * @param completeWorkout completed workout details
+   * @param uid user id
+   */
+  async storeCompletedWorkout(completeWorkout, uid){
+    const workout: CompletedWorkout = completeWorkout;
+    console.log(workout);
+    const timestamp = Timestamp.fromDate(new Date());
+
+     /*store to firebase firestore (firestore, collection, the very long string is the path)*/
+     const noteDocRef = doc(this.firestore, `Users/${uid}/CompletedWorkouts/${timestamp.seconds}`);
+
+     /* must update doc, cannot add doc */
+    await setDoc(noteDocRef, workout);
+  }
+
+  private extractValue(arr, prop) {
+    const extractedValue = [];
+    for (let i = 0; i < arr.length; ++i) {
+
+      // extract value from property
+      extractedValue.push(arr[i][prop]);
+    }
+    return extractedValue;
+  }
+
+  /**
+   * format workout routine
+   *
    * @param workoutDesc workout details
    * @param userDetails user details
    */
-  formatWorkoutRoutine(workoutDesc: WorkoutDesc, userDetails: UserDetails) {
-    let routine = [];
-    
+  private formatWorkoutRoutine(workoutDesc: WorkoutDesc, userDetails: UserDetails) {
+    const routine = [];
+
     for (let i = 0; i < this.userWorkout.length; ++i) {
-      let exercise: WorkoutDetails = {
+      const exercise: WorkoutDetails = {
         category: this.userWorkout[i].category.name,
         equipment: this.extractValue(this.userWorkout[i], 'equipment.name'),
         exerciseDesc: this.userWorkout[i].description,
@@ -118,91 +197,18 @@ export class WorkoutsService {
     return routine;
   }
 
-  /**
-   * save and store workout 
-   * 
-   * @param wid workout id
-   * @param uid user id
-   * @param userWorkout workout details
-   */
-  async saveWorkout(wid, uid, userWorkout) {
-    let workout: WorkoutDesc = userWorkout
-    console.log(workout)
-
-     /*store to firebase firestore (firestore, collection, the very long string is the path)*/
-     const noteDocRef = doc(this.firestore, `Users/${uid}/Workouts/${wid}`);
-
-     /* must update doc, cannot add doc */
-    await setDoc(noteDocRef, workout);
-  }
-
-  /**
-   * get specific workout from user 
-   * 
-   * @param wid workout id
-   * @param uid user id
-   */
-  getWorkout(wid, uid): Observable<WorkoutDesc> {
-    const noteDocRef = doc(this.firestore, `Users/${uid}/Workouts/${wid}`);
-    return docData(noteDocRef, { idField: 'id' }) as Observable<WorkoutDesc>;
-  }
-
-  /**
-   * get all workouts from user
-   * @param uid user id
-   */
-  async getAllWorkout(uid) {
-    let querySnapshot = await getDocs(query(collection(this.firestore, `Users/${uid}/Workouts`), orderBy('dateCreated', 'desc')));
-    return querySnapshot;
-  }
-
-  /**
-   * get all completed workouts from user
-   * 
-   * @param uid user id
-   */
-  async getCompletedWorkouts(uid) {
-    let querySnapshot = await getDocs(query(collection(this.firestore, `Users/${uid}/CompletedWorkouts`), orderBy('dateCompleted', 'desc')));
-    return querySnapshot;
-  }
-
-  /**
-   * delete specific workout from user
-   * @param wid workout id
-   * @param uid user id
-   */
-  async deleteWorkout(wid, uid) {
-    await deleteDoc(doc(this.firestore, `Users/${uid}/Workouts/${wid}`));
-  }
-
-  /**
-   * save completed workout by user 
-   * 
-   * @param completeWorkout completed workout details
-   * @param uid user id
-   */
-  async storeCompletedWorkout(completeWorkout, uid){
-    let workout: CompletedWorkout = completeWorkout
-    console.log(workout)
-    let timestamp = Timestamp.fromDate(new Date());
-
-     /*store to firebase firestore (firestore, collection, the very long string is the path)*/
-     const noteDocRef = doc(this.firestore, `Users/${uid}/CompletedWorkouts/${timestamp.seconds}`);
-    
-     /* must update doc, cannot add doc */
-    await setDoc(noteDocRef, workout);
-  }
-
-
-
   /****** HELPFUL FUNCTIONS  ********/
 
-  /**
-  * Shuffles array in place.
-  * @param {Array} a items An array containing the items.
+ /**
+  * Shuffle array in-place
+  *
+  * @param arr array to sort
+  * @returns shuffled array
   */
-  shuffle(arr) {
-    let j, x, index;
+  private shuffle(arr) {
+    let j;
+    let x;
+    let index;
     for (index = arr.length - 1; index > 0; index--) {
       j = Math.floor(Math.random() * (index + 1));
       x = arr[index];
@@ -212,14 +218,4 @@ export class WorkoutsService {
     return arr;
   }
 
-
-  extractValue(arr, prop) { 
-    let extractedValue = [];
-    for (let i = 0; i < arr.length; ++i) {
-
-      // extract value from property
-      extractedValue.push(arr[i][prop]);
-    }
-    return extractedValue;
-  }
 }

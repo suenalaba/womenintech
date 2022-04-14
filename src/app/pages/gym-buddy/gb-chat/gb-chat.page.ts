@@ -5,6 +5,7 @@ import { ChatService } from 'src/app/services/chat.service';
 import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
 import { GbDeleteBuddyModalPage } from '../gb-delete-buddy-modal/gb-delete-buddy-modal.page';
 import { GbShareWorkoutModalPage } from '../gb-share-workout-modal/gb-share-workout-modal.page';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-gb-chat',
   templateUrl: './gb-chat.page.html',
@@ -17,22 +18,26 @@ import { GbShareWorkoutModalPage } from '../gb-share-workout-modal/gb-share-work
  * The class also detects any changes based on user inputs and acts as intermediate class for data routing to the back end.
  */
 export class GbChatPage implements OnInit, AfterContentChecked {
-
-  @ViewChild(IonContent) content: IonContent;
-
+  @ViewChild(IonContent) private content: IonContent;
+  public allChatMessages: Observable<unknown>;
   public modalDataResponse = false;
   public newMessage = '';
-  public allChatMessages;
-  private currentUser: GymBuddyProfileInfo = null;
-
   private buddyName: string = null;
-  private buddyUserId: string = null;
   private buddyProfilePicture: string = null;
-
-
+  private buddyUserId: string = null;
+  private currentUser: GymBuddyProfileInfo = null;
 
   constructor(private chatService: ChatService, private router: Router,
       private cdRef: ChangeDetectorRef, public modalController: ModalController) {}
+
+  /**
+   * Getter for the current user id.
+   *
+   * @returns the current user id.
+   */
+  public getCurrentUserId() {
+    return this.currentUser.getUserId;
+  }
 
   /**
    * A getter for the secondary user's name for display.
@@ -50,6 +55,108 @@ export class GbChatPage implements OnInit, AfterContentChecked {
    */
   public getSelectedChatBuddyProfilePicture() {
     return this.buddyProfilePicture;
+  }
+
+  /**
+   * Getter to get whether the user is a primary user or secondary user.
+   *
+   * @param fromId reference id of the user.
+   * @returns 'my-message' if the user is the primary user and 'other-message' if the message is by the secondary user.
+   */
+  public getUserClass(fromId: string){
+    console.log(fromId);
+    if (fromId === this.getCurrentUserId()) {
+      console.log('user');
+      return 'my-message';
+    }
+    else {
+      console.log('secondary user');
+      return 'other-message';
+    }
+  }
+
+  /**
+   * This method checks whether a message was the last sent message by the primary user.
+   *
+   * @param fromId the reference id of the user sending the message.
+   * @param isLastMessage a boolean that checks whether it is the last message by primary user.
+   * @returns true if a message was the last sent message by the primary user.
+   */
+  public isLastMessageSentByMe(fromId: string, isLastMessage: boolean): boolean {
+    if (fromId === this.getCurrentUserId() && isLastMessage) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * This methods check whether a message was the last sent message by the secondary user.
+   *
+   * @param fromId the reference id of the user sending the message.
+   * @param isLastMessage a boolean that checks whether the message was the last message
+   * @returns true if a message was sent the last sent message by the secondary user.
+   */
+  public isLastMessageSentByOther(fromId: string, isLastMessage): boolean {
+    if (fromId !== this.getCurrentUserId() && isLastMessage) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Checks whether message is sent by the primary app user(myself).
+   *
+   * @param fromId the reference id of the user that sent the message.
+   * @param isLastMessage a boolean that checks whether message was the last sent message.
+   * @returns true if it's a message sent by primary user and is not the last message.
+   */
+  public isNotLastMessageSentByMe(fromId: string, isLastMessage: boolean): boolean {
+    if (fromId === this.getCurrentUserId() && !isLastMessage) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Checks whether a message is sent by the secondary user and is not the last message.
+   *
+   * @param fromId the reference id of the user that sent the message.
+   * @param isLastMessage a boolean that checks whether message was the last sent message.
+   * @returns true if it's a message sent by secondary user and is not the last message.
+   */
+  public isNotLastMessageSentByOther(fromId: string, isLastMessage: boolean): boolean {
+    if (fromId !== this.getCurrentUserId() && !isLastMessage) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Checks whether message is sent by the primary user id.
+   *
+   * @param fromId reference id of the person sends the message.
+   * @returns true if the message is sent by the primary user.
+   */
+  public isSentByMe(fromId: string): boolean {
+    if (fromId === this.getCurrentUserId()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * This method is triggered on user click and will navigate the user to the gym buddy list home page.
+   */
+  public async navigateChatPageToBuddyListPage() {
+    this.router.navigateByUrl('tabs/gym-buddy/gb-buddylist-home', { replaceUrl: true });
+  }
+
+  /**
+   * This method is triggered on user click and will navigate the user to workout list page.
+   */
+  public async navigateToWorkoutListPage() {
+    this.router.navigateByUrl('tabs/workouts', { replaceUrl: true });
   }
 
   /**
@@ -126,119 +233,6 @@ export class GbChatPage implements OnInit, AfterContentChecked {
 
     await modal.present();
   }
-
-  /**
-   * Getter to get whether the user is a primary user or secondary user.
-   *
-   * @param fromId reference id of the user.
-   * @returns 'my-message' if the user is the primary user and 'other-message' if the message is by the secondary user.
-   */
-  public getUserClass(fromId: string){
-    console.log(fromId);
-    if (fromId === this.getCurrentUserId()) {
-      console.log('user');
-      return 'my-message';
-    }
-    else {
-      console.log('secondary user');
-      return 'other-message';
-    }
-  }
-
-  /**
-   * Getter for the current user id.
-   *
-   * @returns the current user id.
-   */
-  public getCurrentUserId() {
-    return this.currentUser.getUserId;
-  }
-
-  /**
-   * Checks whether message is sent by the primary user id.
-   *
-   * @param fromId reference id of the person sends the message.
-   * @returns true if the message is sent by the primary user.
-   */
-  public isSentByMe(fromId: string): boolean {
-    if (fromId === this.getCurrentUserId()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * Checks whether message is sent by the primary app user(myself).
-   *
-   * @param fromId the reference id of the user that sent the message.
-   * @param isLastMessage a boolean that checks whether message was the last sent message.
-   * @returns true if it's a message sent by primary user and is not the last message.
-   */
-  public isNotLastMessageSentByMe(fromId: string, isLastMessage: boolean): boolean {
-    if (fromId === this.getCurrentUserId() && !isLastMessage) {
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Checks whether a message is sent by the secondary user and is not the last message.
-   *
-   * @param fromId the reference id of the user that sent the message.
-   * @param isLastMessage a boolean that checks whether message was the last sent message.
-   * @returns true if it's a message sent by secondary user and is not the last message.
-   */
-  public isNotLastMessageSentByOther(fromId: string, isLastMessage: boolean): boolean {
-    if (fromId !== this.getCurrentUserId() && !isLastMessage) {
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * This method checks whether a message was the last sent message by the primary user.
-   *
-   * @param fromId the reference id of the user sending the message.
-   * @param isLastMessage a boolean that checks whether it is the last message by primary user.
-   * @returns true if a message was the last sent message by the primary user.
-   */
-  public isLastMessageSentByMe(fromId: string, isLastMessage: boolean): boolean {
-    if (fromId === this.getCurrentUserId() && isLastMessage) {
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * This methods check whether a message was the last sent message by the secondary user.
-   *
-   * @param fromId the reference id of the user sending the message.
-   * @param isLastMessage a boolean that checks whether the message was the last message
-   * @returns true if a message was sent the last sent message by the secondary user.
-   */
-  public isLastMessageSentByOther(fromId: string, isLastMessage): boolean {
-    if (fromId !== this.getCurrentUserId() && isLastMessage) {
-      return true;
-    }
-    return false;
-  }
-
-
-  /**
-   * This method is triggered on user click and will navigate the user to the gym buddy list home page.
-   */
-  public async navigateChatPageToBuddyListPage() {
-    this.router.navigateByUrl('tabs/gym-buddy/gb-buddylist-home', { replaceUrl: true });
-  }
-
-  /**
-   * This method is triggered on user click and will navigate the user to workout list page.
-   */
-  public async navigateToWorkoutListPage() {
-    this.router.navigateByUrl('tabs/workouts', { replaceUrl: true });
-  }
-
 
   /**
    * Adds chat messages to the chat service and scrolls to bottom when a new message is pinged.

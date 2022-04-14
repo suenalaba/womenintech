@@ -7,37 +7,38 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   templateUrl: './boarding.page.html',
   styleUrls: ['./boarding.page.scss'],
 })
+/**
+ * Screen users see when they first create account
+ */
 export class BoardingPage implements OnInit {
   private slides: any;
 
   constructor(private router: Router, private authService: AuthenticationService,) { }
 
-  ngOnInit() {
+  /**
+   * when next button is clicked
+   */
+  private next() {
+    this.slides.slideNext();
   }
 
   /**
    * show the different boarding pages
-   * 
-   * @param swiper 
-   * 
+   *
+   * @param swiper
    */
-  setSwiperInstance(swiper: any) {
+  private setSwiperInstance(swiper: any) {
     this.slides = swiper;
 
   }
 
   /**
-   * when next button is clicked
-   */
-  next() {
-    this.slides.slideNext();
-  }
-
-  /**
    * start button is clicked
    */
-  start(){
+  private start(){
     this.router.navigateByUrl('/tabs', { replaceUrl: true });
   }
 
+  ngOnInit() {
+  }
 }

@@ -1,25 +1,25 @@
 import { GymBuddyDetails } from './GymBuddyProfile';
 
 export class User {
+    birthday: string;
     email: string;
     firstName: string;
-    lastName: string;
-    id: string;
     gender: string;
-    birthday: string;
-    username: string;
     gymBuddyDetails?: GymBuddyDetails;
+    id: string;
+    lastName: string;
     userDetails?: UserDetails;
+    username: string;
 }
 
 export class UserDetails {
-    height: number;
-    weight: number;
-    injury: string;
-    healthCond: string;
     areaOfInjury?: string;
-    injuryType?: string;
-    healthCondName?: string;
     fitnessGoal: string;
+    healthCond: string;
+    healthCondName?: string;
+    height: number;
+    injury: string;
+    injuryType?: string;
     menstruationCycle?: string;
+    weight: number;
 }

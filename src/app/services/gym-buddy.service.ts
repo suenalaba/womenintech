@@ -16,34 +16,13 @@ import { GymBuddyProfileInfo } from '../pages/gym-buddy/gb-findbuddy/GymBuddyInf
  * This class also facilitates the transfer of information between control classes.
  */
 export class GymBuddyService {
-
-  potentialMatchDetails: (GymBuddyProfileInfo)[] = [];
-
   private authState = new BehaviorSubject(false);
-
+  private potentialMatchDetails: (GymBuddyProfileInfo)[] = [];
   constructor(private auth: Auth, private fireStore: Firestore, private userService: UserService, private platform: Platform,) {
     this.platform.ready().then(() => {
       this.isUserSignedUpGymBuddy();
     });
    }
-
-  /**
-   * Setter to set the array of GymBuddyProfile.
-   *
-   * @param potentialMatches Array of Gym Buddy Profiles
-   */
-  public setPotentialMatchDetails(potentialMatches: (GymBuddyProfileInfo)[]) {
-    this.potentialMatchDetails = potentialMatches;
-  }
-  /**
-   * Gets an array of potential match details.
-   *
-   * @returns an array of potential match details.
-   */
-  public getPotentialMatchDetails() {
-    return this.potentialMatchDetails;
-  }
-
 
   /**
    * Stores user's Gym Buddy Details to firebase.
@@ -78,6 +57,24 @@ export class GymBuddyService {
   }
 
   /**
+   * Gets an array of potential match details.
+   *
+   * @returns an array of potential match details.
+   */
+  public getPotentialMatchDetails() {
+    return this.potentialMatchDetails;
+  }
+
+  /**
+   * Getter to check if user has signed up for gym buddy.
+   *
+   * @returns true if user has signed up for gym buddy.
+   */
+  public isSignedUp(){
+    return this.authState.value;
+  }
+
+  /**
    * Checks if user has already signed up for gym buddy and returns an observable.
    *
    * @returns true if the user has signed up for gym buddy.
@@ -91,12 +88,11 @@ export class GymBuddyService {
   }
 
   /**
-   * Getter to check if user has signed up for gym buddy.
+   * Setter to set the array of GymBuddyProfile.
    *
-   * @returns true if user has signed up for gym buddy.
+   * @param potentialMatches Array of Gym Buddy Profiles
    */
-  public isSignedUp(){
-    return this.authState.value;
+  public setPotentialMatchDetails(potentialMatches: (GymBuddyProfileInfo)[]) {
+    this.potentialMatchDetails = potentialMatches;
   }
-
 }

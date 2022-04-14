@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import { Component, OnInit } from '@angular/core';
 import { CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { Duration, Equipment, Intensity, wLocation } from 'src/app/data/workout-data/CreateWorkout';
@@ -14,31 +15,21 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './create-workouts.page.html',
   styleUrls: ['./create-workouts.page.scss'],
 })
+/**
+ * Page to create new workout
+ */
 export class CreateWorkoutsPage implements OnInit {
-  public get workoutAPI(): WorkoutAPIService {
-    return this._workoutAPI;
-  }
-  public set workoutAPI(value: WorkoutAPIService) {
-    this._workoutAPI = value;
-  }
-
-  listIntensity: CreateWorkoutDesc[] = Intensity;
-  listDuration: CreateWorkoutDesc[] = Duration;
-  listLocation: CreateWorkoutDesc[] = wLocation;
-  listEquipment: CreateWorkoutDesc[] = Equipment;
-
-
-  createWorkoutForm: FormGroup;
-
-  workoutDesc: WorkoutDesc;
-  userDetails: UserDetails;
-
-  errors = [];
-
-  exerciseData = [];
-  userWorkout = [];
-
-  userId: string;
+  private createWorkoutForm: FormGroup;
+  private errors = [];
+  private exerciseData = [];
+  private listDuration: CreateWorkoutDesc[] = Duration;
+  private listEquipment: CreateWorkoutDesc[] = Equipment;
+  private listIntensity: CreateWorkoutDesc[] = Intensity;
+  private listLocation: CreateWorkoutDesc[] = wLocation;
+  private userDetails: UserDetails;
+  private userId: string;
+  private userWorkout = [];
+  private workoutDesc: WorkoutDesc;
 
   constructor(
     private fb: FormBuilder,
@@ -49,21 +40,25 @@ export class CreateWorkoutsPage implements OnInit {
     private nav: NavController,
     private _workoutAPI: WorkoutAPIService,
     private userService: UserService
+  ) { }
 
-  ) {
-
+  /**
+   * getter method for the workout API
+   */
+  public get workoutAPI(): WorkoutAPIService {
+    return this._workoutAPI;
   }
-
-  ngOnInit() {
-    this.buildForm();
-    this.userId = JSON.parse(localStorage.getItem('userID'));
-    this.getUserDetails();
+  /**
+   * setter method for the workout API
+   */
+  public set workoutAPI(value: WorkoutAPIService) {
+    this._workoutAPI = value;
   }
 
   /**
    * build workout form
    */
-  buildForm() {
+  private buildForm() {
     this.createWorkoutForm = this.fb.group({
       wName: ['', [Validators.required]],
       wDescription: ['', [Validators.required]],
@@ -77,26 +72,101 @@ export class CreateWorkoutsPage implements OnInit {
   /**
    * get user details from firebase
    */
-  getUserDetails(){
+  private getUserDetails(){
     this.userService.getUserById(this.userId).subscribe(res=>{
-      this.userDetails = res.userDetails
-    })
+      this.userDetails = res.userDetails;
+    });
   }
 
+  /**
+   * fucntion to navigate user back to all workouts
+   */
+  private goBack() {
+    this.nav.navigateBack(['tabs/workouts'], { animated: true });
+  }
 
-  submitWorkoutDesc() {
-    if (this.createWorkoutForm.status == "INVALID") {
-      this.presentAlert()
-    } else {
-      this.generateWorkout(this.createWorkoutForm.value)
+ /**
+  * Shuffle array in place
+  *
+  * @param arr array of items
+  * @return shuffled array
+  */
+  private shuffle(arr) {
+    let j;
+    let x;
+    let index;
+    for (index = arr.length - 1; index > 0; index--) {
+      j = Math.floor(Math.random() * (index + 1));
+      x = arr[index];
+      arr[index] = arr[j];
+      arr[j] = x;
     }
+    return arr;
+  }
+
+  private submitWorkoutDesc() {
+    if (this.createWorkoutForm.status == 'INVALID') {
+      this.presentAlert();
+    } else {
+      this.generateWorkout(this.createWorkoutForm.value);
+    }
+  }
+
+  /**
+   * fucntion for form validation
+   *
+   * @param formGroup createWorkoutForm
+   */
+  private validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+
+  /**
+   * function to generate workout for user based on their selections
+   *
+   * @param val : form values
+   */
+  async generateWorkout(val) {
+    this.workoutDesc = val;
+
+    this.presentLoadingWithOptions().then(() => {
+      this.workoutService.createWorkout(this.workoutDesc, this.userId, this.userDetails).then((res)=>{
+        console.log(res);
+
+        this.goToStartWorkout(res);
+      });
+    });
+  }
+
+  /**
+   * navigate user to view their generated workout
+   *
+   * @param id workout id
+   */
+  async goToStartWorkout(id: any) {
+    console.log(id);
+    this.loadingCtrl.dismiss();
+    await this.router.navigate(['/tabs/workouts/generate-workout'], { queryParams: { wid: id } });
+  }
+
+  ngOnInit() {
+    this.buildForm();
+    this.userId = JSON.parse(localStorage.getItem('userID'));
+    this.getUserDetails();
   }
 
   /**
    * alert display triggered when form is incomplete
    */
   async presentAlert() {
-    this.validateAllFormFields(this.createWorkoutForm)
+    this.validateAllFormFields(this.createWorkoutForm);
 
     const alert = await this.alertController.create({
       cssClass: '',
@@ -112,58 +182,7 @@ export class CreateWorkoutsPage implements OnInit {
   }
 
   /**
-   * fucntion for form validation 
-   * 
-   * @param formGroup createWorkoutForm
-   */
-  validateAllFormFields(formGroup: FormGroup) {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
-      }
-    });
-  }
-
-  /**
-   * function to generate workout for user based on their selections 
-   * 
-   * @param val : form values
-   */
-  async generateWorkout(val) {
-    this.workoutDesc = val;
-
-    this.presentLoadingWithOptions().then(() => {
-      this.workoutService.createWorkout(this.workoutDesc, this.userId, this.userDetails).then((res)=>{
-        console.log(res)
-
-        this.goToStartWorkout(res)
-      })
-    });
-  }
-
-  /**
-   * navigate user to view their generated workout 
-   * 
-   * @param id workout id 
-   */
-  async goToStartWorkout(id: any) {
-    console.log(id);
-    this.loadingCtrl.dismiss();
-    await this.router.navigate(['/tabs/workouts/generate-workout'], { queryParams: { wid: id } });
-  }
-
-  /**
-   * fucntion to navigate user back to all workouts 
-   */
-  goBack() {
-    this.nav.navigateBack(['tabs/workouts'], { animated: true })
-  }
-
-  /**
-   * loading component presented when workout is being generated 
+   * loading component presented when workout is being generated
    */
   async presentLoadingWithOptions() {
     const loading = await this.loadingCtrl.create({
@@ -173,21 +192,5 @@ export class CreateWorkoutsPage implements OnInit {
     });
     return await loading.present();
   }
-
-  /**
-  * Shuffles array in place.
-  * @param {Array} a items An array containing the items.
-  */
-  shuffle(arr) {
-    let j, x, index;
-    for (index = arr.length - 1; index > 0; index--) {
-      j = Math.floor(Math.random() * (index + 1));
-      x = arr[index];
-      arr[index] = arr[j];
-      arr[j] = x;
-    }
-    return arr;
-  }
-
 
 }

@@ -1,53 +1,69 @@
 
 import { DbRetrieveService } from './../../../services/db-retrieve.service';
-import { GymBuddyService } from 'src/app/services/gym-buddy.service';
 import { GymBuddyProfileInfo } from './GymBuddyInformation';
 
 
 export class FindBuddyQuery {
 
-  //private dbRetrieve: DbRetrieveService;
-  private dbRetrieve: DbRetrieveService;
   private currentUser: GymBuddyProfileInfo;
+  private dbRetrieve: DbRetrieveService;
   private gender;
   private preferredGender;
-  //private currentUser: GymBuddyProfileInfo;
   constructor(dbRetrieve: DbRetrieveService, currentUser: GymBuddyProfileInfo) {
     this.dbRetrieve = dbRetrieve;
     this.currentUser = currentUser;
-    //this.dbRetrieve=dbservice;
-    //this.currentUser=currentuser;
     this.gender=this.currentUser.getGender;
     this.preferredGender=this.currentUser.getPrefBuddyGender;
   }
 
+/**
+ * Calls DBRetrieveService to create new a new chat
+ *
+ * @param currentUserId
+ * @param recommendedUserId
+ */
   public createChatQuery(currentUserId: string, recommendedUserId: string) {
-    //locally add chat here.
     this.dbRetrieve.createChatInFireStore(currentUserId, recommendedUserId);
   }
 
+  /**
+   *Updates user profile with new matches
+   *
+   * @param userID
+   */
   public addMatches(userID: string){
-    console.log("reach here");
     this.currentUser.addMatches(userID);
-    console.log("reach here2");
     this.dbRetrieve.updateMatches(this.currentUser,userID);
   }
 
+  /**
+   *Updates user profile with new unmatches
+   *
+   * @param userID
+   */
   public addUnmatches(userID: string){
     this.currentUser.addUnmatches(userID);
     this.dbRetrieve.updateUnMatches(this.currentUser,userID);
   }
 
-
+/**
+ *Generates dictionary of relevant gym buddy profiles
+ *
+ * @returns dictionary of userID and gym buddy profiles
+ */
   public async findBuddyQuery() {
     const dictOfProfile = await this.dbRetrieve.findBuddiesFromDB(this.preferredGender,this.gender);
     this.filterDictionary(dictOfProfile);
     return dictOfProfile;
   }
-
+/**
+ *Filters out profiles that have been previously
+ *matched/unmatched with
+ *
+ * @param dict of userID and GymBuddyProfiles
+ */
   private filterDictionary(dict: Map<string, GymBuddyProfileInfo>){
     this.currentUser.matches.forEach(function(value) {
-      console.log(value);
       delete dict[value];
     });
     this.currentUser.unmatches.forEach(function(value) {

@@ -14,7 +14,7 @@ export default class YoutubeService {
   private static instance: YoutubeService;
 
   constructor(
-  ) { }
+    ) { }
 
   /**
    * Controls access to the singleton instance of YoutubeService. Everyone will interface with this and only this
@@ -36,7 +36,7 @@ export default class YoutubeService {
    */
   getYoutubeAPI(searchTerm) {
     // list of api keys we can work with (each can call a max of 100 times)
-    const API_KEY_AR = ['AIzaSyDmTKmRx9nb2X5vXhR6yTa-tmhwfn--sns', //M560
+    const API_KEY_AR = ['AIzaSyA8JCVTMOaGbLL92LxfcY4ZwzDSRLzZqbU', //M560
     //'AIzaSyApxaBF3ddo3wMeIqfr3OEBtbrBPst92jU', //G560
     //'AIzaSyCGUCYsNQpCM34NwbSzmG-web56Sik8Pbo', //ESp
     //'AIzaSyChbvnT57XxBmNfrN4nLnGICNg3YDhbEo0', //tranz

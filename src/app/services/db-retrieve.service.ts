@@ -20,6 +20,20 @@ export class DbRetrieveService {
     private loadingController: LoadingController
     ) { }
 
+  /**
+   * Create a chat with both users in the Chat collection in the database.
+   *
+   * @param currentUserId Primary user id
+   * @param recommendedUserId Secondary user id to create the chat with.
+   */
+  public async createChatInFireStore(currentUserId: string, recommendedUserId: string) {
+    const newChatDoc = await addDoc(collection(this.firestore, 'Chat'), {
+      chatUsers: [currentUserId, recommendedUserId]
+    });
+    const chatId = newChatDoc.id;
+    console.log('Document written with ID: ', chatId);
+    this.updateChatForEachUser(currentUserId, chatId, recommendedUserId);
+  }
 
   /**
    * Filter the potential buddies based on preferred gender and ensure that user's dont match themselves.
@@ -115,19 +129,27 @@ export class DbRetrieveService {
     return updateDoc(noteDocRef,{ 'gymBuddyDetails.unmatches' : arrayUnion(userID)});
   }
 
+
   /**
-   * Create a chat with both users in the Chat collection in the database.
+   * Returns promise as a query snapshot.
    *
-   * @param currentUserId Primary user id
-   * @param recommendedUserId Secondary user id to create the chat with.
+   * @param q query object.
+   * @returns gets all the docs matching the query.
    */
-  public async createChatInFireStore(currentUserId: string, recommendedUserId: string) {
-    const newChatDoc = await addDoc(collection(this.firestore, 'Chat'), {
-      chatUsers: [currentUserId, recommendedUserId]
-    });
-    const chatId = newChatDoc.id;
-    console.log('Document written with ID: ', chatId);
-    this.updateChatForEachUser(currentUserId, chatId, recommendedUserId);
+   private async pullFromDB(q) {
+    const querySnapshot = await getDocs(q);
+    return querySnapshot;
+  }
+
+  /**
+   * Reads the document to be fetched and get the document snapshot with document contents.
+   *
+   * @param q reference of the document to fetch
+   * @returns querySnapshot A Promise resolved with a querySnapshot containing the current document contents.
+   */
+  private async singlePullFromDB(q) {
+    const querySnapshot = await getDoc(q);
+    return querySnapshot;
   }
 
   /**
@@ -149,25 +171,4 @@ export class DbRetrieveService {
     otherUser: currentUserId})});
   }
 
-  /**
-   * Reads the document to be fetched and get the document snapshot with document contents.
-   *
-   * @param q reference of the document to fetch
-   * @returns querySnapshot A Promise resolved with a querySnapshot containing the current document contents.
-   */
-  private async singlePullFromDB(q) {
-    const querySnapshot = await getDoc(q);
-    return querySnapshot;
-  }
-
-  /**
-   * Returns promise as a query snapshot.
-   *
-   * @param q query object.
-   * @returns gets all the docs matching the query.
-   */
-  private async pullFromDB(q) {
-    const querySnapshot = await getDocs(q);
-    return querySnapshot;
-  }
 }

@@ -11,16 +11,14 @@ declare let google: any;
 
 
 /**
- * Displays map with marks of gym when called 
+ * Displays map with marks of gym when called
  */
 export class DisplayGymsPage implements OnInit {
+  @ViewChild('map', {read: ElementRef, static: false}) private mapRef: ElementRef;
 
-  map: any;
-
-  @ViewChild('map', {read: ElementRef, static: false}) mapRef: ElementRef;
-
-  infoWindows: any = [];
-  markers: any = [
+  private infoWindows: any = [];
+  private map: any;
+  private markers: any = [
     {
         title: 'Anytime Fitness Nanyang CC',
         latitude: '1.3446769843267867',
@@ -75,33 +73,14 @@ export class DisplayGymsPage implements OnInit {
 
   constructor() { }
 
-  ionViewDidEnter() {
-    this.showMap();
+  ngOnInit() {
   }
 
-/**
- *
- * @param markers
- */
-  addMarkersToMap(markers) {
-    for (const marker of markers) {
-      const position = new google.maps.LatLng(marker.latitude, marker.longitude);
-      const mapMarker = new google.maps.Marker({
-        position,
-        title: marker.title,
-        latitude: marker.latitude,
-        longitude: marker.longitude
-      });
-
-      mapMarker.setMap(this.map);
-      this.addInfoWindowToMarker(mapMarker);
-    }
-  }
 /**
  *
  * @param marker
  */
-  addInfoWindowToMarker(marker) {
+  private addInfoWindowToMarker(marker) {
     const infoWindowContent = '<div id="content">' +
                               '<h2 id="firstHeading" class"firstHeading">' + marker.title + '</h2>' +
                               '<p>Latitude: ' + marker.latitude + '</p>' +
@@ -119,27 +98,47 @@ export class DisplayGymsPage implements OnInit {
     this.infoWindows.push(infoWindow);
   }
 
-  closeAllInfoWindows() {
+/**
+ *
+ * @param markers
+ */
+  private addMarkersToMap(markers) {
+    for (const marker of markers) {
+      const position = new google.maps.LatLng(marker.latitude, marker.longitude);
+      const mapMarker = new google.maps.Marker({
+        position,
+        title: marker.title,
+        latitude: marker.latitude,
+        longitude: marker.longitude
+      });
+
+      mapMarker.setMap(this.map);
+      this.addInfoWindowToMarker(mapMarker);
+    }
+  }
+
+  private closeAllInfoWindows() {
     for(const window of this.infoWindows) {
       window.close();
     }
   }
 
+  private ionViewDidEnter() {
+    this.showMap();
+  }
+
   /**
    * display map when function is called
    */
-  showMap() {
+  private showMap() {
     const location = new google.maps.LatLng(1.3463732682538614, 103.68140508360123);
     const options = {
       center: location,
       zoom: 15,
       disableDefaultUI: true
-    }
+    };
     this.map = new google.maps.Map(this.mapRef.nativeElement, options);
     this.addMarkersToMap(this.markers);
-  }
-
-  ngOnInit() {
   }
 
 }

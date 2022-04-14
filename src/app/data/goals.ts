@@ -5,7 +5,7 @@ export interface Goals {
     name: string;
 }
 
-export let fitnessGoals : Goals[] = [
+export const fitnessGoals: Goals[] = [
     {
         id: 1,
         text: 'Gain Muscles',

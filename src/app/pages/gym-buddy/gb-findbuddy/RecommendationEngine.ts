@@ -7,14 +7,31 @@ import { GymBuddyProfileInfo } from './GymBuddyInformation';
  * The recommendation engine's main purpose is to poll and recommend the buddy with the highest matching score.
  */
 export class RecommendationEngine {
-
+  private dictOfProfiles: Map<string, GymBuddyProfileInfo>;
   private matchmakingAlgo: MatchmakingAlgo;
   private userInfo: GymBuddyProfileInfo;
-  private dictOfProfiles: Map<string, GymBuddyProfileInfo>;
-
   constructor(gymBuddyProfileInfo: GymBuddyProfileInfo) {
     this.matchmakingAlgo = new MatchmakingAlgo();
     this.userInfo = gymBuddyProfileInfo;
+  }
+
+  /**
+   * Getter to get all the profile of other users.
+   *
+   * @param dictOfProfiles dictionary that contains gym buddy profiles
+   */
+  public getAllMatches(dictOfProfiles: Map<string, GymBuddyProfileInfo>) {
+    this.dictOfProfiles = dictOfProfiles;
+    const arrayOfProfiles= new Array<GymBuddyProfileInfo>(); //initialize an array to store gym buddy profiles that was queried.
+    for (const key in this.dictOfProfiles) {
+      //Preventing unexpected behavior that could arise from using a for in loop without filtering the results in the loop.
+      if (Object.prototype.hasOwnProperty.call(this.dictOfProfiles,key)) {
+        const value = this.dictOfProfiles[key];
+        arrayOfProfiles.push(value); //array of profile objects only.
+      }
+    }
+    console.log('array of profiles: ', arrayOfProfiles);
+    this.matchmakingAlgo.calculateMatchingScores(this.userInfo,arrayOfProfiles);
   }
 
   /**
@@ -38,41 +55,21 @@ export class RecommendationEngine {
       return this.dictOfProfiles[highestScoreId];
     }
   }
-
-  /**
-   * Getter to get all the profile of other users.
-   *
-   * @param dictOfProfiles dictionary that contains gym buddy profiles
-   */
-  public getAllMatches(dictOfProfiles) {
-    this.dictOfProfiles = dictOfProfiles;
-    const arrayOfProfiles= new Array<GymBuddyProfileInfo>(); //initialize an array to store gym buddy profiles that was queried.
-    for (const key in this.dictOfProfiles) {
-      //Preventing unexpected behavior that could arise from using a for in loop without filtering the results in the loop.
-      if (Object.prototype.hasOwnProperty.call(this.dictOfProfiles,key)) {
-        const value = this.dictOfProfiles[key];
-        arrayOfProfiles.push(value); //array of profile objects only.
-      }
-    }
-    console.log('array of profiles: ', arrayOfProfiles);
-    this.matchmakingAlgo.calculateMatchingScores(this.userInfo,arrayOfProfiles);
-  }
-
   /**
    * Get the Highest Score from the Content Filter Score Map.
    *
    * @param contentFilterScoreMap HashMap of key:Buddy User Id, Value: Score.
    * @returns the user Id of the highest score.
    */
-  private getHighestScoreId(contentFilterScoreMap: Map<string, number>) {
-    let highestScore = -1;
-    let highestScoreId = '';
-    contentFilterScoreMap.forEach((matchingScore: number, id: string) => {
-      if (matchingScore > highestScore) {
-        highestScore = matchingScore;
-        highestScoreId = id;
-      }
-    });
-    return highestScoreId;
-  }
+     private getHighestScoreId(contentFilterScoreMap: Map<string, number>) {
+      let highestScore = -1;
+      let highestScoreId = '';
+      contentFilterScoreMap.forEach((matchingScore: number, id: string) => {
+        if (matchingScore > highestScore) {
+          highestScore = matchingScore;
+          highestScoreId = id;
+        }
+      });
+      return highestScoreId;
+    }
 }

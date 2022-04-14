@@ -12,9 +12,6 @@ export class GbDeleteBuddyModalPage implements OnInit {
 
   private optionList = ['Return to chat', 'Proceed to delete'];
 
-
-  constructor(private modalController: ModalController) { }
-
   /**
    * Getter for the option list to be display to the user.
    */
@@ -22,7 +19,20 @@ export class GbDeleteBuddyModalPage implements OnInit {
     return this.optionList;
   }
 
-  ngOnInit() {
+  constructor(private modalController: ModalController) { }
+
+  /**
+   * Gets the color of button to display depending on the text to display.
+   *
+   * @param option text to display
+   * @returns danger is the option to display is proceed to delete and success if the option to display is not proceed to delete.
+   */
+  public getColorOfButton(option: string): string {
+    if(option === 'Proceed to delete') {
+      return 'danger';
+    } else {
+      return 'success';
+    }
   }
 
   /**
@@ -40,19 +50,6 @@ export class GbDeleteBuddyModalPage implements OnInit {
     await this.modalController.dismiss(isChoiceDelete);
   }
 
-  /**
-   * Gets the color of button to display depending on the text to display.
-   *
-   * @param option text to display
-   * @returns danger is the option to display is proceed to delete and success if the option to display is not proceed to delete.
-   */
-  public getColorOfButton(option: string): string {
-    if(option === 'Proceed to delete') {
-      return 'danger';
-    } else {
-      return 'success';
-    }
+  ngOnInit() {
   }
-
-
 }

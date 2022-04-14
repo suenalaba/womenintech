@@ -11,7 +11,7 @@ export interface Injury {
     name: string;
 }
 
-export let areaOfInjury: Injuries[] = [
+export const areaOfInjury: Injuries[] = [
     {
         text: 'Arm',
         value: 'arm',
@@ -48,9 +48,9 @@ export let areaOfInjury: Injuries[] = [
         img:'',
         name: 'injuries',
     }
-  ]
+  ];
 
-  export let armInjuries: Injuries[] = [
+  export const armInjuries: Injuries[] = [
       {
         text: 'Wrist',
         value: 'wrist',
@@ -81,9 +81,9 @@ export let areaOfInjury: Injuries[] = [
         img: '',
         name: 'armInjuries',
       }
-  ]
+  ];
 
-  export let legInjuries: Injuries[] = [
+  export const legInjuries: Injuries[] = [
     {
       text: 'Hamstring',
       value: 'hamstring',
@@ -120,9 +120,9 @@ export let areaOfInjury: Injuries[] = [
       img: '',
       name: 'legInjuries',
     }
-]
+];
 
-export let backInjuries: Injuries[] = [
+export const backInjuries: Injuries[] = [
   {
     text: 'Upperback',
     value: 'upperback',
@@ -147,9 +147,9 @@ export let backInjuries: Injuries[] = [
     img: '',
     name: 'backInjuries',
   }
-]
+];
 
-export let handInjuries: Injuries[] = [
+export const handInjuries: Injuries[] = [
   {
     text: 'Wrist',
     value: 'wrist',
@@ -174,9 +174,9 @@ export let handInjuries: Injuries[] = [
     img: '',
     name: 'handInjuries',
   }
-]
+];
 
-export let feetInjuries: Injuries[] = [
+export const feetInjuries: Injuries[] = [
   {
     text: 'Achilles',
     value: 'achilles',
@@ -201,9 +201,9 @@ export let feetInjuries: Injuries[] = [
     img: '',
     name: 'feetInjuries',
   }
-]
+];
 
-export let otherInjuries: Injuries[] = [
+export const otherInjuries: Injuries[] = [
   {
     text: 'Groin',
     value: 'groin',
@@ -222,4 +222,4 @@ export let otherInjuries: Injuries[] = [
     img: '',
     name: 'otherInjuries',
   }
-]
+];

@@ -12,22 +12,20 @@ import { GymBuddyProfileInfo } from '../gb-findbuddy/GymBuddyInformation';
   styleUrls: ['./gb-home.page.scss'],
 })
 /**
- * This class initializes the display for the gym buddy home page and logs the user input into the application control.
+ * This class initializes the display for the gym buddy home page
+ * and logs the user input into the application control.
  */
 export class GbHomePage implements OnInit {
-
-  private timePrefList = workoutTimePreference;
-  private buddyGoalsList = gymBuddyGoals;
-  private personalTraitsList = personalTraits;
-  private fullName: string;
-  private profilePicture: string;
   private briefIntro: string;
-  private prefWorkoutTime: string[] = [];
+  private buddyGoalsList = gymBuddyGoals;
+  private currentUser: GymBuddyProfileInfo;
+  private fullName: string;
   private gymBuddyGoals: string[] = [];
   private personalTraits: string[] = [];
-  private currentUser: GymBuddyProfileInfo;
-
-
+  private personalTraitsList = personalTraits;
+  private prefWorkoutTime: string[] = [];
+  private profilePicture: string;
+  private timePrefList = workoutTimePreference;
   constructor(
     private router: Router,
     private loadingController: LoadingController,
@@ -68,8 +66,10 @@ export class GbHomePage implements OnInit {
   }
 
   /**
-   * Main entry point into the page, which initialises when the class is instantiated.
-   * It will retrieve the current user data from the database and set user details if the user has already signed up for gym buddy.
+   * Main entry point into the page, which initialises
+   * when the class is instantiated.
+   * It will retrieve the current user data from the database
+   * and set user details if the user has already signed up for gym buddy.
    */
   async ngOnInit() {
     await this.dbRetrieveService.setCurrentUser();
@@ -79,7 +79,8 @@ export class GbHomePage implements OnInit {
   }
 
   /**
-   * Gets the index of the element to display and returns the corresponding color to display the element.
+   * Gets the index of the element to display and
+   * returns the corresponding color to display the element.
    *
    * @param i The index of element to display.
    * @returns The color to display for the element.
@@ -90,8 +91,9 @@ export class GbHomePage implements OnInit {
     return colors[i];
   }
 
-  /**
-   * This method is called when the user clicks the button to go to find buddy interface, the method will call the application router.
+  /*
+   * This method is called when the user clicks the button to go to find buddy interface,
+   * the method will call the application router.
    * The router will route the user to the find a buddy page.
    */
   public async goToFindBuddy() {
@@ -99,7 +101,8 @@ export class GbHomePage implements OnInit {
   }
 
   /**
-   * This method is called when the user clicks the button to update account preferences, the method will call the application router.
+   * This method is called when the user clicks the button to update account preferences,
+   * the method will call the application router.
    * The router will route the user to the update account preferences page.
    */
    public async goToUpdateAcc() {
@@ -107,7 +110,8 @@ export class GbHomePage implements OnInit {
   }
 
   /**
-   * This method is called when the user clicks the button to go to the buddy list page, the method will call the application router.
+   * This method is called when the user clicks the button to go to the buddy list page,
+   *  the method will call the application router.
    * The router will route the user to the buddy list page.
    */
   public async goToBuddyList() {

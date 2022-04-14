@@ -13,20 +13,21 @@ import { EditWorkoutComponent } from 'src/app/components/edit-workout/edit-worko
   templateUrl: './edit-workout.page.html',
   styleUrls: ['./edit-workout.page.scss'],
 })
+/**
+ * Page that allows users to edit their workouts
+ */
 export class EditWorkoutPage implements OnInit {
-  userWorkoutUpdates: FormGroup;
+  private currentExercise: WorkoutDetails;
+  private exerciseIndex: number;
+  private exerciseList: WorkoutDetails[];
+  private formChange = false;
+  private loadingPresent = true;
+  private userId: string;
+  private userWorkoutUpdates: FormGroup;
 
-  workoutDetails: WorkoutDesc;
-  exerciseList: WorkoutDetails[];
-
-  workoutId: string;
-  userId: string;
-  exerciseIndex: number;
-
-  currentExercise: WorkoutDetails;
-
-  loadingPresent = true;
-  formChange = false;
+  private workoutDetails: WorkoutDesc;
+  private workoutId: string;
+  private workSets = [];
 
   constructor(
     private fb: FormBuilder,
@@ -39,32 +40,19 @@ export class EditWorkoutPage implements OnInit {
     private toastController: ToastController
   ) { }
 
-  workSets = [];
-
-  ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
-      this.workoutId = params.get('wid');
-      this.userId = params.get('uid');
-    })
-
-    this.getWorkoutDetails(this.workoutId, this.userId);
-  }
-
   /**
-   * update workout information when save workout is clicked 
+   * The loading indicator is dismissed
    */
-  async updateWorkoutDetails() {
-    this.workoutDetails.wDescription = this.userWorkoutUpdates.value.wDesc
-    this.workoutDetails.wName = this.userWorkoutUpdates.value.wName
-    console.log(this.workoutDetails)
-    await this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails).then(() => {
-      this.presentToast("Workout is saved!")
-      this.goToWorkout()
-    })
+  async dismissLoading() {
+    if (this.loadingPresent) {
+      await this.loadingController.dismiss();
+    }
+    this.loadingPresent = false;
   }
+
   /**
-   * edit workout component is displayed for user to edit a specifc exercise's sets and reps 
-   * 
+   * edit workout component is displayed for user to edit a specifc exercise's sets and reps
+   *
    * @param i exercise index
    */
   async editExercise(i) {
@@ -84,17 +72,8 @@ export class EditWorkoutPage implements OnInit {
   }
 
   /**
-   * fucntion to dismiss modal 
-   */
-  cancel() {
-    this.modalController.dismiss({
-      'dismissed': true
-    });
-  }
-
-  /**
-   * Function to get workout information from user 
-   * 
+   * Function to get workout information from user
+   *
    * @param wid workout ID
    * @param uid user ID
    */
@@ -104,22 +83,12 @@ export class EditWorkoutPage implements OnInit {
 
     this.workoutService.getWorkout(wid, uid).subscribe(results => {
       this.workoutDetails = results;
-      this.exerciseList = this.workoutDetails.workoutRoutine
+      this.exerciseList = this.workoutDetails.workoutRoutine;
       this.buildEditForm();
     });
 
     this.loadingController.dismiss();
 
-  }
-
-  /**
-   * Generate a form to edit workout details
-   */
-  private buildEditForm() {
-    this.userWorkoutUpdates = this.fb.group({
-      wName: [this.workoutDetails.wName],
-      wDesc: [this.workoutDetails.wDescription]
-    });
   }
 
   /**
@@ -129,10 +98,18 @@ export class EditWorkoutPage implements OnInit {
     this.router.navigateByUrl('/tabs/workouts', { replaceUrl: true });
   }
 
+  ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      this.workoutId = params.get('wid');
+      this.userId = params.get('uid');
+    });
+
+    this.getWorkoutDetails(this.workoutId, this.userId);
+  }
 
   /**
-   * display toast message 
-   * 
+   * display toast message
+   *
    * @param msg toast messsage to be shown
    */
   async presentToast(msg) {
@@ -145,7 +122,7 @@ export class EditWorkoutPage implements OnInit {
 
   /**
    * A dialog that presents users with information
-   * 
+   *
    * @param header alert header
    * @param message alert message
    */
@@ -159,26 +136,51 @@ export class EditWorkoutPage implements OnInit {
   }
 
   /**
-   * An overlay that can be used to indicate activity while blocking user interaction. 
+   * An overlay that can be used to indicate activity while blocking user interaction.
    */
   async showLoading() {
-    this.loadingPresent = true
-    let load = await this.loadingController.create({
-      message: "Please wait....",
+    this.loadingPresent = true;
+    const load = await this.loadingController.create({
+      message: 'Please wait....',
 
-    })
+    });
     await load.present();
   }
 
   /**
-   * The loading indicator is dismissed 
+   * update workout information when save workout is clicked
    */
-  async dismissLoading() {
-    if (this.loadingPresent) {
-      await this.loadingController.dismiss();
-    }
-    this.loadingPresent = false;
+  async updateWorkoutDetails() {
+    this.workoutDetails.wDescription = this.userWorkoutUpdates.value.wDesc;
+    this.workoutDetails.wName = this.userWorkoutUpdates.value.wName;
+    console.log(this.workoutDetails);
+    await this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails).then(() => {
+      this.presentToast('Workout is saved!');
+      this.goToWorkout();
+    });
   }
 
+  /**
+   * Generate a form to edit workout details
+   */
+   private buildEditForm() {
+    this.userWorkoutUpdates = this.fb.group({
+      wName: [this.workoutDetails.wName],
+      wDesc: [this.workoutDetails.wDescription]
+    });
+  }
+
+  /**
+   * fucntion to dismiss modal
+   */
+  private cancel() {
+    this.modalController.dismiss({
+      'dismissed': true,
+    });
+  }
+
+  counter(i: number) {
+    return new Array(i);
+}
 }
 

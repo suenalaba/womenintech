@@ -1,5 +1,6 @@
 <script src="https://www.youtube.com/iframe_api"></script>
 
+<!-- Warm up section with embedded Youtube video -->
 <div style="height: 100%; display: flex; align-items: center; justify-content: center;" id="warmup" *ngIf="workoutSection === 'warmup'">
   <ion-card>
     <ion-card-header>
@@ -55,6 +56,7 @@
 </div>
 
 
+<!-- Cool down section with embedded Youtube video -->
 <div style="height: 100%; display: flex; align-items: center; justify-content: center;" id="COOLDOWN" *ngIf="workoutSection === 'cooldown'">
   <ion-card>
     <ion-card-header>
@@ -71,5 +73,6 @@
     </ion-card-content>
   </ion-card>
 </div>
+
 <ion-button expand="block" color="dark" (click)="nextExercise()"> {{ buttonText }}</ion-button>
 <p style="margin-right:10px; text-align: right;">Next: {{nextComponent()}}</p>

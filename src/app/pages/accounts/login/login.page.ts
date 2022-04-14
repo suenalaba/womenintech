@@ -11,10 +11,10 @@ import { AuthenticationService } from './../../../services/authentication.servic
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  credentials: FormGroup;
-  errorgroup: [];
+  private credentials: FormGroup;
+  private errorgroup: [];
 
-  loadingPresent = true;
+  private loadingPresent = true;
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +48,7 @@ export class LoginPage implements OnInit {
   }
 
   /**
-   * Login user 
+   * Login user
    */
   async login() {
     const loading = await this.loadingController.create();
@@ -66,8 +66,8 @@ export class LoginPage implements OnInit {
   }
 
   /**
-   * display error alert 
-   * 
+   * display error alert
+   *
    * @param header : header message
    * @param message : message text
    */
@@ -82,7 +82,7 @@ export class LoginPage implements OnInit {
 
   async showLoading() {
     this.loadingPresent = true;
-    let load = await this.loadingController.create({
+    const load = await this.loadingController.create({
       message: 'Retrieving your chats, hang in there!',
 
     });
@@ -97,11 +97,11 @@ export class LoginPage implements OnInit {
   }
 
   /**
-   * Check if form values are valid, will mark field with validation error 
-   * 
-   * @param formGroup 
+   * Check if form values are valid, will mark field with validation error
+   *
+   * @param formGroup : the array of values in the form
    */
-  validateAllFormFields(formGroup: FormGroup) {
+  private validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
       if (control instanceof FormControl) {

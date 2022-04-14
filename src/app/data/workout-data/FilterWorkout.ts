@@ -1,19 +1,19 @@
 export const FilterWorkoutList = [
     {
-        value:"not_started",
-        title:"Not Started"
+        value:'not_started',
+        title:'Not Started'
     },
     {
-        value:"in_progress",
-        title:"In Progress"
+        value:'in_progress',
+        title:'In Progress'
     },
     {
-        value:"completed",
-        title:"Completed"
+        value:'completed',
+        title:'Completed'
     },
     {
-      value:"buddy",
-      title:"My Buddy's Workouts"
+      value:'buddy',
+      title:'My Buddy\'s Workouts'
   },
 
-]
+];
