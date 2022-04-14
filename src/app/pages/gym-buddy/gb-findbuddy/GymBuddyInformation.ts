@@ -1,4 +1,4 @@
-import { userInfo } from "os";
+/* eslint-disable no-underscore-dangle */
 
 export class GymBuddyProfileInfo {
   private _age='20';
@@ -44,12 +44,12 @@ export class GymBuddyProfileInfo {
     this.locationPreference = this.userInfo.gymBuddyDetails.locationPreference;
     this.buddyTraits = this.userInfo.gymBuddyDetails.buddyTraits;
     this.buddyTrainStyle = this.userInfo.gymBuddyDetails.buddyTrainStyle;
-    if(!this.userInfo.gymBuddyDetails.matches) this.matches=[];
-      else this.matches = this.userInfo.gymBuddyDetails.matches;
-    if(!this.userInfo.gymBuddyDetails.unmatches) this.unmatches=[];
-      else this.unmatches = this.userInfo.gymBuddyDetails.unmatches;
-    if(!this.userInfo.gymBuddyDetails.chats) this.chats=[];
-      else this.chats = this.userInfo.gymBuddyDetails.chats;
+    if(!this.userInfo.gymBuddyDetails.matches) {this.matches=[];}
+      else {this.matches = this.userInfo.gymBuddyDetails.matches;}
+    if(!this.userInfo.gymBuddyDetails.unmatches) {this.unmatches=[];}
+      else {this.unmatches = this.userInfo.gymBuddyDetails.unmatches;}
+    if(!this.userInfo.gymBuddyDetails.chats) {this.chats=[];}
+      else {this.chats = this.userInfo.gymBuddyDetails.chats;}
 
     //Information needed for display
     // const birthday=new Date(this.userInfo.birthday);
@@ -63,12 +63,11 @@ export class GymBuddyProfileInfo {
     // const d2M = today.getMonth();
     // const months=((d2M+12*d2Y)-(d1M+12*d1Y))/12;
 
-    this._name=this.userInfo.firstName+" "+ this.userInfo.lastName;
+    this._name=this.userInfo.firstName+' '+ this.userInfo.lastName;
     this.briefIntro = this.userInfo.gymBuddyDetails.briefIntro;
     // this._age=String(Math.floor(months));
     this._profilePicture=this.userInfo.gymBuddyDetails.profilePicture;
   }
-
 
   public get getUserId(): string {
     return this.userId;
@@ -113,15 +112,6 @@ export class GymBuddyProfileInfo {
   public get getGymBuddyGoals(): string[] {
     return this.gymBuddyGoals;
   }
-
-  public set setbriefIntro(briefintro: string) {
-    this.briefIntro = briefintro;
-  }
-
-  public set setPrefBuddyGender(gender: string) {
-    this.buddyGender = gender;
-  }
-
   public get name(): string {
     return this._name;
   }
@@ -135,53 +125,63 @@ export class GymBuddyProfileInfo {
   public get isSignUp(): boolean {
     return this._isSignUp;
   }
-  public set isSignUp(value: boolean) {
-    this._isSignUp = value;
-  }
 
   public get matches(): string[] {
     return this._matches;
   }
-  public set matches(value: string[]) {
-    this._matches = value;
+  public get chats(): string[] {
+    return this._chats;
   }
-  public addMatches(value: string) {
-    this._matches .push(value);
-  }
-
   public get unmatches(): string[] {
     return this._unmatches;
   }
+  public set matches(value: string[]) {
+    this._matches = value;
+  }
+
+  public set setbriefIntro(briefintro: string) {
+    this.briefIntro = briefintro;
+  }
+
+  public set setPrefBuddyGender(gender: string) {
+    this.buddyGender = gender;
+  }
+
+  public set isSignUp(value: boolean) {
+    this._isSignUp = value;
+  }
   public set unmatches(value: string[]) {
     this._unmatches = value;
-  }
-  public addUnmatches(value: string) {
-    this._unmatches .push(value);
-  }
-
-  public checkMatches(userID: string) : boolean{
-    return this.matches.includes(userID);
-  }
-
-  public get chats(): string[] {
-    return this._chats;
   }
   public set chats(value: string[]) {
     this._chats = value;
   }
 
-  //not sure what is a better design, update individually, or take array as a parameter
-  /* 1st parameter is the array to update */
-  /* 2nd parameter is the information to update */
-  public updateGymBuddyArrays(arr: string[], element: string) {
-    arr.push(element);
+  /**
+   *Adds new matches to the list of matches
+   *
+   *  @param value
+   */
+  public addMatches(value: string) {
+    this._matches .push(value);
+  }
+  /**
+   *Adds new unmatches to the list of unmatches
+   *
+   *  @param value
+   */
+  public addUnmatches(value: string) {
+    this._unmatches .push(value);
   }
 
-  public removeFromGymBuddyArrays(arr: string[], element: string) {
-    const index = arr.indexOf(element);
-    if (index > -1) {
-      arr.splice(index,1);
-    }
+  /**
+   *Checks if recommended user has matched with current user
+   *
+   *  @param userID
+   * @returns if match is present
+   */
+  public checkMatches(userID: string): boolean{
+    return this.matches.includes(userID);
   }
 }
 
