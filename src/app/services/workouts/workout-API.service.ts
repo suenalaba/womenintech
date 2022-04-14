@@ -21,6 +21,9 @@ export class WorkoutAPIService {
     this.error = '';
   }
 
+  /**
+   * load exercises from api
+   */
   loadExercises() {
     // Load the data
     console.log("... loading data ...")
@@ -37,6 +40,9 @@ export class WorkoutAPIService {
     ); // end of pipe
   }
 
+  /**
+   * http request to api
+   */
   private prepareDataRequest(): Observable<object> {
     // Define the data URL
     const dataUrl = 'https://wger.de/api/v2/exerciseinfo/?limit=500';

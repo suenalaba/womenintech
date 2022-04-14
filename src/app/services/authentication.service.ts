@@ -5,10 +5,8 @@ import {
   createUserWithEmailAndPassword,
   signOut
 } from '@angular/fire/auth';
-import { Firestore, collection, collectionData, doc, setDoc, docData } from '@angular/fire/firestore';
+import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { updateDoc } from 'firebase/firestore';
-import { user } from 'rxfire/auth';
-import { Observable } from 'rxjs';
 import { User, UserDetails } from '../class/user';
 import { GymBuddyDetails } from '../class/GymBuddyProfile';
 import {UserService} from '../services/user.service';
@@ -17,12 +15,16 @@ import {UserService} from '../services/user.service';
   providedIn: 'root'
 })
 
-
 export class AuthenticationService {
   // Init with null to filter out the first value in a guard!
 
   constructor(private auth: Auth, private firestore: Firestore, private userService: UserService) { }
 
+  /**
+   * register new user 
+   * 
+   * @param info user login information
+   */
   async register(info) {
     try {
       const user = await createUserWithEmailAndPassword(
@@ -39,13 +41,17 @@ export class AuthenticationService {
     }
   }
 
+  /**
+   * login user, upon successful login, user will be signed in to the app
+   * return user info
+   * else return error
+   * 
+   * @param param0 user login email and password
+   */
   async login({ email, password }) {
     try {
       const user = await signInWithEmailAndPassword(this.auth, email, password);
       localStorage.setItem('userID', JSON.stringify(user.user.uid));
-      // this.userService.getUserById(user.user.uid).subscribe(res => {
-      //   localStorage.setItem('userInfo', JSON.stringify(res));
-      // });
 
       return user;
     } catch (e) {
@@ -58,6 +64,12 @@ export class AuthenticationService {
     return signOut(this.auth);
   }
 
+  /**
+   * save new user personal details 
+   * 
+   * @param value user information
+   * @param uid user id
+   */
   createUser(value, uid) {
     console.log(uid);
     let create: User = {
@@ -75,6 +87,11 @@ export class AuthenticationService {
     return setDoc(noteDocRef, create);
   }
 
+  /**
+   * save more user attribute details
+   * 
+   * @param user user details
+   */
   addUserDetails(user) {
     let userDetails: UserDetails = {
       height: user.height,
@@ -88,11 +105,9 @@ export class AuthenticationService {
       menstruationCycle: user.menstruationCycle
     };
 
-
     const gymBuddyDetails: GymBuddyDetails = {
       isSignUp: false
     };
-
 
     localStorage.removeItem('userSignUp');
 
@@ -101,10 +116,7 @@ export class AuthenticationService {
     console.log(this.auth);
     /* store to local storage */
     localStorage.setItem('userID', JSON.stringify(this.auth.currentUser.uid));
-    // this.userService.getUserById(this.auth.currentUser.uid).subscribe(res => {
-    //   localStorage.setItem('userInfo', JSON.stringify(res));
-
-    // });
+   
     /* must update doc, cannot add doc */
     return updateDoc(noteDocRef, { userDetails, gymBuddyDetails });
   }
