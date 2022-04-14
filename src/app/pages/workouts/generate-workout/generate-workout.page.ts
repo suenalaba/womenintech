@@ -10,9 +10,12 @@ import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
   templateUrl: './generate-workout.page.html',
   styleUrls: ['./generate-workout.page.scss'],
 })
+/**
+ * Allows users to configure the workout they want to generate
+ */
 export class GenerateWorkoutPage implements OnInit {
   private coolDownTime: string;
-  private exerciseList = []
+  private exerciseList = [];
   private listDuration: CreateWorkoutDesc[] = Duration;
   private listEquipment: CreateWorkoutDesc[] = Equipment;
   private listIntensity: CreateWorkoutDesc[] = Intensity;
@@ -23,7 +26,7 @@ export class GenerateWorkoutPage implements OnInit {
   private workoutId: string;
   private workoutTime: string;
   constructor(
-    private router: Router, 
+    private router: Router,
     private route: ActivatedRoute,
     private workoutService: WorkoutsService,
     private loadingCtrl: LoadingController,
@@ -31,15 +34,8 @@ export class GenerateWorkoutPage implements OnInit {
     private alertController: AlertController) { }
 
  /**
-   * triggered when user wants to a delete workout
-   */
-  private deleteWorkout(){
-    this.presentAlertConfirm();
-  }
-
- /**
-  * function to retrieve workout details and format the relevant details 
-  * 
+  * function to retrieve workout details and format the relevant details
+  *
   * @param wid workout id
   * @param uid user id
   */
@@ -47,23 +43,27 @@ export class GenerateWorkoutPage implements OnInit {
     const loading = await this.loadingCtrl.create();
     await loading.present();
 
-    console.log(wid)
+    console.log(wid);
 
     this.workoutService.getWorkout(wid, uid).subscribe(results=>{
-      console.log(results)
+      console.log(results);
       this.workoutDesc = results;
-      
-      this.workoutDesc.intensity = this.listIntensity.find(x => x.value === this.workoutDesc.intensity).text
-      this.workoutDesc.duration = this.listDuration.find(x => x.value === this.workoutDesc.duration).info
-      this.workoutDesc.equipment = this.listEquipment.find(x => x.value === this.workoutDesc.equipment).text
-      this.workoutDesc.location = this.listLocation.find(x => x.value === this.workoutDesc.location).text
-    
-      this.exerciseList = this.workoutDesc.workoutRoutine
 
-      if(this.workoutDesc.duration=='15 Mins') { this.warmUpTime = "2.5 mins" ; this.coolDownTime = "2.5 mins"; this.workoutTime = "10 mins"}
-      if(this.workoutDesc.duration=='30 Mins') { this.warmUpTime = "5 mins" ; this.coolDownTime = "5 mins"; this.workoutTime = "20 mins" }
-      if(this.workoutDesc.duration=='60 Mins') { this.warmUpTime = "5 mins" ; this.coolDownTime = "5 mins"; this.workoutTime = "50 mins" }
-      if(this.workoutDesc.duration=='90 Mins >') { this.warmUpTime = "10 mins" ; this.coolDownTime = "10 mins"; this.workoutTime = "70 mins" }
+      this.workoutDesc.intensity = this.listIntensity.find(x => x.value === this.workoutDesc.intensity).text;
+      this.workoutDesc.duration = this.listDuration.find(x => x.value === this.workoutDesc.duration).info;
+      this.workoutDesc.equipment = this.listEquipment.find(x => x.value === this.workoutDesc.equipment).text;
+      this.workoutDesc.location = this.listLocation.find(x => x.value === this.workoutDesc.location).text;
+
+      this.exerciseList = this.workoutDesc.workoutRoutine;
+
+      if(this.workoutDesc.duration=='15 Mins') {
+        this.warmUpTime = '2.5 mins' ; this.coolDownTime = '2.5 mins'; this.workoutTime = '10 mins';}
+      if(this.workoutDesc.duration=='30 Mins') {
+        this.warmUpTime = '5 mins' ; this.coolDownTime = '5 mins'; this.workoutTime = '20 mins'; }
+      if(this.workoutDesc.duration=='60 Mins') {
+        this.warmUpTime = '5 mins' ; this.coolDownTime = '5 mins'; this.workoutTime = '50 mins'; }
+      if(this.workoutDesc.duration=='90 Mins >') {
+        this.warmUpTime = '10 mins' ; this.coolDownTime = '10 mins'; this.workoutTime = '70 mins'; }
     });
 
     this.loadingCtrl.dismiss();
@@ -73,28 +73,28 @@ export class GenerateWorkoutPage implements OnInit {
    * navigate user back to workouts
    */
   async goBack(){
-    await this.nav.navigateBack(['tabs/workouts'], { animated: true })
+    await this.nav.navigateBack(['tabs/workouts'], { animated: true });
   }
 
   /**
    * navigate user to view location of gyms and parks
    */
   async goGymMap(){
-    await this.router.navigateByUrl('tabs/workouts/display-gyms', { replaceUrl: true })
+    await this.router.navigateByUrl('tabs/workouts/display-gyms', { replaceUrl: true });
   }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
-      let wid = params.get('wid');
+      const wid = params.get('wid');
       this.workoutId = wid;
-   })
-    this.userId = JSON.parse(localStorage.getItem("userID"));
+   });
+    this.userId = JSON.parse(localStorage.getItem('userID'));
 
     this.getWorkoutDetails(this.workoutId, this.userId);
   }
 
   /**
-   * function to display alert dialog 
+   * function to display alert dialog
    * it has 2 buttons that the user can select,
    * cancel: do not delete workout
    * yes: confirm delete workout
@@ -134,5 +134,12 @@ export class GenerateWorkoutPage implements OnInit {
    */
   async startWorkout(){
     await this.router.navigate(['/start-workout'], { queryParams: { wid: this.workoutId, uid: this.userId } });
+  }
+
+  /**
+   * triggered when user wants to a delete workout
+   */
+   private deleteWorkout(){
+    this.presentAlertConfirm();
   }
 }

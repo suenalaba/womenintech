@@ -8,8 +8,6 @@ import { DisplayGymsPageRoutingModule } from './display-gyms-routing.module';
 
 import { DisplayGymsPage } from './display-gyms.page';
 
-declare var google: any;
-
 @NgModule({
   imports: [
     CommonModule,

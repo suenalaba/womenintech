@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import { Component, OnInit } from '@angular/core';
 import { CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { Duration, Equipment, Intensity, wLocation } from 'src/app/data/workout-data/CreateWorkout';
@@ -14,6 +15,9 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './create-workouts.page.html',
   styleUrls: ['./create-workouts.page.scss'],
 })
+/**
+ * Page to create new workout
+ */
 export class CreateWorkoutsPage implements OnInit {
   private createWorkoutForm: FormGroup;
   private errors = [];
@@ -27,10 +31,6 @@ export class CreateWorkoutsPage implements OnInit {
   private userWorkout = [];
   private workoutDesc: WorkoutDesc;
 
-  public get workoutAPI(): WorkoutAPIService {
-    return this._workoutAPI;
-  }
-
   constructor(
     private fb: FormBuilder,
     private alertController: AlertController,
@@ -41,6 +41,19 @@ export class CreateWorkoutsPage implements OnInit {
     private _workoutAPI: WorkoutAPIService,
     private userService: UserService
   ) { }
+
+  /**
+   * getter method for the workout API
+   */
+  public get workoutAPI(): WorkoutAPIService {
+    return this._workoutAPI;
+  }
+  /**
+   * setter method for the workout API
+   */
+  public set workoutAPI(value: WorkoutAPIService) {
+    this._workoutAPI = value;
+  }
 
   /**
    * build workout form
@@ -61,23 +74,27 @@ export class CreateWorkoutsPage implements OnInit {
    */
   private getUserDetails(){
     this.userService.getUserById(this.userId).subscribe(res=>{
-      this.userDetails = res.userDetails
-    })
+      this.userDetails = res.userDetails;
+    });
   }
 
   /**
-   * fucntion to navigate user back to all workouts 
+   * fucntion to navigate user back to all workouts
    */
   private goBack() {
-    this.nav.navigateBack(['tabs/workouts'], { animated: true })
+    this.nav.navigateBack(['tabs/workouts'], { animated: true });
   }
 
-  /**
-  * Shuffles array in place.
-  * @param {Array} a items An array containing the items.
+ /**
+  * Shuffle array in place
+  *
+  * @param arr array of items
+  * @return shuffled array
   */
   private shuffle(arr) {
-    let j, x, index;
+    let j;
+    let x;
+    let index;
     for (index = arr.length - 1; index > 0; index--) {
       j = Math.floor(Math.random() * (index + 1));
       x = arr[index];
@@ -88,16 +105,16 @@ export class CreateWorkoutsPage implements OnInit {
   }
 
   private submitWorkoutDesc() {
-    if (this.createWorkoutForm.status == "INVALID") {
-      this.presentAlert()
+    if (this.createWorkoutForm.status == 'INVALID') {
+      this.presentAlert();
     } else {
-      this.generateWorkout(this.createWorkoutForm.value)
+      this.generateWorkout(this.createWorkoutForm.value);
     }
   }
 
   /**
-   * fucntion for form validation 
-   * 
+   * fucntion for form validation
+   *
    * @param formGroup createWorkoutForm
    */
   private validateAllFormFields(formGroup: FormGroup) {
@@ -112,8 +129,8 @@ export class CreateWorkoutsPage implements OnInit {
   }
 
   /**
-   * function to generate workout for user based on their selections 
-   * 
+   * function to generate workout for user based on their selections
+   *
    * @param val : form values
    */
   async generateWorkout(val) {
@@ -121,17 +138,17 @@ export class CreateWorkoutsPage implements OnInit {
 
     this.presentLoadingWithOptions().then(() => {
       this.workoutService.createWorkout(this.workoutDesc, this.userId, this.userDetails).then((res)=>{
-        console.log(res)
+        console.log(res);
 
-        this.goToStartWorkout(res)
-      })
+        this.goToStartWorkout(res);
+      });
     });
   }
 
   /**
-   * navigate user to view their generated workout 
-   * 
-   * @param id workout id 
+   * navigate user to view their generated workout
+   *
+   * @param id workout id
    */
   async goToStartWorkout(id: any) {
     console.log(id);
@@ -149,7 +166,7 @@ export class CreateWorkoutsPage implements OnInit {
    * alert display triggered when form is incomplete
    */
   async presentAlert() {
-    this.validateAllFormFields(this.createWorkoutForm)
+    this.validateAllFormFields(this.createWorkoutForm);
 
     const alert = await this.alertController.create({
       cssClass: '',
@@ -165,7 +182,7 @@ export class CreateWorkoutsPage implements OnInit {
   }
 
   /**
-   * loading component presented when workout is being generated 
+   * loading component presented when workout is being generated
    */
   async presentLoadingWithOptions() {
     const loading = await this.loadingCtrl.create({
@@ -176,7 +193,4 @@ export class CreateWorkoutsPage implements OnInit {
     return await loading.present();
   }
 
-  public set workoutAPI(value: WorkoutAPIService) {
-    this._workoutAPI = value;
-  }
 }
