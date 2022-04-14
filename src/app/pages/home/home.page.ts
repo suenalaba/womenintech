@@ -1,3 +1,6 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable @typescript-eslint/prefer-for-of */
+/* eslint-disable @typescript-eslint/member-ordering */
 import { OnInit, ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
@@ -118,7 +121,6 @@ export class HomePage implements OnInit {
       this.loadGraph();
       event.target.complete();
     }, 1000);
-
   }
 
   /**

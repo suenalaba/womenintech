@@ -7,6 +7,7 @@ import { HomePage } from '../home/home.page';
   templateUrl: './stats.page.html',
   styleUrls: ['./stats.page.scss'],
 })
+
 /**
  * Statistics page when people click See More
  */
@@ -15,11 +16,8 @@ export class StatsPage implements OnInit {
 
   constructor(private router: Router) { this.workouts = []; }
 
-  /**
-   * Navigate back home
-   */
-  private goHome() {
-    this.router.navigate(['/tabs/home']);
+  ngOnInit() {
+    this.loadWorkouts();
   }
 
   /**
@@ -36,7 +34,17 @@ export class StatsPage implements OnInit {
     console.log(this.workouts);
   }
 
-  ngOnInit() {
-    this.loadWorkouts();
+  /**
+   * Navigate back home
+   */
+   private goHome() {
+    this.router.navigate(['/tabs/home']);
+  }
+
+  /**
+   * Navigate to workout page
+   */
+  private goWorkout() {
+    this.router.navigate(['/tabs/workouts']);
   }
 }

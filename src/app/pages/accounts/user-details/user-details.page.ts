@@ -20,13 +20,13 @@ SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
  * Page to display details the user keyed in
  */
 export class UserDetailsPage implements OnInit {
+  public listInjuries = areaOfInjury;
+  public listGoals = fitnessGoals;
+
   private gender: any;
   private progress = 0.0;
   private selectedInjury = [];
   private slideIndex = 0;
-
-  public listInjuries = areaOfInjury;
-  public listGoals = fitnessGoals;
 
   private userDetailsForm: FormGroup;
   private slides: any;
@@ -42,6 +42,92 @@ export class UserDetailsPage implements OnInit {
     private toastCtrl: ToastController
 
   ) { }
+
+  // Easy access for form fields
+  get height() {
+    return this.userDetailsForm.get('height');
+  }
+
+  get weight() {
+    return this.userDetailsForm.get('weight');
+  }
+
+  get injury() {
+    return this.userDetailsForm.get('injury');
+  }
+
+  get healthCond() {
+    return this.userDetailsForm.get('healthCond');
+  }
+
+  get healthCondName() {
+    return this.userDetailsForm.get('healthCondName');
+  }
+
+  get fitnessGoal() {
+    return this.userDetailsForm.get('fitnessGoal');
+  }
+
+  get menstruationCycle() {
+    return this.userDetailsForm.get('menstruationCycle');
+  }
+
+  get areaOfInjury() {
+    return this.userDetailsForm.get('areaOfInjury');
+  }
+
+  get injuryType() {
+    return this.userDetailsForm.get('injuryType');
+  }
+
+
+  /**
+   * Triggered when swiper goes to next page and progress bar will be updated
+   */
+  public slideDidChange() {
+    console.log('Slide did change');
+    if (!this.slides) { return; }
+
+    console.table({
+      isBeginning: this.slides.isBeginning,
+      isEnd: this.slides.isEnd
+    });
+
+    this.progress = this.getProgress(this.slides.activeIndex);
+  }
+
+
+  /**
+   * calculate progress of swiper component
+   *
+   * @param i slide index
+   */
+  public getProgress(i) {
+    const val = (i + 1) * 0.18;
+    console.log(val);
+    return val;
+  }
+
+  /**
+   * update user details and store into firebase
+   */
+   async completeSignUp() {
+    console.log(this.userSignUp.id);
+    /*stuff stored in userDetailsForm object */
+    /*.value is to access form details */
+    /*.id new variable name in the object */
+    this.userDetailsForm.value.id = this.userSignUp.id;
+    /*store into firestore */
+    this.authService.addUserDetails(this.userDetailsForm.value);
+
+    const toast = await this.toastCtrl.create({
+      message: 'User updated!',
+      duration: 2000
+    });
+
+    toast.present();
+    this.router.navigateByUrl('/accounts/boarding', { replaceUrl: true });
+  }
 
   ngOnInit() {
     let userSignUp_string = localStorage.getItem('userSignUp');
@@ -82,7 +168,6 @@ export class UserDetailsPage implements OnInit {
     this.userDetailsForm.controls.menstruationCycle.updateValueAndValidity();
   }
 
-
   /**
    * Function to create user details form
    */
@@ -100,43 +185,6 @@ export class UserDetailsPage implements OnInit {
     });
   }
 
-  // Easy access for form fields
-  get height() {
-    return this.userDetailsForm.get('height');
-  }
-
-  get weight() {
-    return this.userDetailsForm.get('weight');
-  }
-
-  get injury() {
-    return this.userDetailsForm.get('injury');
-  }
-
-  get healthCond() {
-    return this.userDetailsForm.get('healthCond');
-  }
-
-  get healthCondName() {
-    return this.userDetailsForm.get('healthCondName');
-  }
-
-  get fitnessGoal() {
-    return this.userDetailsForm.get('fitnessGoal');
-  }
-
-  get menstruationCycle() {
-    return this.userDetailsForm.get('menstruationCycle');
-  }
-
-  get areaOfInjury() {
-    return this.userDetailsForm.get('areaOfInjury');
-  }
-
-  get injuryType() {
-    return this.userDetailsForm.get('injuryType');
-  }
-
   /**
    * set values for swiper progress
    *
@@ -149,34 +197,6 @@ export class UserDetailsPage implements OnInit {
     this.progress = this.getProgress(this.slides.activeIndex);
 
   }
-
-  /**
-   * Triggered when swiper goes to next page and progress bar will be updated
-   */
-  public slideDidChange() {
-    console.log('Slide did change');
-    if (!this.slides) { return; }
-
-    console.table({
-      isBeginning: this.slides.isBeginning,
-      isEnd: this.slides.isEnd
-    });
-
-    this.progress = this.getProgress(this.slides.activeIndex);
-  }
-
-
-  /**
-   * calculate progress of swiper component
-   *
-   * @param i slide index
-   */
-  public getProgress(i) {
-    const val = (i + 1) * 0.18;
-    console.log(val);
-    return val;
-  }
-
 
   /**
    * triggered when next button is clicked and will move slide to the next page
@@ -196,7 +216,7 @@ export class UserDetailsPage implements OnInit {
   }
 
   /**
-   * this function is to initialize the list of injures based on the area of injury selcted by the user 
+   * this function is to initialize the list of injures based on the area of injury selcted by the user
    *
    * @param event radio event when value is changed
    */
@@ -220,26 +240,4 @@ export class UserDetailsPage implements OnInit {
       this.selectedInjury = [];
     }
   }
-
-  /**
-   * update user details and store into firebase
-   */
-  async completeSignUp() {
-    console.log(this.userSignUp.id);
-    /*stuff stored in userDetailsForm object */
-    /*.value is to access form details */
-    /*.id new variable name in the object */
-    this.userDetailsForm.value.id = this.userSignUp.id;
-    /*store into firestore */
-    this.authService.addUserDetails(this.userDetailsForm.value);
-
-    const toast = await this.toastCtrl.create({
-      message: 'User updated!',
-      duration: 2000
-    });
-
-    toast.present();
-    this.router.navigateByUrl('/accounts/boarding', { replaceUrl: true });
-  }
-
 }
