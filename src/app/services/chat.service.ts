@@ -13,9 +13,6 @@ import { Observable } from 'rxjs';
  * Class that stores information to the database for chat data and reads in the data requested by the chat control classes.
  */
 export class ChatService {
-
-
-
   //key:other user name, value: latest message
   //private allChatNameAndMessage: Map<string, string>;
   //private allChatIds: Map<string, string>[] = [];
@@ -35,42 +32,68 @@ export class ChatService {
   constructor(private fireStore: Firestore, private loadingController: LoadingController) {
   }
 
+  /**
+   * get accessor for the buddy's pfp
+   */
   public get getSelectedOtherUserProfilePicture() {
     return this.selectedOtherUserProfilePicture;
   }
 
+  /**
+   * get accessor for the details of the current user
+   */
   public get getCurrentUser() {
     return this.currentUser;
   }
 
+  /**
+   * get accessor for the details of the buddy
+   */
   public get getSelectedOtherUserId() {
     return this.selectedOtherUserId;
   }
 
+  /**
+   * get accessor for the buddy name in the chat
+   */
   public get getSelectedChatUserName() {
     return this.selectedChatUserName;
   }
 
+  /**
+   * get accessor for the gym buddy chat id
+   */
   public get getSelectedChatId() {
     return this.selectedChatId;
   }
 
+  /**
+   * get the pfp of the gym buddy in the selected chat
+   */
   public set setSelectedOtherUserProfilePicture(profilePicture: string) {
     this.selectedOtherUserProfilePicture = profilePicture;
   }
 
+  /**
+   * get the username of the gym buddy in the selected chat
+   */
   public set setSelectedChatUserName(userName: string) {
     this.selectedChatUserName = userName;
   }
 
+  /**
+   * get the chat id of the selected chat
+   */
   public set setSelectedChatId(chatId: string) {
     this.selectedChatId = chatId;
   }
 
+  /**
+   * get the user id of the gym buddy in the selected chat
+   */
   public set setSelectedOtherUserId(otherUserId: string) {
     this.selectedOtherUserId = otherUserId;
   }
-
 
   /**
    * Observable that updates whenever data of chat is being written to the database.
@@ -125,8 +148,6 @@ export class ChatService {
     this.currentUser = userInfo;
     return userInfo;
   }
-
-
 
   /**
    * Gets an array of hashmap for all the chats involving the current user.
@@ -274,7 +295,6 @@ export class ChatService {
     console.log('removed');
   }
 
-
   private getTimeDiffInString(conversationArr: any, timeDiffString: string) {
     const lastTimeStamp = conversationArr[conversationArr.length - 1].timeSent.toDate().getTime();
     console.log(lastTimeStamp);
@@ -326,7 +346,6 @@ export class ChatService {
     const chatQuerySnapshot = await getDoc(q);
     return chatQuerySnapshot;
   }
-
 
   /**
    * Reads the document to be fetched and get the document snapshot with document contents.

@@ -18,7 +18,36 @@ export class UserService {
     private firestore: Firestore
   ) { }
 
-  
+
+  /*get the id to retrieve whatever information you want*/
+  getUserById(id): Observable<User> {
+    const noteDocRef = doc(this.firestore, `Users/${id}`);
+    return docData(noteDocRef, { idField: 'id' }) as Observable<User>;
+  }
+
+  /***
+   * Update user workout profile
+   */
+  updateUser(user){
+    console.log(user);
+    const userDetails: UserDetails = {
+      height: user.height,
+      weight: user.weight,
+      injury: user.injury,
+      areaOfInjury: user.areaOfInjury,
+      injuryType: user.injuryType,
+      healthCond: user.healthCond,
+      healthCondName: user.healthCondName,
+      fitnessGoal: user.fitnessGoal,
+      menstruationCycle: user.menstruationCycle
+    };
+
+    /*store to firebase firestore (firestore, collection, the very long string is the path)*/
+    const noteDocRef = doc(this.firestore, `Users`, `${user.id}`);
+
+    /* must update doc, cannot add doc */
+    return updateDoc(noteDocRef, { userDetails });
+  }
 
     /**
      * Get user profile pics from storage
@@ -31,6 +60,7 @@ export class UserService {
 
   /**
    * Function to allow users to upload an image as their profile pic
+   *
    * @param i i
    * @param file the image users choose to upload
    * @param id the id of the registered user
@@ -74,35 +104,5 @@ export class UserService {
           }
         });
     }
-
-/*get the id to retrieve whatever information you want*/
-  getUserById(id): Observable<User> {
-    const noteDocRef = doc(this.firestore, `Users/${id}`);
-    return docData(noteDocRef, { idField: 'id' }) as Observable<User>;
-  }
-
-  /***
-   * Update user workout profile
-   */
-  updateUser(user){
-    console.log(user)
-    let userDetails: UserDetails = {
-      height: user.height,
-      weight: user.weight,
-      injury: user.injury,
-      areaOfInjury: user.areaOfInjury,
-      injuryType: user.injuryType,
-      healthCond: user.healthCond,
-      healthCondName: user.healthCondName,
-      fitnessGoal: user.fitnessGoal,
-      menstruationCycle: user.menstruationCycle
-    };
-
-    /*store to firebase firestore (firestore, collection, the very long string is the path)*/
-    const noteDocRef = doc(this.firestore, `Users`, `${user.id}`);
-    
-    /* must update doc, cannot add doc */
-    return updateDoc(noteDocRef, { userDetails });
-  }
 
 }

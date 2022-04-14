@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Storage } from '@capacitor/storage';
-import { isPlatform, Platform } from '@ionic/angular'
+import { isPlatform, Platform } from '@ionic/angular';
 
 export interface Photos {
   filepath: string;
@@ -14,8 +15,13 @@ export interface Photos {
   providedIn: 'root'
 })
 
-
+/**
+ * Service to interface with the camera device
+ */
 export class CameraService {
+  public photoStash: Photos[] = [];
+  private PHOTO_STORAGE = 'profile_album';
+  private platform: Platform;
   private convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
     const reader = new FileReader;
     reader.onerror = reject;
@@ -24,15 +30,19 @@ export class CameraService {
     };
     reader.readAsDataURL(blob);
   });
-  private PHOTO_STORAGE: string = "profile_album";
-  private platform: Platform;
-  public photoStash: Photos[] = [];
+
   constructor(
     platform: Platform
   ) {
     this.platform = platform;
   }
 
+  /**
+   * convert image file into a readable format
+   *
+   * @param cameraPhoto imagefile
+   * @returns image processed as data
+   */
   private async readAsBase64(cameraPhoto: Photo) {
     // "hybrid" will detect Cordova or Capacitor
     if (this.platform.is('hybrid')) {
@@ -52,6 +62,9 @@ export class CameraService {
     }
   }
 
+  /**
+   * save the picture
+   */
   private async savePicture(cameraPhoto: Photo) {
     // Convert photo to base64 format, required by Filesystem API to save
     const base64Data = await this.readAsBase64(cameraPhoto);
@@ -129,7 +142,7 @@ export class CameraService {
     // “when the platform is NOT hybrid, do this”
     if (!this.platform.is('hybrid')) {
       // Display the photo by reading into base64 format
-      for (let photo of this.photoStash) {
+      for (const photo of this.photoStash) {
         // Read each saved photo's data from the Filesystem
         const readFile = await Filesystem.readFile({
           path: photo.filepath,

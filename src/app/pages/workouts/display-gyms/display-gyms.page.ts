@@ -11,13 +11,13 @@ declare let google: any;
 
 
 /**
- * Displays map with marks of gym when called 
+ * Displays map with marks of gym when called
  */
 export class DisplayGymsPage implements OnInit {
+  @ViewChild('map', {read: ElementRef, static: false}) private mapRef: ElementRef;
+
   private infoWindows: any = [];
   private map: any;
-
-  @ViewChild('map', {read: ElementRef, static: false}) private mapRef: ElementRef;
   private markers: any = [
     {
         title: 'Anytime Fitness Nanyang CC',
@@ -72,6 +72,9 @@ export class DisplayGymsPage implements OnInit {
   ];
 
   constructor() { }
+
+  ngOnInit() {
+  }
 
 /**
  *
@@ -133,12 +136,9 @@ export class DisplayGymsPage implements OnInit {
       center: location,
       zoom: 15,
       disableDefaultUI: true
-    }
+    };
     this.map = new google.maps.Map(this.mapRef.nativeElement, options);
     this.addMarkersToMap(this.markers);
-  }
-
-  ngOnInit() {
   }
 
 }

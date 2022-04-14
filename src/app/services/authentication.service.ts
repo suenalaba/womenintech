@@ -14,15 +14,17 @@ import {UserService} from '../services/user.service';
 @Injectable({
   providedIn: 'root'
 })
-
+/**
+ * Service to authenticate user login details with the firestore server
+ */
 export class AuthenticationService {
   // Init with null to filter out the first value in a guard!
 
   constructor(private auth: Auth, private firestore: Firestore, private userService: UserService) { }
 
   /**
-   * register new user 
-   * 
+   * register new user
+   *
    * @param info user login information
    */
   async register(info) {
@@ -33,7 +35,7 @@ export class AuthenticationService {
         info.password
       );
 
-      this.createUser(info, user.user.uid)
+      this.createUser(info, user.user.uid);
       return user;
 
     } catch (e) {
@@ -45,7 +47,7 @@ export class AuthenticationService {
    * login user, upon successful login, user will be signed in to the app
    * return user info
    * else return error
-   * 
+   *
    * @param param0 user login email and password
    */
   async login({ email, password }) {
@@ -59,41 +61,21 @@ export class AuthenticationService {
     }
   }
 
+  /**
+   * log user out of app
+   */
   logout() {
     localStorage.removeItem('userID');
     return signOut(this.auth);
   }
 
   /**
-   * save new user personal details 
-   * 
-   * @param value user information
-   * @param uid user id
-   */
-  private createUser(value, uid) {
-    console.log(uid);
-    let create: User = {
-      id: uid,
-      email: value.email,
-      username: value.username,
-      birthday: value.birthday,
-      gender: value.gender,
-      firstName: value.firstName,
-      lastName: value.lastName
-    }
-
-    console.log(create);
-    const noteDocRef = doc(this.firestore, `Users`, `${uid}`);
-    return setDoc(noteDocRef, create);
-  }
-
-  /**
    * save more user attribute details
-   * 
+   *
    * @param user user details
    */
   addUserDetails(user) {
-    let userDetails: UserDetails = {
+    const userDetails: UserDetails = {
       height: user.height,
       weight: user.weight,
       injury: user.injury,
@@ -116,9 +98,32 @@ export class AuthenticationService {
     console.log(this.auth);
     /* store to local storage */
     localStorage.setItem('userID', JSON.stringify(this.auth.currentUser.uid));
-   
+
     /* must update doc, cannot add doc */
     return updateDoc(noteDocRef, { userDetails, gymBuddyDetails });
   }
+
+  /**
+   * save new user personal details
+   *
+   * @param value user information
+   * @param uid user id
+   */
+     private createUser(value, uid) {
+      console.log(uid);
+      const create: User = {
+        id: uid,
+        email: value.email,
+        username: value.username,
+        birthday: value.birthday,
+        gender: value.gender,
+        firstName: value.firstName,
+        lastName: value.lastName
+      };
+
+      console.log(create);
+      const noteDocRef = doc(this.firestore, `Users`, `${uid}`);
+      return setDoc(noteDocRef, create);
+    }
 }
 
