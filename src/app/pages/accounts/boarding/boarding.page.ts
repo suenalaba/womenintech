@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonSlides } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
@@ -16,15 +15,27 @@ export class BoardingPage implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * show the different boarding pages
+   * 
+   * @param swiper 
+   * 
+   */
   setSwiperInstance(swiper: any) {
     this.slides = swiper;
 
   }
 
+  /**
+   * when next button is clicked
+   */
   next() {
     this.slides.slideNext();
   }
 
+  /**
+   * start button is clicked
+   */
   start(){
     this.router.navigateByUrl('/tabs', { replaceUrl: true });
   }

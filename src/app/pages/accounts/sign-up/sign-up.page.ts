@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
-import { NavigationExtras, Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import {  Router } from '@angular/router';
 
 import { NavController, AlertController, LoadingController, Platform } from '@ionic/angular';
 import { AuthenticationService } from './../../../services/authentication.service';
-//import { Storage } from '@capacitor/storage'
+
 
 @Component({
   selector: 'app-sign-up',
@@ -21,7 +21,6 @@ export class SignUpPage implements OnInit {
     private alertController: AlertController,
     private router: Router,
     private loadingController: LoadingController,
-    private navigate: NavController,
   ) { }
 
   ngOnInit() {

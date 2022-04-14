@@ -10,7 +10,7 @@ import { delay } from 'rxjs/operators';
 /**
  * YoutubeService class lets clients access the service's instance via getInstance()
  */
-export class YoutubeService {
+export default class YoutubeService {
   private static instance: YoutubeService;
 
   constructor(
@@ -39,7 +39,7 @@ export class YoutubeService {
                       'AIzaSyChbvnT57XxBmNfrN4nLnGICNg3YDhbEo0', //tranz
                       'AIzaSyBpnu2GzUd4BIQ3241u1cPnz4JQ72erN9w', //kryzs
                      ]
-    var choicee = Math.floor(Math.random() * (APIKEYar.length - 0 + 1)) + 0;
+    var choicee = Math.floor(Math.random() * (APIKEYar.length - 1)) + 0;
     const APIKEY = APIKEYar[choicee];
     console.log('using key ', APIKEY);
     

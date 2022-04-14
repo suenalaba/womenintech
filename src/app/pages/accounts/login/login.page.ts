@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { NavController, AlertController, LoadingController, Platform } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { AuthenticationService } from './../../../services/authentication.service';
-//import { Storage } from '@capacitor/storage'
 
 @Component({
   selector: 'app-login',
@@ -22,9 +21,7 @@ export class LoginPage implements OnInit {
     private authService: AuthenticationService,
     private alertController: AlertController,
     private router: Router,
-    private loadingController: LoadingController,
-    private navigate: NavController,
-    private platform: Platform
+    private loadingController: LoadingController
   ) { }
 
   // Easy access for form fields
@@ -42,19 +39,18 @@ export class LoginPage implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
+
+  /**
+   * navigate to register page
+   */
   async register() {
     this.router.navigateByUrl('/accounts/sign-up', { replaceUrl: true });
-    // const user = await this.authService.register(this.credentials.value);
-    // await loading.dismiss();
-
-    // if (user) {
-    //   this.router.navigateByUrl('/tabs/home', { replaceUrl: true });
-    // } else {
-    //   this.showAlert('Registration failed', 'Please try again!');
-    // }
   }
 
-  async login(value) {
+  /**
+   * Login user 
+   */
+  async login() {
     const loading = await this.loadingController.create();
     await loading.present();
 
@@ -69,7 +65,13 @@ export class LoginPage implements OnInit {
 
   }
 
-  async showAlert(header, message) {
+  /**
+   * display error alert 
+   * 
+   * @param header : header message
+   * @param message : message text
+   */
+  async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({
       header,
       message,
@@ -94,6 +96,11 @@ export class LoginPage implements OnInit {
     this.loadingPresent = false;
   }
 
+  /**
+   * Check if form values are valid, will mark field with validation error 
+   * 
+   * @param formGroup 
+   */
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);

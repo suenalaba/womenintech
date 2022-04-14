@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { EChartsOption } from 'echarts';
 import { waitForAsync } from '@angular/core/testing';
 import { UserService } from '../../services/user.service';
-import { YoutubeService } from 'src/app/services/youtube.service';
+import YoutubeService from 'src/app/services/youtube.service';
 
 import { HostListener } from '@angular/core';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';

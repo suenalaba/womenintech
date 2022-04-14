@@ -59,40 +59,7 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule)
-  },
-
-  /*
-  {
-    path: 'gb-update-account-preference',
-    loadChildren: () => import('./pages/gym-buddy/gb-update-account-preference/gb-update-account-preference.module').then( m => m.GbUpdateAccountPreferencePageModule)
-  },
-*/
-
-
-
-
-
-
-
-
-  /*{
-    path: 'gb-buddylist-home',
-    loadChildren: () => import('./gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then( m => m.GbBuddylistHomePageModule)
-  },
-  {
-    path: 'gb-buddylist-home',
-    loadChildren: () => import('./gym-buddy/gb-buddylist-home/gb-buddylist-home.module').then( m => m.GbBuddylistHomePageModule)
-  },
-  {
-    path: 'gb-findbuddy',
-    loadChildren: () => import('./gym-buddy/gb-findbuddy/gb-findbuddy.module').then( m => m.GbFindbuddyPageModule)
-  },*/
-
-  /*{
-    path: 'gym-buddy/gb-sign-up',
-    loadChildren: () => import('./gym-buddy/gb-sign-up/gb-sign-up.module').then( m => m.GbSignUpPageModule),
-    ...canActivate(redirectUnauthorizedToSignUp),
-  }*/
+  }
 ];
 @NgModule({
   imports: [

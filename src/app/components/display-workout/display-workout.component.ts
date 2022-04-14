@@ -1,12 +1,9 @@
 import { Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
-import { WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { WorkoutDetails } from 'src/app/class/WorkoutDetails';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 
-import { UserService } from '../../services/user.service';
-import { YoutubeService } from 'src/app/services/youtube.service';
+import YoutubeService from 'src/app/services/youtube.service';
 
 import { WindowRefService } from '../../services/window-ref.service';
 import { Timestamp } from 'firebase/firestore';
@@ -19,7 +16,6 @@ import { Timestamp } from 'firebase/firestore';
 export class DisplayWorkoutComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private router: Router, 
-    private alertController: AlertController, private user: UserService,
     private workoutService: WorkoutsService, windowRef: WindowRefService,
     //private ytService: YoutubeService,
     ) { 
@@ -69,6 +65,9 @@ export class DisplayWorkoutComponent implements OnInit {
     // }
   }
 
+  /**
+   * Get list of exercises for user
+   */
   async getExercises(){
     this.route.queryParamMap.subscribe(params => {
       this.workoutSection = params.get('workoutSection');
@@ -87,6 +86,9 @@ export class DisplayWorkoutComponent implements OnInit {
     this.displayExercise();
   }
 
+  /**
+   * get workout videos for user
+   */
   async getVideos() {
     this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(async results => {
       let durn: number;
@@ -105,6 +107,10 @@ export class DisplayWorkoutComponent implements OnInit {
     });
   }
 
+
+  /**
+   * display exercises  
+   */
   displayExercise() {
     this.workSets = []
 
@@ -176,33 +182,6 @@ export class DisplayWorkoutComponent implements OnInit {
     }
   }
 
-  // async presentDeleteConfirm() {
-  //   const alert = await this.alertController.create({
-  //     cssClass: 'my-custom-class',
-  //     header: `Remove set ${this.selectedSet+1}?`,
-  //     buttons: [
-  //       {
-  //         text: 'Cancel',
-  //         role: 'cancel',
-  //         cssClass: 'secondary',
-  //         id: 'cancel-button',
-  //         handler: (blah) => {
-  //           console.log('Confirm Cancel: blah');
-  //         }
-  //       }, {
-  //         text: 'Yes',
-  //         id: 'confirm-button',
-  //         handler: () => {
-  //           console.log('Confirm Okay');
-  //           this.removeSet();
-  //         }
-  //       }
-  //     ]
-  //   });
-
-  //   await alert.present();
-  // }
-
   nextExercise() {
     console.log("next exercise:" , this.workoutSection, this.exerciseIndex, this.workoutRoutine.length)
     let l = this.workoutRoutine.length
@@ -252,7 +231,6 @@ export class DisplayWorkoutComponent implements OnInit {
  
 
   async goToSummary(){
-    // window.localStorage.setItem("workoutDetails", JSON.stringify(this.workoutDetails));
     if(this.workoutDetails.workoutStatus == "completed"){
       this.workoutDetails.currExercise = {
         section: '',

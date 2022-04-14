@@ -16,10 +16,12 @@ export class CreateWorkoutComponent implements OnInit {
   @Input() userInfo: User;
   
   userDetails: UserDetails;
-  public listInjuries = areaOfInjury;
-  public listGoals = fitnessGoals;
   userUpdates: FormGroup;
   selectedInjury: Injuries[];
+
+  public listInjuries = areaOfInjury;
+  public listGoals = fitnessGoals;
+  
   isShown: boolean = false;
 
   private injuryArea: any;
@@ -81,6 +83,11 @@ export class CreateWorkoutComponent implements OnInit {
     this.modalController.dismiss();
   }
 
+  /**
+   * Format date
+   * 
+   * @param pd Period Date 
+   */
   getPeriodDate(pd) {
     let dateTemp = []
 
@@ -130,6 +137,11 @@ export class CreateWorkoutComponent implements OnInit {
     return this.userUpdates.get('injuryType');
   }
 
+  /**
+   * When injury is toggled yes/no
+   * 
+   * @param injury 
+   */
   injuryChange(injury) {
     this.injuryArea = injury;
     if (this.injuryArea == 'arm') {
@@ -156,6 +168,9 @@ export class CreateWorkoutComponent implements OnInit {
     });
   }
 
+  /**
+   * Update user details and create workout for user
+   */
   async updateDetails() {
     console.log(this.userUpdates)
     if (this.formChange) {
@@ -167,6 +182,9 @@ export class CreateWorkoutComponent implements OnInit {
     await this.createWorkout()
   }
 
+  /**
+   *  Navigate user to create workout page
+   */
   async createWorkout() {
     this.cancel()
     this.router.navigateByUrl('/tabs/workouts/create-workout', { replaceUrl: true });
