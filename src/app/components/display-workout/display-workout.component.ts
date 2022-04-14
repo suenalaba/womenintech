@@ -1,11 +1,9 @@
+/* eslint-disable eqeqeq */
 import { Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkoutDetails } from 'src/app/class/WorkoutDetails';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
-
 import YoutubeService from 'src/app/services/youtube.service';
-
-// import { WindowRefService } from '../../../services/window-ref.service';
 import { Timestamp } from 'firebase/firestore';
 
 @Component({
@@ -13,20 +11,14 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './display-workout.component.html',
   styleUrls: ['./display-workout.component.scss'],
 })
+/**
+ * Class to powering the logic to get and display information related to the exercises
+ */
 export class DisplayWorkoutComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private router: Router,
-    private workoutService: WorkoutsService,
-    // windowRef: WindowRefService,
-    //private ytService: YoutubeService,
-  ) {
-    // this._window = windowRef.nativeWindow; 
-  }
   @Input() section: string;
   @Input() workoutDetails: any;
   @Input() stopwatch: number;
-
-  private _window: Window;
 
   workoutId: string;
   userId: string;
@@ -37,7 +29,7 @@ export class DisplayWorkoutComponent implements OnInit {
   exerciseIndex: number;
 
   buttonText: string;
-  setClick: boolean = false;
+  setClick = false;
   selectedSet: number;
 
   workoutRoutine: WorkoutDetails[];
@@ -48,26 +40,18 @@ export class DisplayWorkoutComponent implements OnInit {
   ytVideosWarm: any;
   ytVideosCool: any;
 
+  constructor(private route: ActivatedRoute, private router: Router,
+    private workoutService: WorkoutsService,
+  ) { }
+
   ngOnInit() {
-    this.runSpotify();
     this.getExercises();
     this.getVideos();
     this.displayExercise();
   }
 
-  runSpotify() {
-    // (<any>window).onSpotifyWebPlaybackSDKReady = () => {
-    //   const token = '[My access token]';
-    //   const player = new Spotify.Player({
-    //     name: 'Web Playback SDK Quick Start Player',
-    //     getOAuthToken: cb => { cb(token); },
-    //     volume: 0.5
-    //   });
-    // }
-  }
-
   /**
-   * Get list of exercises for user
+   * Find the list of all exercises associated with this user's workout
    */
   async getExercises() {
     this.route.queryParamMap.subscribe(params => {
@@ -75,20 +59,18 @@ export class DisplayWorkoutComponent implements OnInit {
       this.exerciseiString = params.get('exerciseIndex');
       this.workoutId = params.get('wid');
       this.userId = params.get('uid');
-    })
+    });
 
-    let ReceivedData = window.localStorage.getItem("workoutRoutine");
-    this.workoutRoutine = JSON.parse(ReceivedData)
-
-    this.workoutDetails = JSON.parse(this.workoutDetails)
-
-    this.exerciseIndex = parseInt(this.exerciseiString)
+    const receivedData = window.localStorage.getItem('workoutRoutine');
+    this.workoutRoutine = JSON.parse(receivedData);
+    this.workoutDetails = JSON.parse(this.workoutDetails);
+    this.exerciseIndex = parseInt(this.exerciseiString, 10);
 
     this.displayExercise();
   }
 
   /**
-   * get workout videos for user
+   * Get a random video on Youtube for the warmup and cooldown, matching video duration with warmup/cooldown duration
    */
   async getVideos() {
     this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(async results => {
@@ -110,64 +92,64 @@ export class DisplayWorkoutComponent implements OnInit {
 
 
   /**
-   * display exercises based on user last's session 
+   * Display exercise based on the current workout progress of the user
    */
   displayExercise() {
-    this.workSets = []
+    this.workSets = [];
 
-    if (this.workoutSection == "warmup") {
-      this.buttonText = "FINISH WARM UP"
+    if (this.workoutSection == 'warmup') {
+      this.buttonText = 'FINISH WARM UP';
       this.exerciseIndex = 0;
     }
 
-    else if (this.workoutSection == "exercise" && this.exerciseIndex < this.workoutRoutine.length) {
-      this.exerciseIndex = this.exerciseIndex
-      this.currentExercise = this.workoutRoutine[this.exerciseIndex]
+    else if (this.workoutSection == 'exercise' && this.exerciseIndex < this.workoutRoutine.length) {
+      this.exerciseIndex = this.exerciseIndex;
+      this.currentExercise = this.workoutRoutine[this.exerciseIndex];
 
       for (let i = 0; i < this.currentExercise.sets.sets; i++) {
-        this.workSets.push(this.currentExercise.sets.reps)
+        this.workSets.push(this.currentExercise.sets.reps);
       }
 
-      this.buttonText = "NEXT EXERCISE";
-      console.log(this.section, this.exerciseIndex)
+      this.buttonText = 'NEXT EXERCISE';
+      console.log(this.section, this.exerciseIndex);
     }
 
   }
 
   /**
-   * add more sets to an exercise in workout
+   * If user presses the plus button in html, add more sets to the workout
    */
   addSet() {
     this.setClick = false;
     this.selectedSet = -1;
 
     this.workoutRoutine[this.exerciseIndex].sets.sets = this.currentExercise.sets.sets + 1;
-    this.workSets.push(this.currentExercise.sets.reps)
+    this.workSets.push(this.currentExercise.sets.reps);
 
-    this.workoutDetails.workoutRoutine = this.workoutRoutine
-    window.localStorage.setItem("workoutRoutine", JSON.stringify(this.workoutRoutine));
+    this.workoutDetails.workoutRoutine = this.workoutRoutine;
+    window.localStorage.setItem('workoutRoutine', JSON.stringify(this.workoutRoutine));
   }
 
   /**
-   * remove set from an exercise in workout
+   * If user presses the delete button in html, remove sets from the workout
    */
   removeSet() {
     if (this.workSets.length > 0) {
-      this.workSets.splice(this.selectedSet, 1)
+      this.workSets.splice(this.selectedSet, 1);
       this.workoutRoutine[this.exerciseIndex].sets.sets = this.currentExercise.sets.sets - 1;
-      this.workoutDetails.workoutRoutine = this.workoutRoutine
-      window.localStorage.setItem("workoutRoutine", JSON.stringify(this.workoutRoutine));
+      this.workoutDetails.workoutRoutine = this.workoutRoutine;
+      window.localStorage.setItem('workoutRoutine', JSON.stringify(this.workoutRoutine));
     }
 
   }
 
   /**
-   * function to toggle delete button in html 
-   * 
+   * Function to toggle delete button in html
+   *
    * @param i index of set
    */
   deleteSet(i) {
-    console.log(i, this.setClick)
+    console.log(i, this.setClick);
     if (this.setClick) {
       this.setClick = false;
       this.selectedSet = -1;
@@ -183,17 +165,17 @@ export class DisplayWorkoutComponent implements OnInit {
   }
 
   /**
-   * triggeed when next button is clicked, will return text for button
+   * Triggeed when next button is clicked, will return text for button
    */
   nextComponent() {
-    if (this.workoutSection == "warmup") {
-      return this.workoutRoutine[0].exerciseName
-    } else if (this.workoutSection == "exercise" && this.exerciseIndex < this.workoutRoutine.length - 1) {
-      return this.workoutRoutine[this.exerciseIndex + 1].exerciseName
-    } else if (this.workoutSection == "exercise" && this.exerciseIndex == this.workoutRoutine.length - 1) {
-      return "Cool Down"
-    } else if (this.workoutSection == "cooldown") {
-      return "Workout Done"
+    if (this.workoutSection == 'warmup') {
+      return this.workoutRoutine[0].exerciseName;
+    } else if (this.workoutSection == 'exercise' && this.exerciseIndex < this.workoutRoutine.length - 1) {
+      return this.workoutRoutine[this.exerciseIndex + 1].exerciseName;
+    } else if (this.workoutSection == 'exercise' && this.exerciseIndex == this.workoutRoutine.length - 1) {
+      return 'Cool Down';
+    } else if (this.workoutSection == 'cooldown') {
+      return 'Workout Done';
     }
   }
 
@@ -201,40 +183,40 @@ export class DisplayWorkoutComponent implements OnInit {
    * Exercises to be displayed
    */
   nextExercise() {
-    console.log("next exercise:", this.workoutSection, this.exerciseIndex, this.workoutRoutine.length)
-    let l = this.workoutRoutine.length
+    console.log('next exercise:', this.workoutSection, this.exerciseIndex, this.workoutRoutine.length);
+    const l = this.workoutRoutine.length;
 
     this.workoutDetails.currExercise = {
       section: this.workoutSection,
       index: this.workoutSection == 'exercsie' ? this.exerciseIndex : -1,
-    }
+    };
 
-    if (this.workoutSection == "warmup") {
-      this.buttonText = "NEXT EXERCISE"
-      this.workoutSection = "exercise"
+    if (this.workoutSection == 'warmup') {
+      this.buttonText = 'NEXT EXERCISE';
+      this.workoutSection = 'exercise';
       this.exerciseIndex = 0;
       this.navToSection();
       this.displayExercise();
-    } else if (this.exerciseIndex < l - 1 && this.workoutSection == "exercise") {
+    } else if (this.exerciseIndex < l - 1 && this.workoutSection == 'exercise') {
       this.exerciseIndex = this.exerciseIndex + 1;
       this.displayExercise();
-      this.buttonText = this.exerciseIndex == l - 1 ? "START COOLDOWN" : "NEXT EXERCISE";
-      this.workoutSection = "exercise"
-      this.navToSection()
+      this.buttonText = this.exerciseIndex == l - 1 ? 'START COOLDOWN' : 'NEXT EXERCISE';
+      this.workoutSection = 'exercise';
+      this.navToSection();
     } else if (this.exerciseIndex == l - 1 && this.workoutSection == 'exercise') {
-      this.workoutSection = "cooldown"
-      this.buttonText = "FINISH COOLDOWN";
+      this.workoutSection = 'cooldown';
+      this.buttonText = 'FINISH COOLDOWN';
       this.exerciseIndex = -1;
-      this.navToSection()
+      this.navToSection();
     } else if (this.workoutSection == 'cooldown') {
-      this.buttonText = "FINISH COOLDOWN"
-      this.workoutDetails.workoutStatus = "completed"
-      this.goToSummary()
+      this.buttonText = 'FINISH COOLDOWN';
+      this.workoutDetails.workoutStatus = 'completed';
+      this.goToSummary();
     }
   }
 
   /**
-   * navigate to workout and change it's parameters
+   * Navigate to workout and change its parameters
    */
   navToSection() {
     this.router.navigate([], {
@@ -251,19 +233,19 @@ export class DisplayWorkoutComponent implements OnInit {
   }
 
   /**
-   * navigate user to workout summary
+   * Navigate user to workout summary
    */
   async goToSummary() {
-    if (this.workoutDetails.workoutStatus == "completed") {
+    if (this.workoutDetails.workoutStatus == 'completed') {
       this.workoutDetails.currExercise = {
         section: '',
         index: -1,
-      }
+      };
       this.workoutDetails.stopwatch = this.stopwatch;
       this.workoutDetails.dateCompleted = Timestamp.fromDate((new Date()));
-      this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails)
+      this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails);
       await this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId } });
-      console.log(this.workoutDetails)
+      console.log(this.workoutDetails);
     } else {
       await this.router.navigateByUrl('/tabs/workouts');
     }

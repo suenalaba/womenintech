@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, IonicSwiper, LoadingController, ToastController } from '@ionic/angular';
+import { IonicSwiper, ToastController } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { areaOfInjury, armInjuries, legInjuries, backInjuries, handInjuries, feetInjuries, otherInjuries } from '../../../data/injuries';
 import { fitnessGoals } from '../../../data/goals';
@@ -16,19 +16,21 @@ SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
   styleUrls: ['./user-details.page.scss'],
   encapsulation: ViewEncapsulation.None
 })
+/**
+ * Page to display details the user keyed in
+ */
 export class UserDetailsPage implements OnInit {
   progress = 0.0;
   slideIndex = 0;
 
   public listInjuries = areaOfInjury;
-  private selectedInjury = [];
-
   public listGoals = fitnessGoals;
 
+  userDetailsForm: FormGroup;
+
+  private selectedInjury = [];
   private gender: any;
   private slides: any;
-
-  userDetailsForm: FormGroup;
   private userSignUp: any;
 
   //Get value on ionChange on IonRadioGroup
@@ -49,36 +51,36 @@ export class UserDetailsPage implements OnInit {
     this.buildForm();
 
     this.injury.valueChanges.subscribe(val => {
-      console.log(val)
+      console.log(val);
       if (val === 'yes') {
-        this.userDetailsForm.controls['areaOfInjury'].setValidators([Validators.required]);
-        this.userDetailsForm.controls['injuryType'].setValidators([Validators.required]);
+        this.userDetailsForm.controls.areaOfInjury.setValidators([Validators.required]);
+        this.userDetailsForm.controls.injuryType.setValidators([Validators.required]);
       } else {
-        this.userDetailsForm.controls['areaOfInjury'].clearValidators();
-        this.userDetailsForm.controls['injuryType'].clearValidators();
+        this.userDetailsForm.controls.areaOfInjury.clearValidators();
+        this.userDetailsForm.controls.injuryType.clearValidators();
 
       }
-      this.userDetailsForm.controls['areaOfInjury'].updateValueAndValidity();
-      this.userDetailsForm.controls['injuryType'].updateValueAndValidity();
+      this.userDetailsForm.controls.areaOfInjury.updateValueAndValidity();
+      this.userDetailsForm.controls.injuryType.updateValueAndValidity();
 
     });
 
     this.healthCond.valueChanges.subscribe(val => {
       console.log(val);
       if (val === 'yes') {
-        this.userDetailsForm.controls['healthCondName'].setValidators([Validators.required]);
+        this.userDetailsForm.controls.healthCondName.setValidators([Validators.required]);
       } else {
-        this.userDetailsForm.controls['healthCondName'].clearValidators();
+        this.userDetailsForm.controls.healthCondName.clearValidators();
       }
-      this.userDetailsForm.controls['healthCondName'].updateValueAndValidity();
+      this.userDetailsForm.controls.healthCondName.updateValueAndValidity();
     });
 
     if (this.gender === 'female') {
-      this.userDetailsForm.controls['menstruationCycle'].setValidators([Validators.required]);
+      this.userDetailsForm.controls.menstruationCycle.setValidators([Validators.required]);
     } else {
-      this.userDetailsForm.controls['menstruationCycle'].clearValidators();
+      this.userDetailsForm.controls.menstruationCycle.clearValidators();
     }
-    this.userDetailsForm.controls['menstruationCycle'].updateValueAndValidity();
+    this.userDetailsForm.controls.menstruationCycle.updateValueAndValidity();
   }
 
 
@@ -138,7 +140,7 @@ export class UserDetailsPage implements OnInit {
 
   /**
    * set values for swiper progress
-   * 
+   *
    * @param swiper swiper page
    */
 
@@ -154,7 +156,7 @@ export class UserDetailsPage implements OnInit {
    */
   public slideDidChange() {
     console.log('Slide did change');
-    if (!this.slides) return;
+    if (!this.slides) { return; }
 
     console.table({
       isBeginning: this.slides.isBeginning,
@@ -167,11 +169,11 @@ export class UserDetailsPage implements OnInit {
 
   /**
    * calculate progress of swiper component
-   * 
+   *
    * @param i slide index
    */
   public getProgress(i) {
-    let val = (i + 1) * 0.18;
+    const val = (i + 1) * 0.18;
     console.log(val);
     return val;
   }
@@ -196,27 +198,27 @@ export class UserDetailsPage implements OnInit {
 
   /**
    * this function is to initialize the list of injures based on the area of injury selcted by the user 
-   *  
+   *
    * @param event radio event when value is changed
    */
   radioInjuryChange(event) {
     this.selectedRadioGroup = event.detail;
-    console.log(event)
+    console.log(event);
     if (this.selectedRadioGroup.value == 'arm') {
-      this.selectedInjury = armInjuries
+      this.selectedInjury = armInjuries;
     } else if (this.selectedRadioGroup.value == 'leg') {
-      this.selectedInjury = legInjuries
+      this.selectedInjury = legInjuries;
     } else if (this.selectedRadioGroup.value == 'back') {
-      this.selectedInjury = backInjuries
+      this.selectedInjury = backInjuries;
     } else if (this.selectedRadioGroup.value == 'hand') {
-      this.selectedInjury = handInjuries
+      this.selectedInjury = handInjuries;
     } else if (this.selectedRadioGroup.value == 'feet') {
-      this.selectedInjury = feetInjuries
+      this.selectedInjury = feetInjuries;
     } else if (this.selectedRadioGroup.value == 'others') {
-      this.selectedInjury = otherInjuries
+      this.selectedInjury = otherInjuries;
     }
     else {
-      this.selectedInjury = []
+      this.selectedInjury = [];
     }
   }
 

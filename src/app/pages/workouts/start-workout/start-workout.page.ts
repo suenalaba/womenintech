@@ -5,7 +5,6 @@ import { Timestamp } from 'firebase/firestore';
 import { timer } from 'rxjs';
 import { WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { WorkoutDetails } from 'src/app/class/WorkoutDetails';
-import { WorkoutAPIService } from 'src/app/services/workouts/workout-API.service';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 
 @Component({
@@ -33,14 +32,14 @@ export class StartWorkoutPage implements OnInit {
   displayTimer: string;
 
   constructor(
-    private route: ActivatedRoute, private router: Router, 
+    private route: ActivatedRoute, private router: Router,
     private workoutService: WorkoutsService, private alertController: AlertController, private toastController: ToastController) { }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
       this.workoutId = params.get('wid');
       this.userId = params.get('uid');
-    })
+    });
 
     this.timerDuration = 0;
     this.toggleTimer();
@@ -49,29 +48,29 @@ export class StartWorkoutPage implements OnInit {
   }
 
   /**
-   * function to get user's workout 
-   * 
+   * function to get user's workout
+   *
    * @param wid workout id
    * @param uid user id
    */
   async getWorkoutDetails(wid: string, uid: string) {
-    console.log(wid)
+    console.log(wid);
 
     this.workoutService.getWorkout(wid, uid).subscribe(results => {
 
       this.workoutRoutine = results.workoutRoutine;
       this.workoutDetails = results;
-      this.workoutJSON = JSON.stringify(this.workoutDetails)
-      this.getMoreWorkoutDetails(results)
+      this.workoutJSON = JSON.stringify(this.workoutDetails);
+      this.getMoreWorkoutDetails(results);
 
-      console.log(this.workoutRoutine)
+      console.log(this.workoutRoutine);
 
-      window.localStorage.setItem("workoutRoutine",JSON.stringify(this.workoutRoutine));
-      window.localStorage.setItem("workoutDetails",JSON.stringify(this.workoutDetails));
+      window.localStorage.setItem('workoutRoutine',JSON.stringify(this.workoutRoutine));
+      window.localStorage.setItem('workoutDetails',JSON.stringify(this.workoutDetails));
 
     },
     error=>{
-      console.log(error)
+      console.log(error);
       this.router.navigateByUrl('/tabs/workouts', {replaceUrl: true});
     }
     );
@@ -82,37 +81,37 @@ export class StartWorkoutPage implements OnInit {
    */
   ionViewWillLeave() {
     this.isRunning = false;
-    console.log(this.timerDuration)
+    console.log(this.timerDuration);
   }
 
   /**
-   * function to retrieve workout information 
-   * declare variables based on the workout status 
-   * 
+   * function to retrieve workout information
+   * declare variables based on the workout status
+   *
    * @param res workout information
    */
   getMoreWorkoutDetails(res: WorkoutDesc) {
-    console.log(res.workoutStatus)
-    if (res.workoutStatus == "created" || res.workoutStatus == "completed") {
-      this.buttonText = "FINISH WARM UP"
-      this.workoutSection = "warmup"
-      this.workoutDetails.workoutStatus = "in_progress"
+    console.log(res.workoutStatus);
+    if (res.workoutStatus == 'created' || res.workoutStatus == 'completed') {
+      this.buttonText = 'FINISH WARM UP';
+      this.workoutSection = 'warmup';
+      this.workoutDetails.workoutStatus = 'in_progress';
       this.workoutDetails.dateStart = Timestamp.fromDate((new Date()));
 
-    } else if (res.workoutStatus == "in_progress") {
+    } else if (res.workoutStatus == 'in_progress') {
       this.getDisplayTimer(this.workoutDetails.stopwatch);
       this.timerDuration =  this.workoutDetails.stopwatch;
       this.workoutSection = this.workoutDetails.currExercise.section;
       this.exerciseIndex = this.workoutDetails.currExercise.index;
     }
-    this.navToSection()
+    this.navToSection();
   }
 
   /**
    * change params of route
    */
   navToSection() {
-    console.log("Current page:" + this.workoutSection + " " + this.exerciseIndex)
+    console.log('Current page:' + this.workoutSection + ' ' + this.exerciseIndex);
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
@@ -127,12 +126,12 @@ export class StartWorkoutPage implements OnInit {
   }
 
   nextComponent(){
-    if(this.workoutSection == "warmup"){
-      return this.workoutRoutine[0].exerciseName
-    }else if(this.workoutSection =="exercise" && this.exerciseIndex < this.workoutRoutine.length-1){
-      return this.workoutRoutine[this.exerciseIndex].exerciseName
-    }else if(this.workoutSection =="exercise" && this.exerciseIndex == this.workoutRoutine.length-1){
-      return "Cool Down"
+    if(this.workoutSection == 'warmup'){
+      return this.workoutRoutine[0].exerciseName;
+    }else if(this.workoutSection =='exercise' && this.exerciseIndex < this.workoutRoutine.length-1){
+      return this.workoutRoutine[this.exerciseIndex].exerciseName;
+    }else if(this.workoutSection =='exercise' && this.exerciseIndex == this.workoutRoutine.length-1){
+      return 'Cool Down';
     }
   }
 
@@ -165,7 +164,7 @@ export class StartWorkoutPage implements OnInit {
           id: 'confirm-button',
           handler: () => {
             console.log('Confirm Okay');
-            this.saveWorkout()
+            this.saveWorkout();
           }
         }
       ]
@@ -178,39 +177,39 @@ export class StartWorkoutPage implements OnInit {
    * fucntion to format data and save workout to firebase
    */
   async saveWorkout(){
-    let ReceivedData = window.localStorage.getItem("workoutRoutine");
-    this.workoutRoutine = JSON.parse(ReceivedData);
+    const receivedData = window.localStorage.getItem('workoutRoutine');
+    this.workoutRoutine = JSON.parse(receivedData);
 
     let msg;
-    
+
     this.route.queryParamMap.subscribe(params => {
       this.workoutSection = params.get('workoutSection');
-      this.exerciseIndex = parseInt(params.get('exerciseIndex'));
-    })
+      this.exerciseIndex = parseInt(params.get('exerciseIndex'), 10);
+    });
 
     this.workoutDetails.workoutRoutine = this.workoutRoutine;
 
-    if(this.workoutDetails.workoutStatus == "in_progress"){
+    if(this.workoutDetails.workoutStatus == 'in_progress'){
       this.workoutDetails.stopwatch = this.timerDuration;
       this.workoutDetails.workoutRoutine = this.workoutRoutine;
       this.workoutDetails.currExercise = {
         section: this.workoutSection,
-        index: this.workoutSection=="exercise"?this.exerciseIndex:-1,
-      }
-      msg = "Workout is saved!"
-      this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails).then(()=>this.presentToast(msg))
+        index: this.workoutSection=='exercise'?this.exerciseIndex:-1,
+      };
+      msg = 'Workout is saved!';
+      this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails).then(()=>this.presentToast(msg));
 
       await this.router.navigateByUrl('/tabs/workouts', {replaceUrl: true});
-    }else if(this.workoutDetails.workoutStatus == "completed"){
+    }else if(this.workoutDetails.workoutStatus == 'completed'){
       this.workoutDetails.currExercise = {
         section: '',
         index: -1,
-      }
+      };
       this.workoutDetails.dateCompleted = Timestamp.fromDate((new Date()));
 
-      console.log(this.workoutDetails)
-      msg = "Workout completed!"
-      this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails).then(()=>this.presentToast(msg))
+      console.log(this.workoutDetails);
+      msg = 'Workout completed!';
+      this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails).then(()=>this.presentToast(msg));
     }
   }
 
@@ -226,16 +225,15 @@ export class StartWorkoutPage implements OnInit {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Your Workout is Paused',
-      // subHeader: 'Subtitle',
       backdropDismiss: false,
       message: 'Do you want to continue?',
       buttons: [{
         text: 'Yes',
         handler: (blah) => {
-          this.toggleTimer()
+          this.toggleTimer();
         }
       },{
-        text: "No",
+        text: 'No',
         role: 'cancel',
         id: 'cancel-button',
         handler: (blah) => {
@@ -243,7 +241,7 @@ export class StartWorkoutPage implements OnInit {
           this.stopWorkout();
         }
       }],
-      
+
     });
 
     await alert.present();
@@ -252,16 +250,18 @@ export class StartWorkoutPage implements OnInit {
   /***
    * TIMER
    */
-
   toggleTimer() {
     this.isRunning = !this.isRunning;
     this.stopwatch();
 
     if(!this.isRunning){
-      this.presentAlert()
+      this.presentAlert();
     }
   }
 
+  /**
+   * Stopwatch functions to control the timer
+   */
   stopwatch() {
     timer(0, 1000).subscribe(ellapsedCycles => {
       if (this.isRunning) {
@@ -274,10 +274,14 @@ export class StartWorkoutPage implements OnInit {
     });
   }
 
+  /**
+   * Display the time
+   * @param time current time to show
+   */
   getDisplayTimer(time: number) {
-    var hours = '' + Math.floor(time / 3600);
-    var minutes = '' + Math.floor(time % 3600 / 60);
-    var seconds = '' + Math.floor(time % 3600 % 60);
+    let hours = '' + Math.floor(time / 3600);
+    let minutes = '' + Math.floor(time % 3600 / 60);
+    let seconds = '' + Math.floor(time % 3600 % 60);
 
     if (Number(hours) < 10) {
       hours = '0' + hours;

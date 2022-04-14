@@ -7,6 +7,9 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   templateUrl: './boarding.page.html',
   styleUrls: ['./boarding.page.scss'],
 })
+/**
+ * Screen users see when they first create account
+ */
 export class BoardingPage implements OnInit {
   private slides: any;
 
@@ -17,9 +20,8 @@ export class BoardingPage implements OnInit {
 
   /**
    * show the different boarding pages
-   * 
-   * @param swiper 
-   * 
+   *
+   * @param swiper
    */
   setSwiperInstance(swiper: any) {
     this.slides = swiper;

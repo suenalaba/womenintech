@@ -37,7 +37,7 @@ export const Intensity: CreateWorkoutDesc[] = [
         color: 'warning',
         mets: 9.0,
     }
-]
+];
 
 export const Duration: CreateWorkoutDesc[] = [
     {
@@ -72,7 +72,7 @@ export const Duration: CreateWorkoutDesc[] = [
         name: 'duration',
         color: 'success'
     }
-]
+];
 
 export const wLocation: CreateWorkoutDesc[] = [
     {
@@ -99,7 +99,7 @@ export const wLocation: CreateWorkoutDesc[] = [
         name: 'location',
         color: 'tertiary'
     }
-]
+];
 
 export const Equipment: CreateWorkoutDesc[] = [
     {
@@ -126,7 +126,7 @@ export const Equipment: CreateWorkoutDesc[] = [
         name: 'equipment',
         color: 'secondary'
     },
-]
+];
 
-export let tag: CreateWorkoutDesc[] = []
-export const Tags = tag.concat(Intensity,Equipment,wLocation,Duration)
+export const tag: CreateWorkoutDesc[] = [];
+export const Tags = tag.concat(Intensity,Equipment,wLocation,Duration);

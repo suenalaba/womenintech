@@ -5,18 +5,13 @@ import { SwiperOptions } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
 import Swiper, {Autoplay} from 'swiper';
 import SwiperCore, {Pagination} from 'swiper';
-import { User } from '../../class/user';
-import { AuthenticationService } from '../../services/authentication.service';
 import { EChartsOption } from 'echarts';
-import { waitForAsync } from '@angular/core/testing';
 import { UserService } from '../../services/user.service';
 import YoutubeService from 'src/app/services/youtube.service';
 
 import { HostListener } from '@angular/core';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 import { Router } from '@angular/router';
-import { CompletedWorkout } from 'src/app/class/CreateWorkoutDesc';
-
 
 Swiper.use([Autoplay]);
 SwiperCore.use([Pagination]);
@@ -27,36 +22,64 @@ SwiperCore.use([Pagination]);
   styleUrls: ['home.page.scss']
 })
 
+/**
+ * Homepage that the user lands on
+ */
 export class HomePage implements OnInit {
-  firstName: string = '';
+  public static completedWorkouts: any;
+
+  /**
+   * Configuration for the swiper slide for the stats
+   */
+  @ViewChild('swiperStats') swiperStats: SwiperComponent;
+  configStats: SwiperOptions = {
+    slidesPerView: 1,
+    loop: true,
+    spaceBetween: 50,
+    autoplay: {
+      delay: 5000,
+    },
+    pagination: true
+  };
+
+  /**
+   * Configuration for the swiper slide for the youtube video recommendations
+   */
+  @ViewChild('swiperYt') swiperYt: SwiperComponent;
+  configYt: SwiperOptions = {
+    slidesPerView: 1.5,
+    loop: true,
+    spaceBetween: 10,
+    pagination: true,
+  };
+
+  firstName = '';
+  welcomeText = '';
+  today = '';
+  basedOnWorkout = '';
+
+  cals = 0;
+  durn = '0 mins';
+
   userInfo: any;
-
-  welcomeText: string = '';
-  today: string = '';
-  basedOnWorkout: string = '';
-
-  cals: number = 0;
-  durn: string = '0 mins';
-
   chartOptions: EChartsOption;
-
   ytVideos: any[];
-
   workoutTimeSeries: number[];
   workoutTimeIndex: string[];
-
-  public static completedWorkouts: any;
   thisWkWorkouts: any;
 
   constructor(
-    private authService: AuthenticationService,
     private userService: UserService,
     private loadingCtrl: LoadingController,
     private workoutService: WorkoutsService,
     private router: Router,
-    //private ytService: YoutubeService,
   ) { this.onResize(); this.ytVideos = []; this.thisWkWorkouts = []; }
 
+  /**
+   * Dynamically change the number of videos shown on the screen based on screen size
+   *
+   * @param event when the screen changes
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
     console.log('screen change size');
@@ -70,25 +93,6 @@ export class HomePage implements OnInit {
     }
   }
 
-  @ViewChild('swiperStats') swiperStats: SwiperComponent;
-  configStats: SwiperOptions = {
-    slidesPerView: 1,
-    loop: true,
-    spaceBetween: 50,
-    autoplay: {
-      delay: 5000,
-    },
-    pagination: true
-  };
-
-  @ViewChild('swiperYt') swiperYt: SwiperComponent;
-  configYt: SwiperOptions = {
-    slidesPerView: 1.5,
-    loop: true,
-    spaceBetween: 10,
-    pagination: true,
-  };
-
   ngOnInit() {
     this.userService.getUserById(JSON.parse(localStorage.getItem('userID'))).subscribe(async (res)=>{
       this.userInfo = res;
@@ -99,11 +103,14 @@ export class HomePage implements OnInit {
     });
   }
 
+  /**
+   * Get all the workouts and filter down to those done this week
+   */
   async filterWorkouts() {
     this.thisWkWorkouts = [];
     HomePage.completedWorkouts = await this.workoutService.getCompletedWorkouts(JSON.parse(localStorage.getItem('userID')));
     for (let i = 0; i < HomePage.completedWorkouts.docs.length; i++) {
-      var tdy = new Date();
+      const tdy = new Date();
       if(HomePage.completedWorkouts.docs[i].data().dateCompleted.seconds>=tdy.getTime()/1000-7*24*60*60) {
         await this.thisWkWorkouts.push(HomePage.completedWorkouts.docs[i].data());
       }
@@ -111,6 +118,9 @@ export class HomePage implements OnInit {
     console.log('end filterWorkout');
   }
 
+  /**
+   * Process the data and generate the relevant text to show on the screen
+   */
   async loadText(){
     const loading = await this.loadingCtrl.create();
     // await loading.present();
@@ -120,23 +130,28 @@ export class HomePage implements OnInit {
     } else {
       this.welcomeText = 'Welcome back, ' + this.userInfo.firstName;
     }
-    
-    var tdy = new Date();
-    this.today = String(tdy.getDate()) + ' ' + String(tdy.toLocaleString('default', { month: 'long' })) + ' ' + String(tdy.getFullYear()) + ', ' + String(tdy.toLocaleString('default', { weekday: 'long' }));
+
+    const tdy = new Date();
+    this.today = String(tdy.getDate()) + ' ' +
+    String(tdy.toLocaleString('default', { month: 'long' })) + ' ' +
+    String(tdy.getFullYear()) + ', ' + String(tdy.toLocaleString('default', { weekday: 'long' }));
 
     this.cals = 0;
     let durnInt = 0;
     for (let i = 0; i < this.thisWkWorkouts.length; i++) {
-      durnInt += parseInt(this.thisWkWorkouts[i].stopwatch);
+      durnInt += parseInt(this.thisWkWorkouts[i].stopwatch, 10);
       this.cals += this.thisWkWorkouts[i].caloriesBurnt;
     }
-    this.cals = Math.round(this.cals * 100) / 100
+    this.cals = Math.round(this.cals * 100) / 100;
     this.durn = `${Math.round(durnInt/60 * 100) / 100} mins`;
 
     loading.dismiss();
     console.log('end loadtext');
   }
 
+  /**
+   * Connect to the Youtube API endpoint to get recommneded videos
+   */
   async getVideos() {
     const loading = await this.loadingCtrl.create();
     await loading.present();
@@ -147,7 +162,7 @@ export class HomePage implements OnInit {
       this.basedOnWorkout = `Get started on your first exercise!`;
 
       let genderr = '';
-      if (this.userInfo.gender != "others") {
+      if (this.userInfo.gender != 'others') {
         genderr += this.userInfo.gender;
       }
       const ytService = YoutubeService.getInstance();
@@ -159,16 +174,16 @@ export class HomePage implements OnInit {
     } else {
     // HAS COMPLETED A WORKOUT
       this.basedOnWorkout = `Based on workout: ${HomePage.completedWorkouts.docs[0].data().workoutName}`;
-      let latestWorkout = HomePage.completedWorkouts.docs[0].data().workoutRoutine;
+      const latestWorkout = HomePage.completedWorkouts.docs[0].data().workoutRoutine;
 
       for (let i = 0; i < latestWorkout.length; i++) {
         let searchTerm = '';
         searchTerm += latestWorkout[i].exerciseName;
-        if (this.userInfo.gender != "others") {
+        if (this.userInfo.gender != 'others') {
           searchTerm += ' ' + this.userInfo.gender;
         }
         const ytService = YoutubeService.getInstance();
-        let ytVid = ytService.getYoutubeAPI(searchTerm);
+        const ytVid = ytService.getYoutubeAPI(searchTerm);
         this.ytVideos.push(ytVid);
       }
     }
@@ -177,33 +192,36 @@ export class HomePage implements OnInit {
     console.log('end getvid');
   }
 
+  /**
+   * Calculate the stats to show on the graph
+   */
   async loadGraph() {
     const loading = await this.loadingCtrl.create();
     await loading.present();
 
     this.workoutTimeIndex = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    var tdy = new Date();
+    const tdy = new Date();
     console.log(tdy);
-    var shift = tdy.getDay()-1;
+    let shift = tdy.getDay()-1;
     while (shift--) {
-      var temp = this.workoutTimeIndex.shift()
-      this.workoutTimeIndex.push(temp);
+      const temp1 = this.workoutTimeIndex.shift();
+      this.workoutTimeIndex.push(temp1);
     }
-    var temp = this.workoutTimeIndex.shift();
-    temp += ' (TODAY) '
+    let temp = this.workoutTimeIndex.shift();
+    temp += ' (TODAY) ';
     this.workoutTimeIndex.push(temp);
 
     console.log(this.thisWkWorkouts);
     this.workoutTimeSeries = new Array(this.workoutTimeIndex.length).fill(0);
-    var ptr = 0;
+    let ptr = 0;
     let i = 0;
     while (i<this.workoutTimeIndex.length && ptr < this.thisWkWorkouts.length) {
       console.log(ptr);
-      var upperBound = tdy.getTime()/1000-i*24*60*60;
-      var lowerBound = upperBound-24*60*60;
-      var curTime = this.thisWkWorkouts[ptr].dateCompleted.seconds;
+      const upperBound = tdy.getTime()/1000-i*24*60*60;
+      const lowerBound = upperBound-24*60*60;
+      const curTime = this.thisWkWorkouts[ptr].dateCompleted.seconds;
       if (lowerBound <= curTime && curTime <= upperBound) {
-        this.workoutTimeSeries[this.workoutTimeSeries.length-1-i] += parseInt(this.thisWkWorkouts[ptr].stopwatch)/60;
+        this.workoutTimeSeries[this.workoutTimeSeries.length-1-i] += parseInt(this.thisWkWorkouts[ptr].stopwatch, 10)/60;
         ptr++;
       }
       else{
@@ -218,6 +236,11 @@ export class HomePage implements OnInit {
     console.log('end loadgraph');
   }
 
+  /**
+   * Lazily draw the chart only when the user swipes to the graph page
+   *
+   * @param e event for when the user swipes to the graph
+   */
   async swiperSlideChanged(e) {
     console.log('changed slide: ' ,e);
     this.chartOptions = {
@@ -276,10 +299,16 @@ export class HomePage implements OnInit {
     };
   }
 
+  /**
+   * Navigate to the statistics page
+   */
   goStats() {
     this.router.navigate(['/tabs/stats']);
   }
 
+  /**
+   * Perform a synchronous-type refresh upon clicking refresh button
+   */
   async doRefresh() {
     await this.filterWorkouts();
     this.loadText();
@@ -287,6 +316,11 @@ export class HomePage implements OnInit {
     this.loadGraph();
   }
 
+  /**
+   * Perform an asynchronous-type refresh upon pull to refresh
+   *
+   * @param event pull up to refresh occurred
+   */
   async doRefresh2(event) {
     await this.filterWorkouts();
     setTimeout(() => {
@@ -296,7 +330,7 @@ export class HomePage implements OnInit {
       this.loadGraph();
       event.target.complete();
     }, 1000);
-   
+
   }
 
 }

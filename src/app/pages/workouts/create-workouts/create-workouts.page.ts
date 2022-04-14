@@ -15,18 +15,10 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./create-workouts.page.scss'],
 })
 export class CreateWorkoutsPage implements OnInit {
-  public get workoutAPI(): WorkoutAPIService {
-    return this._workoutAPI;
-  }
-  public set workoutAPI(value: WorkoutAPIService) {
-    this._workoutAPI = value;
-  }
-
   listIntensity: CreateWorkoutDesc[] = Intensity;
   listDuration: CreateWorkoutDesc[] = Duration;
   listLocation: CreateWorkoutDesc[] = wLocation;
   listEquipment: CreateWorkoutDesc[] = Equipment;
-
 
   createWorkoutForm: FormGroup;
 
@@ -34,7 +26,6 @@ export class CreateWorkoutsPage implements OnInit {
   userDetails: UserDetails;
 
   errors = [];
-
   exerciseData = [];
   userWorkout = [];
 
@@ -49,9 +40,13 @@ export class CreateWorkoutsPage implements OnInit {
     private nav: NavController,
     private _workoutAPI: WorkoutAPIService,
     private userService: UserService
+  ) { }
 
-  ) {
-
+  public get workoutAPI(): WorkoutAPIService {
+    return this._workoutAPI;
+  }
+  public set workoutAPI(value: WorkoutAPIService) {
+    this._workoutAPI = value;
   }
 
   ngOnInit() {

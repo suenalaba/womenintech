@@ -28,6 +28,8 @@ export class EditWorkoutPage implements OnInit {
   loadingPresent = true;
   formChange = false;
 
+  workSets = [];
+
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
@@ -38,8 +40,6 @@ export class EditWorkoutPage implements OnInit {
     private workoutService: WorkoutsService,
     private toastController: ToastController
   ) { }
-
-  workSets = [];
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {

@@ -2,15 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { NavController, AlertController, LoadingController, Platform } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { AuthenticationService } from './../../../services/authentication.service';
-
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.page.html',
   styleUrls: ['./sign-up.page.scss'],
 })
+/**
+ * Class for the app's central sign up page
+ */
 export class SignUpPage implements OnInit {
   credentials: FormGroup;
 
@@ -73,17 +75,18 @@ export class SignUpPage implements OnInit {
    * checks if confirm password matches with password, it will return validation error is it does not match,
    * else it will reutrn null as there is not error
    *
-   * @param password user password 
+   * @param password user password
    */
   equalto(field_name): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
-      let input = control.value;
-      let isValid = control.root.value[field_name] == input
-      if (!isValid)
-        return { 'equalTo': { isValid } }
-      else
+      const input = control.value;
+      const isValid = control.root.value[field_name] == input;
+      if (!isValid) {
+        return { 'equalTo': { isValid } };
+      } else {
         return null;
+      }
     };
   }
 
@@ -95,20 +98,18 @@ export class SignUpPage implements OnInit {
   }
 
   /**
-   * funcion to register a new user 
-   * 
+   * funcion to register a new user
+   *
    * if the user is new and has not made an account, they will be navigated to enter more details for their profile
    * if the user has registerd before, they will be prompted a failed message 
-   *  
+   *
    */
   async signUp() {
     const loading = await this.loadingController.create();
     await loading.present();
 
-
     const user = await this.authService.register(this.credentials.value);
     await loading.dismiss();
-
 
     if (this.credentials.valid && user) {
       this.credentials.value.id = user.user.uid;
@@ -122,7 +123,7 @@ export class SignUpPage implements OnInit {
 
   /**
    * function to display alert with customized headers and messages
-   * 
+   *
    * @param header header of alert
    * @param message message of alert
    */
@@ -139,11 +140,11 @@ export class SignUpPage implements OnInit {
    * function to display loading component
    */
   async showLoading() {
-    this.loadingPresent = true
-    let load = await this.loadingController.create({
-      message: "Please wait....",
+    this.loadingPresent = true;
+    const load = await this.loadingController.create({
+      message: 'Please wait....',
 
-    })
+    });
     await load.present();
   }
 
