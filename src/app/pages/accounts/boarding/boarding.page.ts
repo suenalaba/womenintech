@@ -15,6 +15,9 @@ export class BoardingPage implements OnInit {
 
   constructor(private router: Router, private authService: AuthenticationService,) { }
 
+  ngOnInit() {
+  }
+
   /**
    * when next button is clicked
    */
@@ -39,6 +42,4 @@ export class BoardingPage implements OnInit {
     this.router.navigateByUrl('/tabs', { replaceUrl: true });
   }
 
-  ngOnInit() {
-  }
 }
