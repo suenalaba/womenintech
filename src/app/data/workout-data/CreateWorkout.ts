@@ -1,6 +1,6 @@
-import { CreateWorkoutDesc } from 'src/app/class/CreateWorkoutDesc'
+import { CreateWorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 
-export const Intensity: CreateWorkoutDesc[] = [
+export const intensity: CreateWorkoutDesc[] = [
     {
         id: 1,
         text: 'Low',
@@ -39,7 +39,7 @@ export const Intensity: CreateWorkoutDesc[] = [
     }
 ];
 
-export const Duration: CreateWorkoutDesc[] = [
+export const duration: CreateWorkoutDesc[] = [
     {
         id: 1,
         text: 'Short and Quick',
@@ -101,7 +101,7 @@ export const wLocation: CreateWorkoutDesc[] = [
     }
 ];
 
-export const Equipment: CreateWorkoutDesc[] = [
+export const equipment: CreateWorkoutDesc[] = [
     {
         id: 1,
         text: 'Basic Equipment',
@@ -129,4 +129,4 @@ export const Equipment: CreateWorkoutDesc[] = [
 ];
 
 export const tag: CreateWorkoutDesc[] = [];
-export const Tags = tag.concat(Intensity,Equipment,wLocation,Duration);
+export const tags = tag.concat(intensity,equipment,wLocation,duration);

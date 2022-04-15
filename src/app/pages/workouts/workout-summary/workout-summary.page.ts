@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { CompletedWorkout, CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { User } from 'src/app/class/user';
-import { Intensity } from 'src/app/data/workout-data/CreateWorkout';
+import { intensity } from 'src/app/data/workout-data/CreateWorkout';
 import { UserService } from 'src/app/services/user.service';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 
@@ -19,7 +19,7 @@ import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 export class WorkoutSummaryPage implements OnInit {
   private calories: number;
   private fitnessVal: number;
-  private listIntensity: CreateWorkoutDesc[] = Intensity;
+  private listIntensity: CreateWorkoutDesc[] = intensity;
   private strengthVal: number;
   private totalReps: number;
   private totalSets: number;

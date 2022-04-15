@@ -1,4 +1,4 @@
-export const FilterWorkoutList = [
+export const filterWorkoutList = [
     {
         value:'not_started',
         title:'Not Started'

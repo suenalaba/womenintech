@@ -82,7 +82,7 @@ export class SignUpPage implements OnInit {
    * funcion to register a new user
    *
    * if the user is new and has not made an account, they will be navigated to enter more details for their profile
-   * if the user has registerd before, they will be prompted a failed message 
+   * if the user has registerd before, they will be prompted a failed message
    *
    */
   async signUp() {
@@ -144,13 +144,13 @@ export class SignUpPage implements OnInit {
    *
    * @param password user password
    */
-  private equalto(field_name): ValidatorFn {
+  private equalto(fieldName): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
       const input = control.value;
-      const isValid = control.root.value[field_name] == input;
+      const isValid = control.root.value[fieldName] === input;
       if (!isValid) {
-        return { 'equalTo': { isValid } };
+        return { equalTo: { isValid } };
       } else {
         return null;
       }

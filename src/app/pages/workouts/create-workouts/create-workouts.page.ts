@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Component, OnInit } from '@angular/core';
 import { CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
-import { Duration, Equipment, Intensity, wLocation } from 'src/app/data/workout-data/CreateWorkout';
+import { duration, equipment, intensity, wLocation } from 'src/app/data/workout-data/CreateWorkout';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -22,9 +22,9 @@ export class CreateWorkoutsPage implements OnInit {
   private createWorkoutForm: FormGroup;
   private errors = [];
   private exerciseData = [];
-  private listDuration: CreateWorkoutDesc[] = Duration;
-  private listEquipment: CreateWorkoutDesc[] = Equipment;
-  private listIntensity: CreateWorkoutDesc[] = Intensity;
+  private listDuration: CreateWorkoutDesc[] = duration;
+  private listEquipment: CreateWorkoutDesc[] = equipment;
+  private listIntensity: CreateWorkoutDesc[] = intensity;
   private listLocation: CreateWorkoutDesc[] = wLocation;
   private userDetails: UserDetails;
   private userId: string;
