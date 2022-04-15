@@ -15,15 +15,7 @@ ion-card-title.exercise-title {
 div.yt-video{
     width:100%;
 }
-// div.sets{
-//     margin-top:20px;
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: space-between;
-//     align-items: center;
-//     width: 100%;
-//     overflow-x: scroll;
-// }
+
 
 div.sets {
   width: 100%;
@@ -43,7 +35,6 @@ div.add-set {
 }
 
 div.working-set {
-//   width: 100%;
   background-color: var(--ion-color-dark);
   color: white;
   margin: 5px;
