@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Component, OnInit } from '@angular/core';
 import { CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
@@ -19,13 +20,13 @@ import { UserService } from 'src/app/services/user.service';
  * Page to create new workout
  */
 export class CreateWorkoutsPage implements OnInit {
-  private createWorkoutForm: FormGroup;
+  public createWorkoutForm: FormGroup;
   private errors = [];
   private exerciseData = [];
-  private listDuration: CreateWorkoutDesc[] = duration;
-  private listEquipment: CreateWorkoutDesc[] = equipment;
-  private listIntensity: CreateWorkoutDesc[] = intensity;
-  private listLocation: CreateWorkoutDesc[] = wLocation;
+  public listDuration: CreateWorkoutDesc[] = duration;
+  public listEquipment: CreateWorkoutDesc[] = equipment;
+  public listIntensity: CreateWorkoutDesc[] = intensity;
+  public listLocation: CreateWorkoutDesc[] = wLocation;
   private userDetails: UserDetails;
   private userId: string;
   private userWorkout = [];
@@ -79,9 +80,9 @@ export class CreateWorkoutsPage implements OnInit {
   }
 
   /**
-   * fucntion to navigate user back to all workouts
+   * function to navigate user back to all workouts
    */
-  private goBack() {
+  public goBack() {
     this.nav.navigateBack(['tabs/workouts'], { animated: true });
   }
 
@@ -104,8 +105,8 @@ export class CreateWorkoutsPage implements OnInit {
     return arr;
   }
 
-  private submitWorkoutDesc() {
-    if (this.createWorkoutForm.status == 'INVALID') {
+  public submitWorkoutDesc() {
+    if (this.createWorkoutForm.status === 'INVALID') {
       this.presentAlert();
     } else {
       this.generateWorkout(this.createWorkoutForm.value);
