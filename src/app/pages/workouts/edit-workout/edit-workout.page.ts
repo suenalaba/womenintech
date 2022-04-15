@@ -17,15 +17,14 @@ import { EditWorkoutComponent } from 'src/app/components/edit-workout/edit-worko
  * Page that allows users to edit their workouts
  */
 export class EditWorkoutPage implements OnInit {
+  public userWorkoutUpdates: FormGroup;
+  public workoutDetails: WorkoutDesc;
   private currentExercise: WorkoutDetails;
   private exerciseIndex: number;
   private exerciseList: WorkoutDetails[];
   private formChange = false;
   private loadingPresent = true;
   private userId: string;
-  private userWorkoutUpdates: FormGroup;
-
-  private workoutDetails: WorkoutDesc;
   private workoutId: string;
   private workSets = [];
 
@@ -107,6 +106,11 @@ export class EditWorkoutPage implements OnInit {
     this.getWorkoutDetails(this.workoutId, this.userId);
   }
 
+
+  counter(i: number) {
+    return new Array(i);
+  }
+
   /**
    * display toast message
    *
@@ -171,16 +175,12 @@ export class EditWorkoutPage implements OnInit {
   }
 
   /**
-   * fucntion to dismiss modal
+   * function to dismiss modal
    */
-  private cancel() {
+   private cancel() {
     this.modalController.dismiss({
-      'dismissed': true,
+      dismissed: true,
     });
   }
-
-  counter(i: number) {
-    return new Array(i);
-}
 }
 
