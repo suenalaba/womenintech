@@ -22,13 +22,12 @@ SwiperCore.use([Keyboard, Pagination, Scrollbar, IonicSwiper]);
 export class UserDetailsPage implements OnInit {
   public listInjuries = areaOfInjury;
   public listGoals = fitnessGoals;
-
+  public userDetailsForm: FormGroup;
   public gender: string;
   public progress = 0.0;
   public selectedInjury = [];
   private slideIndex = 0;
 
-  public userDetailsForm: FormGroup;
   private slides: any;
   private userSignUp: any;
 
@@ -169,6 +168,62 @@ export class UserDetailsPage implements OnInit {
   }
 
   /**
+   * set values for swiper progress
+   *
+   * @param swiper swiper page
+   */
+
+     public setSwiperInstance(swiper: any) {
+      this.slides = swiper;
+      this.slideIndex = this.slides.activeIndex;
+      this.progress = this.getProgress(this.slides.activeIndex);
+
+    }
+
+    /**
+     * triggered when next button is clicked and will move slide to the next page
+     */
+    public nextPage() {
+      console.log(this.slides);
+      console.log(this.userDetailsForm);
+
+      this.slides.slideNext();
+    }
+
+    /**
+     * triggered when the back button is clicked and will return user to previous slide
+     */
+    public prevPage() {
+      this.slides.slidePrev();
+    }
+
+    /**
+     * this function is to initialize the list of injures based on the area of injury selcted by the user
+     *
+     * @param event radio event when value is changed
+     */
+    public radioInjuryChange(event) {
+      this.selectedRadioGroup = event.detail;
+      console.log(event);
+      if (this.selectedRadioGroup.value === 'arm') {
+        this.selectedInjury = armInjuries;
+      } else if (this.selectedRadioGroup.value === 'leg') {
+        this.selectedInjury = legInjuries;
+      } else if (this.selectedRadioGroup.value === 'back') {
+        this.selectedInjury = backInjuries;
+      } else if (this.selectedRadioGroup.value === 'hand') {
+        this.selectedInjury = handInjuries;
+      } else if (this.selectedRadioGroup.value === 'feet') {
+        this.selectedInjury = feetInjuries;
+      } else if (this.selectedRadioGroup.value === 'others') {
+        this.selectedInjury = otherInjuries;
+      }
+      else {
+        this.selectedInjury = [];
+      }
+    }
+
+  /**
    * Function to create user details form
    */
   private buildForm() {
@@ -183,61 +238,5 @@ export class UserDetailsPage implements OnInit {
       fitnessGoal: ['', [Validators.required]],
       menstruationCycle: ['', []]
     });
-  }
-
-  /**
-   * set values for swiper progress
-   *
-   * @param swiper swiper page
-   */
-
-  public setSwiperInstance(swiper: any) {
-    this.slides = swiper;
-    this.slideIndex = this.slides.activeIndex;
-    this.progress = this.getProgress(this.slides.activeIndex);
-
-  }
-
-  /**
-   * triggered when next button is clicked and will move slide to the next page
-   */
-  public nextPage() {
-    console.log(this.slides);
-    console.log(this.userDetailsForm);
-
-    this.slides.slideNext();
-  }
-
-  /**
-   * triggered when the back button is clicked and will return user to previous slide
-   */
-  public prevPage() {
-    this.slides.slidePrev();
-  }
-
-  /**
-   * this function is to initialize the list of injures based on the area of injury selcted by the user
-   *
-   * @param event radio event when value is changed
-   */
-  public radioInjuryChange(event) {
-    this.selectedRadioGroup = event.detail;
-    console.log(event);
-    if (this.selectedRadioGroup.value === 'arm') {
-      this.selectedInjury = armInjuries;
-    } else if (this.selectedRadioGroup.value === 'leg') {
-      this.selectedInjury = legInjuries;
-    } else if (this.selectedRadioGroup.value === 'back') {
-      this.selectedInjury = backInjuries;
-    } else if (this.selectedRadioGroup.value === 'hand') {
-      this.selectedInjury = handInjuries;
-    } else if (this.selectedRadioGroup.value === 'feet') {
-      this.selectedInjury = feetInjuries;
-    } else if (this.selectedRadioGroup.value === 'others') {
-      this.selectedInjury = otherInjuries;
-    }
-    else {
-      this.selectedInjury = [];
-    }
   }
 }
