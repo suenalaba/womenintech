@@ -186,10 +186,10 @@
 
               </div>
               <div class="child2">
-                <ion-button expand="block" color="dark" (click)="nextPage()" *ngIf="gender=='female'"> Next
+                <ion-button expand="block" color="dark" (click)="nextPage()" *ngIf="gender==='female'"> Next
                 </ion-button>
                 <ion-button expand="block" color="dark"
-                  *ngIf="gender=='male' || gender=='others'" type="submit"> Finish </ion-button>
+                  *ngIf="gender==='male' || gender==='others'" type="submit"> Finish </ion-button>
                 <a (click)="prevPage()"> Go back </a>
               </div>
             </div>
@@ -199,7 +199,7 @@
       </ng-template>
 
       <!-- Menstruation cycle, for female gender -->
-      <ng-template swiperSlide *ngIf="gender=='female'">
+      <ng-template swiperSlide *ngIf="gender==='female'">
         <ion-card>
           <ion-card-content>
             <div class="parent">

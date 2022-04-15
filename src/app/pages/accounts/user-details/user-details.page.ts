@@ -23,12 +23,12 @@ export class UserDetailsPage implements OnInit {
   public listInjuries = areaOfInjury;
   public listGoals = fitnessGoals;
 
-  private gender: any;
-  private progress = 0.0;
-  private selectedInjury = [];
+  public gender: string;
+  public progress = 0.0;
+  public selectedInjury = [];
   private slideIndex = 0;
 
-  private userDetailsForm: FormGroup;
+  public userDetailsForm: FormGroup;
   private slides: any;
   private userSignUp: any;
 
@@ -191,7 +191,7 @@ export class UserDetailsPage implements OnInit {
    * @param swiper swiper page
    */
 
-  private setSwiperInstance(swiper: any) {
+  public setSwiperInstance(swiper: any) {
     this.slides = swiper;
     this.slideIndex = this.slides.activeIndex;
     this.progress = this.getProgress(this.slides.activeIndex);
@@ -201,7 +201,7 @@ export class UserDetailsPage implements OnInit {
   /**
    * triggered when next button is clicked and will move slide to the next page
    */
-  private nextPage() {
+  public nextPage() {
     console.log(this.slides);
     console.log(this.userDetailsForm);
 
@@ -211,7 +211,7 @@ export class UserDetailsPage implements OnInit {
   /**
    * triggered when the back button is clicked and will return user to previous slide
    */
-  private prevPage() {
+  public prevPage() {
     this.slides.slidePrev();
   }
 
@@ -220,7 +220,7 @@ export class UserDetailsPage implements OnInit {
    *
    * @param event radio event when value is changed
    */
-  private radioInjuryChange(event) {
+  public radioInjuryChange(event) {
     this.selectedRadioGroup = event.detail;
     console.log(event);
     if (this.selectedRadioGroup.value === 'arm') {

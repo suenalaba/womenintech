@@ -85,19 +85,19 @@ export default class YoutubeService {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       error => {
         console.log('error: youtube api limit reached');
-        if (typee == 1) {
+        if (typee === 1) {
           console.log('recommendations');
           parsedVideos['ThumbnailWidth'] = 480;
           parsedVideos['ThumbnailHeight'] = 360;
           parsedVideos['URL'] = 'https://www.youtube.com/embed/2pLT-olgUJs';
         }
-        if (typee == 2) {
+        if (typee === 2) {
           console.log('warmup');
           parsedVideos['ThumbnailWidth'] = 480;
           parsedVideos['ThumbnailHeight'] = 360;
           parsedVideos['URL'] = 'https://www.youtube.com/embed/CSrBaHX3HxQ';
         }
-        if (typee == 3) {
+        if (typee === 3) {
           console.log('cooldown');
           parsedVideos['ThumbnailWidth'] = 480;
           parsedVideos['ThumbnailHeight'] = 360;

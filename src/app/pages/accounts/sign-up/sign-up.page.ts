@@ -14,7 +14,7 @@ import { AuthenticationService } from './../../../services/authentication.servic
  * Class for the app's central sign up page
  */
 export class SignUpPage implements OnInit {
-  private credentials: FormGroup;
+  public credentials: FormGroup;
 
   private loadingPresent = true;
 
