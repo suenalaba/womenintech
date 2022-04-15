@@ -15,31 +15,99 @@ import { Timestamp } from 'firebase/firestore';
  * Class to powering the logic to get and display information related to the exercises
  */
 export class DisplayWorkoutComponent implements OnInit {
+  @Input() private section: string;
+  @Input() private stopwatch: number;
+  @Input() private workoutDetails: any;
   private buttonText: string;
   private currentExercise: WorkoutDetails;
   private exerciseIndex: number;
   private exerciseiString: string;
-  @Input() private section: string;
   private selectedSet: number;
   private setClick = false;
-  @Input() private stopwatch: number;
   private userId: string;
-  @Input() private workoutDetails: any;
   private workoutId: string;
   private workoutIntensity: string;
   private workoutRoutine: WorkoutDetails[];
   private workoutSection: string;
   private workSets = [];
-  private ytVideosCool: any;
-  private ytVideosWarm: any;
+  private ytVideosCool = [] as any;
+  private ytVideosWarm = [] as any;
   constructor(private route: ActivatedRoute, private router: Router,
     private workoutService: WorkoutsService,
   ) { }
 
   /**
+   * Find the list of all exercises associated with this user's workout
+   */
+  async getExercises() {
+    this.route.queryParamMap.subscribe(params => {
+      this.workoutSection = params.get('workoutSection');
+      this.exerciseiString = params.get('exerciseIndex');
+      this.workoutId = params.get('wid');
+      this.userId = params.get('uid');
+    });
+
+    const receivedData = window.localStorage.getItem('workoutRoutine');
+    this.workoutRoutine = JSON.parse(receivedData);
+    this.workoutDetails = JSON.parse(this.workoutDetails);
+    this.exerciseIndex = parseInt(this.exerciseiString, 10);
+
+    this.displayExercise();
+  }
+
+  /**
+   * Get a random video on Youtube for the warmup and cooldown, matching video duration with warmup/cooldown duration
+   */
+  async getVideos() {
+    this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(async results => {
+      let durn: number;
+      this.workoutIntensity = results.intensity;
+      if (this.workoutIntensity == 'low') { durn = 2; }
+      else if (this.workoutIntensity == 'hard') { durn = 10; }
+      else { durn = 5; }
+
+      const ytService = YoutubeService.getInstance();
+
+      this.ytVideosWarm = await ytService.getYoutubeAPI('warm up ' + durn + ' minutes', 2);
+      console.log('warm', this.ytVideosWarm);
+
+      this.ytVideosCool = await ytService.getYoutubeAPI('cool down ' + durn + ' minutes', 3);
+      console.log('cool', this.ytVideosCool);
+
+
+    });
+  }
+
+  /**
+   * Navigate user to workout summary
+   */
+  async goToSummary() {
+    if (this.workoutDetails.workoutStatus == 'completed') {
+      this.workoutDetails.currExercise = {
+        section: '',
+        index: -1,
+      };
+      this.workoutDetails.stopwatch = this.stopwatch;
+      this.workoutDetails.dateCompleted = Timestamp.fromDate((new Date()));
+      this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails);
+      await this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId } });
+      console.log(this.workoutDetails);
+    } else {
+      await this.router.navigateByUrl('/tabs/workouts');
+    }
+  }
+
+  ngOnInit() {
+    this.getExercises();
+    this.getVideos();
+    this.displayExercise();
+  }
+
+
+  /**
    * If user presses the plus button in html, add more sets to the workout
    */
-  private addSet() {
+   private addSet() {
     this.setClick = false;
     this.selectedSet = -1;
 
@@ -175,70 +243,5 @@ export class DisplayWorkoutComponent implements OnInit {
       window.localStorage.setItem('workoutRoutine', JSON.stringify(this.workoutRoutine));
     }
 
-  }
-
-  /**
-   * Find the list of all exercises associated with this user's workout
-   */
-  async getExercises() {
-    this.route.queryParamMap.subscribe(params => {
-      this.workoutSection = params.get('workoutSection');
-      this.exerciseiString = params.get('exerciseIndex');
-      this.workoutId = params.get('wid');
-      this.userId = params.get('uid');
-    });
-
-    const receivedData = window.localStorage.getItem('workoutRoutine');
-    this.workoutRoutine = JSON.parse(receivedData);
-    this.workoutDetails = JSON.parse(this.workoutDetails);
-    this.exerciseIndex = parseInt(this.exerciseiString, 10);
-
-    this.displayExercise();
-  }
-
-  /**
-   * Get a random video on Youtube for the warmup and cooldown, matching video duration with warmup/cooldown duration
-   */
-  async getVideos() {
-    this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(async results => {
-      let durn: number;
-      this.workoutIntensity = results.intensity;
-      if (this.workoutIntensity == 'low') { durn = 2; }
-      else if (this.workoutIntensity == 'hard') { durn = 10; }
-      else { durn = 5; }
-
-      const ytService = YoutubeService.getInstance();
-
-      this.ytVideosWarm = await ytService.getYoutubeAPI('warm up ' + durn + ' minutes');
-      console.log('warm', this.ytVideosWarm);
-
-      this.ytVideosCool = await ytService.getYoutubeAPI('cool down ' + durn + ' minutes');
-      console.log('cool', this.ytVideosCool);
-    });
-  }
-
-  /**
-   * Navigate user to workout summary
-   */
-  async goToSummary() {
-    if (this.workoutDetails.workoutStatus == 'completed') {
-      this.workoutDetails.currExercise = {
-        section: '',
-        index: -1,
-      };
-      this.workoutDetails.stopwatch = this.stopwatch;
-      this.workoutDetails.dateCompleted = Timestamp.fromDate((new Date()));
-      this.workoutService.saveWorkout(this.workoutId, this.userId, this.workoutDetails);
-      await this.router.navigate(['/workout-summary'], { queryParams: { wid: this.workoutId, uid: this.userId } });
-      console.log(this.workoutDetails);
-    } else {
-      await this.router.navigateByUrl('/tabs/workouts');
-    }
-  }
-
-  ngOnInit() {
-    this.getExercises();
-    this.getVideos();
-    this.displayExercise();
   }
 }

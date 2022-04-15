@@ -4,14 +4,14 @@ import { HomePage } from '../home/home.page';
 
 @Component({
   selector: 'app-stats',
-  templateUrl: './stats.page.html',
-  styleUrls: ['./stats.page.scss'],
+  templateUrl: './completedworkouts.page.html',
+  styleUrls: ['./completedworkouts.page.scss'],
 })
 
 /**
  * Statistics page when people click See More
  */
-export class StatsPage implements OnInit {
+export class CompletedWorkoutsPage implements OnInit {
   private workouts: any[];
 
   constructor(private router: Router) { this.workouts = []; }

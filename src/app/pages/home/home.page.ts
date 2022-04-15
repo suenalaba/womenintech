@@ -154,11 +154,15 @@ export class HomePage implements OnInit {
       if (this.userInfo.gender != 'others') {
         genderr += this.userInfo.gender;
       }
+
       const ytService = YoutubeService.getInstance();
-      this.ytVideos.push(ytService.getYoutubeAPI('exercise for beginners '+genderr));
-      this.ytVideos.push(ytService.getYoutubeAPI('exercise for '+this.userInfo.userDetails.fitnessGoal+' '+genderr));
+      ytService.getYoutubeAPI('exercise for beginners ' + genderr, 1).then(
+        (res) => this.ytVideos.push(res));
+      ytService.getYoutubeAPI('exercise for ' + this.userInfo.userDetails.fitnessGoal + ' ' + genderr, 1).then(
+        (res) => this.ytVideos.push(res));
       if (this.userInfo.userDetails.areaOfInjury) {
-        this.ytVideos.push(ytService.getYoutubeAPI('exercise for injury '+this.userInfo.userDetails.areaOfInjury));
+        ytService.getYoutubeAPI('exercise for injury ' + this.userInfo.userDetails.areaOfInjury, 1).then(
+          (res) => this.ytVideos.push(res));
       }
     } else {
     // HAS COMPLETED A WORKOUT
@@ -172,10 +176,11 @@ export class HomePage implements OnInit {
           searchTerm += ' ' + this.userInfo.gender;
         }
         const ytService = YoutubeService.getInstance();
-        const ytVid = ytService.getYoutubeAPI(searchTerm);
-        this.ytVideos.push(ytVid);
+        ytService.getYoutubeAPI(searchTerm, 1).then(
+          (res) => this.ytVideos.push(res));
       }
     }
+    console.log(this.ytVideos);
 
     loading.dismiss();
     console.log('end getvid');

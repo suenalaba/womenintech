@@ -34,9 +34,10 @@ export default class YoutubeService {
    * @param searchTerm the term to search youtube for
    * returns the results' 1) video title, 2) video url, and 3) video thumbnail
    */
-  getYoutubeAPI(searchTerm) {
+  getYoutubeAPI(searchTerm, typee): Promise<any> {
     // list of api keys we can work with (each can call a max of 100 times)
-    const API_KEY_AR = ['AIzaSyA8JCVTMOaGbLL92LxfcY4ZwzDSRLzZqbU', //M560
+    const API_KEY_AR = [
+    'AIzaSyA8JCVTMOaGbLL92LxfcY4ZwzDSRLzZqbU', //M560
     //'AIzaSyApxaBF3ddo3wMeIqfr3OEBtbrBPst92jU', //G560
     //'AIzaSyCGUCYsNQpCM34NwbSzmG-web56Sik8Pbo', //ESp
     //'AIzaSyChbvnT57XxBmNfrN4nLnGICNg3YDhbEo0', //tranz
@@ -66,25 +67,53 @@ export default class YoutubeService {
     //to store and return our result
     const parsedVideos = [];
     http.get<any>(url).subscribe( //needs to be <any> so that it can call .items on data without compile error
-    async (data) => {
-      //delay due to youtube api's rate limits
-      delay(500);
-      const response = data.items;
-      parsedVideos['Title'] = response[0].snippet.title;
-      parsedVideos['URL'] = 'https://www.youtube.com/embed/' + response[0].id.videoId;
-      parsedVideos['ThumbnailURL'] = response[0].snippet.thumbnails.high.url;
-      parsedVideos['ThumbnailWidth'] = response[0].snippet.thumbnails.high.width;
-      parsedVideos['ThumbnailHeight'] = response[0].snippet.thumbnails.high.height;
-      console.log('returning', parsedVideos);
-      return parsedVideos;
-    });
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    (error: any) => {
-      console.log('youtube api limit reached');
-      delay(500);
-    };
+      data => {
+        console.log('data');
+        //delay due to youtube api's rate limits
+        delay(500);
+        const response = data.items;
+        parsedVideos['Title'] = response[0].snippet.title;
+        parsedVideos['URL'] = 'https://www.youtube.com/embed/' + response[0].id.videoId;
+        parsedVideos['ThumbnailURL'] = response[0].snippet.thumbnails.high.url;
+        parsedVideos['ThumbnailWidth'] = response[0].snippet.thumbnails.high.width;
+        parsedVideos['ThumbnailHeight'] = response[0].snippet.thumbnails.high.height;
+        console.log('returning', parsedVideos);
+        return new Promise(function(resolve, reject) {
+          resolve(parsedVideos);
+        });
+      },
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      error => {
+        console.log('error: youtube api limit reached');
+        if (typee == 1) {
+          console.log('recommendations');
+          parsedVideos['ThumbnailWidth'] = 480;
+          parsedVideos['ThumbnailHeight'] = 360;
+          parsedVideos['URL'] = 'https://www.youtube.com/embed/2pLT-olgUJs';
+        }
+        if (typee == 2) {
+          console.log('warmup');
+          parsedVideos['ThumbnailWidth'] = 480;
+          parsedVideos['ThumbnailHeight'] = 360;
+          parsedVideos['URL'] = 'https://www.youtube.com/embed/CSrBaHX3HxQ';
+        }
+        if (typee == 3) {
+          console.log('cooldown');
+          parsedVideos['ThumbnailWidth'] = 480;
+          parsedVideos['ThumbnailHeight'] = 360;
+          parsedVideos['URL'] = 'https://www.youtube.com/embed/BXBtzvpIBSs';
+        }
+        delay(500);
 
-    return parsedVideos;
+        console.log('returning placeholder', parsedVideos);
+        return new Promise(function(resolve, reject) {
+          resolve(parsedVideos);
+        });
+      }
+    );
+    return new Promise(function(resolve, reject) {
+      resolve(parsedVideos);
+    });
   }
 }
 
