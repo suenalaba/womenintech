@@ -130,8 +130,8 @@ export class UserDetailsPage implements OnInit {
   }
 
   ngOnInit() {
-    let userSignUp_string = localStorage.getItem('userSignUp');
-    this.userSignUp = JSON.parse(userSignUp_string);
+    const userSignUpString = localStorage.getItem('userSignUp');
+    this.userSignUp = JSON.parse(userSignUpString);
     this.gender = this.userSignUp.gender;
     this.buildForm();
 
@@ -223,17 +223,17 @@ export class UserDetailsPage implements OnInit {
   private radioInjuryChange(event) {
     this.selectedRadioGroup = event.detail;
     console.log(event);
-    if (this.selectedRadioGroup.value == 'arm') {
+    if (this.selectedRadioGroup.value === 'arm') {
       this.selectedInjury = armInjuries;
-    } else if (this.selectedRadioGroup.value == 'leg') {
+    } else if (this.selectedRadioGroup.value === 'leg') {
       this.selectedInjury = legInjuries;
-    } else if (this.selectedRadioGroup.value == 'back') {
+    } else if (this.selectedRadioGroup.value === 'back') {
       this.selectedInjury = backInjuries;
-    } else if (this.selectedRadioGroup.value == 'hand') {
+    } else if (this.selectedRadioGroup.value === 'hand') {
       this.selectedInjury = handInjuries;
-    } else if (this.selectedRadioGroup.value == 'feet') {
+    } else if (this.selectedRadioGroup.value === 'feet') {
       this.selectedInjury = feetInjuries;
-    } else if (this.selectedRadioGroup.value == 'others') {
+    } else if (this.selectedRadioGroup.value === 'others') {
       this.selectedInjury = otherInjuries;
     }
     else {
