@@ -8,10 +8,8 @@ export class WorkoutDetails {
     images: any[];
     sets: ExerciseDetails;
   }
-  
 
 export class ExerciseDetails {
     reps: number;
     sets: number;
   }
-  
