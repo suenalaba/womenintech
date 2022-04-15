@@ -75,7 +75,7 @@ export class HomePage implements OnInit {
   /**
    * Navigate to the statistics page
    */
-  private goStats() {
+  private goCompletedWorkouts() {
     this.router.navigate(['/tabs/stats']);
   }
 
