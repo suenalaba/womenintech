@@ -28,7 +28,7 @@ export class WorkoutAPIService {
       // Does something on response.data
       // modify the response.data as you see fit.
       // return the modified data:
-      return res['results'].filter(x => x.language.id == 2);
+      return res.results.filter(x => x.language.id == 2);
     }),
       catchError(error => {
         return throwError(error); // From 'rxjs'
