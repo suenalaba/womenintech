@@ -90,10 +90,10 @@ export class GbFindbuddyPage implements OnInit, AfterViewInit {
    * A lifecycle hook that is called after Angular has fully initialized a component's view.
    *This method is used to handle any additional initialization tasks.
    */
-    ngAfterViewInit() {
-      const cardArray = this.cards.toArray();
-      this.useSwiperGesture(cardArray);
-    }
+  ngAfterViewInit() {
+    const cardArray = this.cards.toArray();
+    this.useSwiperGesture(cardArray);
+  }
 
   /**
    * Main entry point to the page that gets called when the class is instantiated.

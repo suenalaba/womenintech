@@ -12,6 +12,9 @@ export class GbDeleteBuddyModalPage implements OnInit {
 
   private optionList = ['Return to chat', 'Proceed to delete'];
 
+
+  constructor(private modalController: ModalController) { }
+
   /**
    * Getter for the option list to be display to the user.
    */
@@ -19,7 +22,6 @@ export class GbDeleteBuddyModalPage implements OnInit {
     return this.optionList;
   }
 
-  constructor(private modalController: ModalController) { }
 
   /**
    * Gets the color of button to display depending on the text to display.
