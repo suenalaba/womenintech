@@ -19,7 +19,7 @@ import { Observable } from 'rxjs';
  */
 export class GbChatPage implements OnInit, AfterContentChecked {
   @ViewChild(IonContent) private content: IonContent;
-  public allChatMessages: Observable<unknown>;
+  public allChatMessages;
   public modalDataResponse = false;
   public newMessage = '';
   private buddyName: string = null;
