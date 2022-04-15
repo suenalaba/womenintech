@@ -12,7 +12,7 @@ import { HomePage } from '../home/home.page';
  * Statistics page when people click See More
  */
 export class CompletedWorkoutsPage implements OnInit {
-  private workouts: any[];
+  public workouts: any[];
 
   constructor(private router: Router) { this.workouts = []; }
 
@@ -20,10 +20,25 @@ export class CompletedWorkoutsPage implements OnInit {
     this.loadWorkouts();
   }
 
+
+  /**
+   * Navigate back home
+   */
+   public goHome() {
+    this.router.navigate(['/tabs/home']);
+  }
+
+  /**
+   * Navigate to workout page
+   */
+  public goWorkout() {
+    this.router.navigate(['/tabs/workouts']);
+  }
+
   /**
    * Get the list of workouts and parse statistics for display
    */
-  private loadWorkouts() {
+   private loadWorkouts() {
     for (let i = 0; i < HomePage.completedWorkouts.docs.length; i++) {
       this.workouts.push(HomePage.completedWorkouts.docs[i].data());
       this.workouts[i].caloriesBurnt = Math.round(this.workouts[i].caloriesBurnt * 100) / 100;
@@ -32,19 +47,5 @@ export class CompletedWorkoutsPage implements OnInit {
       this.workouts[i].SetsReps = this.workouts[i].totalSets + ' / ' + this.workouts[i].totalReps;
     };
     console.log(this.workouts);
-  }
-
-  /**
-   * Navigate back home
-   */
-   private goHome() {
-    this.router.navigate(['/tabs/home']);
-  }
-
-  /**
-   * Navigate to workout page
-   */
-  private goWorkout() {
-    this.router.navigate(['/tabs/workouts']);
   }
 }
