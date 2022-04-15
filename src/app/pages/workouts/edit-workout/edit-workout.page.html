@@ -6,15 +6,18 @@
       </ion-button>
     </ion-buttons>
 
+    <!-- Header -->
     <ion-title>EDIT WORKOUT</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<!-- Workout Details -->
 <ion-content *ngIf="workoutDetails">
   <form (ngSubmit)="updateWorkoutDetails()" [formGroup]="userWorkoutUpdates">
     <ion-input formControlName="wName" value="{{workoutDetails.wName}}"> </ion-input>
     <ion-input formControlName="wDesc" value="{{workoutDetails.wDescription}}"></ion-input>
 
+    <!-- Workout Exercises -->
     <div *ngFor="let e of workoutDetails.workoutRoutine; let i = index" class="workout-update">
       <ion-card (click)="editExercise(i)">
         <ion-card-content>
@@ -30,6 +33,7 @@
         </ion-card-content>
       </ion-card>
 
+      <!-- Save Button -->
     </div>
     <ion-button expand="block" color="dark" (click)="updateWorkoutDetails()"> Save Workout </ion-button>
   </form>

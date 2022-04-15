@@ -5,6 +5,7 @@
 <ion-content [fullscreen]="true" [scrollEvents]="true">
   <ion-card class="ion-no-margin">
     <ion-card-header>
+      <!-- WITFIT Logo -->
       <ion-card-title>
         <ion-img class="witfitlogo" src="../assets/logo/witfit-logo.png"></ion-img>
         <h4> LOG IN </h4>
@@ -13,21 +14,22 @@
     <ion-card-content>
       <form (ngSubmit)="login()" [formGroup]="credentials">
         <ion-item class="ion-margin-bottom">
+          <!-- Login Email Field -->
           <ion-label position="floating">Email</ion-label>
           <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
           <ion-note slot="error" *ngIf="(email.dirty || email.touched) && email.errors">Email is invalid</ion-note>
         </ion-item>
+        <!-- Login Password Field -->
         <ion-item class="ion-margin-bottom">
           <ion-label position="floating">Password</ion-label>
           <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
           <ion-note slot="error" *ngIf="(password.dirty || password.touched) && password.errors">Password needs to be 6 characters</ion-note>
         </ion-item>
 
+        <!-- Login Button -->
         <ion-button type="submit" expand="block" color="dark" [disabled]="!credentials.valid">LOGIN</ion-button>
 
-        <!-- <p>
-          <ion-text color="danger"> Forget password </ion-text>
-        </p> -->
+        <!-- Register Button -->
         <p>
           <ion-text color="secondary" (click)="register()"> I don't have an account  </ion-text>
         </p>

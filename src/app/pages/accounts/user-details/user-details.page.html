@@ -1,11 +1,12 @@
 
 <ion-content>
+  <!-- User Details Heading -->
   <h2>We would like to know more about you</h2>
   <ion-progress-bar color="primary" value="{{progress}}"></ion-progress-bar>
   <form (ngSubmit)="completeSignUp()" [formGroup]="userDetailsForm">
     <swiper (swiper)="setSwiperInstance($event)" (slideChangeTransitionStart)="slideWillChange()"
       (slideChangeTransitionEnd)="slideDidChange()" [allowTouchMove]="false">
-      <!--Height & Weight-->
+      <!-- Height & Weight Prompt -->
       <ng-template swiperSlide>
         <ion-card>
           <ion-card-content>
@@ -39,7 +40,7 @@
 
       </ng-template>
 
-      <!--Declaration of Injuries-->
+      <!-- Declaration of Injuries -->
       <ng-template swiperSlide>
         <ion-card>
           <ion-card-content>
@@ -64,7 +65,6 @@
                       </ion-col>
                     </ion-row>
                   </ion-radio-group>
-                  <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
                 </ion-item>
                 <ion-item class="ion-margin-bottom" lines="none">
                   <ion-label position="stacked" text-wrap>Do you have pre-existing health conditions?</ion-label>
@@ -85,7 +85,6 @@
                       </ion-col>
                     </ion-row>
                   </ion-radio-group>
-                  <!-- <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note> -->
                 </ion-item>
               </div>
               <div class="child2">
@@ -100,7 +99,7 @@
 
       </ng-template>
 
-      <!--Area of Injuries, if any-->
+      <!-- Area of Injuries, if any -->
       <ng-template swiperSlide *ngIf="injury.value==='yes'">
         <ion-card>
           <ion-card-content>
@@ -141,7 +140,7 @@
         </ion-card>
       </ng-template>
 
-      <!--Pre-health conditions, if any-->
+      <!-- Pre-health conditions, if any -->
       <ng-template swiperSlide *ngIf="healthCond.value==='yes'">
         <ion-card>
           <ion-card-content>
@@ -163,7 +162,7 @@
         </ion-card>
       </ng-template>
 
-      <!--Fitness goals-->
+      <!-- Fitness goals -->
       <ng-template swiperSlide>
         <ion-card>
           <ion-card-content>
@@ -199,7 +198,7 @@
         </ion-card>
       </ng-template>
 
-      <!--Menstruation cycle, for female gender-->
+      <!-- Menstruation cycle, for female gender -->
       <ng-template swiperSlide *ngIf="gender=='female'">
         <ion-card>
           <ion-card-content>

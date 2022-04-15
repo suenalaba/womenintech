@@ -1,14 +1,17 @@
 <ion-header>
   <ion-toolbar>
+    <!-- Back Button -->
     <ion-button class="back-btn" (click)="goBack()">
       <ion-icon slot="icon-only" name="chevron-back-outline" color="dark"></ion-icon>
     </ion-button>
+    <!-- Header -->
     <ion-title>CREATE WORKOUT</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" [scrollEvents]="true">
   <ion-card>
+    <!-- Workout Name -->
     <ion-card-content>
       <form (ngSubmit)="submitWorkoutDesc()" [formGroup]="createWorkoutForm">
         <ion-item class="ion-margin-bottom">
@@ -19,6 +22,7 @@
           <!-- <ion-note slot="error" *ngIf="wName.dirty && wName.errors">Enter valid name</ion-note> -->
         </ion-item>
 
+        <!-- Workout Description -->
         <ion-item class="ion-margin-bottom">
           <ion-label position="stacked">Description</ion-label>
           <div class="input-align">
@@ -27,6 +31,7 @@
           <!-- <ion-note slot="error" *ngIf="wDescription.dirty && wDescription.errors">Enter valid description</ion-note> -->
         </ion-item>
 
+        <!-- Workout Intensity -->
         <ion-item class="ion-margin-bottom" lines = "none">
           <ion-label position="stacked">Intensity</ion-label>
           <ion-radio-group allow-empty-selection="true" name="radio-group"
@@ -42,6 +47,7 @@
           <!-- <ion-note slot="error" *ngIf="intensity.errors">Enter valid height</ion-note> -->
         </ion-item>
 
+        <!-- Workout Duration -->
         <ion-item class="ion-margin-bottom" lines = "none">
           <ion-label position="stacked">Duration</ion-label>
           <ion-radio-group allow-empty-selection="true" name="radio-group"
@@ -57,6 +63,7 @@
           <!-- <ion-note slot="error" *ngIf="height.dirty && height.errors">Enter valid height</ion-note> -->
         </ion-item>
 
+        <!-- Workout Location -->
         <ion-item class="ion-margin-bottom" lines = "none">
           <ion-label position="stacked">Location</ion-label>
           <ion-radio-group allow-empty-selection="true" name="radio-group"
@@ -72,6 +79,7 @@
         <!-- <ion-note slot="error" *ngIf="height.dirty && height.errors">Enter valid height</ion-note> -->
       </ion-item>
 
+      <!-- Workout Equipment -->
         <ion-item class="ion-margin-bottom" lines = "none">
           <ion-label position="stacked">Equipment</ion-label>
           <ion-radio-group allow-empty-selection="true" name="radio-group"
@@ -87,6 +95,7 @@
           <!-- <ion-note slot="error" *ngIf="height.dirty && height.errors">Enter valid height</ion-note> -->
         </ion-item>
 
+        <!-- Create Workout Button -->
         <ion-button expand="block" color="dark" type="submit">
           CREATE WORKOUT
         </ion-button>

@@ -1,6 +1,5 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <!-- <ion-button slot="start" (click)="login()" shape="round" color="dark"> <ion-icon name="chevron-back-outline"></ion-icon></ion-button> -->
   </ion-toolbar>
 </ion-header>
 
@@ -14,33 +13,39 @@
 
   <ion-card class="ion-no-margin">
     <ion-card-header>
+      <!-- WITFIT Logo -->
       <ion-card-title>
         <ion-img class="witfitlogo" src="../assets/logo/witfit-logo.png"></ion-img>
         <h4> SIGN UP </h4>
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
+      <!-- Signup First Name Field -->
       <form (ngSubmit)="signUp()" [formGroup]="credentials" *ngIf="credentials">
         <ion-item class="ion-margin-bottom">
           <ion-label position="stacked">First Name*</ion-label>
           <ion-input type="text" placeholder="First Name" formControlName="firstName"></ion-input>
           <ion-note slot="error" *ngIf="firstName.dirty && firstName.errors">Enter first name</ion-note>
         </ion-item>
+        <!-- Signup Last Name Field -->
         <ion-item class="ion-margin-bottom">
           <ion-label position="stacked">Last Name*</ion-label>
           <ion-input type="text" placeholder="Last Name" formControlName="lastName"></ion-input>
           <ion-note slot="error" *ngIf="lastName.dirty && lastName.errors">Enter last name</ion-note>
         </ion-item>
+        <!-- Signup Email Field -->
         <ion-item class="ion-margin-bottom">
           <ion-label position="stacked">Email*</ion-label>
           <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
           <ion-note slot="error" *ngIf="email.dirty && email.errors">Email is invalid</ion-note>
         </ion-item>
+        <!-- Signup Birthday Field -->
         <ion-item class="ion-margin-bottom">
           <ion-label position="stacked">Birthday*</ion-label>
           <ion-input type="date" placeholder="DD/MM/YYYY" formControlName="birthday"></ion-input>
           <ion-note slot="error" *ngIf="birthday.dirty && birthday.errors">Birthday is invalid</ion-note>
         </ion-item>
+        <!-- Signup Gender Field -->
         <ion-item class="ion-margin-bottom">
           <ion-label position="stacked">Gender*</ion-label>
           <ion-select interface="popover" placeholder="Select One" formControlName="gender">
@@ -48,7 +53,6 @@
             <ion-select-option value="male">Male</ion-select-option>
             <ion-select-option value="others">Others</ion-select-option>
           </ion-select>
-          <!-- <ion-input type="password" placeholder="Password" formControlName="password"></ion-input> -->
           <ion-note slot="error" *ngIf="(gender.dirty || gender.touched) && gender.errors">Select a gender</ion-note>
         </ion-item>
         <ion-item class="ion-margin-bottom">
@@ -67,8 +71,10 @@
           <ion-note slot="error" *ngIf="(confirmPassword.dirty || confirmPassword.touched) && confirmPassword.hasError('equalTo')">Password does not match</ion-note>
         </ion-item>
 
+        <!-- Signup Button -->
         <ion-button type="submit" expand="block" [disabled]="!credentials.valid">SIGN UP</ion-button>
 
+        <!-- Login Button -->
         <p>
           <ion-text color="secondary" (click)="login()"> I have an account  </ion-text>
         </p>
