@@ -37,7 +37,7 @@
   </div>
 
   <!-- Create Workout Button -->
-  <div *ngIf="workouts.length==0" class="no-workout">
+  <div *ngIf="workouts.length===0" class="no-workout">
     <h2> No workouts yet </h2>
     <ion-button (click)="createWorkout()">Create a Workout</ion-button>
   </div>

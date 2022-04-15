@@ -17,14 +17,15 @@ import { CreateWorkoutComponent } from '../../../components/create-workout/creat
  * List the workouts created by the user
  */
 export class ListWorkoutsPage implements OnInit {
+
+  public filterWOList = filterWorkoutList;
+  public tagText = 'Show Tags';
+  public workouts = [];
+  private workoutTags = tags;
   private allWorkouts = [];
   private filterBy: any;
-  private filterWOList = filterWorkoutList;
-  private ishidden = true;
-  private tagText = 'Show Tags';
   private userInfo: User;
-  private workouts = [];
-  private workoutTags = tags;
+  private ishidden = true;
 
   constructor(
     private modalController: ModalController,
@@ -191,31 +192,21 @@ export class ListWorkoutsPage implements OnInit {
   }
 
   /**
-   * Prompt user an alert to confirm deletion of workout
-   *
-   * @param wid workout id
-   * @param uid user id
-   */
-   private deleteWorkout(wid, uid) {
-    this.presentAlertConfirm(wid, uid);
-  }
-
-  /**
    * filter workouts based on user selection
    *
    * @param filter filter option
    */
-  private filterWorkout(filter) {
+  public filterWorkout(filter) {
     this.workouts = this.allWorkouts;
     this.filterBy = filter;
 
-    if (this.filterBy == 'not_started') {
-      this.workouts = this.workouts.filter(a => a.workoutStatus == 'created');
-    } else if (this.filterBy == 'in_progress') {
-      this.workouts = this.workouts.filter(a => a.workoutStatus == 'in_progress');
-    } else if (this.filterBy == 'completed') {
-      this.workouts = this.workouts.filter(a => a.workoutStatus == 'completed');
-    } else if (this.filterBy == 'buddy') {
+    if (this.filterBy === 'not_started') {
+      this.workouts = this.workouts.filter(a => a.workoutStatus === 'created');
+    } else if (this.filterBy === 'in_progress') {
+      this.workouts = this.workouts.filter(a => a.workoutStatus === 'in_progress');
+    } else if (this.filterBy === 'completed') {
+      this.workouts = this.workouts.filter(a => a.workoutStatus === 'completed');
+    } else if (this.filterBy === 'buddy') {
       this.workouts = this.workouts.filter(a => a.createdBy !== this.userInfo.id);
     } else {
       this.workouts = this.allWorkouts;
@@ -227,8 +218,8 @@ export class ListWorkoutsPage implements OnInit {
    *
    * @param wo workout details
    */
-  private getBuddyClass(wo) {
-    if (wo.createdBy != this.userInfo.id) {
+  public getBuddyClass(wo) {
+    if (wo.createdBy !== this.userInfo.id) {
       return 'buddy';
     }
   }
@@ -238,7 +229,7 @@ export class ListWorkoutsPage implements OnInit {
    *
    * @param date
    */
-  private getDate(date) {
+  public getDate(date) {
     if (date) {
       const newDate = new Date(date.seconds * 1000);
       const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
@@ -252,14 +243,14 @@ export class ListWorkoutsPage implements OnInit {
    *
    * @param tag tag value
    */
-  private getTagText(tag) {
+  public getTagText(tag) {
     return this.workoutTags.find(t => t.value === tag);
   }
 
   /**
    * fucntion to show/hide tags
    */
-  private showTags() {
+  public showTags() {
     if (this.ishidden) {
       this.ishidden = false;
       this.tagText = 'Hide Tags';
@@ -279,4 +270,13 @@ export class ListWorkoutsPage implements OnInit {
       this.router.navigate(['/start-workout'], { queryParams: { wid, uid } });
     }
 
+  /**
+   * Prompt user an alert to confirm deletion of workout
+   *
+   * @param wid workout id
+   * @param uid user id
+   */
+   private deleteWorkout(wid, uid) {
+    this.presentAlertConfirm(wid, uid);
+  }
 }
