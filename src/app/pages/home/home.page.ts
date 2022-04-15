@@ -29,7 +29,7 @@ SwiperCore.use([Pagination]);
  * Homepage that the user lands on
  */
 export class HomePage implements OnInit {
-  public static completedWorkouts: any;
+  public static completedWorkouts = [] as any;
   private basedOnWorkout = '';
   private cals = 0;
   private chartOptions: EChartsOption;
@@ -58,7 +58,7 @@ export class HomePage implements OnInit {
    * Configuration for the swiper slide for the youtube video recommendations
    */
   @ViewChild('swiperYt') private swiperYt: SwiperComponent;
-  private thisWkWorkouts: any;
+  private thisWkWorkouts = [] as any;
   private today = '';
   private userInfo: any;
   private welcomeText = '';
