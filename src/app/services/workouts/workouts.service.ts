@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, doc, setDoc, docData, Timestamp, query, getDocs } from '@angular/fire/firestore';
-import { onSnapshot, orderBy, updateDoc, deleteDoc } from 'firebase/firestore';
+import { orderBy, deleteDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
 import { UserDetails } from 'src/app/class/user';
 import { CompletedWorkout, WorkoutDesc } from '../../class/CreateWorkoutDesc';
@@ -38,17 +38,17 @@ export class WorkoutsService {
         this.exerciseData = this.shuffle(r);
 
         let injury ='';
-        if(userDetails.areaOfInjury!=''){
+        if(userDetails.areaOfInjury!==''){
           injury = this.injuries.find(x => x.value === userDetails.areaOfInjury).text;
         }
 
 
-        this.exerciseData  = this.exerciseData.filter(x => x.category.name != injury);
+        this.exerciseData  = this.exerciseData.filter(x => x.category.name !== injury);
 
-        if(workoutInfo.equipment == 'no_equipment'){
-          this.exerciseData = this.exerciseData.filter(y=>y.equipment.length == 0);
+        if(workoutInfo.equipment === 'no_equipment'){
+          this.exerciseData = this.exerciseData.filter(y=>y.equipment.length === 0);
         }else{
-          this.exerciseData = this.exerciseData.filter(y=>y.equipment.length != 0);
+          this.exerciseData = this.exerciseData.filter(y=>y.equipment.length !== 0);
         }
 
         //Filter array further
@@ -58,7 +58,7 @@ export class WorkoutsService {
 
         workoutInfo.routine = this.formatWorkoutRoutine(workoutInfo, userDetails);
 
-        const docData: WorkoutDesc = {
+        const workoutDocData: WorkoutDesc = {
           wName: workoutInfo.wName,
           wDescription: workoutInfo.wDescription,
           intensity: workoutInfo.intensity,
@@ -72,8 +72,8 @@ export class WorkoutsService {
           workoutRoutine: workoutInfo.routine
         };
 
-        console.log(docData);
-        setDoc(doc(this.firestore, 'Users', `${uid}`, 'Workouts', timestamp.seconds.toString()), docData);
+        console.log(workoutDocData);
+        setDoc(doc(this.firestore, 'Users', `${uid}`, 'Workouts', timestamp.seconds.toString()), workoutDocData);
 
         resolve(timestamp.seconds);
       });
@@ -161,10 +161,9 @@ export class WorkoutsService {
 
   private extractValue(arr, prop) {
     const extractedValue = [];
-    for (let i = 0; i < arr.length; ++i) {
-
-      // extract value from property
-      extractedValue.push(arr[i][prop]);
+    for (const eachValue of arr) {
+      //extract value from property
+      extractedValue.push(eachValue[prop]);
     }
     return extractedValue;
   }
@@ -177,15 +176,14 @@ export class WorkoutsService {
    */
   private formatWorkoutRoutine(workoutDesc: WorkoutDesc, userDetails: UserDetails) {
     const routine = [];
-
-    for (let i = 0; i < this.userWorkout.length; ++i) {
+    for (const eachWorkout of this.userWorkout) {
       const exercise: WorkoutDetails = {
-        category: this.userWorkout[i].category.name,
-        equipment: this.extractValue(this.userWorkout[i], 'equipment.name'),
-        exerciseDesc: this.userWorkout[i].description,
-        id: this.userWorkout[i].id,
-        exerciseName: this.userWorkout[i].name,
-        images: this.extractValue(this.userWorkout[i], 'images.image'),
+        category: eachWorkout.category.name,
+        equipment: this.extractValue(eachWorkout, 'equipment.name'),
+        exerciseDesc: eachWorkout.description,
+        id: eachWorkout.id,
+        exerciseName: eachWorkout.name,
+        images: this.extractValue(eachWorkout, 'images.image'),
         sets: {
           sets: 3,
           reps: 10
@@ -193,7 +191,6 @@ export class WorkoutsService {
       };
       routine.push(exercise);
     }
-
     return routine;
   }
 
