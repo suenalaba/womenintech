@@ -13,6 +13,8 @@ export class GbShareWorkoutModalPage implements OnInit {
 
   private optionList = ['Share workouts', 'Return to chat'];
 
+  constructor(private modalController: ModalController) { }
+
   /**
    * Getter for the option list to be displayed to the user.
    */
@@ -20,7 +22,6 @@ export class GbShareWorkoutModalPage implements OnInit {
     return this.optionList;
   }
 
-  constructor(private modalController: ModalController) { }
 
   /**
    * Getter for the color of the button to be display on the user interface.
