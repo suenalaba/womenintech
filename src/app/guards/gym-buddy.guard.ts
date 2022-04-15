@@ -14,7 +14,7 @@ export class GymBuddyGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     // return true if use is authenticated
-    console.log(this.gymBuddyService.isSignedUp())
+    console.log(this.gymBuddyService.isSignedUp());
       if (this.gymBuddyService.isSignedUp()){
         return true;
       } else {
