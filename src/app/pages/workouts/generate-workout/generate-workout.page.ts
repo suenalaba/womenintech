@@ -14,17 +14,17 @@ import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
  * Allows users to configure the workout they want to generate
  */
 export class GenerateWorkoutPage implements OnInit {
-  private coolDownTime: string;
-  private exerciseList = [];
+  public warmUpTime: string;
+  public workoutDesc: WorkoutDesc;
+  public workoutTime: string;
+  public coolDownTime: string;
+  public exerciseList = [];
   private listDuration: CreateWorkoutDesc[] = duration;
   private listEquipment: CreateWorkoutDesc[] = equipment;
   private listIntensity: CreateWorkoutDesc[] = intensity;
   private listLocation: CreateWorkoutDesc[] = wLocation;
   private userId: string;
-  private warmUpTime: string;
-  private workoutDesc: WorkoutDesc;
   private workoutId: string;
-  private workoutTime: string;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -56,13 +56,13 @@ export class GenerateWorkoutPage implements OnInit {
 
       this.exerciseList = this.workoutDesc.workoutRoutine;
 
-      if(this.workoutDesc.duration=='15 Mins') {
+      if(this.workoutDesc.duration==='15 Mins') {
         this.warmUpTime = '2.5 mins' ; this.coolDownTime = '2.5 mins'; this.workoutTime = '10 mins';}
-      if(this.workoutDesc.duration=='30 Mins') {
+      if(this.workoutDesc.duration==='30 Mins') {
         this.warmUpTime = '5 mins' ; this.coolDownTime = '5 mins'; this.workoutTime = '20 mins'; }
-      if(this.workoutDesc.duration=='60 Mins') {
+      if(this.workoutDesc.duration==='60 Mins') {
         this.warmUpTime = '5 mins' ; this.coolDownTime = '5 mins'; this.workoutTime = '50 mins'; }
-      if(this.workoutDesc.duration=='90 Mins >') {
+      if(this.workoutDesc.duration==='90 Mins >') {
         this.warmUpTime = '10 mins' ; this.coolDownTime = '10 mins'; this.workoutTime = '70 mins'; }
     });
 
@@ -139,7 +139,7 @@ export class GenerateWorkoutPage implements OnInit {
   /**
    * triggered when user wants to a delete workout
    */
-   private deleteWorkout(){
+   public deleteWorkout(){
     this.presentAlertConfirm();
   }
 }
