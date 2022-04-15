@@ -6,10 +6,10 @@
     <ion-card-header>
       <ion-card-title>WARM UP</ion-card-title>
     </ion-card-header>
-  
+
     <ion-card-content>
       <div class="yt-video">
-        <iframe 
+        <iframe
           width={{ytVideosWarm.ThumbnailWidth}}
           height={{ytVideosWarm.ThumbnailHeight}}
           [src]="ytVideosWarm.URL | safe">
@@ -25,7 +25,7 @@
     <ion-card-header>
       <ion-card-title>EXERCISES {{exerciseIndex+1}} </ion-card-title>
     </ion-card-header>
-  
+
     <ion-card-content>
 
       <ion-card-title class="exercise-title"> {{ currentExercise.exerciseName }} </ion-card-title>
@@ -50,7 +50,7 @@
         </div>
 
       </div>
-      
+
     </ion-card-content>
   </ion-card>
 </div>
@@ -64,7 +64,7 @@
     </ion-card-header>
     <ion-card-content>
       <div class="yt-video">
-        <iframe 
+        <iframe
           width={{ytVideosCool.ThumbnailWidth}}
           height={{ytVideosCool.ThumbnailHeight}}
           [src]="ytVideosCool.URL | safe">
