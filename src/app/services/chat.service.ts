@@ -33,7 +33,7 @@ export class ChatService {
   }
 
   /**
-   * get accessor for the buddy's pfp
+   * get accessor for the buddy's profile picture.
    */
   public get getSelectedOtherUserProfilePicture() {
     return this.selectedOtherUserProfilePicture;
