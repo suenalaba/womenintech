@@ -2,6 +2,7 @@
   <form [formGroup]="userWorkoutUpdates">
     <ion-card>
       <ion-card-content>
+        <!-- setDetails -->
           <ion-item class="ion-margin-bottom">
             <ion-label position="stacked">Number of sets</ion-label>
             <div class="input-align">
@@ -11,6 +12,7 @@
             </div>
           </ion-item>
 
+          <!-- repDetails -->
           <ion-item class="ion-margin-bottom">
             <ion-label position="stacked">Number of repetitions</ion-label>
             <div class="input-align">
@@ -22,6 +24,7 @@
       </ion-card-content>
     </ion-card>
 
+    <!-- Update Button -->
     <div class="btn-grp">
       <ion-button expand="block" color="light" (click)="updateWorkoutDetails()">
         UPDATE

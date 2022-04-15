@@ -1,8 +1,10 @@
 <ion-header>
   <ion-toolbar>
+    <!-- Back Button -->
     <ion-button (click)="goHome()">
       Back
     </ion-button>
+    <!-- Header -->
     <ion-title>Your Profile</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -10,14 +12,17 @@
 <ion-content>
   <div *ngIf="workouts.length===0">
     <ion-grid>
+        <!-- New User Text -->
       <ion-row class="fullheight xc">
         <h2>No past workouts found!</h2>
       </ion-row>
       <ion-row class="fullheight xc">
+        <!-- New User Button -->
         <ion-button (click)="goWorkout()">Start a Workout Today</ion-button>
       </ion-row>
     </ion-grid>
   </div>
+  <!-- Workout Details -->
   <ion-card *ngFor="let workout of workouts">
     <ion-grid>
       <ion-row>

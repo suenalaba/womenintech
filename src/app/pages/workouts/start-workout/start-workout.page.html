@@ -1,16 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <!-- <ion-buttons slot="secondary">
-      <ion-button fill="solid" color="light">
-        <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
-      </ion-button> 
-    </ion-buttons>-->
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <!-- Timer -->
   <div class="timer-header">
-
     <div class="timer">
       <span *ngIf="displayTimer; else elseBlock"> {{displayTimer}}</span>
       <ng-template #elseBlock> 00:00:00 </ng-template>
@@ -22,23 +17,15 @@
         <ion-icon slot="icon-only" [name]="timerButton"></ion-icon>
       </ion-button>
     </div>
-
-
   </div>
 
+  <!-- Workout Details -->
   <div class="workout-section" *ngIf="workoutDetails">
     <h2> {{workoutDetails.wName}} </h2>
-
-    <!-- <div> spotify </div> -->
-
     <!--Dsiplay workouts-->
     <app-display-workout section="{{workoutSection}}" workoutDetails="{{workoutJSON}}" stopwatch="{{timerDuration}}"></app-display-workout>
-
-
     <!-- <ion-button expand="block" color="dark" (click)="nextExercise()" *ngIf="workoutSection=='cooldown'"> {{ buttonText }}</ion-button> -->
     <!-- <ion-button expand="block" size="small" color="danger" (click)="stopWorkout()">STOP WORKOUT</ion-button> -->
   </div>
-
-
 </ion-content>
 

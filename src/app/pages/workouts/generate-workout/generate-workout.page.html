@@ -6,11 +6,13 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- WITFIT Logo -->
 <ion-content>
   <div class="logo-header">
     <ion-img class="logo-img" src="../assets/logo/witfit-black.png"> </ion-img>
   </div>
 
+  <!-- Workout Description -->
   <ion-card class="workout-desc" *ngIf="workoutDesc">
     <ion-card-header>
       <ion-card-title>{{ workoutDesc.wName }} </ion-card-title>
@@ -24,6 +26,7 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Workout Warmup -->
   <ion-card class="workout-plan" *ngIf="workoutDesc">
     <ion-card-content>
       <div class="warm-up">
@@ -33,6 +36,7 @@
         </div>
       </div>
 
+      <!-- Workout Exercises -->
       <div class="workout-exercises">
         <div class="workout-div">
           <div class="workout-title">Exercises</div>
@@ -46,7 +50,6 @@
                   <div class="exercise-left">
                     <p class="exercise-name"> {{ i.exerciseName}}</p>
                   </div>
-    
                   <div class="exercise-right">
                     <p class="sets">{{i.sets.sets}} sets</p>
                     <p class="reps">{{i.sets.reps}} reps</p>
@@ -59,6 +62,7 @@
         </ion-card>
       </div>
 
+      <!-- Workout Cooldown -->
       <div class="cool-down">
         <div class="workout-div">
           <div class="workout-title">Cool Down</div>
@@ -67,7 +71,9 @@
         </div>
       </div>
 
+      <!-- Start Workout Button -->
       <ion-button expand="block" color="dark" (click)="startWorkout()"> START WORKOUT </ion-button>
+      <!-- Start Later Button -->
       <ion-button expand="block" color="danger" fill="outline" (click)="goBack()"> MAYBE I START LATER </ion-button>
 
       <div class="delete-workout"><a (click)="deleteWorkout()" > Delete Workout </a> </div>

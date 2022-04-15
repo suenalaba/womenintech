@@ -1,15 +1,17 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <!-- <ion-title>workout-summary</ion-title> -->
+
   </ion-toolbar>
 </ion-header>
 
+<!-- Header -->
 <ion-content>
   <div class="logo-header">
     <ion-img class="logo-img" src="../assets/logo/witfit-black.png"> </ion-img>
     <h2>WORKOUT SUMMARY</h2>
   </div>
 
+  <!-- Workout Details -->
   <div *ngIf="workoutDetails && userDetails">
     <ion-card>
       <ion-card-header>
@@ -21,6 +23,7 @@
         </ion-card-subtitle>
       </ion-card-header>
 
+      <!-- Workout Sets and Reps -->
       <ion-card-content>
         <ion-grid>
           <ion-row class="ion-align-self-center">
@@ -36,6 +39,7 @@
               <p> {{getTotalReps(workoutDetails.workoutRoutine)}} </p>
             </ion-col>
 
+          <!-- Workout Calories and Duration -->
           </ion-row>
           <ion-row class="ion-align-self-center">
             <ion-col class="ion-align-self-center">
@@ -49,6 +53,7 @@
           </ion-row>
         </ion-grid>
 
+        <!-- Workout Fitness -->
         <div class="fitness">
           <h3 class="title">FITNESS</h3>
           <!-- <ion-progress-bar color="primary" value="0.5"></ion-progress-bar> -->
@@ -57,6 +62,7 @@
           </div>
         </div>
 
+        <!-- Workout Strength -->
         <div class="strength">
           <h3 class="title">STRENGTH</h3>
           <!-- <ion-progress-bar color="primary" value="0.5"></ion-progress-bar> -->
@@ -65,6 +71,7 @@
           </div>
         </div>
 
+        <!-- Workout Notes -->
         <form (ngSubmit)="workoutDone()" [formGroup]="workoutNotes">
           <h3 class="title">WORKOUT NOTES</h3>
           <ion-item class="workout-notes">
