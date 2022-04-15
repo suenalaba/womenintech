@@ -13,15 +13,17 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class BoardingPage implements OnInit {
   private slides: any;
 
-  constructor(private router: Router, private authService: AuthenticationService,) { }
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   /**
    * when next button is clicked
    */
-  private next() {
+  public next() {
     this.slides.slideNext();
   }
 
@@ -30,16 +32,14 @@ export class BoardingPage implements OnInit {
    *
    * @param swiper
    */
-  private setSwiperInstance(swiper: any) {
+  public setSwiperInstance(swiper: any) {
     this.slides = swiper;
-
   }
 
   /**
    * start button is clicked
    */
-  private start(){
+  public start() {
     this.router.navigateByUrl('/tabs', { replaceUrl: true });
   }
-
 }
