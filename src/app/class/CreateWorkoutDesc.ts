@@ -16,7 +16,6 @@ export class WorkoutDesc {
     currExercise?: {
         section: string;
         index: number;
-        // set: number
     };
     dateCompleted?: Timestamp;
     dateCreated: Timestamp;
