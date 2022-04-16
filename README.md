@@ -1,4 +1,4 @@
-# WITIFIT 
+# WITFIT 
 ### Your number one gym companion, built by WomenInTech to empower women.
 
 ## To quick start the program:
