@@ -2,7 +2,7 @@
 
 This is a project done using Ionic Frmaework that uses Typescript by CZ2006 BCS3 WomenInTech. It's named WITFIT.
 
-WITIFT aims to provide promote fitness and a community dedicated to a healthy lifestyle through its 2 main fuctionalities:
+WITIFT aims to provide promote fitness and a community dedicated to a healthy lifestyle through its 2 main functionalities:
 
 1. Workout Functionality
 2. Find a gym buddy functionality.
