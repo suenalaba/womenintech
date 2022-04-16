@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetController, AlertController, LoadingController, ModalController } from '@ionic/angular';
-import { filterWorkoutList } from 'src/app/data/workout-data/FilterWorkout';
-import { tags } from 'src/app/data/workout-data/CreateWorkout';
+import { FilterWorkoutList } from 'src/app/data/workout-data/FilterWorkout';
+import { Tags } from 'src/app/data/workout-data/CreateWorkout';
 import { User } from 'src/app/class/user';
 import { UserService } from 'src/app/services/user.service';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
@@ -18,10 +18,10 @@ import { CreateWorkoutComponent } from '../../../components/create-workout/creat
  */
 export class ListWorkoutsPage implements OnInit {
 
-  public filterWOList = filterWorkoutList;
+  public filterWOList = FilterWorkoutList;
   public tagText = 'Show Tags';
   public workouts = [];
-  private workoutTags = tags;
+  private workoutTags = Tags;
   private allWorkouts = [];
   private filterBy: any;
   private userInfo: User;

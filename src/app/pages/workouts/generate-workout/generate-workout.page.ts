@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
-import { duration, equipment, intensity, wLocation } from 'src/app/data/workout-data/CreateWorkout';
+import { Duration, Equipment, Intensity, wLocation } from 'src/app/data/workout-data/CreateWorkout';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 
 @Component({
@@ -19,9 +19,9 @@ export class GenerateWorkoutPage implements OnInit {
   public workoutTime: string;
   public coolDownTime: string;
   public exerciseList = [];
-  private listDuration: CreateWorkoutDesc[] = duration;
-  private listEquipment: CreateWorkoutDesc[] = equipment;
-  private listIntensity: CreateWorkoutDesc[] = intensity;
+  private listDuration: CreateWorkoutDesc[] = Duration;
+  private listEquipment: CreateWorkoutDesc[] = Equipment;
+  private listIntensity: CreateWorkoutDesc[] = Intensity;
   private listLocation: CreateWorkoutDesc[] = wLocation;
   private userId: string;
   private workoutId: string;

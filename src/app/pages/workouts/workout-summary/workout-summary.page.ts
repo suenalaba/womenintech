@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { CompletedWorkout, CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
 import { User } from 'src/app/class/user';
-import { intensity } from 'src/app/data/workout-data/CreateWorkout';
+import { Intensity } from 'src/app/data/workout-data/CreateWorkout';
 import { UserService } from 'src/app/services/user.service';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 import { TabsPageRoutingModule } from 'src/app/tabs/tabs-routing.module';
@@ -24,7 +24,7 @@ export class WorkoutSummaryPage implements OnInit {
   public workoutDetails: WorkoutDesc;
   public workoutNotes: FormGroup;
   private calories: number;
-  private listIntensity: CreateWorkoutDesc[] = intensity;
+  private listIntensity: CreateWorkoutDesc[] = Intensity;
   private totalReps: number;
   private totalSets: number;
   private userId: string;
