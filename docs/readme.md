@@ -5,10 +5,13 @@ This is a project done using Ionic Framework that uses Typescript by CZ2006 BCS3
 WITIFT aims to provide promote fitness and a community dedicated to a healthy lifestyle through its 2 main functionalities:
 
 * Workout Functionality
-      * [Create a new flight route: `addRoute`](#create-a-new-flight-route-addroute)
-      * [Find availability on existing flight route: `findRoute`](#find-availability-on-existing-flight-route-findroute)
-      * [List all flight routes: `listRoute`](#list-all-flight-routes-listroute)
-      * [Delete a flight route: `deleteRoute`](#delete-a-flight-route-deleteroute)
+      * Create Workout based on personalised recommendations
+      * Edit Workout
+      * Display Workout profile based on past workouts
+      * Youtube recommendations based on past workouts
+ * Find a gym buddy Functionality
+ 
+ 
 
 To quick start the program:
 1. Clone this repository into your local drive.
