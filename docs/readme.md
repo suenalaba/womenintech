@@ -9,6 +9,7 @@ WITIFT aims to provide promote fitness and a community dedicated to a healthy li
 -  Edit Workout
 -  Display Workout profile based on past workouts
 - Youtube recommendations based on past workouts
+
 ## Find a gym buddy Functionality
 - Find a buddy that shares similar goals with you through our matchmaking algorithm
 - Chat with your buddy in real-time
@@ -23,7 +24,7 @@ WITIFT aims to provide promote fitness and a community dedicated to a healthy li
 
 ## Table of contents and useful links
 * **WITFIT Product Video Link**: [Demo Video](https://www.youtube.com/watch?v=EoKyog0QAvI) <br>
-* **01. BCS3-WIT_Functional and Non-Functional Requirements**: [Functional and Non-Functional Requirements](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2001%20BCS3-WIT_Functional%2C%20Non-Functional%20Requirements.pdf)<br>
+* **01. BCS3-WIT_Functional and Non-Functional Requirements**: [Functional/Non-Functional Requirements](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2001%20BCS3-WIT_Functional%2C%20Non-Functional%20Requirements.pdf)<br>
 * **02. BCS3-WIT_Data Dictionary**: [Data Dictionary](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2002.%20BCS3-WIT_Data%20Dictionary.pdf)<br>
 * **03. BCS3-WIT_Use Case Diagram**: [Use Case Diagram](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2003.%20BCS3-WIT_Use%20Case%20Diagram.pdf)<br>
 * **04. BCS3-WIT_Use Case Descriptions**: [Use Case Descriptions](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2004.%20BCS3-WIT_Use%20Case%20Descriptions.pdf)<br>
