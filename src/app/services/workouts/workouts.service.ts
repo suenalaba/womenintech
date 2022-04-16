@@ -19,6 +19,7 @@ export class WorkoutsService {
   private injuries = areaOfInjury;
   private userWorkout = [];
   private workoutDesc: WorkoutDesc;
+
   constructor(private firestore: Firestore, private workoutAPI: WorkoutAPIService) { }
 
   /**
@@ -56,7 +57,8 @@ export class WorkoutsService {
         this.userWorkout = this.exerciseData.slice(0, 5);
         console.log(this.userWorkout);
 
-        workoutInfo.routine = this.formatWorkoutRoutine(workoutInfo, userDetails);
+        workoutInfo.routine = this.formatWorkoutRoutine();
+        console.log(workoutInfo)
 
         const workoutDocData: WorkoutDesc = {
           wName: workoutInfo.wName,
@@ -73,6 +75,7 @@ export class WorkoutsService {
         };
 
         console.log(workoutDocData);
+
         setDoc(doc(this.firestore, 'Users', `${uid}`, 'Workouts', timestamp.seconds.toString()), workoutDocData);
 
         resolve(timestamp.seconds);
@@ -161,6 +164,7 @@ export class WorkoutsService {
 
   private extractValue(arr, prop) {
     const extractedValue = [];
+
     for (const eachValue of arr) {
       //extract value from property
       extractedValue.push(eachValue[prop]);
@@ -174,16 +178,18 @@ export class WorkoutsService {
    * @param workoutDesc workout details
    * @param userDetails user details
    */
-  private formatWorkoutRoutine(workoutDesc: WorkoutDesc, userDetails: UserDetails) {
+  private formatWorkoutRoutine() {
     const routine = [];
+    console.log(this.userWorkout)
     for (const eachWorkout of this.userWorkout) {
+      console.log(eachWorkout)
       const exercise: WorkoutDetails = {
         category: eachWorkout.category.name,
-        equipment: this.extractValue(eachWorkout, 'equipment.name'),
+        equipment: this.extractValue(eachWorkout.equipment, 'name'),
         exerciseDesc: eachWorkout.description,
         id: eachWorkout.id,
         exerciseName: eachWorkout.name,
-        images: this.extractValue(eachWorkout, 'images.image'),
+        images: this.extractValue(eachWorkout.images, 'image'),
         sets: {
           sets: 3,
           reps: 10
