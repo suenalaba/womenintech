@@ -1,11 +1,18 @@
 # CZ2006 BCS3 WomenInTech WITFIT
 
-This is a project done using Ionic Frmaework that uses Typescript by CZ2006 BCS3 WomenInTech. It's named WITFIT. 
+This is a project done using Ionic Frmaework that uses Typescript by CZ2006 BCS3 WomenInTech. It's named WITFIT.
 
-WITIFT aims to provide promote fitness and a community dedicated to a healthy lifestyle through its 2 main fuctionalities. 
+WITIFT aims to provide promote fitness and a community dedicated to a healthy lifestyle through its 2 main fuctionalities:
 
 1. Workout Functionality
 2. Find a gym buddy functionality.
+
+To quick start the program:
+1. Clone this repository into your local drive.
+2. Change your working directory to the one containing the source code.
+3. Run `npm i` in your command line to install all dependencies.
+4. Run `ionic serve` in your command line.
+
 Table of contents useful links: 
 * **WITFIT Product Video Link**: [Demo Video](https://www.youtube.com/watch?v=EoKyog0QAvI) <br>
 * **01. BCS3-WIT_Functional and Non-Functional Requirements**: [Functional and Non-Functional Requirements]()<br>
