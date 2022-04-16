@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { HttpClient, HttpXhrBackend } from '@angular/common/http';
-import { Injectable, Pipe, PipeTransform } from '@angular/core';
+import { Injectable, Pipe, PipeTransform, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { delay } from 'rxjs/operators';
 
@@ -126,6 +126,7 @@ export default class YoutubeService {
   export class SafePipe implements PipeTransform {
     constructor(private sanitizer: DomSanitizer) { }
     transform(url) {
-      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      return this.sanitizer.bypassSecurityTrustResourceUrl(this.sanitizer.sanitize(SecurityContext.URL, url));
+      //return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
   }
