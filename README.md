@@ -1,5 +1,5 @@
 # WITIFIT 
-### Your number one gym companion
+### Your number one gym companion, built by WomenInTech to empower women.
 
 Lab Deliverables 
 
