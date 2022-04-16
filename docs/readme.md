@@ -15,18 +15,18 @@ To quick start the program:
 
 Table of contents useful links: 
 * **WITFIT Product Video Link**: [Demo Video](https://www.youtube.com/watch?v=EoKyog0QAvI) <br>
-* **01. BCS3-WIT_Functional and Non-Functional Requirements**: [Functional and Non-Functional Requirements](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%201%20Deliverables/%5BFINAL%5D%2001%20BCS3-WIT_Functional%2C%20Non-Functional%20Requirements.pdf)<br>
-* **02. BCS3-WIT_Data Dictionary**: [Data Dictionary]()<br>
-* **03. BCS3-WIT_Use Case Diagram**: [Use Case Diagram]()<br>
-* **04. BCS3-WIT_Use Case Descriptions**: [Use Case Descriptions]()<br>
-* **05. BCS3-WIT_UI Mockups**: [UI Mockups]()<br>
-* **06. BCS3-WIT_Class Diagram**: [Class Diagram]()<br>
-* **07. BCS3-WIT_Sequence Diagram**: [Sequence Diagram]()<br>
-* **08. BCS3-WIT_Dialog Map**: [Dialog Map]()<br>
-* **09. BCS3-WIT_System Architecture**: [System Architecture Diagram]()<br>
-* **10. BCS3-WIT_Test Cases**: [Test Cases]()<br>
+* **01. BCS3-WIT_Functional and Non-Functional Requirements**: [Functional and Non-Functional Requirements](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2001%20BCS3-WIT_Functional%2C%20Non-Functional%20Requirements.pdf)<br>
+* **02. BCS3-WIT_Data Dictionary**: [Data Dictionary](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2002.%20BCS3-WIT_Data%20Dictionary.pdf)<br>
+* **03. BCS3-WIT_Use Case Diagram**: [Use Case Diagram](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2003.%20BCS3-WIT_Use%20Case%20Diagram.pdf)<br>
+* **04. BCS3-WIT_Use Case Descriptions**: [Use Case Descriptions](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2004.%20BCS3-WIT_Use%20Case%20Descriptions.pdf)<br>
+* **05. BCS3-WIT_UI Mockups**: [UI Mockups](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2005.%20BCS3-WIT_UI%20Mockups.pdf)<br>
+* **06. BCS3-WIT_Class Diagram**: [Class Diagram](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2006.%20BCS3-WIT_Class%20Diagram.pdf)<br>
+* **07. BCS3-WIT_Sequence Diagram**: [Sequence Diagram Folder](https://github.com/suenalaba/womenintech/tree/main/docs/Lab%205%20Deliverables/Sequence%20Diagrams)<br>
+* **08. BCS3-WIT_Dialog Map**: [Dialog Map](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2008.%20BCS3-WIT_Dialog%20Map.pdf)<br>
+* **09. BCS3-WIT_System Architecture**: [System Architecture Diagram](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2009.%20BCS3-WIT_System%20Architecture.pdf)<br>
+* **10. BCS3-WIT_Test Cases**: [Black Box Testing](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/Testing%20and%20Test%20Cases/BCS3-WIT%20Black%20Box%20Testing.pdf) [White Box Testing](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/Testing%20and%20Test%20Cases/BCS3-WIT%20White%20Box%20Testing.pdf)<br>
 * **11. BCS3-WIT_Product Demonstration Video**: [Demo Video](https://www.youtube.com/watch?v=EoKyog0QAvI) <br>
-* **12. BCS3-WIT_Slides**: [Slides]()<br>
+* **12. BCS3-WIT_Slides**: [Slides](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2012.%20BCS3-WIT_Slides.pdf)<br>
 * **13. BCS3-WIT_Software Requirements Specification**:[Software Requirements Specification]()<br>
 * **BCS3-WIT_Source Code**:[Source Code]()<br>
 
