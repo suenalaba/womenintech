@@ -221,18 +221,16 @@ export class HomePage implements OnInit {
    * Calculate the stats to show on the graph
    */
   async loadGraph() {
-    const loading = await this.loadingCtrl.create();
-    await loading.present();
-
+    //const loading = await this.loadingCtrl.create();
+    //await loading.present();
     this.workoutTimeIndex = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const tdy = new Date();
-    console.log(tdy);
-    let shift = tdy.getDay() - 1;
-    while (shift--) {
+    const shift = tdy.getDay();
+    for (let loop = 0; loop < shift; loop++) {
       const temp1 = this.workoutTimeIndex.shift();
       this.workoutTimeIndex.push(temp1);
     }
-    let temp = this.workoutTimeIndex.shift();
+    let temp = this.workoutTimeIndex.pop();
     temp += ' (TODAY) ';
     this.workoutTimeIndex.push(temp);
 
@@ -261,7 +259,7 @@ export class HomePage implements OnInit {
         Math.round(this.workoutTimeSeries[j] * 100) / 100;
     }
 
-    loading.dismiss();
+    //loading.dismiss();
     console.log('end loadgraph');
   }
 
