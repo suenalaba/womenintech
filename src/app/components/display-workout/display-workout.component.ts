@@ -196,7 +196,7 @@ export class DisplayWorkoutComponent implements OnInit {
 
     this.workoutDetails.currExercise = {
       section: this.workoutSection,
-      index: this.workoutSection == 'exercsie' ? this.exerciseIndex : -1,
+      index: this.workoutSection == 'exercise' ? this.exerciseIndex : -1,
     };
 
     if (this.workoutSection == 'warmup') {

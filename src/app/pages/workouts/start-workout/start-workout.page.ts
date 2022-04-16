@@ -171,7 +171,7 @@ export class StartWorkoutPage implements OnInit {
   }
 
   /**
-   * fucntion to format data and save workout to firebase
+   * function to format data and save workout to firebase
    */
   async saveWorkout() {
     const receivedData = window.localStorage.getItem('workoutRoutine');
