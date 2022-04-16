@@ -1,6 +1,6 @@
 # CZ2006 BCS3 WomenInTech WITFIT
 
-This is a project done using Ionic Framework that uses Typescript by CZ2006 BCS3 WomenInTech. It's named WITFIT.
+This is a project done using Ionic Angular Framework that uses Typescript by CZ2006 BCS3 WomenInTech. It's named WITFIT.
 
 WITIFT aims to provide promote fitness and a community dedicated to a healthy lifestyle through its 2 main functionalities:
 
