@@ -4,12 +4,15 @@ This is a project done using Ionic Framework that uses Typescript by CZ2006 BCS3
 
 WITIFT aims to provide promote fitness and a community dedicated to a healthy lifestyle through its 2 main functionalities:
 
-* Workout Functionality:
+## Workout Functionality:
 -  Create Workout based on personalised recommendations
 -  Edit Workout
 -  Display Workout profile based on past workouts
 - Youtube recommendations based on past workouts
-* Find a gym buddy Functionality
+## Find a gym buddy Functionality
+- Find a buddy that shares similar goals with you through our matchmaking algorithm
+- Chat with your buddy in real-time
+- Share your workouts with your buddy
  
  
 
