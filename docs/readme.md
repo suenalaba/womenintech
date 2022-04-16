@@ -19,7 +19,7 @@ Table of contents useful links:
 * **02. BCS3-WIT_Data Dictionary**: [Data Dictionary](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2002.%20BCS3-WIT_Data%20Dictionary.pdf)<br>
 * **03. BCS3-WIT_Use Case Diagram**: [Use Case Diagram](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2003.%20BCS3-WIT_Use%20Case%20Diagram.pdf)<br>
 * **04. BCS3-WIT_Use Case Descriptions**: [Use Case Descriptions](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2004.%20BCS3-WIT_Use%20Case%20Descriptions.pdf)<br>
-* **05. BCS3-WIT_UI Mockups**: [UI Mockups](If UI Mockup doesn't work please visit: [here](https://www.dropbox.com/s/lt3ys1oc4lxwyrq/%5BFINAL%5D%2005.%20BCS3-WIT_UI%20Mockups.pdf?dl=0))<br>
+* **05. BCS3-WIT_UI Mockups**: [UI Mockups](https://www.dropbox.com/s/lt3ys1oc4lxwyrq/%5BFINAL%5D%2005.%20BCS3-WIT_UI%20Mockups.pdf?dl=0)<br>
 * **06. BCS3-WIT_Class Diagram**: [Class Diagram](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2006.%20BCS3-WIT_Class%20Diagram.pdf)<br>
 * **07. BCS3-WIT_Sequence Diagram**: [Sequence Diagram Folder](https://github.com/suenalaba/womenintech/tree/main/docs/Lab%205%20Deliverables/Sequence%20Diagrams)<br>
 * **08. BCS3-WIT_Dialog Map**: [Dialog Map](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2008.%20BCS3-WIT_Dialog%20Map.pdf)<br>
