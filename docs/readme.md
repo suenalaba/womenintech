@@ -36,7 +36,7 @@ WITIFT aims to provide promote fitness and a community dedicated to a healthy li
 * **10. BCS3-WIT_Test Cases**: [Black Box Testing](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/Testing%20and%20Test%20Cases/BCS3-WIT%20Black%20Box%20Testing.pdf) [White Box Testing](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/Testing%20and%20Test%20Cases/BCS3-WIT%20White%20Box%20Testing.pdf)<br>
 * **11. BCS3-WIT_Product Demonstration Video**: [Demo Video](https://www.youtube.com/watch?v=EoKyog0QAvI) <br>
 * **12. BCS3-WIT_Slides**: [Slides](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2012.%20BCS3-WIT_Slides.pdf)<br>
-* **13. BCS3-WIT_Software Requirements Specification**: [Software Requirements Specification](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2013.%20BCS3-WIT_Software%20Requirements%20Specification.pdf)<br>
+* **13. BCS3-WIT_Software Requirements Specification**:  [Software Requirements Specification](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2013.%20BCS3-WIT_Software%20Requirements%20Specification.pdf)<br>
 * **BCS3-WIT_Source Code**: [Source Code under folder /src](https://github.com/suenalaba/womenintech)<br>
 
 Useful links:
