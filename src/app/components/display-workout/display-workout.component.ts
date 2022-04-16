@@ -21,9 +21,9 @@ import { Timestamp } from 'firebase/firestore';
  * Class to powering the logic to get and display information related to the exercises
  */
 export class DisplayWorkoutComponent implements OnInit {
-  @Input() private section: string;
-  @Input() private stopwatch: number;
-  @Input() private workoutDetails: any;
+  @Input() public stopwatch: number;
+  @Input() public section: string;
+  @Input() public workoutDetails: any;
   public buttonText: string;
   public currentExercise: WorkoutDetails;
   public exerciseIndex: number;

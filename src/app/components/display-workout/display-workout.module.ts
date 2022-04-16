@@ -10,8 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { SafePipe } from 'src/app/services/youtube.service';
 
 @NgModule({
-  imports: [ CommonModule, FormsModule, IonicModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, IonicModule, HttpClientModule],
   declarations: [DisplayWorkoutComponent, SafePipe],
-  exports: [DisplayWorkoutComponent]
+  exports: [DisplayWorkoutComponent],
 })
 export class DisplayWorkoutComponentModule {}

@@ -25,8 +25,8 @@ import { FormatFileSizePipe } from '../gb-sign-up/format-file-size.pipe';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
   ],
-  declarations: [GbUpdateAccountPreferencePage,FormatFileSizePipe]
+  declarations: [GbUpdateAccountPreferencePage],
 })
 export class GbUpdateAccountPreferencePageModule {}

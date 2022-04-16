@@ -2,9 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { CompletedWorkout, CreateWorkoutDesc, WorkoutDesc } from 'src/app/class/CreateWorkoutDesc';
+import {
+  CompletedWorkout,
+  CreateWorkoutDesc,
+  WorkoutDesc,
+} from 'src/app/class/CreateWorkoutDesc';
 import { User } from 'src/app/class/user';
-import { Intensity } from 'src/app/data/workout-data/CreateWorkout';
+import { intensity } from 'src/app/data/workout-data/CreateWorkout';
 import { UserService } from 'src/app/services/user.service';
 import { WorkoutsService } from 'src/app/services/workouts/workouts.service';
 import { TabsPageRoutingModule } from 'src/app/tabs/tabs-routing.module';
@@ -24,7 +28,7 @@ export class WorkoutSummaryPage implements OnInit {
   public workoutDetails: WorkoutDesc;
   public workoutNotes: FormGroup;
   private calories: number;
-  private listIntensity: CreateWorkoutDesc[] = Intensity;
+  private listIntensity: CreateWorkoutDesc[] = intensity;
   private totalReps: number;
   private totalSets: number;
   private userId: string;
@@ -36,14 +40,15 @@ export class WorkoutSummaryPage implements OnInit {
     private loadingCtrl: LoadingController,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService) { }
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     this.workoutNotes = this.fb.group({
-      notes: ['']
+      notes: [''],
     });
 
-    this.route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.subscribe((params) => {
       this.workoutId = params.get('wid');
       this.userId = params.get('uid');
     });
@@ -55,7 +60,7 @@ export class WorkoutSummaryPage implements OnInit {
   /**
    * format workout and save completed workout
    */
-  async workoutDone(){
+  async workoutDone() {
     this.workoutCompleted = {
       workoutName: this.workoutDetails.wName,
       workoutId: this.workoutId,
@@ -67,18 +72,19 @@ export class WorkoutSummaryPage implements OnInit {
       caloriesBurnt: this.calories,
       totalSets: this.totalSets,
       totalReps: this.totalReps,
-      workoutNotes: this.workoutNotes.value.notes
+      workoutNotes: this.workoutNotes.value.notes,
     };
 
     const loading = await this.loadingCtrl.create();
     await loading.present();
 
-    this.workoutService.storeCompletedWorkout(this.workoutCompleted, this.userId).then((res)=>{
+    this.workoutService
+      .storeCompletedWorkout(this.workoutCompleted, this.userId)
+      .then((res) => {
         console.log(res);
         loading.dismiss();
-        this.router.navigateByUrl('/tabs/workouts', {replaceUrl: true});
+        this.router.navigateByUrl('/tabs/workouts', { replaceUrl: true });
       });
-
   }
 
   /**
@@ -92,7 +98,7 @@ export class WorkoutSummaryPage implements OnInit {
     let age = today.getFullYear() - birthDate.getFullYear();
     const m = today.getMonth() - birthDate.getMonth();
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
+      age--;
     }
     return age;
   }
@@ -103,12 +109,14 @@ export class WorkoutSummaryPage implements OnInit {
    * @param w workout details
    * @param u user details
    */
-  public getCalories(w: WorkoutDesc, u: User){
+  public getCalories(w: WorkoutDesc, u: User) {
     const weight = u.userDetails.weight ? u.userDetails.weight : 50;
-    const duration = w.stopwatch % 3600 / 60;
-    const workoutIntensity = this.listIntensity.find(x => x.value === w.intensity).mets;
-    this.calories = (duration*(workoutIntensity*3.5*weight)/200);
-    return (duration*(workoutIntensity*3.5*weight)/200).toFixed(3);
+    const duration = (w.stopwatch % 3600) / 60;
+    const workoutIntensity = this.listIntensity.find(
+      (x) => x.value === w.intensity
+    ).mets;
+    this.calories = (duration * (workoutIntensity * 3.5 * weight)) / 200;
+    return ((duration * (workoutIntensity * 3.5 * weight)) / 200).toFixed(3);
     //Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
   }
 
@@ -120,11 +128,32 @@ export class WorkoutSummaryPage implements OnInit {
   public getDate(date) {
     if (date) {
       const newDate = new Date(date.seconds * 1000);
-      const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-      const strDate = newDate.getDate() + ' ' + mS[newDate.getMonth()] + ' ' + newDate.getFullYear() + ' ' + this.formatAMPM(newDate);
+      const mS = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sept',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
+      const strDate =
+        newDate.getDate() +
+        ' ' +
+        mS[newDate.getMonth()] +
+        ' ' +
+        newDate.getFullYear() +
+        ' ' +
+        this.formatAMPM(newDate);
       return strDate;
+    } else {
+      return '';
     }
-    else { return ''; }
   }
 
   /**
@@ -132,8 +161,8 @@ export class WorkoutSummaryPage implements OnInit {
    */
   public getDuration(time: number) {
     let hours = '' + Math.floor(time / 3600);
-    let minutes = '' + Math.floor(time % 3600 / 60);
-    let seconds = '' + Math.floor(time % 3600 % 60);
+    let minutes = '' + Math.floor((time % 3600) / 60);
+    let seconds = '' + Math.floor((time % 3600) % 60);
 
     if (Number(hours) < 10) {
       hours = '0' + hours;
@@ -160,17 +189,23 @@ export class WorkoutSummaryPage implements OnInit {
    * @param wd workout details
    * @param ud user details
    */
-  public getStats(wd: WorkoutDesc, ud: User){
-    const workoutIntensity = this.listIntensity.find(x => x.value === wd.intensity).mets;
+  public getStats(wd: WorkoutDesc, ud: User) {
+    const workoutIntensity = this.listIntensity.find(
+      (x) => x.value === wd.intensity
+    ).mets;
     // let duration = wd.stopwatch % 3600 / 60;
     const age = this.getAge(ud.birthday);
     console.log(age);
 
     //THR = [(MHR - RHR) x %Intensity] + RHR
-    this.fitnessVal = (((200-age)*(workoutIntensity/10))/(220-age))*100;
+    this.fitnessVal =
+      (((200 - age) * (workoutIntensity / 10)) / (220 - age)) * 100;
     console.log(this.fitnessVal);
 
-    this.strengthVal = this.getTotalSets(wd.workoutRoutine)*this.getTotalReps(wd.workoutRoutine)/10;
+    this.strengthVal =
+      (this.getTotalSets(wd.workoutRoutine) *
+        this.getTotalReps(wd.workoutRoutine)) /
+      10;
     console.log(this.strengthVal);
   }
 
@@ -179,10 +214,10 @@ export class WorkoutSummaryPage implements OnInit {
    *
    * @param sets workout sets
    */
-  public getTotalReps(sets){
+  public getTotalReps(sets) {
     let totalReps = 0;
-    for(const eachRep of sets) {
-      totalReps = (eachRep.sets.reps * eachRep.sets.sets)+totalReps;
+    for (const eachRep of sets) {
+      totalReps = eachRep.sets.reps * eachRep.sets.sets + totalReps;
     }
     this.totalReps = totalReps;
     return totalReps;
@@ -193,21 +228,20 @@ export class WorkoutSummaryPage implements OnInit {
    *
    * @param sets workout sets
    */
-  public getTotalSets(sets){
+  public getTotalSets(sets) {
     let totalSets = 0;
     for (const eachSet of sets) {
       totalSets += eachSet.sets.sets;
     }
     this.totalSets = totalSets;
     return totalSets;
-
   }
 
   /**
    * get user details
    */
-  private getUserDetails(){
-    this.userService.getUserById(this.userId).subscribe(res=>{
+  private getUserDetails() {
+    this.userService.getUserById(this.userId).subscribe((res) => {
       this.userDetails = res;
 
       this.getStats(this.workoutDetails, this.userDetails);
@@ -218,12 +252,14 @@ export class WorkoutSummaryPage implements OnInit {
    * get workout details
    */
   private showWorkoutSummary() {
-    this.workoutService.getWorkout(this.workoutId, this.userId).subscribe(res => {
-      console.log(res);
-      if (res.workoutStatus === 'completed') {
-        this.workoutDetails = res;
-      }
-    });
+    this.workoutService
+      .getWorkout(this.workoutId, this.userId)
+      .subscribe((res) => {
+        console.log(res);
+        if (res.workoutStatus === 'completed') {
+          this.workoutDetails = res;
+        }
+      });
   }
 
   /**
@@ -231,15 +267,14 @@ export class WorkoutSummaryPage implements OnInit {
    *
    * @param date date object of timestamp
    */
-     private formatAMPM(date) {
-      let hours = date.getHours();
-      let minutes = date.getMinutes();
-      const ampm = hours >= 12 ? 'pm' : 'am';
-      hours = hours % 12;
-      hours = hours ? hours : 12; // the hour '0' should be '12'
-      minutes = minutes < 10 ? '0'+minutes : minutes;
-      const strTime = hours + ':' + minutes + ' ' + ampm;
-      return strTime;
-    }
-
+  private formatAMPM(date) {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    const strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
 }
