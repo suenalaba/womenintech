@@ -4,7 +4,7 @@ This is a project done using Ionic Framework that uses Typescript by CZ2006 BCS3
 
 WITIFT aims to provide promote fitness and a community dedicated to a healthy lifestyle through its 2 main functionalities:
 
-## Workout Functionality:
+## Workout Functionality
 -  Create Workout based on personalised recommendations
 -  Edit Workout
 -  Display Workout profile based on past workouts
@@ -15,14 +15,13 @@ WITIFT aims to provide promote fitness and a community dedicated to a healthy li
 - Share your workouts with your buddy
  
  
-
-To quick start the program:
+## To quick start the program
 1. Clone this repository into your local drive.
 2. Change your working directory to the one containing the source code.
 3. Run `npm i` in your command line to install all dependencies.
 4. Run `ionic serve` in your command line.
 
-Table of contents useful links: 
+## Table of contents and useful links
 * **WITFIT Product Video Link**: [Demo Video](https://www.youtube.com/watch?v=EoKyog0QAvI) <br>
 * **01. BCS3-WIT_Functional and Non-Functional Requirements**: [Functional and Non-Functional Requirements](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2001%20BCS3-WIT_Functional%2C%20Non-Functional%20Requirements.pdf)<br>
 * **02. BCS3-WIT_Data Dictionary**: [Data Dictionary](https://github.com/suenalaba/womenintech/blob/main/docs/Lab%205%20Deliverables/%5BFINAL%5D%2002.%20BCS3-WIT_Data%20Dictionary.pdf)<br>
