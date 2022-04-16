@@ -8,3 +8,6 @@
 4. Run `ionic serve` in your command line.
 
 For more information and developer guides please click: [here](https://github.com/suenalaba/womenintech/blob/main/docs/readme.md)
+
+[Github Pages](https://suenalaba.github.io/womenintech/)
+
