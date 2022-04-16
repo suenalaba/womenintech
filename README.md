@@ -1,15 +1,7 @@
 # WITIFIT 
 ### Your number one gym companion, built by WomenInTech to empower women.
 
-Lab Deliverables 
-
-✅ Lab 1
-✅ Lab 2
-✅ Lab 3
-✅ Lab 4
-✅ Lab 5
-
-To quick start the program:
+## To quick start the program:
 1. Clone this repository into your local drive.
 2. Change your working directory to the one containing the source code.
 3. Run `npm i` in your command line to install all dependencies.
