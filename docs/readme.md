@@ -8,7 +8,7 @@ WITIFT aims to provide promote fitness and a community dedicated to a healthy li
 2. Find a gym buddy functionality.
 
 Table of contents useful links: 
-WITFIT Product video Link: [Demo Video](#https://www.youtube.com/watch?v=EoKyog0QAvI) <br>
+WITFIT Product video Link: [Demo Video](https://www.youtube.com/watch?v=EoKyog0QAvI) <br>
 [01. BCS3-WIT_Functional and Non-Functional Requirements]  <br>
 [02. BCS3-WIT_Data Dictionary] <br>
 [03. BCS3-WIT_Use Case Diagram] <br>
